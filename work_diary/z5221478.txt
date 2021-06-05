@@ -1,0 +1,3 @@
+Week 1:
+Group formed. I created my Jira and Github accounts. I discussed with my teammates about the project topic we will choose (Myrecipe) and programming languages we will use for this project (SQL for database,
+Python for backend and flask for frontend). I discussed with team about the attributes our software needs and recorded them.
