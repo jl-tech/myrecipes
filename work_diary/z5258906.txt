@@ -2,3 +2,4 @@
 - Created Jira project and GitHub repo. 
 - Discussed & selected project
 - Discussed with team software stack
+- Added some core and novel requirements to proposal document
