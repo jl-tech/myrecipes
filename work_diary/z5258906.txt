@@ -1,0 +1,4 @@
+*Week 1*
+- Created Jira project and GitHub repo. 
+- Discussed & selected project
+- Discussed with team software stack
