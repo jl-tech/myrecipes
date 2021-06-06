@@ -1,0 +1,6 @@
+Week 1:
+* Formed the project group. Created GitHub repo and Jira for the Project.
+* Discussed topics about the project, and we chose MyRecipes.
+* Discussed programming languages, stack framework, and few other things.
+* SQL for the database, python for backend, flask, and HTML templates.
+* For next week: Work on features to include in the project and proposal.
