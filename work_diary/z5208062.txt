@@ -1,0 +1,9 @@
+Week 1
+- Group formed. I created the Jira & GitHub accounts. 
+- After a long discussion everyone was happy to do the MyRecipes project.
+- I set up a temporary Google Drive to contain the draft documents.
+- I also found and discussed with the team all available software tools and libraries that we can use for the project.
+- We settled on using SQL, Flask, Django for the backend of the project and the tutor advised us to source frontend templates from the internet.
+- The team opted to start on the user stories for MyRecipes.
+
+Week 2
