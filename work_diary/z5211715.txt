@@ -1,0 +1,7 @@
+Week 1:
+- Formed project group and created Jira and Github accounts
+- Selected MyRecipes and considered the following frameworks:
+  Database: MySQL
+  Backend: Django/Flask
+  Frontend: React
+- Created some user stories
