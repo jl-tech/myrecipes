@@ -3,3 +3,8 @@
 - Discussed & selected project
 - Discussed with team software stack
 - Added some core and novel requirements to proposal document
+*Week 2*
+- Added acceptance criteria for all user stories on Jira
+- Created storyboards for Account Management user stories
+- Created rough WIP logo
+- Discussed with team how to manage user stories etc and novel requirements
