@@ -7,3 +7,11 @@ Week 1
 - The team opted to start on the user stories for MyRecipes.
 
 Week 2
+- Advised the team to migrate the user stories from the temporary Google Drive to Jira.
+- Briefly read up on the difference between Node.js and React.
+- Brainstormed "novel" requirements with the team.
+- Discussed the scope of user stories and the best way to display them in a coherent and concise manner.
+- Reviewed and edited the user stories and thought about how well it concisely aligned with project spec given in the pdf.
+- Edited and added criteria and labels to the existing user stories.
+
+Week 3
