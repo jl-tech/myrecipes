@@ -8,3 +8,9 @@
 - Created storyboards for Account Management user stories
 - Created rough WIP logo
 - Discussed with team how to manage user stories etc and novel requirements
+*Week 3*
+- Created around 4 new storyboards
+- Wrote and compiled section 2 (user stories and sprints) section of proposal
+- Wrote section 1.3 in proposal
+- Compiled all proposal work into PDF document
+- Updated logo
