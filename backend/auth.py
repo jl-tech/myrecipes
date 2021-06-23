@@ -16,7 +16,7 @@ def add_new_user(email, first_name, last_name, password):
     :param first_name:
     :param last_name:
     :param password:
-    :return: On success, the confirmation code for email verification.
+    :return: 0 success, the confirmation code for email verification.
     -1 if the email already exists.
     -2 if the password didn't meet the password requirements.
     -3 for any other error.
@@ -42,7 +42,7 @@ def add_new_user(email, first_name, last_name, password):
         con.commit()
         send_confirm_email(email, conf_code)
         print(f"INFO: Created new account: {email}, f: {first_name}, l: {last_name}, p: {hashed_pwd}, c: {conf_code}")
-        return conf_code
+        return 0
 
 
 def hash_password(password):

@@ -11,7 +11,7 @@ CORS(APP)
 def status():
     return dumps({'status': 200})
 
-@APP.route("/auth/register")
+@APP.route("/auth/register", methods=['POST'])
 def route_auth_register():
     data = flask.request.get_json()
     result = auth.add_new_user(data["email"], data["password"], data["first_name"], data["last_name"])
