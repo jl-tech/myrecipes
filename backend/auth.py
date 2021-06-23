@@ -4,7 +4,7 @@ import flask
 
 def add_new_user(email, first_name, last_name, password):
     '''
-    Adds a new user to the database.
+    Adds a new user to the database. The user will be set as unverified email.
     :param email:
     :param first_name:
     :param last_name:
@@ -25,8 +25,8 @@ def add_new_user(email, first_name, last_name, password):
                           cursorclass=pymysql.cursors.DictCursor)
     with con:
         cur = con.cursor()
-        query = "insert into Users(email, first_name, last_name, password_hash)" \
-                "values (%s, %s, %s, %s)"
+        query = "insert into Users(email, first_name, last_name, password_hash, verified_email)" \
+                "values (%s, %s, %s, %s, FALSE)"
         cur.execute(query, (email, first_name, last_name, hashed_pwd))
         con.commit()
         return 0
