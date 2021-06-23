@@ -11,14 +11,28 @@ CORS(APP)
 def status():
     return dumps({'status': 200})
 
+@APP.route("/auth/register")
+def route_auth_register():
+    data = flask.request.get_json()
+    result = auth.add_new_user(data["email"], data["password"], data["first_name"], data["last_name"])
+    if result == 1:
+        return dumps({'status': 'email_already_exists'})
+    elif result == 2:
+        return dumps({'status': 'password_requirements_fail'})
+    elif result == 0:
+        return dumps({'status': 'OK'})
+
+
+
+
 if __name__ == "__main__":
     # Testing code
     print(auth.email_already_exists('test@test.com'))
-    print(auth.email_already_exists('test@test2.com'))
-    print(auth.add_new_user('test@test2.com', 'Test', '2', 'goodpassword'))
-    print(auth.email_already_exists('test@test2.com'))
-    print(auth.check_password('test@test2.com', 'goodpassword'))
-    print(auth.check_password('test@test2.com', 'badpassword'))
+    print(auth.email_already_exists('jonathan.liu2000@gmail.com'))
+    print(auth.add_new_user('jonathan.liu2000@gmail.com', 'Test', '2', 'goodpassword'))
+    print(auth.email_already_exists('jonathan.liu2000@gmail.com'))
+    print(auth.check_password('jonathan.liu2000@gmail.com', 'goodpassword'))
+    print(auth.check_password('jonathan.liu2000@gmail.com', 'badpassword'))
     # End testing code
 
     if len(sys.argv) != 2:

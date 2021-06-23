@@ -15,8 +15,8 @@ create table Users (
     last_name text not null,
     password_hash text not null, -- Use bcrypt at backend layer and store the value here
     profile_pic_path text, -- path in flask backend to the profile pic file, NULL if no pic
-    password_reset_code_hash integer, -- password reset ode if user requests password, NULL if not
-    verified_email boolean not null,
+    password_reset_code_hash integer, -- password reset code if user requests password, NULL if not
+    email_verification_code integer, -- code for email verification. NULL if email already verified.
     primary key (user_id)
 );
 
