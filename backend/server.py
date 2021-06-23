@@ -15,6 +15,9 @@ if __name__ == "__main__":
     # Testing code
     print(auth.email_already_exists('test@test.com'))
     print(auth.email_already_exists('test@test2.com'))
+    print(auth.add_new_user('test@test2.com', 'Test', '2', 'goodpassword'))
+    print(auth.email_already_exists('test@test2.com'))
+    print(auth.check_password('test@test2.com', 'goodpassword'))
     # End testing code
 
     if len(sys.argv) != 2:
