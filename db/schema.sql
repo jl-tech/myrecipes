@@ -20,5 +20,5 @@ create table Users (
 );
 
 -- temporary test account
-insert ignore into Users(email, first_name, last_name, password_hash, profile_pic_path, password_reset_code_hash)
-    values ('test@test.com', 'Test', 'Account', 'testing', NULL, NULL);
+insert ignore into Users(email, first_name, last_name, password_hash)
+    values ('test@test.com', 'Test', 'Account', 'testing');
