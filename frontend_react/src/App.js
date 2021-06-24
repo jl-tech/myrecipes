@@ -22,7 +22,7 @@ function App() {
           <Login />
         </Route>
         <Route path="/">
-            <div></div>
+            <div>Work in progress</div>
         </Route>
         </Switch>
     </Router>

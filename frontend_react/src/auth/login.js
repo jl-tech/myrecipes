@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory } from "react-router-dom";
+import { useHistory, Switch, Route, useRouteMatch, Link } from "react-router-dom";
 
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
@@ -11,6 +11,7 @@ import logo from '../WIP_logo_2.png';
 import Cookie from 'universal-cookie';
 
 import Register from './register.js';
+import ForgetPassword from './forgetpassword.js';
 
 async function loginUser(email, password) {
     let response = await fetch('http://localhost:5000/auth/login', {
@@ -32,14 +33,15 @@ async function loginUser(email, password) {
     else throw new Error(responseJson.error);
 }
 
-function Login() {
-
+function LoginBody() {
     const [alertShow, setAlertShow] = useState(false);
     const [alertText, setAlertText] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const cookie = new Cookie();
     const history = useHistory();
+
+    let { path, url } = useRouteMatch();
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -51,41 +53,58 @@ function Login() {
             });
 
         if (response != null) {
-            cookie.set('token', 'hello', {path: '/'});
+            cookie.set('token', response.token, {path: '/'});
             history.push('/');
         }
-
     }
+    
+    return (
+        <>
+        <Modal.Body>
+            <Form onSubmit={handleSubmit}>
+                <Form.Group controlId="email">
+                    <Form.Control type="email" placeholder="Email address" required onChange={e => setEmail(e.target.value)}/>
+                </Form.Group>
+                <Form.Group controlId="password">
+                    <Form.Control type="password" placeholder="Password" required onChange={e => setPassword(e.target.value)}/>
+                </Form.Group>
+                <Alert show={alertShow} variant="danger" onClose={() => setAlertShow(false)} dismissible>
+                    {alertText}
+                </Alert>
+                <Button type="submit" block>
+                    Log In
+                </Button>
+            </Form>
+            <div style={{textAlign:"center",marginTop:"1em"}}>
+                <Link to={`${url}/forgetpassword`}>Forgotten password?</Link>
+            </div>
+        </Modal.Body>
+        <Modal.Footer>
+            <div style={{textAlign:"center"}}>
+                <Register />
+            </div>
+        </Modal.Footer>
+        </>
+    );
+}
+
+function Login() {
+
+    let { path, url } = useRouteMatch();
 
     return (<>
         <div style={{textAlign:"center"}}>
             <img src={logo} alt="Logo" style={{maxWidth:"500px"}}/>
         </div>
         <Modal.Dialog>
-            <Modal.Body>
-                <Form onSubmit={handleSubmit}>
-                    <Form.Group controlId="email">
-                        <Form.Control type="email" placeholder="Email address" required onChange={e => setEmail(e.target.value)}/>
-                    </Form.Group>
-                    <Form.Group controlId="password">
-                        <Form.Control type="password" placeholder="Password" required onChange={e => setPassword(e.target.value)}/>
-                    </Form.Group>
-                    <Alert show={alertShow} variant="danger" onClose={() => setAlertShow(false)} dismissible>
-                        {alertText}
-                    </Alert>
-                    <Button type="submit" block>
-                        Log In
-                    </Button>
-                </Form>
-                <div style={{textAlign:"center",paddingTop:"1em"}}>
-                    <a href="">Forgotten password?</a>
-                </div>
-            </Modal.Body>
-            <Modal.Footer style={{display:"block"}}>
-                <div style={{textAlign:"center"}}>
-                    <Register />
-                </div>
-            </Modal.Footer>
+        <Switch>
+            <Route path={`${path}/forgetpassword`}>
+                <ForgetPassword />
+            </Route>
+            <Route path={path}>
+                <LoginBody />
+            </Route>
+        </Switch>
         </Modal.Dialog>
     </>);
 }
