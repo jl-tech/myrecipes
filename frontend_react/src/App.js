@@ -13,6 +13,7 @@ import {
 } from "react-router-dom";
 
 import Login from './auth/login.js';
+import EmailConfirm from './auth/emailconfirm.js';
 
 function App() {
   return (
@@ -20,6 +21,9 @@ function App() {
       <Switch>
         <Route path="/login">
           <Login />
+        </Route>
+        <Route path="/emailconfirm">
+          <EmailConfirm />
         </Route>
         <Route path="/">
             <div>Work in progress</div>

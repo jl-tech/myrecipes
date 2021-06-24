@@ -6,7 +6,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 
-async function requestPassword(email) {
+async function requestForgetPassword(email) {
     let response = await fetch('http://localhost:5000/auth/forgetpassword', {
         method: 'POST',
         headers: {
@@ -34,7 +34,7 @@ function ForgetPassword() {
     async function handleSubmit(event) {
         event.preventDefault();
 
-        let response = await requestPassword(email)
+        let response = await requestForgetPassword(email)
             .catch(e => {
                 setAlertShow(true);
                 setAlertText(e.message);
