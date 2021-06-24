@@ -23,11 +23,8 @@ async function registerUser(firstName, lastName, email, password) {
 
     let responseJson = await response.json();
     
-    if (response.ok) {
-        return responseJson;
-    } else {
-        throw new Error(responseJson.error);
-    }
+    if (response.ok) return responseJson;
+    else throw new Error(responseJson.error);
 }
 
 function RegisterBody(props) {
@@ -52,7 +49,6 @@ function RegisterBody(props) {
         if (response != null) {
             setRegistered(true);
         }
-
     }
 
     if (!registered) {
