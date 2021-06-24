@@ -5,3 +5,10 @@ Week 1:
   Backend: Django/Flask
   Frontend: React
 - Created some user stories
+
+Week 2:
+- Completed user stories and acceptance criteria
+
+Week 3:
+- Wrote software architecture discussion
+- Completed proposal
