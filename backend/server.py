@@ -78,14 +78,15 @@ def route_resetpassword():
 
 if __name__ == "__main__":
     # Testing code
-    print(auth.email_already_exists('test@test.com'))
-    print(auth.email_already_exists('jonathan.liu2000@gmail.com'))
-    print(auth.add_new_user('jonathan.liu2000@gmail.com', 'Test', '2', 'goodpassword'))
-    print(auth.email_already_exists('jonathan.liu2000@gmail.com'))
-    print(auth.check_password('jonathan.liu2000@gmail.com', 'goodpassword'))
-    print(auth.check_password('jonathan.liu2000@gmail.com', 'badpassword'))
-    print(auth.verify_email(132777754))
-    print(auth.send_reset('jonathan.liu2000@gmail.com'))
+    # print(auth.email_already_exists('test@test.com'))
+    # print(auth.email_already_exists('jonathan.liu2000@gmail.com'))
+    # print(auth.add_new_user('jonathan.liu2000@gmail.com', 'Test', '2', 'goodpassword'))
+    # print(auth.email_already_exists('jonathan.liu2000@gmail.com'))
+    # print(auth.check_password('jonathan.liu2000@gmail.com', 'goodpassword'))
+    # print(auth.check_password('jonathan.liu2000@gmail.com', 'badpassword'))
+    # print(auth.verify_email(132777754))
+    # print(auth.send_reset('jonathan.liu2000@gmail.com'))
+    print(auth.reset_password('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwYXNzd29yZCI6IiQyYiQxMiRRMThSR1JhL0wwM3RXVHdWWkpNbS9PbEpvcC9WUmwuZkhOMGtqZk53MkVlR0ZjT0V3Z2VweSJ9._yDmsNIp1YmVztrmnuRWUQZ80W7-RCmcCAAxP1XXaPM', 'newpwd'))
     # End testing code
 
     if len(sys.argv) != 2:

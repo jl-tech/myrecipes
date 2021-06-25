@@ -311,9 +311,35 @@ def reset_password(reset_code, password):
 
     email_of_acc = result[0]['email']
     new_pwd_hash = hash_password(password)
-    query = 'update Users set password=%s where email=%s'
+    query = 'update Users set password_hash=%s where email=%s'
     cur.execute(query, (new_pwd_hash, email_of_acc))
 
+    # Send email to notify user
+    # Variables setup
+    message = MIMEMultipart("alternative")
+    message["Subject"] = "Your password was changed for MyRecipes"
+    message["From"] = "myrecipes.supp@gmail.com"
+    message["To"] = email_of_acc
+
+    message_plain = f"""\
+          Hi,
+          
+          This email is to inform you that your password was changed.
+          
+          If you didn't expect this, contact customer support immediately.
+
+          Regards,
+          MyRecipes
+          """
+
+    message.attach(MIMEText(message_plain, "plain"))
+
+    ctxt = ssl.create_default_context()
+    # try:
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=ctxt) as server:
+        server.login("myrecipes.supp@gmail.com", "#%ep773^KpScAduTj^SM6U*Gnw")
+        server.sendmail("myrecipes.supp@gmail.com", email_of_acc,
+                        message.as_string())
     return 0
 
 
