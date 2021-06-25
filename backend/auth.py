@@ -7,6 +7,8 @@ import bcrypt
 import pymysql
 import smtplib
 
+import tokenise
+
 
 def add_new_user(email, first_name, last_name, password):
     '''
@@ -80,6 +82,39 @@ def verify_email(code):
         else:
             print(f"INFO: Email verified for code {code}")
             return 0
+
+def token_to_email(token):
+    '''
+    Given a jwt token, decodes that token into the email address corresponding
+    to the token's account
+    :param token: The token to decode
+    :return: The email address of the account on success.
+    -1 if the token couldn't be decoded
+    -2 if the email decoded is not associated with an account
+    -3 if the email decoded hasn't been verified
+    '''
+    result = tokenise.decode_token(token)
+    if token is None:
+        return -1
+    if 'email' not in result:
+        return -1
+
+    con = pymysql.connect(host='localhost',
+                          user='myrecipes',
+                          password='g3iCv7sr!',
+                          db='myrecipes',
+                          cursorclass=pymysql.cursors.DictCursor)
+    with con:
+        cur = con.cursor()
+        # check email exists with an account
+        query = "select * from Users where email = %s"
+        if len(cur.execute(query, (result['email'])).fetchall()) == 0:
+            return -2
+        query = "select * from Users where email = %s and email_verification_code is NULL"
+        if len(cur.execute(query, (result['email'])).fetchall()) == 0:
+            return -3
+        return result['email']
+
 
 def hash_password(password):
     '''

@@ -31,6 +31,18 @@ def route_auth_emailconfirm():
     elif result == 1:
         return dumps({'status': 'invalid_code'})
 
+@APP.route("/auth/verify", methods=['GET'])
+def route_auth_verify():
+    result = auth.token_to_email(flask.request.args.get("token"))
+    if result == -1:
+        return dumps({'status': 'invalid_token'})
+    elif result == -2:
+        return dumps({'status': 'email_not_registered'})
+    elif result == -3:
+        return dumps({'status': 'email_not_verified'})
+    else:
+        return dumps({'email': result})
+
 if __name__ == "__main__":
     # Testing code
     # print(auth.email_already_exists('test@test.com'))
