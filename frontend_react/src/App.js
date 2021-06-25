@@ -23,11 +23,14 @@ async function tokenVerify(token) {
       headers: {
           'Authorization': token
       }
-  }).catch(() => {
-      return false;
+  }).catch(e => {
+    throw new Error(e);
   });
 
-  return response.ok;
+  let responseJson = await response.json();
+    
+  if (response.ok) return responseJson;
+  else throw new Error(responseJson.error);
 }
 
 function VisitorRoute(props) {
@@ -48,14 +51,21 @@ function App() {
 
   const [loggedIn, setLoggedIn] = useState(false);
   const [fetched, setFetched] = useState(false);
+  const [currId, setCurrId] = useState(null);
   const cookie = new Cookie();
 
   async function checkToken() {
     let token = cookie.get('token');
     if (token != null) {
-      let response = await tokenVerify(token);
-      if (response) setLoggedIn(true);
-      else cookie.remove('token', {path: '/'});
+      let response = await tokenVerify(token)
+        .catch(() => {
+          cookie.remove('token', {path: '/'});
+        });
+      
+      if (response != null) {
+        setCurrId(response.id);
+        setLoggedIn(true);
+      }
     }
     setFetched(true);
   }
@@ -85,7 +95,7 @@ function App() {
           <ResetPassword />
         </Route>
         <Route path="/">
-          <Home loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
+          <Home loggedIn={loggedIn} setLoggedIn={setLoggedIn} id={currId} />
         </Route>
         </Switch>
     </Router>

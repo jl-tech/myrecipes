@@ -18,7 +18,10 @@ function LoginButton() {
 }
 
 function UserButton(props) {
+    const cookie = new Cookie();
+    
     function logout() {
+        cookie.remove('token', {path: '/'});
         props.setLoggedIn(false);
     }
 
@@ -30,9 +33,7 @@ function UserButton(props) {
     );
 }
 
-function Home(props) {
-
-    const cookie = new Cookie();
+function Home({ loggedIn, ...rest }) {
     
     return (
     <>
@@ -43,7 +44,7 @@ function Home(props) {
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
             <Navbar.Text>
-                {props.loggedIn ? <UserButton {...props}/> : <LoginButton />}
+                {loggedIn ? <UserButton {...rest}/> : <LoginButton />}
             </Navbar.Text>
         </Navbar.Collapse>
     </Navbar>
