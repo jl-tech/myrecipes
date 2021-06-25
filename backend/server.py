@@ -1,5 +1,7 @@
 import flask
 import sys
+
+import pymysql
 from flask_cors import CORS
 from json import dumps
 import tokenise
@@ -56,15 +58,34 @@ def route_auth_login():
     elif not correct:
         return dumps({'status': 'invalid_combination'})
 
+@APP.route("/auth/forgetpassword", methods=['POST'])
+def route_auth_forgetpassword():
+    data = flask.request.get_json()
+    result = auth.send_reset(data["email"])
+    if result == 1:
+        return dumps({'status': 'email_not_found'})
+    else:
+        return dumps({'status': 'OK'})
+
+@APP.route("/auth/resetpassword", methods=['POST'])
+def route_resetpassword():
+    data = flask.request.get_json()
+    result = auth.reset_password(data["reset_code"], data["password"])
+    if result == 1:
+        return dumps({'status': 'reset_code_invalid'})
+    else:
+        return dumps({'status': 'OK'})
+
 if __name__ == "__main__":
     # Testing code
-    # print(auth.email_already_exists('test@test.com'))
-    # print(auth.email_already_exists('jonathan.liu2000@gmail.com'))
-    # print(auth.add_new_user('jonathan.liu2000@gmail.com', 'Test', '2', 'goodpassword'))
-    # print(auth.email_already_exists('jonathan.liu2000@gmail.com'))
-    # print(auth.check_password('jonathan.liu2000@gmail.com', 'goodpassword'))
-    # print(auth.check_password('jonathan.liu2000@gmail.com', 'badpassword'))
-    print(auth.verify_email(248190294))
+    print(auth.email_already_exists('test@test.com'))
+    print(auth.email_already_exists('jonathan.liu2000@gmail.com'))
+    print(auth.add_new_user('jonathan.liu2000@gmail.com', 'Test', '2', 'goodpassword'))
+    print(auth.email_already_exists('jonathan.liu2000@gmail.com'))
+    print(auth.check_password('jonathan.liu2000@gmail.com', 'goodpassword'))
+    print(auth.check_password('jonathan.liu2000@gmail.com', 'badpassword'))
+    print(auth.verify_email(132777754))
+    print(auth.send_reset('jonathan.liu2000@gmail.com'))
     # End testing code
 
     if len(sys.argv) != 2:

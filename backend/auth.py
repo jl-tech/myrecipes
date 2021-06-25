@@ -2,6 +2,7 @@ import random
 import ssl
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from constants import *
 
 import bcrypt
 import pymysql
@@ -29,32 +30,26 @@ def add_new_user(email, first_name, last_name, password):
     # TODO password requirements?
 
     hashed_pwd = hash_password(password)
-    con = pymysql.connect(host='localhost',
-                          user='myrecipes',
-                          password='g3iCv7sr!',
-                          db='myrecipes',
-                          cursorclass=pymysql.cursors.DictCursor)
 
-    with con:
-        cur = con.cursor()
-        # generate unique conf_code
-        is_unique = False
-        conf_code = 0
-        while not is_unique:
-            conf_code = random.SystemRandom().randint(100000000, 999999999)
-            query = "select * from Users where email_verification_code = %s"
-            cur.execute(query, (int(conf_code)))
-            if len(cur.fetchall()) == 0:
-                is_unique = True
+    # generate unique conf_code
+    cur = con.cursor()
+    is_unique = False
+    conf_code = 0
+    while not is_unique:
+        conf_code = random.SystemRandom().randint(100000000, 999999999)
+        query = "select * from Users where email_verification_code = %s"
+        cur.execute(query, (int(conf_code)))
+        if len(cur.fetchall()) == 0:
+            is_unique = True
 
 
-        query = "insert into Users(email, first_name, last_name, password_hash, email_verification_code)" \
-                "values (%s, %s, %s, %s, %s)"
-        cur.execute(query, (email, first_name, last_name, hashed_pwd, int(conf_code)))
-        con.commit()
-        send_confirm_email(email, conf_code)
-        print(f"INFO: Created new account: {email}, f: {first_name}, l: {last_name}, p: {hashed_pwd}, c: {conf_code}")
-        return 0
+    query = "insert into Users(email, first_name, last_name, password_hash, email_verification_code)" \
+            "values (%s, %s, %s, %s, %s)"
+    cur.execute(query, (email, first_name, last_name, hashed_pwd, int(conf_code)))
+    con.commit()
+    send_confirm_email(email, conf_code)
+    print(f"INFO: Created new account: {email}, f: {first_name}, l: {last_name}, p: {hashed_pwd}, c: {conf_code}")
+    return 0
 
 def verify_email(code):
     '''
@@ -63,25 +58,19 @@ def verify_email(code):
     :param code: The email verification code
     :return: 0 on success. 1 if the code was not matched.
     '''
-    con = pymysql.connect(host='localhost',
-                          user='myrecipes',
-                          password='g3iCv7sr!',
-                          db='myrecipes',
-                          cursorclass=pymysql.cursors.DictCursor)
 
-    with con:
-        cur = con.cursor()
-        # generate unique conf_code
-        query = "update Users " \
-                "set email_verification_code=NULL " \
-                "where email_verification_code=%s"
-        changed_rows = cur.execute(query, (int(code)))
-        con.commit()
-        if changed_rows == 0:
-            return 1
-        else:
-            print(f"INFO: Email verified for code {code}")
-            return 0
+    cur = con.cursor()
+    # generate unique conf_code
+    query = "update Users " \
+            "set email_verification_code=NULL " \
+            "where email_verification_code=%s"
+    changed_rows = cur.execute(query, (int(code)))
+    con.commit()
+    if changed_rows == 0:
+        return 1
+    else:
+        print(f"INFO: Email verified for code {code}")
+        return 0
 
 def token_to_email(token):
     '''
@@ -99,21 +88,15 @@ def token_to_email(token):
     if 'email' not in result:
         return -1
 
-    con = pymysql.connect(host='localhost',
-                          user='myrecipes',
-                          password='g3iCv7sr!',
-                          db='myrecipes',
-                          cursorclass=pymysql.cursors.DictCursor)
-    with con:
-        cur = con.cursor()
-        # check email exists with an account
-        query = "select * from Users where email = %s"
-        if len(cur.execute(query, (result['email'])).fetchall()) == 0:
-            return -2
-        query = "select * from Users where email = %s and email_verification_code is NULL"
-        if len(cur.execute(query, (result['email'])).fetchall()) == 0:
-            return -3
-        return result['email']
+    cur = con.cursor()
+    # check email exists with an account
+    query = "select * from Users where email = %s"
+    if len(cur.execute(query, (result['email'])).fetchall()) == 0:
+        return -2
+    query = "select * from Users where email = %s and email_verification_code is NULL"
+    if len(cur.execute(query, (result['email'])).fetchall()) == 0:
+        return -3
+    return result['email']
 
 
 def hash_password(password):
@@ -135,20 +118,14 @@ def check_password(email, password):
     :return: True if the password was correct. False otherwise.
     :except: ValueError - if the email address was not found in the database
     '''
-    con = pymysql.connect(host='localhost',
-                          user='myrecipes',
-                          password='g3iCv7sr!',
-                          db='myrecipes',
-                          cursorclass=pymysql.cursors.DictCursor)
-    with con:
-        cur = con.cursor()
-        query = f"select password_hash from Users where email = %s"
-        cur.execute(query, (email,))
-        result = cur.fetchall()
-        if len(result) == 0:
-            raise ValueError
-        p_hash = result[0]['password_hash']
-        return bcrypt.checkpw(password.encode('utf-8'), p_hash.encode('utf-8'))
+    cur = con.cursor()
+    query = f"select password_hash from Users where email = %s"
+    cur.execute(query, (email,))
+    result = cur.fetchall()
+    if len(result) == 0:
+        raise ValueError
+    p_hash = result[0]['password_hash']
+    return bcrypt.checkpw(password.encode('utf-8'), p_hash.encode('utf-8'))
 
 def email_already_exists(email):
     '''
@@ -156,20 +133,14 @@ def email_already_exists(email):
     :param email: The email address to check
     :return: True if the email already exists. False otherwise.
     '''
-    con = pymysql.connect(host='localhost',
-                          user='myrecipes',
-                          password='g3iCv7sr!',
-                          db='myrecipes',
-                          cursorclass=pymysql.cursors.DictCursor)
-    with con:
-        cur = con.cursor()
-        query = f"select * from Users where email = %s"
-        cur.execute(query, (email,))
-        result = cur.fetchall()
-        if len(result) != 0:
-            return True
-        else:
-            return False
+    cur = con.cursor()
+    query = f"select * from Users where email = %s"
+    cur.execute(query, (email,))
+    result = cur.fetchall()
+    if len(result) != 0:
+        return True
+    else:
+        return False
 
 def send_confirm_email(email, code):
     '''
@@ -191,7 +162,7 @@ def send_confirm_email(email, code):
        Thanks for signing up for MyRecipes.
 
        Please click the link below to confirm your email.
-       http://localhost:8080/confirm_email?code={code}
+       http://localhost:3000/emailconfirm?code={code}
        
        If the link doesn't work, the code to confirm your email is {code}.
 
@@ -210,7 +181,7 @@ def send_confirm_email(email, code):
                    <p> Thanks for signing up for MyRecipes. </p>
 
                    <b> <p> Please click the link below to confirm your email.</p>
-                    <p> http://localhost:8080/confirm_email?code={code}</p> </b>
+                    <p> http://localhost:3000/emailconfirm?code={code}</p> </b>
        
                     <p> If the link doesn't work, the code to reset your email is {code}. </p>
 
@@ -236,3 +207,114 @@ def send_confirm_email(email, code):
     #     return 1
 
     return 0
+
+
+def send_reset(email):
+    '''
+    Sends the email containing the link and code to reset password.
+    The
+    :param email: The email address to send to
+    :return: 0 on success. 1 if the email is not associated with an account.
+    '''
+
+    cur = con.cursor()
+    query = 'select password_hash from Users where email = %s'
+    cur.execute(query, (email,))
+
+    result = cur.fetchall()
+    if len(result) == 0:
+        return 1
+    code = tokenise.encode_token({'password': result[0]['password_hash']})
+
+    # Variables setup
+    message = MIMEMultipart("alternative")
+    message["Subject"] = "Your password reset link for MyRecipes"
+    message["From"] = "myrecipes.supp@gmail.com"
+    message["To"] = email
+
+    message_plain = f"""\
+       Hi!
+
+       Someone (hopefully you) requested to change your password for MyRecipes.
+
+       Please click the link below to change your password.
+       http://localhost:3000/reset?code={code}
+
+       If the link doesn't work, the code to reset your password is {code}.
+
+       If you did not request this change you do not need to do anything.
+
+       Regards,
+       MyRecipes
+       """
+
+    message_html = f"""\
+           <html>
+               <body>
+                   <p> Hi! </p>
+
+                   <p>  Someone (hopefully you) requested to change your password for MyRecipes. </p>
+
+                   <b> <p> Please click the link below to change your 
+                   password.</p>
+                    <p> http://localhost:3000/reset?code={code}</p> </b>
+
+                    <p> If the link doesn't work, the code to reset your 
+                    password is {code}. </p>
+
+                    <p> If you did not request this change you do not need to do anything. </p>
+
+                    <p> Regards, </p>
+                    <p> MyRecipes </p>
+               </body>
+           </html>
+           """
+
+    message.attach(MIMEText(message_plain, "plain"))
+    message.attach(MIMEText(message_html, "html"))
+
+    ctxt = ssl.create_default_context()
+    # try:
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=ctxt) as server:
+        server.login("myrecipes.supp@gmail.com", "#%ep773^KpScAduTj^SM6U*Gnw")
+        server.sendmail("myrecipes.supp@gmail.com", email,
+                        message.as_string())
+    # except:
+    #     return 1
+
+    return 0
+
+def reset_password(reset_code, password):
+    '''
+    Given a reset code, checks that code is valid, and then changes the
+    password for the user account associated with that user code.
+    :param reset_code: The reset code
+    :param password: The new password
+    :return: 0 on success. 1 if the token is not valid in any way.
+    '''
+    cur = con.cursor()
+    decoded = tokenise.decode_token(reset_code)
+    if decoded is None:
+        return 1
+    if 'password' not in decoded:
+        return 1
+
+    password_hash = decoded['password']
+
+    cur = con.cursor()
+    query = 'select email from Users where password_hash = %s'
+    cur.execute(query, (password_hash,))
+
+    result = cur.fetchall()
+    if len(result) == 0:
+        return 1
+
+    email_of_acc = result[0]['email']
+    new_pwd_hash = hash_password(password)
+    query = 'update Users set password=%s where email=%s'
+    cur.execute(query, (new_pwd_hash, email_of_acc))
+
+    return 0
+
+
+

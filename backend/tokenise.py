@@ -8,7 +8,7 @@ def encode_token(data):
     :param data: The dictionary to encode
     :return: The jwt token
     '''
-    return jwt.encode(data, SECRET_PASSKEY, algorithm='HS256').decode('utf-8')
+    return jwt.encode(data, SECRET_PASSKEY, algorithm='HS256')
 
 
 def decode_token(token):
