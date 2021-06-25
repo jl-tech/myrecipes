@@ -79,7 +79,7 @@ function LoginBody() {
                 <Link to={`${url}/forgetpassword`}>Forgotten password?</Link>
             </div>
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer style={{display:"block"}}>
             <div style={{textAlign:"center"}}>
                 <Register />
             </div>
@@ -93,7 +93,7 @@ function Login() {
     let { path, url } = useRouteMatch();
 
     return (<>
-        <div style={{textAlign:"center"}}>
+        <div style={{textAlign:"center",marginTop:"1em"}}>
             <img src={logo} alt="Logo" style={{maxWidth:"500px"}}/>
         </div>
         <Modal.Dialog>

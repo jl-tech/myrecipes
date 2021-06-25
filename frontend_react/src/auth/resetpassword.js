@@ -74,7 +74,7 @@ function ResetPasswordBody(props) {
     if (success) {
         return (
             <>
-            <div style={{textAlign:"center"}}>
+            <div style={{textAlign:"center",marginTop:"1em"}}>
                 <img src={logo} alt="Logo" style={{maxWidth:"500px"}}/>
             </div>
             <Modal.Dialog>

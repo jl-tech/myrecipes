@@ -1,5 +1,3 @@
-import logo from './logo.svg';
-
 import React, { useState, useEffect } from 'react';
 
 // import 'bootstrap/dist/css/bootstrap.css';
@@ -12,21 +10,68 @@ import {
     Redirect,
 } from "react-router-dom";
 
+import Cookie from 'universal-cookie';
+
 import Login from './auth/login.js';
 import EmailConfirm from './auth/emailconfirm.js';
 import ResetPassword from './auth/resetpassword.js';
+import Home from './Home.js';
 
-function Home() {
-  return (<div>Work in progress</div>);
+async function tokenVerify(token) {
+  let response = await fetch('http://localhost:5000/auth/verify', {
+      method: 'GET',
+      headers: {
+          'Authorization': token
+      }
+  }).catch(() => {
+      return false;
+  });
+
+  return response.ok;
+}
+
+function VisitorRoute(props) {
+  return (
+    <Route
+      render={({ location }) =>
+        props.loggedIn ? (
+          <Redirect to="/" />
+        ) : (
+          props.children
+        )
+      }
+    />
+  );
 }
 
 function App() {
+
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [fetched, setFetched] = useState(false);
+  const cookie = new Cookie();
+
+  async function checkToken() {
+    let token = cookie.get('token');
+    if (token != null) {
+      let response = await tokenVerify(token);
+      if (response) setLoggedIn(true);
+      else cookie.remove('token', {path: '/'});
+    }
+    setFetched(true);
+  }
+
+  useEffect(() => {
+    if (!fetched) checkToken();
+  })
+  
+  if (!fetched) return (<></>)
+
   return (
     <Router>
       <Switch>
-        <Route path="/login">
+        <VisitorRoute path="/login" loggedIn={loggedIn}>
           <Login />
-        </Route>
+        </VisitorRoute>
         <Route strict path="/emailconfirm/">
           <Home />
         </Route>
@@ -40,7 +85,7 @@ function App() {
           <ResetPassword />
         </Route>
         <Route path="/">
-          <Home />
+          <Home loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
         </Route>
         </Switch>
     </Router>
