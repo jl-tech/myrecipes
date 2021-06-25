@@ -2,6 +2,7 @@ import flask
 import sys
 from flask_cors import CORS
 from json import dumps
+import tokenise
 import auth
 
 APP = flask.Flask(__name__)
@@ -42,6 +43,18 @@ def route_auth_verify():
         return dumps({'status': 'email_not_verified'})
     else:
         return dumps({'email': result})
+
+@APP.route("/auth/login", methods=['POST'])
+def route_auth_login():
+    data = flask.request.get_json()
+    correct = auth.check_password(data["email"], data["password"])
+    if correct:
+        return dumps({
+            'status': 'OK',
+            'token':  tokenise.encode_token({'email': data["email"]})
+        })
+    elif not correct:
+        return dumps({'status': 'invalid_combination'})
 
 if __name__ == "__main__":
     # Testing code
