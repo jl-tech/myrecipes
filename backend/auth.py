@@ -33,9 +33,19 @@ def add_new_user(email, first_name, last_name, password):
                           db='myrecipes',
                           cursorclass=pymysql.cursors.DictCursor)
 
-    conf_code = random.SystemRandom().randint(10000000, 99999999)
     with con:
         cur = con.cursor()
+        # generate unique conf_code
+        is_unique = False
+        conf_code = 0
+        while not is_unique:
+            conf_code = random.SystemRandom().randint(100000000, 999999999)
+            query = "select * from Users where email_verification_code = %s"
+            cur.execute(query, (int(conf_code)))
+            if len(cur.fetchall()) == 0:
+                is_unique = True
+
+
         query = "insert into Users(email, first_name, last_name, password_hash, email_verification_code)" \
                 "values (%s, %s, %s, %s, %s)"
         cur.execute(query, (email, first_name, last_name, hashed_pwd, int(conf_code)))
@@ -44,6 +54,32 @@ def add_new_user(email, first_name, last_name, password):
         print(f"INFO: Created new account: {email}, f: {first_name}, l: {last_name}, p: {hashed_pwd}, c: {conf_code}")
         return 0
 
+def verify_email(code):
+    '''
+    Given an email verification code, checks if the code is matched with
+    an unverified account, and verifies that account if so.
+    :param code: The email verification code
+    :return: 0 on success. 1 if the code was not matched.
+    '''
+    con = pymysql.connect(host='localhost',
+                          user='myrecipes',
+                          password='g3iCv7sr!',
+                          db='myrecipes',
+                          cursorclass=pymysql.cursors.DictCursor)
+
+    with con:
+        cur = con.cursor()
+        # generate unique conf_code
+        query = "update Users " \
+                "set email_verification_code=NULL " \
+                "where email_verification_code=%s"
+        changed_rows = cur.execute(query, (int(code)))
+        con.commit()
+        if changed_rows == 0:
+            return 1
+        else:
+            print(f"INFO: Email verified for code {code}")
+            return 0
 
 def hash_password(password):
     '''

@@ -22,17 +22,24 @@ def route_auth_register():
     elif result == 0:
         return dumps({'status': 'OK'})
 
-
-
+@APP.route("/auth/emailconfirm", methods=['POST'])
+def route_auth_emailconfirm():
+    data = flask.request.get_json()
+    result = auth.verify_email(data["code"])
+    if result == 0:
+        return dumps({'status': 'OK'})
+    elif result == 1:
+        return dumps({'status': 'invalid_code'})
 
 if __name__ == "__main__":
     # Testing code
-    print(auth.email_already_exists('test@test.com'))
-    print(auth.email_already_exists('jonathan.liu2000@gmail.com'))
-    print(auth.add_new_user('jonathan.liu2000@gmail.com', 'Test', '2', 'goodpassword'))
-    print(auth.email_already_exists('jonathan.liu2000@gmail.com'))
-    print(auth.check_password('jonathan.liu2000@gmail.com', 'goodpassword'))
-    print(auth.check_password('jonathan.liu2000@gmail.com', 'badpassword'))
+    # print(auth.email_already_exists('test@test.com'))
+    # print(auth.email_already_exists('jonathan.liu2000@gmail.com'))
+    # print(auth.add_new_user('jonathan.liu2000@gmail.com', 'Test', '2', 'goodpassword'))
+    # print(auth.email_already_exists('jonathan.liu2000@gmail.com'))
+    # print(auth.check_password('jonathan.liu2000@gmail.com', 'goodpassword'))
+    # print(auth.check_password('jonathan.liu2000@gmail.com', 'badpassword'))
+    print(auth.verify_email(248190294))
     # End testing code
 
     if len(sys.argv) != 2:
