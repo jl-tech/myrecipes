@@ -14,6 +14,11 @@ import {
 
 import Login from './auth/login.js';
 import EmailConfirm from './auth/emailconfirm.js';
+import ResetPassword from './auth/resetpassword.js';
+
+function Home() {
+  return (<div>Work in progress</div>);
+}
 
 function App() {
   return (
@@ -22,11 +27,20 @@ function App() {
         <Route path="/login">
           <Login />
         </Route>
+        <Route strict path="/emailconfirm/">
+          <Home />
+        </Route>
         <Route path="/emailconfirm">
           <EmailConfirm />
         </Route>
+        <Route strict path="/resetpassword/">
+          <ResetPassword />
+        </Route>
+        <Route path="/resetpassword">
+          <ResetPassword />
+        </Route>
         <Route path="/">
-            <div>Work in progress</div>
+          <Home />
         </Route>
         </Switch>
     </Router>

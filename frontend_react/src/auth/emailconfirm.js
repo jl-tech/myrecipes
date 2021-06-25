@@ -55,8 +55,7 @@ function EmailConfirm() {
 
     if (!fetched) {
         return (
-            <Modal.Dialog>
-            </Modal.Dialog>
+            <Modal.Dialog></Modal.Dialog>
         );
     } else {
         return (
