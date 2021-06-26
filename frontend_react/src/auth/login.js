@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory, Switch, Route, useRouteMatch, Link } from "react-router-dom";
+import { useHistory, Switch, Route, Link } from "react-router-dom";
 
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
@@ -41,8 +41,6 @@ function LoginBody() {
     const cookie = new Cookie();
     const history = useHistory();
 
-    let { path, url } = useRouteMatch();
-
     async function handleSubmit(event) {
         event.preventDefault();
 
@@ -76,7 +74,7 @@ function LoginBody() {
                 </Button>
             </Form>
             <div style={{textAlign:"center",marginTop:"1em"}}>
-                <Link to={`${url}/forgetpassword`}>Forgotten password?</Link>
+                <Link to="/login/forgetpassword" >Forgotten password?</Link>
             </div>
         </Modal.Body>
         <Modal.Footer style={{display:"block"}}>
@@ -90,18 +88,16 @@ function LoginBody() {
 
 function Login() {
 
-    let { path, url } = useRouteMatch();
-
     return (<>
         <div style={{textAlign:"center",marginTop:"1em"}}>
             <img src={logo} alt="Logo" style={{maxWidth:"500px"}}/>
         </div>
         <Modal.Dialog>
         <Switch>
-            <Route path={`${path}/forgetpassword`}>
+            <Route path="/login/forgetpassword">
                 <ForgetPassword />
             </Route>
-            <Route path={path}>
+            <Route path="/login">
                 <LoginBody />
             </Route>
         </Switch>
