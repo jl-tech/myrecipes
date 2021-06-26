@@ -15,3 +15,10 @@ Week 2
 - Edited and added criteria and labels to the existing user stories.
 
 Week 3
+- Finished reviewing and brainstorming the "novel" requirements with the team and verified them with the tutor.
+- Started and finished the software architectrue diagram.
+- Proofread and helped rectify errors in the project proposal.
+
+Week 4
+- Helped design the APIs for the frontend to commuicate with the backend for sprint 1.
+
