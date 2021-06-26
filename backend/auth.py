@@ -345,3 +345,25 @@ def send_pwd_change_email(email):
         server.login("myrecipes.supp@gmail.com", "#%ep773^KpScAduTj^SM6U*Gnw")
         server.sendmail("myrecipes.supp@gmail.com", email,
                         message.as_string())
+
+
+def profile_info(user_id):
+    cur = con.cursor()
+    query = "select * from Users where user_id = %s"
+    cur.execute(query, (user_id,))
+    result = cur.fetchall()
+    return result
+
+def change_password(email, oldpassword, newpassword):
+    cur = con.cursor()
+    query = "select password_hash from Users where email = %s"
+    cur.execute(query, (email,))
+    result = cur.fetchall()
+    if hash_password(oldpassword) != result['password']:
+        return False
+    else:
+        new_hash_password = hash_password(newpassword)
+        query = 'update Users set password_hash=%s where email=%s'
+        cur.execute(query, (new_hash_password, email))
+        send_pwd_change_email(email)
+        return True
