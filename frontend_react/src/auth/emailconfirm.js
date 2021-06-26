@@ -4,14 +4,14 @@ import { Link, useLocation, useHistory } from "react-router-dom";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 
-async function requestEmailConfirm(emailHash) {
+async function requestEmailConfirm(code) {
     let response = await fetch('http://localhost:5000/auth/emailconfirm', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            emailHash: emailHash,
+            code: code,
         })
     }).catch(e => {
         throw new Error(e);
@@ -36,22 +36,23 @@ function EmailConfirm() {
     async function processCode() {
         let code = query.get("code");
         if (code == null) {
-            history.push('/');
+            history.go('/');
         }
-        let response = await requestEmailConfirm(code)
-            .catch(e => {
-                setMessage(e.message);
-            });
+        if (!fetched) {
+            let response = await requestEmailConfirm(code)
+                .catch(e => {
+                    setMessage(e.message);
+                });
 
-        if (response != null) {
-            setMessage(response.message);
+            if (response != null) setMessage("Successfully verified email");
+
+            setFetched(true);
         }
-        setFetched(true);
     }
 
     useEffect(() => {
-        if (!fetched) processCode()
-    });
+        if (!fetched) processCode();
+    }, []);
 
     if (!fetched) {
         return (

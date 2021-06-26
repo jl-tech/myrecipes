@@ -10,6 +10,7 @@ import smtplib
 
 import tokenise
 
+import sys
 
 def add_new_user(email, first_name, last_name, password):
     '''
@@ -31,15 +32,15 @@ def add_new_user(email, first_name, last_name, password):
 
     hashed_pwd = hash_password(password)
     cur = con.cursor()
-    query = "insert into Users(email, first_name, last_name, password_hash, email_verified)" \
+    query = "insert into Users (email, first_name, last_name, password_hash, email_verified)" \
             "values (%s, %s, %s, %s, %s)"
     cur.execute(query, (email, first_name, last_name, hashed_pwd, False))
     con.commit()
 
     query = "select user_id from Users where email = %s"
     cur.execute(query, (email))
-    user_id = cur.fetchone()[0]
-    send_confirm_email(user_id, email)
+    user_id = cur.fetchone()
+    send_confirm_email(user_id['user_id'], email)
 
     print(f"INFO: Created new account: {email}, f: {first_name}, l: {last_name}, p: {hashed_pwd}")
     return 0
@@ -67,17 +68,15 @@ def email_confirm(code):
         return 0
 
 def verify(token):
-    email = token_to_email(token)
+    user_id = token_to_id(token)
     
-    if isinstance(email, int): 
+    print(user_id, file=sys.stderr)
+    if user_id < 0:
         return None
 
-    cur = con.cursor()
-    query = "select user_id from Users where email = %s"
-    cur.execute(query, (email))
-    return cur.fetchone()[0]
+    return user_id
 
-def token_to_email(token):
+def token_to_id(token):
     '''
     Given a jwt token, decodes that token into the email address corresponding
     to the token's account
@@ -87,21 +86,28 @@ def token_to_email(token):
     -2 if the email decoded is not associated with an account
     -3 if the email decoded hasn't been verified
     '''
-    result = tokenise.decode_token(token)
     if token is None:
         return -1
-    if 'email' not in result:
+
+    token_decoded = tokenise.decode_token(token)
+    if 'user_id' not in token_decoded:
         return -1
+    user_id = token_decoded['user_id']
+    print(user_id, file=sys.stderr)
 
     cur = con.cursor()
     # check email exists with an account
-    query = "select * from Users where email = %s"
-    if len(cur.execute(query, (result['email'])).fetchall()) == 0:
+    query = "select * from Users where user_id = %s"
+    cur.execute(query, (user_id,))
+    result = cur.fetchall()
+    if len(result) == 0:
         return -2
-    query = "select * from Users where email = %s and email_verification_code is NULL"
-    if len(cur.execute(query, (result['email'])).fetchall()) == 0:
+    query = "select * from Users where user_id = %s and email_verified = %s"
+    cur.execute(query, (user_id, True, ))
+    result = cur.fetchall()
+    if len(result) == 0:
         return -3
-    return result['email']
+    return user_id
 
 
 def hash_password(password):
@@ -124,13 +130,13 @@ def check_password(email, password):
     :except: ValueError - if the email address was not found in the database
     '''
     cur = con.cursor()
-    query = f"select password_hash from Users where email = %s"
+    query = f"select user_id, password_hash from Users where email = %s"
     cur.execute(query, (email,))
     result = cur.fetchall()
     if len(result) == 0:
-        raise ValueError
+        return False, -1
     p_hash = result[0]['password_hash']
-    return bcrypt.checkpw(password.encode('utf-8'), p_hash.encode('utf-8'))
+    return bcrypt.checkpw(password.encode('utf-8'), p_hash.encode('utf-8')), result[0]['user_id']
 
 def email_already_exists(email):
     '''

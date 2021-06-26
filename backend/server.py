@@ -17,52 +17,71 @@ def status():
 @APP.route("/auth/register", methods=['POST'])
 def route_auth_register():
     data = flask.request.get_json()
-    result = auth.add_new_user(data["email"], data["password"], data["first_name"], data["last_name"])
+    result = auth.add_new_user(data["email"], data["first_name"], data["last_name"], data["password"])
     if result == 1:
-        return dumps({'status': 'email_already_exists'})
+        response = flask.jsonify({'error': 'The email already exists'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
     elif result == 2:
-        return dumps({'status': 'password_requirements_fail'})
+        response = flask.jsonify({'error': 'Invalid password'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
     elif result == 0:
-        return dumps({'status': 'OK'})
+        response = flask.jsonify({})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 200
 
 @APP.route("/auth/emailconfirm", methods=['POST'])
 def route_auth_emailconfirm():
     data = flask.request.get_json()
     result = auth.email_confirm(data["code"])
     if result == 0:
-        return dumps({'status': 'OK'})
+        response = flask.jsonify({})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 200
     elif result == 1:
-        return dumps({'status': 'unsecure token'})
+        response = flask.jsonify({'error': 'Invalid email verification code'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
 
 @APP.route("/auth/verify", methods=['GET'])
 def route_auth_verify():
-    token = flask.request.args.get("token")
+    token = flask.request.headers.get("Authorization")
     user_id = auth.verify(token)
     if user_id is not None:
-        return dumps({'user_id': user_id})
+        response = flask.jsonify({'user_id': user_id})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 200
     else:
-        return dumps({'status': 'unsecure token'})
+        response = flask.jsonify({})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
 
 @APP.route("/auth/login", methods=['POST'])
 def route_auth_login():
     data = flask.request.get_json()
-    correct = auth.check_password(data["email"], data["password"])
+    correct, user_id = auth.check_password(data["email"], data["password"])
     if correct:
-        return dumps({
-            'status': 'OK',
-            'token':  tokenise.encode_token({'email': data["email"]})
-        })
+        response = flask.jsonify({'token': tokenise.encode_token({'user_id': user_id})})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 200
     elif not correct:
-        return dumps({'status': 'invalid_combination'})
+        response = flask.jsonify({'error': 'Invalid email or password'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
 
 @APP.route("/auth/forgetpassword", methods=['POST'])
 def route_auth_forgetpassword():
     data = flask.request.get_json()
     result = auth.send_reset(data["email"])
     if result == 1:
-        return dumps({'status': 'email_not_found'})
+        response = flask.jsonify({'error': 'Invalid email'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
     else:
-        return dumps({'status': 'OK'})
+        response = flask.jsonify({})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 200
 
 @APP.route("/auth/resetpassword", methods=['POST'])
 def route_resetpassword():
@@ -98,15 +117,7 @@ def editprofile():
     if auth.editprofile(data["Token"], data["FirstName"], data["LastName"]):
         return dumps({'status': 'OK'})
     else:
-        return dumps({'status': 'edit profile unsuccessful'})
-
-@APP.route("/auth/editprofile", methods=['POST'])
-def editprofile():
-    data = flask.request.get_json()
-    if auth.editprofile(data["Token"], data["FirstName"], data["LastName"]):
-        return dumps({'status': 'OK'})
-    else:
-        return dumps({'status': 'edit profile unsuccessful'})     
+        return dumps({'status': 'edit profile unsuccessful'})  
 
 @APP.route("/auth/changeemail", methods=['POST'])
 def changeemail():

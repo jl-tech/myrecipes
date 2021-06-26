@@ -151,7 +151,7 @@ function ResetPassword() {
     let code = query.get("code");
 
     async function processCode() {
-        if (code == null) history.push('/');
+        if (code == null) history.go('/');
 
         let response = await verifyResetCode(code)
             .catch(e => {
@@ -166,7 +166,7 @@ function ResetPassword() {
 
     useEffect(() => {
         if (!fetched) processCode()
-    });
+    }, []);
 
     if (fetched) {
         if (valid) return (<ResetPasswordBody code={code} />);

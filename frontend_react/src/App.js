@@ -63,7 +63,7 @@ function App() {
         });
       
       if (response != null) {
-        setCurrId(response.id);
+        setCurrId(response.user_id);
         setLoggedIn(true);
       }
     }
@@ -72,7 +72,7 @@ function App() {
 
   useEffect(() => {
     if (!fetched) checkToken();
-  })
+  }, []);
   
   if (!fetched) return (<></>)
 
