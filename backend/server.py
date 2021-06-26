@@ -36,15 +36,12 @@ def route_auth_emailconfirm():
 
 @APP.route("/auth/verify", methods=['GET'])
 def route_auth_verify():
-    result = auth.token_to_email(flask.request.args.get("token"))
-    if result == -1:
-        return dumps({'status': 'invalid_token'})
-    elif result == -2:
-        return dumps({'status': 'email_not_registered'})
-    elif result == -3:
-        return dumps({'status': 'email_not_verified'})
+    token = flask.request.args.get("token")
+    user_id = auth.verify(token)
+    if user_id is not None:
+        return dumps({'user_id': user_id})
     else:
-        return dumps({'email': result})
+        return dumps({'status': 'unsecure token'})
 
 @APP.route("/auth/login", methods=['POST'])
 def route_auth_login():

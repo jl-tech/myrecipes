@@ -66,6 +66,17 @@ def email_confirm(code):
     else:
         return 0
 
+def verify(token):
+    email = token_to_email(token)
+    
+    if isinstance(email, int): 
+        return None
+
+    cur = con.cursor()
+    query = "select user_id from Users where email = %s"
+    cur.execute(query, (email))
+    return cur.fetchone()[0]
+
 def token_to_email(token):
     '''
     Given a jwt token, decodes that token into the email address corresponding
