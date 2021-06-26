@@ -30,46 +30,40 @@ def add_new_user(email, first_name, last_name, password):
     # TODO password requirements?
 
     hashed_pwd = hash_password(password)
-
-    # generate unique conf_code
     cur = con.cursor()
-    is_unique = False
-    conf_code = 0
-    while not is_unique:
-        conf_code = random.SystemRandom().randint(100000000, 999999999)
-        query = "select * from Users where email_verification_code = %s"
-        cur.execute(query, (int(conf_code)))
-        if len(cur.fetchall()) == 0:
-            is_unique = True
-
-
-    query = "insert into Users(email, first_name, last_name, password_hash, email_verification_code)" \
+    query = "insert into Users(email, first_name, last_name, password_hash, email_verified)" \
             "values (%s, %s, %s, %s, %s)"
-    cur.execute(query, (email, first_name, last_name, hashed_pwd, int(conf_code)))
+    cur.execute(query, (email, first_name, last_name, hashed_pwd, False))
     con.commit()
-    send_confirm_email(email, conf_code)
-    print(f"INFO: Created new account: {email}, f: {first_name}, l: {last_name}, p: {hashed_pwd}, c: {conf_code}")
+
+    query = "select user_id from Users where email = %s"
+    cur.execute(query, (email))
+    user_id = cur.fetchone()[0]
+    send_confirm_email(user_id, email)
+
+    print(f"INFO: Created new account: {email}, f: {first_name}, l: {last_name}, p: {hashed_pwd}")
     return 0
 
-def verify_email(code):
+def email_confirm(code):
     '''
-    Given an email verification code, checks if the code is matched with
+    Given an email verification token, updates the user email associated with user_id
     an unverified account, and verifies that account if so.
-    :param code: The email verification code
-    :return: 0 on success. 1 if the code was not matched.
+    :param code: The email verification token
+    :return: 0 on success. 1 if token is unsecure
     '''
 
+    data = tokenise.decode_token(code)
+    if data is None:
+        return 1
+
     cur = con.cursor()
-    # generate unique conf_code
-    query = "update Users " \
-            "set email_verification_code=NULL " \
-            "where email_verification_code=%s"
-    changed_rows = cur.execute(query, (int(code)))
+    query = "update Users set email = %s, email_verified = %s where user_id = %s"
+    changed_rows = cur.execute(query, (data["email"], True, data["user_id"]))
     con.commit()
+
     if changed_rows == 0:
         return 1
     else:
-        print(f"INFO: Email verified for code {code}")
         return 0
 
 def token_to_email(token):
@@ -142,15 +136,18 @@ def email_already_exists(email):
     else:
         return False
 
-def send_confirm_email(email, code):
+def send_confirm_email(user_id, email):
     '''
     Sends the email requesting the user to confirm their email to the
     specified email address
+    :param user_id: The id associated with the user
     :param email: The email address to send to
     :return: 0 on success. 1 on any error.
     '''
 
     # Variables setup
+    code = tokenise.encode_token({'user_id': user_id, 'email': email})
+
     message = MIMEMultipart("alternative")
     message["Subject"] = "Confirm your email for MyRecipes"
     message["From"] = "myrecipes.supp@gmail.com"
@@ -350,7 +347,7 @@ def send_pwd_change_email(email):
 def profile_info(user_id):
     '''
     Gets all info associated to a specified user.
-    :param user_id: The user of the user
+    :param user_id: The id of the user
     :return: The tuple containing all fields associated with that user. 1 if
     the user id was not found.
     '''
@@ -397,3 +394,16 @@ def editprofile(token, first_name, last_name):
 
     return True
     
+def changeemail(token, email):
+    prev_email = token_to_email(token)
+    
+    if isinstance(prev_email, int): 
+        return False
+
+    cur = con.cursor()
+    query = "select user_id from Users where email = %s"
+    cur.execute(query, (prev_email))
+    user_id = cur.fetchone()[0]
+    send_confirm_email(user_id, email)
+
+    return True

@@ -28,11 +28,11 @@ def route_auth_register():
 @APP.route("/auth/emailconfirm", methods=['POST'])
 def route_auth_emailconfirm():
     data = flask.request.get_json()
-    result = auth.verify_email(data["code"])
+    result = auth.email_confirm(data["code"])
     if result == 0:
         return dumps({'status': 'OK'})
     elif result == 1:
-        return dumps({'status': 'invalid_code'})
+        return dumps({'status': 'unsecure token'})
 
 @APP.route("/auth/verify", methods=['GET'])
 def route_auth_verify():
@@ -103,6 +103,21 @@ def editprofile():
     else:
         return dumps({'status': 'edit profile unsuccessful'})
 
+@APP.route("/auth/editprofile", methods=['POST'])
+def editprofile():
+    data = flask.request.get_json()
+    if auth.editprofile(data["Token"], data["FirstName"], data["LastName"]):
+        return dumps({'status': 'OK'})
+    else:
+        return dumps({'status': 'edit profile unsuccessful'})     
+
+@APP.route("/auth/changeemail", methods=['POST'])
+def changeemail():
+    data = flask.request.get_json()
+    if auth.changeemail(data["Token"], data["Email"]):
+        return dumps({'status': 'OK'})
+    else:
+        return dumps({'status': 'change email unsuccessful'})
 
 if __name__ == "__main__":
     # Testing code
