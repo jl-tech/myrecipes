@@ -348,18 +348,34 @@ def send_pwd_change_email(email):
 
 
 def profile_info(user_id):
+    '''
+    Gets all info associated to a specified user.
+    :param user_id: The user of the user
+    :return: The tuple containing all fields associated with that user. 1 if
+    the user id was not found.
+    '''
     cur = con.cursor()
     query = "select * from Users where user_id = %s"
     cur.execute(query, (user_id,))
     result = cur.fetchall()
-    return result
+    if len(result) == 0:
+        return 1
+    else:
+        return result[0]
 
 def change_password(email, oldpassword, newpassword):
+    '''
+    Changes the password for the account with the specified email.
+    :param email: The email address of the account
+    :param oldpassword: The old password
+    :param newpassword: The password to change to
+    :return: . True on success. False if the old password was incorrect
+    '''
     cur = con.cursor()
     query = "select password_hash from Users where email = %s"
     cur.execute(query, (email,))
     result = cur.fetchall()
-    if hash_password(oldpassword) != result['password']:
+    if not check_password(email, oldpassword):
         return False
     else:
         new_hash_password = hash_password(newpassword)

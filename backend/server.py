@@ -80,7 +80,10 @@ def route_resetpassword():
 def route_profile():
     data = flask.request.get_json()
     result = auth.profile_info(data["user_id"])
-    return dumps({'Email': result['email'], 'FirstName': result['first_name'],
+    if result == 1:
+        return dumps({'status': 'user_id_invalid'})
+    else:
+        return dumps({'Email': result['email'], 'FirstName': result['first_name'],
                   'LastName': result['last_name'], 'ProfilePictureURL': result['profile_pic_path']})
 
 @APP.route("/auth/changepassword", methods=['POST'])
@@ -88,7 +91,7 @@ def changepassword():
     email = auth.token_to_email(flask.request.args.get("token"))
     data = flask.request.get_json()
     if not auth.change_password(email, data["OldPassword"], data["NewPassword"]):
-        return dumps({'status': 'old password invalid'})
+        return dumps({'status': 'old_password_invalid'})
     else:
         return dumps({'status': 'OK'})
 
