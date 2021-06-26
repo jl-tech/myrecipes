@@ -367,3 +367,17 @@ def change_password(email, oldpassword, newpassword):
         cur.execute(query, (new_hash_password, email))
         send_pwd_change_email(email)
         return True
+
+def editprofile(token, first_name, last_name):
+    email = token_to_email(token)
+    
+    if isinstance(email, int): 
+        return False
+
+    cur = con.cursor()
+    query = "update Users set first_name = %s, last_name = %s where email = %s"
+    cur.execute(query, (first_name, last_name, email))
+    con.commit()
+
+    return True
+    

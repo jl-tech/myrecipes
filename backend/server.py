@@ -92,6 +92,14 @@ def changepassword():
     else:
         return dumps({'status': 'OK'})
 
+@APP.route("/auth/editprofile", methods=['POST'])
+def editprofile():
+    data = flask.request.get_json()
+    if auth.editprofile(data["Token"], data["FirstName"], data["LastName"]):
+        return dumps({'status': 'OK'})
+    else:
+        return dumps({'status': 'edit profile unsuccessful'})
+
 
 if __name__ == "__main__":
     # Testing code
