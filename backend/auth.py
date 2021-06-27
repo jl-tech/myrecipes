@@ -2,6 +2,9 @@ import random
 import ssl
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+
+import os
+
 from constants import *
 
 import bcrypt
@@ -488,13 +491,22 @@ def change_profile_pic(image_file, token):
     if u_id < 0:
         return -1
 
+    cur = con.cursor()
+    query = "select profile_pic_path from Users where user_id=%s"
+    cur.execute(query, (u_id,))
+    old_path = cur.fetchone()['profile_pic_path']
+
     file_name = hashlib.sha1(image_file.read()).hexdigest()
     img = Image.open(image_file)
     out_path = f'../server_resources/images/profile_pictures/{file_name}.png'
     img.save(out_path)
 
-    cur = con.cursor()
+
     query = "update Users set profile_pic_path=%s where user_id=%s"
     cur.execute(query, (out_path, u_id))
     con.commit()
+
+    # delete old image
+    os.remove(old_path)
+
     return 0

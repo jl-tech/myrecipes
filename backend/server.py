@@ -162,7 +162,7 @@ def route_auth_changepicture():
     data = flask.request.get_json()
     file = flask.request.files['ProfilePicture']
     if file.filename != '':
-        result = auth.change_profile_pic(file, data['token'])
+        result = auth.change_profile_pic(file, flask.request.headers.get("Authorization"))
     else:
         response = flask.jsonify({'error': 'Unexpected error occured. Try again.'})
         response.headers.add('Access-Control-Allow-Origin', '*')
