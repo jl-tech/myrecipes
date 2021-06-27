@@ -15,6 +15,8 @@ import hashlib
 
 from PIL import Image
 
+import threading
+
 def add_new_user(email, first_name, last_name, password):
     '''
     Adds a new user to the database, and sends a confirmation email providing
@@ -43,7 +45,11 @@ def add_new_user(email, first_name, last_name, password):
     query = "select user_id from Users where email = %s"
     cur.execute(query, (email))
     user_id = cur.fetchone()
-    send_confirm_email(user_id['user_id'], email)
+
+    email_thread = threading.Thread(name="conf_email_thread",
+                                    args=(user_id['user_id'], email),
+                                    target=send_confirm_email)
+    email_thread.start()
 
     print(f"INFO: Created new account: {email}, f: {first_name}, l: {last_name}, p: {hashed_pwd}")
     return 0
@@ -362,7 +368,11 @@ def reset_password(reset_code, password):
     query = 'update Users set password_hash=%s where email=%s'
     cur.execute(query, (new_pwd_hash, email_of_acc))
 
-    send_pwd_change_email(email_of_acc)
+    email_thread = threading.Thread(name="conf_email_thread",
+                                    args=(email_of_acc,),
+                                    target=send_pwd_change_email)
+    email_thread.start()
+
 
     return 0
 
@@ -429,7 +439,11 @@ def change_password(email, oldpassword, newpassword):
         new_hash_password = hash_password(newpassword)
         query = 'update Users set password_hash=%s where email=%s'
         cur.execute(query, (new_hash_password, email))
-        send_pwd_change_email(email)
+
+        email_thread = threading.Thread(name="conf_email_thread",
+                                        args=(email,),
+                                        target=send_pwd_change_email)
+        email_thread.start()
         return True
 
 def editprofile(token, first_name, last_name):
@@ -455,7 +469,10 @@ def changeemail(token, email):
     query = "select user_id from Users where email = %s"
     cur.execute(query, (prev_email))
     user_id = cur.fetchone()[0]
-    send_confirm_email(user_id, email)
+    email_thread = threading.Thread(name="conf_email_thread",
+                                    args=(user_id, email),
+                                    target=send_confirm_email)
+    email_thread.start()
 
     return True
 
