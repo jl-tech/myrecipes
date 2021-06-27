@@ -383,7 +383,7 @@ def send_pwd_change_email(email):
         <p> MyRecipes </p>
         """
     email_thread = threading.Thread(name="conf_email_thread",
-                                    args=(email_of_acc,),
+                                    args=(email,),
                                     target=send_pwd_change_email)
     email_thread.start()
 

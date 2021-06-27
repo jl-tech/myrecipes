@@ -14,3 +14,12 @@
 - Wrote section 1.3 in proposal
 - Compiled all proposal work into PDF document
 - Updated logo
+*Week 4*
+- Database schema for auth data
+- Basic server backend structure
+- Login functions
+- Email functions
+- Tokenise functions
+- Profile pic functions
+- Early register & email confirm functions (modified by Eric substantially)
+- Debugging & testing backend with Insomnia
