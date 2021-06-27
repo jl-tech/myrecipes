@@ -119,27 +119,43 @@ def route_auth_profile():
 def route_auth_changepassword():
     token = flask.request.headers.get("Authorization")
     email = auth.token_to_email(token)
+    if not isinstance(email, str) and email < 1:
+        response = flask.jsonify({'error': 'Invalid token'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
     data = flask.request.get_json()
     if not auth.change_password(email, data["OldPassword"], data["NewPassword"]):
-        return dumps({'status': 'old_password_invalid'})
+        response = flask.jsonify({'error': 'Old password invalid'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
     else:
-        return dumps({'status': 'OK'})
+        response = flask.jsonify({})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 200
 
 @APP.route("/auth/editprofile", methods=['POST'])
 def route_auth_editprofile():
     data = flask.request.get_json()
-    if auth.editprofile(data["Token"], data["FirstName"], data["LastName"]):
-        return dumps({'status': 'OK'})
+    if auth.editprofile(flask.request.headers.get("Authorization"), data["FirstName"], data["LastName"]):
+        response = flask.jsonify({})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 200
     else:
-        return dumps({'status': 'edit profile unsuccessful'})  
+        response = flask.jsonify({'error': 'Invalid token'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
 
 @APP.route("/auth/changeemail", methods=['POST'])
 def route_auth_changeemail():
     data = flask.request.get_json()
-    if auth.changeemail(data["Token"], data["Email"]):
-        return dumps({'status': 'OK'})
+    if auth.changeemail(flask.request.headers.get("Authorization"), data["Email"]):
+        response = flask.jsonify({})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 200
     else:
-        return dumps({'status': 'change email unsuccessful'})
+        response = flask.jsonify({'error': 'Invalid token'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
 
 @APP.route("/auth/changepicture", methods=['POST'])
 def route_auth_changepicture():

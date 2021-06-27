@@ -67,8 +67,9 @@ def email_confirm(code):
         return 1
 
     cur = con.cursor()
+    print(data)
     query = "update Users set email = %s, email_verified = TRUE where user_id = %s"
-    changed_rows = cur.execute(query, (data["email"], data["user_id"]))
+    changed_rows = cur.execute(query, (data["email"], int(data["user_id"])))
     con.commit()
 
     if changed_rows == 0:
@@ -433,10 +434,7 @@ def change_password(email, oldpassword, newpassword):
     :return: . True on success. False if the old password was incorrect
     '''
     cur = con.cursor()
-    query = "select password_hash from Users where email = %s"
-    cur.execute(query, (email,))
-    result = cur.fetchall()
-    if not check_password(email, oldpassword):
+    if not check_password(email, oldpassword)[0]:
         return False
     else:
         new_hash_password = hash_password(newpassword)
@@ -466,8 +464,8 @@ def changeemail(token, email):
 
     cur = con.cursor()
     query = "select user_id from Users where email = %s"
-    cur.execute(query, (prev_email))
-    user_id = cur.fetchone()[0]
+    cur.execute(query, (prev_email,))
+    user_id = cur.fetchone()['user_id']
     email_thread = threading.Thread(name="conf_email_thread",
                                     args=(user_id, email),
                                     target=send_confirm_email)
