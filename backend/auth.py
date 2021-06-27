@@ -507,6 +507,12 @@ def change_profile_pic(image_file, token):
     con.commit()
 
     # delete old image
-    os.remove(old_path)
+    if old_path is not None:
+        try:
+            os.remove(old_path)
+        except:
+            pass
+
+
 
     return 0
