@@ -65,8 +65,12 @@ def route_auth_login():
         response = flask.jsonify({'token': tokenise.encode_token({'user_id': user_id})})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
-    elif not correct:
+    elif not correct and user_id == -1 or not correct and user_id == -2:
         response = flask.jsonify({'error': 'Invalid email or password'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
+    elif not correct and user_id == -3:
+        response = flask.jsonify({'error': 'That email hasn\'t been verified yet.'})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
 

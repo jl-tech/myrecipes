@@ -126,17 +126,28 @@ def check_password(email, password):
     account with the specified email.
     :param email: The email address of the account
     :param password: The password to check
-    :return: True if the password was correct. False otherwise.
-    :except: ValueError - if the email address was not found in the database
+    :return: True if the password was correct.
+    (False, -1) if not. (False, -2) if the email wasn't found.
+    (False, -3) if the email hasn't been verified, but the combination was correct.
     '''
     cur = con.cursor()
     query = f"select user_id, password_hash from Users where email = %s"
     cur.execute(query, (email,))
     result = cur.fetchall()
     if len(result) == 0:
-        return False, -1
+        return False, -2
     p_hash = result[0]['password_hash']
-    return bcrypt.checkpw(password.encode('utf-8'), p_hash.encode('utf-8')), result[0]['user_id']
+    correct = bcrypt.checkpw(password.encode('utf-8'), p_hash.encode('utf-8')), result[0]['user_id']
+    if not correct:
+        return False, -1
+    query = f"select email_verified from Users where user_id = %s"
+    cur.execute(query, (result[0]['user_id'],))
+    is_verified = cur.fetchall()[0]['email_verified']
+    print(is_verified)
+    if not is_verified:
+        return False, -3
+    return True, result[0]['user_id']
+
 
 def email_already_exists(email):
     '''
