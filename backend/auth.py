@@ -78,13 +78,13 @@ def verify(token):
 
 def token_to_id(token):
     '''
-    Given a jwt token, decodes that token into the email address corresponding
+    Given a jwt token, decodes that token into the user id corresponding
     to the token's account
     :param token: The token to decode
-    :return: The email address of the account on success.
+    :return: The id of the account on success.
     -1 if the token couldn't be decoded
-    -2 if the email decoded is not associated with an account
-    -3 if the email decoded hasn't been verified
+    -2 if the id decoded is not associated with an account
+    -3 if the email of the account decoded hasn't been verified
     '''
     if token is None:
         return -1
@@ -108,6 +108,26 @@ def token_to_id(token):
     if len(result) == 0:
         return -3
     return user_id
+
+def token_to_email(token):
+    '''
+    Given a jwt token, decodes that token into the user id corresponding
+    to the token's account, and then gets the email associated with that account.
+    :param token: The token to decode
+    :return: The email address of the account on success.
+    -1 if the token couldn't be decoded
+    -2 if the id decoded is not associated with an account
+    -3 if the email decoded hasn't been verified
+    '''
+    id = token_to_id(token)
+    if id == -1 or id == -2 or id == -3:
+        return id
+
+    cur = con.cursor()
+    query = 'select email from Users where user_id = %s'
+    cur.execute(query, (id,))
+    return cur.fetchone()['email']
+
 
 
 def hash_password(password):
@@ -435,3 +455,6 @@ def changeemail(token, email):
     send_confirm_email(user_id, email)
 
     return True
+
+def change_profile_pic(picture, token):
+    pass
