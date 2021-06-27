@@ -8,14 +8,14 @@ import Alert from 'react-bootstrap/Alert';
 
 import logo from '../WIP_logo_2.png';
 
-async function verifyResetCode(emailHash) {
+async function verifyResetCode(reset_code) {
     let response = await fetch('http://localhost:5000/auth/verifyresetcode', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            emailHash: emailHash
+            reset_code: reset_code
         })
     }).catch(e => {
         throw new Error(e);
@@ -27,14 +27,14 @@ async function verifyResetCode(emailHash) {
     else throw new Error(responseJson.error);
 }
 
-async function requestResetPassword(emailHash, password) {
+async function requestResetPassword(reset_code, password) {
     let response = await fetch('http://localhost:5000/auth/resetpassword', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            emailHash: emailHash,
+            reset_code: reset_code,
             password: password
         })
     }).catch(e => {
@@ -85,7 +85,7 @@ function ResetPasswordBody(props) {
             </Modal.Header>
             <Modal.Body>
                 <div style={{textAlign:"center"}}>
-                    Successfully reset password <br />
+                    Successfully changed password <br />
                     <Link to="/login" component={Button} style={{marginTop:"1em"}}>
                         Return
                     </Link>
@@ -158,9 +158,8 @@ function ResetPassword() {
                 setMessage(e.message);
             });
 
-        if (response != null) {
-            setValid(true);
-        }
+        if (response != null) setValid(true);
+
         setFetched(true);
     }
 

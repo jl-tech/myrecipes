@@ -282,7 +282,7 @@ def send_reset(email):
        Someone (hopefully you) requested to change your password for MyRecipes.
 
        Please click the link below to change your password.
-       http://localhost:3000/reset?code={code}
+       http://localhost:3000/resetpassword?code={code}
 
        If the link doesn't work, the code to reset your password is {code}.
 
@@ -354,6 +354,31 @@ def reset_password(reset_code, password):
                                     target=send_pwd_change_email)
     email_thread.start()
 
+
+    return 0
+
+def verify_reset_code(reset_code):
+    '''
+    Given a reset code, checks that code is valid
+    :param reset_code: The reset code
+    :return: 0 on success. 1 if the token is not valid in any way.
+    '''
+    cur = con.cursor()
+    decoded = tokenise.decode_token(reset_code)
+    if decoded is None:
+        return 1
+    if 'password' not in decoded:
+        return 1
+
+    password_hash = decoded['password']
+
+    cur = con.cursor()
+    query = 'select email from Users where password_hash = %s'
+    cur.execute(query, (password_hash,))
+
+    result = cur.fetchall()
+    if len(result) == 0:
+        return 1
 
     return 0
 

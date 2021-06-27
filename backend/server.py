@@ -94,7 +94,20 @@ def route_auth_resetpassword():
     data = flask.request.get_json()
     result = auth.reset_password(data["reset_code"], data["password"])
     if result == 1:
-        response = flask.jsonify({'error': 'Reset Code Invalid'})
+        response = flask.jsonify({'error': 'Invalid password reset code'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
+    else:
+        response = flask.jsonify({})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 200
+
+@APP.route("/auth/verifyresetcode", methods=['POST'])
+def route_auth_verifyresetcode():
+    data = flask.request.get_json()
+    result = auth.verify_reset_code(data["reset_code"])
+    if result == 1:
+        response = flask.jsonify({'error': 'Invalid password reset code'})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
     else:
