@@ -11,6 +11,9 @@ import smtplib
 import tokenise
 
 import sys
+import hashlib
+
+from PIL import Image
 
 def add_new_user(email, first_name, last_name, password):
     '''
@@ -33,8 +36,8 @@ def add_new_user(email, first_name, last_name, password):
     hashed_pwd = hash_password(password)
     cur = con.cursor()
     query = "insert into Users (email, first_name, last_name, password_hash, email_verified)" \
-            "values (%s, %s, %s, %s, %s)"
-    cur.execute(query, (email, first_name, last_name, hashed_pwd, False))
+            "values (%s, %s, %s, %s, FALSE)"
+    cur.execute(query, (email, first_name, last_name, hashed_pwd))
     con.commit()
 
     query = "select user_id from Users where email = %s"
@@ -138,7 +141,7 @@ def hash_password(password):
     :return: The hashed password which can be stored safely in the database
     '''
     pword_bytes = password.encode('utf-8')
-    return bcrypt.hashpw(pword_bytes, bcrypt.gensalt())
+    return bcrypt.hashpw(pword_bytes, bcrypt.gensalt()).decode('utf-8')
 
 def check_password(email, password):
     '''
@@ -146,7 +149,7 @@ def check_password(email, password):
     account with the specified email.
     :param email: The email address of the account
     :param password: The password to check
-    :return: True if the password was correct.
+    :return: (True, user_id) if the password was correct.
     (False, -1) if not. (False, -2) if the email wasn't found.
     (False, -3) if the email hasn't been verified, but the combination was correct.
     '''
@@ -157,7 +160,7 @@ def check_password(email, password):
     if len(result) == 0:
         return False, -2
     p_hash = result[0]['password_hash']
-    correct = bcrypt.checkpw(password.encode('utf-8'), p_hash.encode('utf-8')), result[0]['user_id']
+    correct = bcrypt.checkpw(password.encode('utf-8'), p_hash.encode('utf-8'))
     if not correct:
         return False, -1
     query = f"select email_verified from Users where user_id = %s"
@@ -456,5 +459,28 @@ def changeemail(token, email):
 
     return True
 
-def change_profile_pic(picture, token):
-    pass
+def change_profile_pic(image_file, token):
+    '''
+    Changes the profile picture for the user associated with the token.
+    Does so by creating a file in root/server_resources/images/profile_pictures
+    and updating the database with that URL.
+    If a profile picture was previously set, that file will be deleted from
+    the profile_pictures folder.
+    :param image_file: The image file of the profile picture
+    :param token: The token for the user doing this operation
+    :return: 0 on success. -1 if the token was not valid. -2 on any other error.
+    '''
+    u_id = token_to_id(token)
+    if u_id < 0:
+        return -1
+
+    file_name = hashlib.sha1(image_file.read()).hexdigest()
+    img = Image.open(image_file)
+    out_path = f'../server_resources/images/profile_pictures/{file_name}.png'
+    img.save(out_path)
+
+    cur = con.cursor()
+    query = "update Users set profile_pic_path=%s where user_id=%s"
+    cur.execute(query, (out_path, u_id))
+
+    return 0

@@ -88,7 +88,7 @@ def route_auth_forgetpassword():
         return response, 200
 
 @APP.route("/auth/resetpassword", methods=['POST'])
-def route_resetpassword():
+def route_auth_resetpassword():
     data = flask.request.get_json()
     result = auth.reset_password(data["reset_code"], data["password"])
     if result == 1:
@@ -97,7 +97,7 @@ def route_resetpassword():
         return dumps({'status': 'OK'})
 
 @APP.route("/auth/profile", methods=['POST'])
-def route_profile():
+def route_auth_profile():
     data = flask.request.get_json()
     result = auth.profile_info(data["user_id"])
     if result == 1:
@@ -107,7 +107,7 @@ def route_profile():
                   'LastName': result['last_name'], 'ProfilePictureURL': result['profile_pic_path']})
 
 @APP.route("/auth/changepassword", methods=['POST'])
-def changepassword():
+def route_auth_changepassword():
     email = auth.token_to_email(flask.request.args.get("token"))
     data = flask.request.get_json()
     if not auth.change_password(email, data["OldPassword"], data["NewPassword"]):
@@ -116,7 +116,7 @@ def changepassword():
         return dumps({'status': 'OK'})
 
 @APP.route("/auth/editprofile", methods=['POST'])
-def editprofile():
+def route_auth_editprofile():
     data = flask.request.get_json()
     if auth.editprofile(data["Token"], data["FirstName"], data["LastName"]):
         return dumps({'status': 'OK'})
@@ -124,12 +124,31 @@ def editprofile():
         return dumps({'status': 'edit profile unsuccessful'})  
 
 @APP.route("/auth/changeemail", methods=['POST'])
-def changeemail():
+def route_auth_changeemail():
     data = flask.request.get_json()
     if auth.changeemail(data["Token"], data["Email"]):
         return dumps({'status': 'OK'})
     else:
         return dumps({'status': 'change email unsuccessful'})
+
+@APP.route("/auth/changepicture", methods=['POST'])
+def route_auth_changepicture():
+    data = flask.request.get_json()
+    file = flask.request.files['ProfilePicture']
+    if file.filename != '':
+        result = auth.change_profile_pic(file, data['token'])
+    else:
+        response = flask.jsonify({'error': 'Unexpected error occured. Try again.'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 500
+    if result == -1:
+        response = flask.jsonify({'error': 'Invalid token'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
+    else:
+        response = flask.jsonify({})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 200
 
 if __name__ == "__main__":
     # Testing code
