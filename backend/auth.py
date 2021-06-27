@@ -5,6 +5,7 @@ from email.mime.text import MIMEText
 
 import os
 
+import helpers
 from constants import *
 
 import bcrypt
@@ -212,23 +213,17 @@ def send_confirm_email(user_id, email):
     # Variables setup
     code = tokenise.encode_token({'user_id': user_id, 'email': email})
 
-    message = MIMEMultipart("alternative")
-    message["Subject"] = "Confirm your email for MyRecipes"
-    message["From"] = "myrecipes.supp@gmail.com"
-    message["To"] = email
+    subject = "Confirm your email for MyRecipes"
 
     message_plain = f"""\
        Hi!
-
-       Thanks for signing up for MyRecipes.
 
        Please click the link below to confirm your email.
        http://localhost:3000/emailconfirm?code={code}
        
        If the link doesn't work, the code to confirm your email is {code}.
 
-       If you did not sign up, you do not need to do anything. The account
-       will be deleted in 24 hours
+       If you did not sign up, you do not need to do anything.
 
        Regards,
        MyRecipes
@@ -239,15 +234,12 @@ def send_confirm_email(user_id, email):
                <body>
                    <p> Hi! </p>
 
-                   <p> Thanks for signing up for MyRecipes. </p>
-
                    <b> <p> Please click the link below to confirm your email.</p>
                     <p> http://localhost:3000/emailconfirm?code={code}</p> </b>
        
                     <p> If the link doesn't work, the code to reset your email is {code}. </p>
 
-                    <p> If you did not sign up, you do not need to do anything. The account
-                    will be deleted in 24 hours </p>
+                    <p> If you did not sign up, you do not need to do anything. </p>
 
                     <p> Regards, </p>
                     <p> MyRecipes </p>
@@ -255,17 +247,11 @@ def send_confirm_email(user_id, email):
            </html>
            """
 
-    message.attach(MIMEText(message_plain, "plain"))
-    message.attach(MIMEText(message_html, "html"))
+    email_thread = threading.Thread(name="email_thread",
+                                    args=(subject, message_html, message_plain, email),
+                                    target=helpers.send_email)
+    email_thread.start()
 
-    ctxt = ssl.create_default_context()
-    # try:
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=ctxt) as server:
-            server.login("myrecipes.supp@gmail.com", "#%ep773^KpScAduTj^SM6U*Gnw")
-            server.sendmail("myrecipes.supp@gmail.com", email,
-                            message.as_string())
-    # except:
-    #     return 1
 
     return 0
 
@@ -288,11 +274,8 @@ def send_reset(email):
     code = tokenise.encode_token({'password': result[0]['password_hash']})
 
     # Variables setup
-    message = MIMEMultipart("alternative")
-    message["Subject"] = "Your password reset link for MyRecipes"
-    message["From"] = "myrecipes.supp@gmail.com"
-    message["To"] = email
 
+    subject = "Your password reset link for MyRecipes"
     message_plain = f"""\
        Hi!
 
@@ -308,7 +291,6 @@ def send_reset(email):
        Regards,
        MyRecipes
        """
-
     message_html = f"""\
            <html>
                <body>
@@ -330,19 +312,11 @@ def send_reset(email):
                </body>
            </html>
            """
-
-    message.attach(MIMEText(message_plain, "plain"))
-    message.attach(MIMEText(message_html, "html"))
-
-    ctxt = ssl.create_default_context()
-    # try:
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=ctxt) as server:
-        server.login("myrecipes.supp@gmail.com", "#%ep773^KpScAduTj^SM6U*Gnw")
-        server.sendmail("myrecipes.supp@gmail.com", email,
-                        message.as_string())
-    # except:
-    #     return 1
-
+    email_thread = threading.Thread(name="email_thread",
+                                    args=(subject, message_html, message_plain,
+                                          email),
+                                    target=helpers.send_email)
+    email_thread.start()
     return 0
 
 def reset_password(reset_code, password):
@@ -386,11 +360,8 @@ def reset_password(reset_code, password):
 def send_pwd_change_email(email):
     # Send email to notify user
     # Variables setup
-    message = MIMEMultipart("alternative")
-    message["Subject"] = "Your password was changed for MyRecipes"
-    message["From"] = "myrecipes.supp@gmail.com"
-    message["To"] = email
 
+    subject = "Your password was changed for MyRecipes"
     message_plain = f"""\
         Hi,
 
@@ -401,15 +372,20 @@ def send_pwd_change_email(email):
         Regards,
         MyRecipes
               """
+    message_html =f"""\
+        <p> Hi,</p>
 
-    message.attach(MIMEText(message_plain, "plain"))
+        <p> This email is to inform you that your password was changed.</p>
 
-    ctxt = ssl.create_default_context()
-    # try:
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=ctxt) as server:
-        server.login("myrecipes.supp@gmail.com", "#%ep773^KpScAduTj^SM6U*Gnw")
-        server.sendmail("myrecipes.supp@gmail.com", email,
-                        message.as_string())
+        <p> If you didn't expect this, contact customer support immediately.</p>
+
+        <p> Regards, </p>
+        <p> MyRecipes </p>
+        """
+    email_thread = threading.Thread(name="conf_email_thread",
+                                    args=(email_of_acc,),
+                                    target=send_pwd_change_email)
+    email_thread.start()
 
 
 def profile_info(user_id):
