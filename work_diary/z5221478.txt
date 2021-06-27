@@ -1,2 +1,25 @@
 Week 1:
-Group formed. I created my Jira and Github accounts. I discussed with my teammates about the project topic we will choose (Myrecipe) and programming languages we will use for this project (SQL for database, Python for backend and flask for frontend). I discussed with team about the attributes our software needs and recorded them. The team agreed to use a cloud disk for file sharing. I made my github run correctly and made some changes to our project master branch. I wrote several user stories and upload to our cloud disk.
+- Group formed
+- created my Jira and Github accounts
+- discussed with my teammates about the project topic we will choose (Myrecipe) and programming languages we will use for this project (SQL for database, Python for backend and flask for frontend)
+- discussed with team about the attributes our software needs and recorded them
+- team agreed to use a cloud disk for file sharing
+- made my github run correctly and made some changes to our project master branch
+- wrote several user stories and upload to our cloud disk and Jira
+
+Week 2:
+- modified some user stories on Jira
+- created some storyboards for main interface, recipe creation, management and deletion, visibility
+- discussed with team about sprints, novels and task distribution
+
+Week 3:
+- created some storyboards for unregistered users, research history and chatbot
+- modified all storyboards for consistency and adding new features
+- discussed with team about novel requirements (add many and remove many)
+- finished the proposal with team
+
+Week 4:
+- started sprint1
+- created a nice-look frontend website with signin feature using Nicepage (rejected later for using third-party coding tool)
+- created an example of interaction between python and html
+- did part of backend build
