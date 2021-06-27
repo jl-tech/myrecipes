@@ -67,8 +67,8 @@ def email_confirm(code):
         return 1
 
     cur = con.cursor()
-    query = "update Users set email = %s, email_verified = %s where user_id = %s"
-    changed_rows = cur.execute(query, (data["email"], True, data["user_id"]))
+    query = "update Users set email = %s, email_verified = TRUE where user_id = %s"
+    changed_rows = cur.execute(query, (data["email"], data["user_id"]))
     con.commit()
 
     if changed_rows == 0:
@@ -99,6 +99,9 @@ def token_to_id(token):
         return -1
 
     token_decoded = tokenise.decode_token(token)
+    if token_decoded is None:
+        return -1
+
     if 'user_id' not in token_decoded:
         return -1
     user_id = token_decoded['user_id']
@@ -367,7 +370,7 @@ def reset_password(reset_code, password):
     new_pwd_hash = hash_password(password)
     query = 'update Users set password_hash=%s where email=%s'
     cur.execute(query, (new_pwd_hash, email_of_acc))
-
+    con.commit()
     email_thread = threading.Thread(name="conf_email_thread",
                                     args=(email_of_acc,),
                                     target=send_pwd_change_email)
@@ -439,11 +442,7 @@ def change_password(email, oldpassword, newpassword):
         new_hash_password = hash_password(newpassword)
         query = 'update Users set password_hash=%s where email=%s'
         cur.execute(query, (new_hash_password, email))
-
-        email_thread = threading.Thread(name="conf_email_thread",
-                                        args=(email,),
-                                        target=send_pwd_change_email)
-        email_thread.start()
+        con.commit()
         return True
 
 def editprofile(token, first_name, last_name):
@@ -499,5 +498,5 @@ def change_profile_pic(image_file, token):
     cur = con.cursor()
     query = "update Users set profile_pic_path=%s where user_id=%s"
     cur.execute(query, (out_path, u_id))
-
+    con.commit()
     return 0

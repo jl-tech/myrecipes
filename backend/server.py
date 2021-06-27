@@ -77,6 +77,7 @@ def route_auth_login():
 @APP.route("/auth/forgetpassword", methods=['POST'])
 def route_auth_forgetpassword():
     data = flask.request.get_json()
+    # TODO threading
     result = auth.send_reset(data["email"])
     if result == 1:
         response = flask.jsonify({'error': 'Invalid email'})
@@ -92,23 +93,32 @@ def route_auth_resetpassword():
     data = flask.request.get_json()
     result = auth.reset_password(data["reset_code"], data["password"])
     if result == 1:
-        return dumps({'status': 'reset_code_invalid'})
+        response = flask.jsonify({'error': 'Reset Code Invalid'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
     else:
-        return dumps({'status': 'OK'})
+        response = flask.jsonify({})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 200
 
-@APP.route("/auth/profile", methods=['POST'])
+@APP.route("/auth/profile", methods=['GET'])
 def route_auth_profile():
-    data = flask.request.get_json()
-    result = auth.profile_info(data["user_id"])
+    data = flask.request.args.get("userid")
+    result = auth.profile_info(data)
     if result == 1:
-        return dumps({'status': 'user_id_invalid'})
+        response = flask.jsonify({'error': 'User ID Invalid'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
     else:
-        return dumps({'Email': result['email'], 'FirstName': result['first_name'],
+        response = flask.jsonify({'Email': result['email'], 'FirstName': result['first_name'],
                   'LastName': result['last_name'], 'ProfilePictureURL': result['profile_pic_path']})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 200
 
 @APP.route("/auth/changepassword", methods=['POST'])
 def route_auth_changepassword():
-    email = auth.token_to_email(flask.request.args.get("token"))
+    token = flask.request.headers.get("Authorization")
+    email = auth.token_to_email(token)
     data = flask.request.get_json()
     if not auth.change_password(email, data["OldPassword"], data["NewPassword"]):
         return dumps({'status': 'old_password_invalid'})
