@@ -9,6 +9,7 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 
 import ProfileEditName from './editname.js';
+import ProfileEditEmail from './editemail.js';
 
 async function profileUser(id) {
     let response = await fetch('http://localhost:5000/auth/profile', {
@@ -47,32 +48,7 @@ function ProfileEdit(props) {
             <Modal.Body>
                 <Container>
                     <ProfileEditName firstName={props.firstName} setfirstName={props.setfirstName} lastName={props.lastName} setlastName={props.setlastName} />
-                    <Row style={{borderTopColor:"gray",borderTopWidth:"1px",borderTopStyle:"solid",paddingTop:"1em", marginTop:"1em"}}>
-                        <Col sm={10}><h5>Email</h5></Col>
-                        <Col sm={2}>Edit</Col>
-                    </Row>
-                    <Row>
-                        <Col >helloworld@gmail.com</Col>
-                    </Row>
-                    <Row style={{borderTopColor:"gray",borderTopWidth:"1px",borderTopStyle:"solid",paddingTop:"1em", marginTop:"1em"}}>
-                        <Col sm={10}><h5>Email</h5></Col>
-                        <Col sm={2}>Cancel</Col>
-                    </Row>
-                    <Form>
-                        <Form.Group as={Row}>
-                            <Form.Label column sm="2">
-                                New
-                            </Form.Label>
-                            <Col sm="8">
-                                <Form.Control defaultValue="Hello" />
-                            </Col>
-                        </Form.Group>
-                        <div style={{textAlign:"center"}}>
-                            <Button type="submit" size="sm">
-                                Confirm
-                            </Button>
-                        </div>
-                    </Form>
+                    <ProfileEditEmail email={props.email} />
                     <Row style={{borderTopColor:"gray",borderTopWidth:"1px",borderTopStyle:"solid",paddingTop:"1em", marginTop:"1em"}}>
                         <Col sm={10}><h5>Password</h5></Col>
                         <Col sm={2}>Edit</Col>

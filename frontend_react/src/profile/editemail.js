@@ -10,16 +10,15 @@ import Form from 'react-bootstrap/Form';
 import Cookie from 'universal-cookie';
 
 
-async function editName(token, firstname, lastname) {
-    let response = await fetch('http://localhost:5000/profile/edit', {
+async function editEmail(token, email) {
+    let response = await fetch('http://localhost:5000/profile/changeemail', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': token
         },
         body: JSON.stringify({
-            FirstName: firstname,
-            LastName: lastname
+            Email: email
         })
     }).catch(e => {
         throw new Error(e);
@@ -31,13 +30,12 @@ async function editName(token, firstname, lastname) {
     else throw new Error(responseJson.error);
 }
 
-function ProfileEditName(props) {
+function ProfileEditEmail(props) {
     
 
     const [editMode, setEditMode] = useState(false);
 
-    const [newFirst, setNewFirst] = useState(props.firstName);
-    const [newLast, setNewLast] = useState(props.lastName);
+    const [newEmail, setNewEmail] = useState('');
     const [errorShow, setErrorShow] = useState(false);
     const [errorText, setErrorText] = useState('');
     const [successShow, setSuccessShow] = useState(false);
@@ -47,15 +45,13 @@ function ProfileEditName(props) {
     async function handleSubmit(event) {
         event.preventDefault();
 
-        let response = await editName(cookie.get('token'), newFirst, newLast)
+        let response = await editEmail(cookie.get('token'), newEmail)
             .catch(e => {
                 setErrorShow(true);
                 setErrorText(e.message);
             });
 
         if (response != null) {
-            props.setfirstName(newFirst);
-            props.setlastName(newLast);
             setEditMode(false);
             setSuccessShow(true);
         }
@@ -64,40 +60,32 @@ function ProfileEditName(props) {
     if (!editMode) {
         return (
             <>
-                <Row>
-                    <Col sm={10}><h5>Name</h5></Col>
+                <Row style={{borderTopColor:"gray",borderTopWidth:"1px",borderTopStyle:"solid",paddingTop:"1em", marginTop:"1em"}}>
+                    <Col sm={10}><h5>Email</h5></Col>
                     <Col sm={2} ><Button variant="outline-secondary" size="sm" onClick={() => setEditMode(true)}>Edit</Button></Col>
                 </Row>
                 <Row>
-                    <Col >{props.firstName} {props.lastName}</Col>
+                    <Col >{props.email}</Col>
                 </Row>
                 <Alert show={successShow} variant="success" onClose={() => setSuccessShow(false)} dismissible>
-                    Successfully changed name
+                    Please verify the new email using the confirmation link sent.
                 </Alert>
             </>
         );
     } else {
         return (
             <>
-                <Row>
-                    <Col sm={10}><h5>Name</h5></Col>
+                <Row style={{borderTopColor:"gray",borderTopWidth:"1px",borderTopStyle:"solid",paddingTop:"1em", marginTop:"1em"}}>
+                    <Col sm={10}><h5>Email</h5></Col>
                     <Col sm={2} ><Button variant="outline-secondary" size="sm" onClick={() => setEditMode(false)}>Cancel</Button></Col>
                 </Row>
                 <Form onSubmit={handleSubmit}>
                     <Form.Group as={Row}>
                         <Form.Label column sm="2">
-                            First
+                            New
                         </Form.Label>
                         <Col sm="8">
-                            <Form.Control defaultValue={props.firstName} required onChange={e => setNewFirst(e.target.value)} />
-                        </Col>
-                    </Form.Group>
-                    <Form.Group as={Row}>
-                        <Form.Label column sm="2">
-                            Last
-                        </Form.Label>
-                        <Col sm="8">
-                            <Form.Control defaultValue={props.lastName} required onChange={e => setNewLast(e.target.value)} />
+                            <Form.Control required onChange={e => setNewEmail(e.target.value)} />
                         </Col>
                     </Form.Group>
                     <Alert show={errorShow} variant="danger" onClose={() => setErrorShow(false)} dismissible>
@@ -114,4 +102,4 @@ function ProfileEditName(props) {
     }
 }
 
-export default ProfileEditName;
+export default ProfileEditEmail;
