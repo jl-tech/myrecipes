@@ -82,14 +82,8 @@ function App() {
         <VisitorRoute path="/login" loggedIn={loggedIn}>
           <Login />
         </VisitorRoute>
-        <Route strict path="/emailconfirm/">
-          <Home />
-        </Route>
         <Route path="/emailconfirm">
           <EmailConfirm />
-        </Route>
-        <Route strict path="/resetpassword/">
-          <ResetPassword />
         </Route>
         <Route path="/resetpassword">
           <ResetPassword />

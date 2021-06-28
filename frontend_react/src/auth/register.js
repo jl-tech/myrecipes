@@ -98,7 +98,7 @@ function Register() {
     const [modalShow, setModalShow] = useState(false);
 
     return (<>
-        <Button style={{backgroundColor:"#ff9147",borderColor:"#fff3de"}} onClick={() => setModalShow(true)}>
+        <Button style={{backgroundColor:"#ff9147",borderColor:"#ff9147"}} onClick={() => setModalShow(true)}>
             Create New Account
         </Button>
         <Modal show={modalShow} onHide={() => setModalShow(false)} centered>

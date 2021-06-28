@@ -450,14 +450,14 @@ def change_password(email, oldpassword, newpassword):
         return True
 
 def editprofile(token, first_name, last_name):
-    email = token_to_email(token)
+    userid = token_to_id(token)
     
-    if isinstance(email, int): 
+    if userid < 0:
         return False
 
     cur = con.cursor()
-    query = "update Users set first_name = %s, last_name = %s where email = %s"
-    cur.execute(query, (first_name, last_name, email))
+    query = "update Users set first_name = %s, last_name = %s where user_id = %s"
+    cur.execute(query, (first_name, last_name, userid))
     con.commit()
 
     return True

@@ -33,7 +33,7 @@ async function profileUser(id) {
 
 function LoginButton() {
     return (
-        <Link to="/login">Log In</Link>
+        <Link to="/login" style={{color:"white"}}>Log In</Link>
     );
 }
 
@@ -89,12 +89,11 @@ function Home({ loggedIn, setLoggedIn, currId }) {
         </Navbar.Collapse>
     </Navbar>
     <Switch>
-
         <Route path="/profile/:id">
-          <Profile currId={currId}  />
+          <Profile currId={currId} loggedIn={loggedIn}/>
         </Route>
         <Route path="/profile">
-          <Profile currId={currId} />
+          <Profile currId={currId} loggedIn={loggedIn}/>
         </Route>
     </Switch>
     </>
