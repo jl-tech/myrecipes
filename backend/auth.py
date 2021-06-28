@@ -441,7 +441,7 @@ def profile_info(user_id):
             result[0]['profile_pic_path'] = 'dog.jpg'
         return result[0]
 
-def change_password(email, oldpassword, newpassword):
+def change_password(token, oldpassword, newpassword):
     '''
     Changes the password for the account with the specified email.
     :param email: The email address of the account
@@ -449,15 +449,24 @@ def change_password(email, oldpassword, newpassword):
     :param newpassword: The password to change to
     :return: . True on success. False if the old password was incorrect
     '''
+
+    user_id = token_to_id(token)
+    
+    if user_id < 0:
+        return False, 'Invalid token'
+
     cur = con.cursor()
-    if not check_password(email, oldpassword)[0]:
-        return False
-    else:
+    query = f"select password_hash from Users where user_id = %s"
+    cur.execute(query, (user_id,))
+    result = cur.fetchall()
+    if bcrypt.checkpw(oldpassword.encode('utf-8'), result[0]['password_hash'].encode('utf-8')):
         new_hash_password = hash_password(newpassword)
-        query = 'update Users set password_hash=%s where email=%s'
-        cur.execute(query, (new_hash_password, email))
+        query = 'update Users set password_hash=%s where user_id=%s'
+        cur.execute(query, (new_hash_password, user_id))
         con.commit()
-        return True
+        return True, ''
+    else:
+        return False, 'Wrong current password'
 
 def editprofile(token, first_name, last_name):
     user_id = token_to_id(token)

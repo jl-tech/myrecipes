@@ -131,21 +131,16 @@ def route_auth_profile():
 
 @APP.route("/profile/changepassword", methods=['POST'])
 def route_auth_changepassword():
-    token = flask.request.headers.get("Authorization")
-    email = auth.token_to_email(token)
-    if not isinstance(email, str) and email < 1:
-        response = flask.jsonify({'error': 'Invalid token'})
-        response.headers.add('Access-Control-Allow-Origin', '*')
-        return response, 400
     data = flask.request.get_json()
-    if not auth.change_password(email, data["OldPassword"], data["NewPassword"]):
-        response = flask.jsonify({'error': 'Old password invalid'})
-        response.headers.add('Access-Control-Allow-Origin', '*')
-        return response, 400
-    else:
+    ok, message = auth.change_password(flask.request.headers.get("Authorization"), data["OldPassword"], data["NewPassword"])
+    if ok:
         response = flask.jsonify({})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
+    else:
+        response = flask.jsonify({'error': message})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
 
 @APP.route("/profile/edit", methods=['POST'])
 def route_auth_editprofile():
