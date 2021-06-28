@@ -45,18 +45,31 @@ def route_auth_emailconfirm():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
 
+# @APP.route("/auth/verify", methods=['GET'])
+# def route_auth_verify():
+#     token = flask.request.headers.get("Authorization")
+#     user_id = auth.verify(token)
+#     if user_id is not None:
+#         response = flask.jsonify({'user_id': user_id})
+#         response.headers.add('Access-Control-Allow-Origin', '*')
+#         return response, 200
+#     else:
+#         response = flask.jsonify({})
+#         response.headers.add('Access-Control-Allow-Origin', '*')
+#         return response, 400
+
 @APP.route("/auth/verify", methods=['GET'])
 def route_auth_verify():
     token = flask.request.headers.get("Authorization")
     user_id = auth.verify(token)
     if user_id is not None:
-        response = flask.jsonify({'user_id': user_id})
+        response = flask.jsonify({'user_id': user_id, 'status': 0})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
     else:
-        response = flask.jsonify({})
+        response = flask.jsonify({'user_id': -1, 'status': 1})
         response.headers.add('Access-Control-Allow-Origin', '*')
-        return response, 400
+        return response, 200
 
 @APP.route("/auth/login", methods=['POST'])
 def route_auth_login():
