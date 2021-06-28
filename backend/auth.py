@@ -327,7 +327,7 @@ def send_reset(email):
 
                    <b> <p> Please click the link below to change your 
                    password.</p>
-                    <p> http://localhost:3000/reset?code={code}</p> </b>
+                    <p> http://localhost:3000/resetpassword?code={code}</p> </b>
 
                     <p> If the link doesn't work, the code to reset your 
                     password is {code}. </p>
