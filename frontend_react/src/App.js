@@ -8,6 +8,7 @@ import {
     Switch,
     Route,
     Redirect,
+    useHistory,
 } from "react-router-dom";
 
 import Cookie from 'universal-cookie';
@@ -24,13 +25,12 @@ async function tokenVerify(token) {
           'Authorization': token
       }
   }).catch(e => {
-    throw new Error(e);
+    return {'user_id': -1, 'status': 2};
   });
 
   let responseJson = await response.json();
     
-  if (response.ok) return responseJson;
-  else throw new Error(responseJson.error);
+  return responseJson;
 }
 
 function VisitorRoute(props) {
@@ -59,14 +59,21 @@ function App() {
     if (token != null) {
       let response = await tokenVerify(token)
         .catch(() => {
-          cookie.remove('token', {path: '/'});
+
         });
       
       if (response != null) {
-        setCurrId(response.user_id);
-        setLoggedIn(true);
+        if (response.status == 0) {
+          setCurrId(response.user_id);
+          setLoggedIn(true);
+        } else if (response.status == 1) {
+          cookie.remove('token', {path: '/'});
+        } else {
+          setLoggedIn(true);
+        }
       }
     }
+
     setFetched(true);
   }
 
