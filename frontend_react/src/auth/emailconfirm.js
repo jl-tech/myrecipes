@@ -36,7 +36,7 @@ function EmailConfirm() {
     async function processCode() {
         let code = query.get("code");
         if (code == null) {
-            history.go('/');
+            history.push('/');
         }
         let response = await requestEmailConfirm(code)
             .catch(e => {

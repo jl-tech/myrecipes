@@ -75,8 +75,7 @@ function UserButton(props) {
 }
 
 function Home({ loggedIn, setLoggedIn, currId }) {
-    
-    return (
+        return (
     <>
     <Navbar bg="dark" >
         <Link to="/" component={Navbar.Brand} >
@@ -92,10 +91,10 @@ function Home({ loggedIn, setLoggedIn, currId }) {
     <Switch>
 
         <Route path="/profile/:id">
-          <Profile currId={currId}/>
+          <Profile currId={currId}  />
         </Route>
         <Route path="/profile">
-          <Profile currId={currId}/>
+          <Profile currId={currId} />
         </Route>
     </Switch>
     </>

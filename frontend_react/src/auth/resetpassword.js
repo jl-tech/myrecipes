@@ -151,7 +151,7 @@ function ResetPassword() {
     let code = query.get("code");
 
     async function processCode() {
-        if (code == null) history.go('/');
+        if (code == null) history.push('/');
 
         let response = await verifyResetCode(code)
             .catch(e => {

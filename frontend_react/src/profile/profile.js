@@ -13,14 +13,14 @@ import Alert from 'react-bootstrap/Alert';
 
 import ProfileImg from './profileimg.js';
 
-async function profileUser(id) {
+async function profileUser(userid) {
     let response = await fetch('http://localhost:5000/profile/view', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            userid: id
+            userid: userid
         })
     }).catch(e => {
         throw new Error(e);
@@ -46,12 +46,13 @@ function Profile(props) {
     const history = useHistory();
 
     async function processId() {
-        if (id == null) {
-            id = props.currId;
-            if (id == null) history.go('/');
+        let id_ = id;
+        if (id_ == null) {
+            id_ = props.currId;
+            if (id_ == null) history.push('/');
         }
 
-        let response = await profileUser(id)
+        let response = await profileUser(id_)
             .catch(e => {
                 setMessage(e.message);
             });
