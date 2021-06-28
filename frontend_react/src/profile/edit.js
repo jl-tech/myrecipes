@@ -11,6 +11,7 @@ import Form from 'react-bootstrap/Form';
 import ProfileEditName from './editname.js';
 import ProfileEditEmail from './editemail.js';
 import ProfileEditPassword from './editpassword.js';
+import ProfileEditPicture from './editpicture.js';
 
 async function profileUser(id) {
     let response = await fetch('http://localhost:5000/auth/profile', {
@@ -51,6 +52,7 @@ function ProfileEdit(props) {
                     <ProfileEditName firstName={props.firstName} setfirstName={props.setfirstName} lastName={props.lastName} setlastName={props.setlastName} />
                     <ProfileEditEmail email={props.email} />
                     <ProfileEditPassword />
+                    <ProfileEditPicture imgUrl={props.imgUrl} setImgUrl={props.setImgUrl} />
                 </Container>
             </Modal.Body>
         </Modal>

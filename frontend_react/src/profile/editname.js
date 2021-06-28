@@ -56,6 +56,7 @@ function ProfileEditName(props) {
         if (response != null) {
             props.setfirstName(newFirst);
             props.setlastName(newLast);
+            setErrorShow(false);
             setEditMode(false);
             setSuccessShow(true);
         }

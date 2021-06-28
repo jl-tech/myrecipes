@@ -52,6 +52,7 @@ function ProfileEditEmail(props) {
             });
 
         if (response != null) {
+            setErrorShow(false);
             setEditMode(false);
             setSuccessShow(true);
         }

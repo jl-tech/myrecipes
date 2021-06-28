@@ -185,7 +185,7 @@ def route_auth_changepicture():
     data = flask.request.get_json()
     file = flask.request.files['ProfilePicture']
     if file.filename != '':
-        result = auth.change_profile_pic(file, flask.request.headers.get("Authorization"))
+        result, file_name = auth.change_profile_pic(file, flask.request.headers.get("Authorization"))
     else:
         response = flask.jsonify({'error': 'Unexpected error occured. Try again.'})
         response.headers.add('Access-Control-Allow-Origin', '*')
@@ -195,7 +195,19 @@ def route_auth_changepicture():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
     else:
-        response = flask.jsonify({})
+        response = flask.jsonify({'url': file_name})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 200
+
+@APP.route("/profile/removepicture", methods=['GET'])
+def route_auth_removepicture():
+    result, file_name = auth.remove_profile_pic(flask.request.headers.get('Authorization'))
+    if result == -1:
+        response = flask.jsonify({'error': 'Invalid token'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
+    else:
+        response = flask.jsonify({'url': file_name})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
 
