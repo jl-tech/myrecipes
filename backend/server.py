@@ -115,10 +115,10 @@ def route_auth_verifyresetcode():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
 
-@APP.route("/auth/profile", methods=['GET'])
+@APP.route("/profile/view", methods=['POST'])
 def route_auth_profile():
-    data = flask.request.args.get("userid")
-    result = auth.profile_info(data)
+    data = flask.request.get_json()
+    result = auth.profile_info(data["userid"])
     if result == 1:
         response = flask.jsonify({'error': 'User ID Invalid'})
         response.headers.add('Access-Control-Allow-Origin', '*')
@@ -129,7 +129,7 @@ def route_auth_profile():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
 
-@APP.route("/auth/changepassword", methods=['POST'])
+@APP.route("/profile/changepassword", methods=['POST'])
 def route_auth_changepassword():
     token = flask.request.headers.get("Authorization")
     email = auth.token_to_email(token)
@@ -147,7 +147,7 @@ def route_auth_changepassword():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
 
-@APP.route("/auth/editprofile", methods=['POST'])
+@APP.route("/profile/edit", methods=['POST'])
 def route_auth_editprofile():
     data = flask.request.get_json()
     if auth.editprofile(flask.request.headers.get("Authorization"), data["FirstName"], data["LastName"]):
@@ -159,7 +159,7 @@ def route_auth_editprofile():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
 
-@APP.route("/auth/changeemail", methods=['POST'])
+@APP.route("/profile/changeemail", methods=['POST'])
 def route_auth_changeemail():
     data = flask.request.get_json()
     if auth.changeemail(flask.request.headers.get("Authorization"), data["Email"]):
@@ -171,7 +171,7 @@ def route_auth_changeemail():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
 
-@APP.route("/auth/changepicture", methods=['POST'])
+@APP.route("/profile/changepicture", methods=['POST'])
 def route_auth_changepicture():
     data = flask.request.get_json()
     file = flask.request.files['ProfilePicture']
@@ -189,6 +189,10 @@ def route_auth_changepicture():
         response = flask.jsonify({})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
+
+@APP.route("/img/<filename>")
+def view_image(filename):
+    return flask.redirect(flask.url_for('static', filename='./server_resources/images/profile_pictures/' + filename), code=301)
 
 if __name__ == "__main__":
     # Testing code

@@ -95,7 +95,7 @@ function App() {
           <ResetPassword />
         </Route>
         <Route path="/">
-          <Home loggedIn={loggedIn} setLoggedIn={setLoggedIn} id={currId} />
+          <Home loggedIn={loggedIn} setLoggedIn={setLoggedIn} currId={currId} />
         </Route>
         </Switch>
     </Router>

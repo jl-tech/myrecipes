@@ -427,6 +427,8 @@ def profile_info(user_id):
     if len(result) == 0:
         return 1
     else:
+        if result[0]['profile_pic_path'] is None:
+            result[0]['profile_pic_path'] = 'dog.jpg'
         return result[0]
 
 def change_password(email, oldpassword, newpassword):
@@ -499,12 +501,12 @@ def change_profile_pic(image_file, token):
 
     file_name = hashlib.sha1(image_file.read()).hexdigest()
     img = Image.open(image_file)
-    out_path = f'../server_resources/images/profile_pictures/{file_name}.png'
+    out_path = f'./server_resources/images/profile_pictures/{file_name}.png'
     img.save(out_path)
 
 
     query = "update Users set profile_pic_path=%s where user_id=%s"
-    cur.execute(query, (out_path, u_id))
+    cur.execute(query, (file_name, u_id))
     con.commit()
 
     # delete old image

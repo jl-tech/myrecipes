@@ -38,16 +38,14 @@ function EmailConfirm() {
         if (code == null) {
             history.go('/');
         }
-        if (!fetched) {
-            let response = await requestEmailConfirm(code)
-                .catch(e => {
-                    setMessage(e.message);
-                });
+        let response = await requestEmailConfirm(code)
+            .catch(e => {
+                setMessage(e.message);
+            });
 
-            if (response != null) setMessage("Successfully verified email");
+        if (response != null) setMessage("Successfully verified email");
 
-            setFetched(true);
-        }
+        setFetched(true);
     }
 
     useEffect(() => {
