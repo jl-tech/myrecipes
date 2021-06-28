@@ -49,9 +49,9 @@ def add_new_user(email, first_name, last_name, password):
 
     # query_lock.acquire()
     cur = con.cursor()
-    query = "insert into Users (email, first_name, last_name, password_hash, email_verified, profile_pic_path)" \
+    query = "insert into Users (email, first_name, last_name, password_hash, email_verified)" \
             "values (%s, %s, %s, %s, FALSE)"
-    cur.execute(query, (email, first_name, last_name, hashed_pwd, DEFAULT_PIC))
+    cur.execute(query, (email, first_name, last_name, hashed_pwd))
     con.commit()
 
     query = "select user_id from Users where email = %s"
@@ -461,7 +461,7 @@ def profile_info(user_id):
         return 1
     else:
         if result[0]['profile_pic_path'] is None:
-            result[0]['profile_pic_path'] = 'dog.jpg'
+            result[0]['profile_pic_path'] = DEFAULT_PIC
         return result[0]
 
 def change_password(token, oldpassword, newpassword):
@@ -582,7 +582,7 @@ def remove_profile_pic(token):
     old_path = cur.fetchone()['profile_pic_path']
 
     query = "update Users set profile_pic_path=%s where user_id=%s"
-    cur.execute(query, (DEFAULT_PIC, u_id))
+    cur.execute(query, (None, u_id))
     con.commit()
 
     # delete old image

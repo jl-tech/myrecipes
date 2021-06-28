@@ -78,7 +78,7 @@ function Home({ loggedIn, setLoggedIn, currId }) {
         return (
     <>
     <Navbar bg="dark" >
-        <Link to="/" component={Navbar.Brand} >
+        <Link to="/" >
             <img src={logo} height="50" />
         </Link>
         <Navbar.Toggle />
