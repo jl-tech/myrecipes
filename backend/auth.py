@@ -21,6 +21,8 @@ from PIL import Image
 
 import threading
 
+query_lock = threading.Lock()
+
 def add_new_user(email, first_name, last_name, password):
     '''
     Adds a new user to the database, and sends a confirmation email providing
@@ -40,6 +42,8 @@ def add_new_user(email, first_name, last_name, password):
     # TODO password requirements?
 
     hashed_pwd = hash_password(password)
+
+    query_lock.acquire()
     cur = con.cursor()
     query = "insert into Users (email, first_name, last_name, password_hash, email_verified)" \
             "values (%s, %s, %s, %s, FALSE)"
@@ -75,6 +79,7 @@ def email_confirm(code):
     query = "select * from users where email = %s and email_verified = FALSE and user_id = %s"
     cur.execute(query, (data["email"], int(data["user_id"])))
     result = cur.fetchall()
+    query_lock.release()
     if len(result) == 1:
         query = "update Users set email = %s, email_verified = TRUE where user_id = %s"
         changed_rows = cur.execute(query, (data["email"], int(data["user_id"])))
@@ -86,6 +91,7 @@ def email_confirm(code):
     if email_already_exists(data["email"]):
         return 1
 
+    query_lock.acquire()
     query = "update Users set email = %s, email_verified = TRUE where user_id = %s"
     changed_rows = cur.execute(query, (data["email"], int(data["user_id"])))
     con.commit()
@@ -122,17 +128,20 @@ def token_to_id(token):
     user_id = token_decoded['user_id']
     print(user_id, file=sys.stderr)
 
+    query_lock.acquire()
     cur = con.cursor()
     # check email exists with an account
     query = "select * from Users where user_id = %s"
     cur.execute(query, (user_id,))
     result = cur.fetchall()
     if len(result) == 0:
+        query_lock.release()
         return -2
     query = "select * from Users where user_id = %s and email_verified = %s"
     cur.execute(query, (user_id, True, ))
     result = cur.fetchall()
     if len(result) == 0:
+        query_lock.release()
         return -3
     return user_id
 
@@ -150,6 +159,7 @@ def token_to_email(token):
     if id == -1 or id == -2 or id == -3:
         return id
 
+    query_lock.acquire()
     cur = con.cursor()
     query = 'select email from Users where user_id = %s'
     cur.execute(query, (id,))
@@ -177,21 +187,25 @@ def check_password(email, password):
     (False, -1) if not. (False, -2) if the email wasn't found.
     (False, -3) if the email hasn't been verified, but the combination was correct.
     '''
+    query_lock.acquire()
     cur = con.cursor()
     query = f"select user_id, password_hash from Users where email = %s"
     cur.execute(query, (email,))
     result = cur.fetchall()
     if len(result) == 0:
+        query_lock.release()
         return False, -2
     p_hash = result[0]['password_hash']
     correct = bcrypt.checkpw(password.encode('utf-8'), p_hash.encode('utf-8'))
     if not correct:
+        query_lock.release()
         return False, -1
     query = f"select email_verified from Users where user_id = %s"
     cur.execute(query, (result[0]['user_id'],))
     is_verified = cur.fetchall()[0]['email_verified']
     print(is_verified)
     if not is_verified:
+        query_lock.release()
         return False, -3
     return True, result[0]['user_id']
 
@@ -202,6 +216,7 @@ def email_already_exists(email):
     :param email: The email address to check
     :return: True if the email already exists. False otherwise.
     '''
+    query_lock.acquire()
     cur = con.cursor()
     query = f"select * from Users where email = %s"
     cur.execute(query, (email,))
@@ -274,12 +289,14 @@ def send_reset(email):
     :return: 0 on success. 1 if the email is not associated with an account.
     '''
 
+    query_lock.acquire()
     cur = con.cursor()
     query = 'select password_hash from Users where email = %s'
     cur.execute(query, (email,))
 
     result = cur.fetchall()
     if len(result) == 0:
+        query_lock.release()
         return 1
     code = tokenise.encode_token({'password': result[0]['password_hash']})
 
@@ -337,7 +354,7 @@ def reset_password(reset_code, password):
     :param password: The new password
     :return: 0 on success. 1 if the token is not valid in any way.
     '''
-    cur = con.cursor()
+
     decoded = tokenise.decode_token(reset_code)
     if decoded is None:
         return 1
@@ -346,12 +363,14 @@ def reset_password(reset_code, password):
 
     password_hash = decoded['password']
 
+    query_lock.acquire()
     cur = con.cursor()
     query = 'select email from Users where password_hash = %s'
     cur.execute(query, (password_hash,))
 
     result = cur.fetchall()
     if len(result) == 0:
+        query_lock.release()
         return 1
 
     email_of_acc = result[0]['email']
@@ -373,21 +392,23 @@ def verify_reset_code(reset_code):
     :param reset_code: The reset code
     :return: 0 on success. 1 if the token is not valid in any way.
     '''
-    cur = con.cursor()
     decoded = tokenise.decode_token(reset_code)
     if decoded is None:
+
         return 1
     if 'password' not in decoded:
         return 1
 
     password_hash = decoded['password']
 
+    query_lock.acquire()
     cur = con.cursor()
     query = 'select email from Users where password_hash = %s'
     cur.execute(query, (password_hash,))
 
     result = cur.fetchall()
     if len(result) == 0:
+        query_lock.release()
         return 1
 
     return 0
@@ -430,6 +451,7 @@ def profile_info(user_id):
     :return: The tuple containing all fields associated with that user. 1 if
     the user id was not found.
     '''
+    query_lock.acquire()
     cur = con.cursor()
     query = "select * from Users where user_id = %s"
     cur.execute(query, (user_id,))
@@ -455,6 +477,7 @@ def change_password(token, oldpassword, newpassword):
     if user_id < 0:
         return False, 'Invalid token'
 
+    query_lock.acquire()
     cur = con.cursor()
     query = f"select password_hash from Users where user_id = %s"
     cur.execute(query, (user_id,))
@@ -474,6 +497,7 @@ def editprofile(token, first_name, last_name):
     if user_id < 0:
         return False
 
+    query_lock.acquire()
     cur = con.cursor()
     query = "update Users set first_name = %s, last_name = %s where user_id = %s"
     cur.execute(query, (first_name, last_name, user_id))
@@ -512,6 +536,7 @@ def change_profile_pic(image_file, token):
     if u_id < 0:
         return -1
 
+    query_lock.acquire()
     cur = con.cursor()
     query = "select profile_pic_path from Users where user_id=%s"
     cur.execute(query, (u_id,))
