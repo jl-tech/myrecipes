@@ -36,9 +36,16 @@ function RegisterBody(props) {
     const [lastName, setlastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [password2, setPassword2] = useState('');
 
     async function handleSubmit(event) {
         event.preventDefault();
+
+        if (password != password2) {
+            setAlertShow(true);
+            setAlertText('Passwords are different');
+            return;
+        }
 
         let response = await registerUser(firstName, lastName, email, password)
             .catch(e => {
@@ -67,6 +74,9 @@ function RegisterBody(props) {
         </Form.Group>
         <Form.Group controlId="password">
             <Form.Control type="password" placeholder="Password" required onChange={e => setPassword(e.target.value)}/>
+        </Form.Group>
+        <Form.Group controlId="password">
+            <Form.Control type="password" placeholder="Password" required onChange={e => setPassword2(e.target.value)}/>
         </Form.Group>
         <Alert show={alertShow} variant="danger" onClose={() => setAlertShow(false)} dismissible>
             {alertText}

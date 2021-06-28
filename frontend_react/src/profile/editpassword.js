@@ -38,6 +38,7 @@ function ProfileEditPassword(props) {
 
     const [oldPass, setOldPass] = useState('');
     const [newPass, setNewPass] = useState('');
+    const [newPass2, setNewPass2] = useState('');
     const [errorShow, setErrorShow] = useState(false);
     const [errorText, setErrorText] = useState('');
     const [successShow, setSuccessShow] = useState(false);
@@ -46,6 +47,12 @@ function ProfileEditPassword(props) {
 
     async function handleSubmit(event) {
         event.preventDefault();
+
+        if (newPass != newPass2) {
+            setErrorShow(true);
+            setErrorText('Passwords are different');
+            return;
+        }
 
         let response = await editPassword(cookie.get('token'), oldPass, newPass)
             .catch(e => {
@@ -96,6 +103,14 @@ function ProfileEditPassword(props) {
                         </Form.Label>
                         <Col sm="8">
                             <Form.Control required type="password" onChange={e => setNewPass(e.target.value)} />
+                        </Col>
+                    </Form.Group>
+                    <Form.Group as={Row}>
+                        <Form.Label column sm="2">
+                            Retype New
+                        </Form.Label>
+                        <Col sm="8">
+                            <Form.Control required type="password" onChange={e => setNewPass2(e.target.value)} />
                         </Col>
                     </Form.Group>
                     <Alert show={errorShow} variant="danger" onClose={() => setErrorShow(false)} dismissible>
