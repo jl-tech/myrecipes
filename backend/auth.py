@@ -245,8 +245,6 @@ def send_confirm_email(user_id, email):
 
        Please click the link below to confirm your email.
        http://localhost:3000/emailconfirm?code={code}
-       
-       If the link doesn't work, the code to confirm your email is {code}.
 
        If you did not sign up, you do not need to do anything.
 
@@ -257,23 +255,25 @@ def send_confirm_email(user_id, email):
     message_html = f"""\
            <html>
                <body>
-                   <p> Hi! </p>
+                   <p style="font-size:150%;text-align: center"> Hi! </p>
 
-                   <b> <p> Please click the link below to confirm your email.</p>
-                    <p> http://localhost:3000/emailconfirm?code={code}</p> </b>
-       
-                    <p> If the link doesn't work, the code to reset your email is {code}. </p>
-
-                    <p> If you did not sign up, you do not need to do anything. </p>
-
-                    <p> Regards, </p>
-                    <p> MyRecipes </p>
+                   <b> <a href=http://localhost:3000/emailconfirm?code={code}
+                   <p style="font-size:150%;text-align: center"> Please click HERE to confirm your email.</p> </b> </a>
+                   
+                    <p style="font-size:100%;text-align: center"> If the link doesnt work, copy and paste the following into your browser: </p>
+                    <p style="font-size:100%;text-align: center"> http://localhost:3000/emailconfirm?code={code}</p> </b>
+            
+                    <p style="font-size:150%;text-align: center"> If you did not sign up, you do not need to do anything. </p>
+        
+                    <p style="font-size:150%;text-align: center"> Regards, </p>
+                    <p style="font-size:150%;text-align: center"> MyRecipes </p>
                </body>
            </html>
            """
 
     email_thread = threading.Thread(name="email_thread",
-                                    args=(subject, message_html, message_plain, email),
+                                    args=(subject, message_html, message_plain, email,
+                                          '../server_resources/email_images/email_banner_conf_email.png'),
                                     target=helpers.send_email)
     email_thread.start()
 
@@ -311,8 +311,6 @@ def send_reset(email):
        Please click the link below to change your password.
        http://localhost:3000/resetpassword?code={code}
 
-       If the link doesn't work, the code to reset your password is {code}.
-
        If you did not request this change you do not need to do anything.
 
        Regards,
@@ -321,27 +319,26 @@ def send_reset(email):
     message_html = f"""\
            <html>
                <body>
-                   <p> Hi! </p>
+                   <p style="font-size:150%;text-align: center"> Hi! </p>
 
-                   <p>  Someone (hopefully you) requested to change your password for MyRecipes. </p>
+                   <p style="font-size:150%;text-align: center">  Someone (hopefully you) requested to change your password for MyRecipes. </p>
 
-                   <b> <p> Please click the link below to change your 
-                   password.</p>
-                    <p> http://localhost:3000/resetpassword?code={code}</p> </b>
+                   <b> <a href=http://localhost:3000/resetpassword?code={code}> <p style="font-size:150%;text-align: center"> 
+                   Please click HERE to change your password. </a> </p> </b>
+                   
+                   <p style="font-size:100%;text-align: center"> If the link doesnt work, copy and paste the following into your browser: </p>
+                    <p style="font-size:100%;text-align: center"> http://localhost:3000/resetpassword?code={code}</p>
 
-                    <p> If the link doesn't work, the code to reset your 
-                    password is {code}. </p>
+                    <p style="font-size:150%;text-align: center"> If you did not request this change you do not need to do anything. </p>
 
-                    <p> If you did not request this change you do not need to do anything. </p>
-
-                    <p> Regards, </p>
-                    <p> MyRecipes </p>
+                    <p style="font-size:150%;text-align: center"> Regards, </p>
+                    <p style="font-size:150%;text-align: center"> MyRecipes </p>
                </body>
            </html>
            """
     email_thread = threading.Thread(name="email_thread",
                                     args=(subject, message_html, message_plain,
-                                          email),
+                                          email, '../server_resources/email_images/email_banner_pwd_reset.png'),
                                     target=helpers.send_email)
     email_thread.start()
     return 0
@@ -429,14 +426,14 @@ def send_pwd_change_email(email):
         MyRecipes
               """
     message_html =f"""\
-        <p> Hi,</p>
+        <p style="font-size:150%;text-align: center"> Hi,</p>
 
-        <p> This email is to inform you that your password was changed.</p>
+        <p style="font-size:150%;text-align: center"> This email is to inform you that your password was changed.</p>
 
-        <p> If you didn't expect this, contact customer support immediately.</p>
+        <p style="font-size:150%;text-align: center"> If you didn't expect this, contact customer support immediately.</p>
 
-        <p> Regards, </p>
-        <p> MyRecipes </p>
+        <p style="font-size:150%;text-align: center"> Regards, </p>
+        <p style="font-size:150%;text-align: center"> MyRecipes </p>
         """
     email_thread = threading.Thread(name="conf_email_thread",
                                     args=(email,),
