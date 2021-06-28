@@ -70,16 +70,26 @@ def email_confirm(code):
     if data is None:
         return 1
 
+    # Verify unverified user
     cur = con.cursor()
-    print(data)
+    query = "select * from users where email = %s and email_verified = FALSE and user_id = %s"
+    cur.execute(query, (data["email"], int(data["user_id"])))
+    result = cur.fetchall()
+    if len(result) == 1:
+        query = "update Users set email = %s, email_verified = TRUE where user_id = %s"
+        changed_rows = cur.execute(query, (data["email"], int(data["user_id"])))
+        con.commit()
+        return 0
+    elif len(result) > 1:
+        return 1
+
+    if email_already_exists(data["email"]):
+        return 1
+
     query = "update Users set email = %s, email_verified = TRUE where user_id = %s"
     changed_rows = cur.execute(query, (data["email"], int(data["user_id"])))
     con.commit()
-
-    if changed_rows == 0:
-        return 1
-    else:
-        return 0
+    return 0
 
 def verify(token):
     user_id = token_to_id(token)
@@ -450,34 +460,33 @@ def change_password(email, oldpassword, newpassword):
         return True
 
 def editprofile(token, first_name, last_name):
-    userid = token_to_id(token)
+    user_id = token_to_id(token)
     
-    if userid < 0:
+    if user_id < 0:
         return False
 
     cur = con.cursor()
     query = "update Users set first_name = %s, last_name = %s where user_id = %s"
-    cur.execute(query, (first_name, last_name, userid))
+    cur.execute(query, (first_name, last_name, user_id))
     con.commit()
 
     return True
     
 def changeemail(token, email):
-    prev_email = token_to_email(token)
+    user_id = token_to_id(token)
     
-    if isinstance(prev_email, int): 
-        return False
+    if user_id < 0:
+        return False, "Invalid token"
 
-    cur = con.cursor()
-    query = "select user_id from Users where email = %s"
-    cur.execute(query, (prev_email,))
-    user_id = cur.fetchone()['user_id']
+    if email_already_exists(email):
+        return False, "Email already exists"
+
     email_thread = threading.Thread(name="conf_email_thread",
                                     args=(user_id, email),
                                     target=send_confirm_email)
     email_thread.start()
 
-    return True
+    return True, ""
 
 def change_profile_pic(image_file, token):
     '''

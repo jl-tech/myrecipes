@@ -162,12 +162,13 @@ def route_auth_editprofile():
 @APP.route("/profile/changeemail", methods=['POST'])
 def route_auth_changeemail():
     data = flask.request.get_json()
-    if auth.changeemail(flask.request.headers.get("Authorization"), data["Email"]):
+    ok, message = auth.changeemail(flask.request.headers.get("Authorization"), data["Email"])
+    if ok:
         response = flask.jsonify({})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
     else:
-        response = flask.jsonify({'error': 'Invalid token'})
+        response = flask.jsonify({'error': message})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
 
