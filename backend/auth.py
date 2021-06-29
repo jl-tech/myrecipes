@@ -25,7 +25,7 @@ import threading
 
 query_lock = threading.Lock()
 
-DEFAULT_PIC = 'dog.jpg'
+DEFAULT_PIC = 'default.png'
 
 def add_new_user(email, first_name, last_name, password):
     '''
