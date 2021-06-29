@@ -137,7 +137,7 @@ function ProfileEditPicture(props) {
                 <Row style={{borderTopColor:"gray",borderTopWidth:"1px",borderTopStyle:"solid",paddingTop:"1em", marginTop:"1em"}}>
                     <Col sm={8}><h5>Picture</h5></Col>
                     <Col sm={2} >
-                        { props.imgUrl == 'dog.jpg' ? <></> : <Button variant="outline-primary" size="sm" onClick={handleRemoveImage}>Delete</Button>}</Col>
+                        { props.imgUrl == 'default.png' ? <></> : <Button variant="outline-primary" size="sm" onClick={handleRemoveImage}>Delete</Button>}</Col>
                     <Col sm={2} ><Button variant="outline-secondary" size="sm" onClick={() => setEditMode(true)}>Edit</Button></Col>
                 </Row>
                 <Row>
