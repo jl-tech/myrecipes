@@ -21,4 +21,10 @@ Week 3
 
 Week 4
 - Helped design the APIs for the frontend to commuicate with the backend for sprint 1.
+- Finished edit profile feature for backend
+- Finished change email feature for backend, including updating email_confirm, add_new_user, send_confirm_email
+- Fixed /auth/verify
+- Discussed the potential issue of invalid tokens from users changing emails with the team
 
+Week 5
+- 
