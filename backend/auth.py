@@ -23,7 +23,7 @@ import mimetypes
 
 import threading
 
-# query_lock = threading.Lock()
+query_lock = threading.Lock()
 
 DEFAULT_PIC = 'dog.jpg'
 
@@ -47,7 +47,7 @@ def add_new_user(email, first_name, last_name, password):
 
     hashed_pwd = hash_password(password)
 
-    # query_lock.acquire()
+    query_lock.acquire()
     cur = con.cursor()
     query = "insert into Users (email, first_name, last_name, password_hash, email_verified)" \
             "values (%s, %s, %s, %s, FALSE)"
@@ -58,10 +58,8 @@ def add_new_user(email, first_name, last_name, password):
     cur.execute(query, (email))
     user_id = cur.fetchone()
 
-    email_thread = threading.Thread(name="conf_email_thread",
-                                    args=(user_id['user_id'], email),
-                                    target=send_confirm_email)
-    email_thread.start()
+    query_lock.release()
+    send_confirm_email(user_id['user_id'], email)
 
     print(f"INFO: Created new account: {email}, f: {first_name}, l: {last_name}, p: {hashed_pwd}")
     return 0
@@ -79,11 +77,12 @@ def email_confirm(code):
         return 1
 
     # Verify unverified user
+    query_lock.acquire()
     cur = con.cursor()
-    query = "select * from users where email = %s and email_verified = FALSE and user_id = %s"
+    query = "select * from Users where email = %s and email_verified = FALSE and user_id = %s"
     cur.execute(query, (data["email"], int(data["user_id"])))
     result = cur.fetchall()
-    # query_lock.release()
+    query_lock.release()
     if len(result) == 1:
         query = "update Users set email = %s, email_verified = TRUE where user_id = %s"
         changed_rows = cur.execute(query, (data["email"], int(data["user_id"])))
@@ -95,10 +94,12 @@ def email_confirm(code):
     if email_already_exists(data["email"]):
         return 1
 
-    # query_lock.acquire()
+    query_lock.acquire()
     query = "update Users set email = %s, email_verified = TRUE where user_id = %s"
     changed_rows = cur.execute(query, (data["email"], int(data["user_id"])))
     con.commit()
+
+    query_lock.release()
     return 0
 
 def verify(token):
@@ -132,21 +133,23 @@ def token_to_id(token):
     user_id = token_decoded['user_id']
     print(user_id, file=sys.stderr)
 
-    # query_lock.acquire()
+    query_lock.acquire()
     cur = con.cursor()
     # check email exists with an account
     query = "select * from Users where user_id = %s"
     cur.execute(query, (user_id,))
     result = cur.fetchall()
     if len(result) == 0:
-        # query_lock.release()
+        query_lock.release()
         return -2
     query = "select * from Users where user_id = %s and email_verified = %s"
     cur.execute(query, (user_id, True, ))
     result = cur.fetchall()
     if len(result) == 0:
-        # query_lock.release()
+        query_lock.release()
         return -3
+
+    query_lock.release()
     return user_id
 
 def token_to_email(token):
@@ -163,11 +166,14 @@ def token_to_email(token):
     if id == -1 or id == -2 or id == -3:
         return id
 
-    # query_lock.acquire()
+    query_lock.acquire()
     cur = con.cursor()
     query = 'select email from Users where user_id = %s'
     cur.execute(query, (id,))
-    return cur.fetchone()['email']
+    result = cur.fetchone()['email']
+
+    query_lock.release()
+    return result
 
 
 
@@ -191,26 +197,28 @@ def check_password(email, password):
     (False, -1) if not. (False, -2) if the email wasn't found.
     (False, -3) if the email hasn't been verified, but the combination was correct.
     '''
-    # query_lock.acquire()
+    query_lock.acquire()
     cur = con.cursor()
     query = f"select user_id, password_hash from Users where email = %s"
     cur.execute(query, (email,))
     result = cur.fetchall()
     if len(result) == 0:
-        # query_lock.release()
+        query_lock.release()
         return False, -2
     p_hash = result[0]['password_hash']
     correct = bcrypt.checkpw(password.encode('utf-8'), p_hash.encode('utf-8'))
     if not correct:
-        # query_lock.release()
+        query_lock.release()
         return False, -1
     query = f"select email_verified from Users where user_id = %s"
     cur.execute(query, (result[0]['user_id'],))
     is_verified = cur.fetchall()[0]['email_verified']
     print(is_verified)
     if not is_verified:
-        # query_lock.release()
+        query_lock.release()
         return False, -3
+
+    query_lock.release()
     return True, result[0]['user_id']
 
 
@@ -220,11 +228,13 @@ def email_already_exists(email):
     :param email: The email address to check
     :return: True if the email already exists. False otherwise.
     '''
-    # query_lock.acquire()
+    query_lock.acquire()
     cur = con.cursor()
     query = f"select * from Users where email = %s"
     cur.execute(query, (email,))
     result = cur.fetchall()
+
+    query_lock.release()
     if len(result) != 0:
         return True
     else:
@@ -281,6 +291,7 @@ def send_confirm_email(user_id, email):
                                     target=helpers.send_email)
     email_thread.start()
 
+    query_lock.release()
 
     return 0
 
@@ -293,14 +304,14 @@ def send_reset(email):
     :return: 0 on success. 1 if the email is not associated with an account.
     '''
 
-    # query_lock.acquire()
+    query_lock.acquire()
     cur = con.cursor()
     query = 'select password_hash from Users where email = %s'
     cur.execute(query, (email,))
 
     result = cur.fetchall()
     if len(result) == 0:
-        # query_lock.release()
+        query_lock.release()
         return 1
     code = tokenise.encode_token({'password': result[0]['password_hash']})
 
@@ -345,6 +356,8 @@ def send_reset(email):
                                           email, 'http://i.imgur.com/S9M7chn.png'),
                                     target=helpers.send_email)
     email_thread.start()
+
+    query_lock.release()
     return 0
 
 def reset_password(reset_code, password):
@@ -364,14 +377,14 @@ def reset_password(reset_code, password):
 
     password_hash = decoded['password']
 
-    # query_lock.acquire()
+    query_lock.acquire()
     cur = con.cursor()
     query = 'select email from Users where password_hash = %s'
     cur.execute(query, (password_hash,))
 
     result = cur.fetchall()
     if len(result) == 0:
-        # query_lock.release()
+        query_lock.release()
         return 1
 
     email_of_acc = result[0]['email']
@@ -379,12 +392,9 @@ def reset_password(reset_code, password):
     query = 'update Users set password_hash=%s where email=%s'
     cur.execute(query, (new_pwd_hash, email_of_acc))
     con.commit()
-    email_thread = threading.Thread(name="conf_email_thread",
-                                    args=(email_of_acc,),
-                                    target=send_pwd_change_email)
-    email_thread.start()
+    send_pwd_change_email(email_of_acc)
 
-
+    query_lock.release()
     return 0
 
 def verify_reset_code(reset_code):
@@ -402,16 +412,17 @@ def verify_reset_code(reset_code):
 
     password_hash = decoded['password']
 
-    # query_lock.acquire()
+    query_lock.acquire()
     cur = con.cursor()
     query = 'select email from Users where password_hash = %s'
     cur.execute(query, (password_hash,))
 
     result = cur.fetchall()
     if len(result) == 0:
-        # query_lock.release()
+        query_lock.release()
         return 1
 
+    query_lock.release()
     return 0
 
 def send_pwd_change_email(email):
@@ -440,8 +451,9 @@ def send_pwd_change_email(email):
         <p style="font-size:150%;text-align: center"> MyRecipes </p>
         """
     email_thread = threading.Thread(name="conf_email_thread",
-                                    args=(email,),
-                                    target=send_pwd_change_email)
+                                    args=(subject, message_html, message_plain, email,
+                                          'http://i.imgur.com/fUkY4mW.png'),
+                                    target=helpers.send_email)
     email_thread.start()
 
 
@@ -452,17 +464,20 @@ def profile_info(user_id):
     :return: The tuple containing all fields associated with that user. 1 if
     the user id was not found.
     '''
-    # query_lock.acquire()
+    query_lock.acquire()
     cur = con.cursor()
     query = "select * from Users where user_id = %s"
     cur.execute(query, (user_id,))
     result = cur.fetchall()
+
+    query_lock.release()
     if len(result) == 0:
         return 1
     else:
         if result[0]['profile_pic_path'] is None:
             result[0]['profile_pic_path'] = DEFAULT_PIC
         return result[0]
+
 
 def change_password(token, oldpassword, newpassword):
     '''
@@ -474,20 +489,24 @@ def change_password(token, oldpassword, newpassword):
     '''
 
     user_id = token_to_id(token)
-    
+    email = token_to_email(token)
     if user_id < 0:
         return False, 'Invalid token'
 
-    # query_lock.acquire()
+    query_lock.acquire()
     cur = con.cursor()
     query = f"select password_hash from Users where user_id = %s"
     cur.execute(query, (user_id,))
     result = cur.fetchall()
+
+    query_lock.release()
     if bcrypt.checkpw(oldpassword.encode('utf-8'), result[0]['password_hash'].encode('utf-8')):
         new_hash_password = hash_password(newpassword)
         query = 'update Users set password_hash=%s where user_id=%s'
         cur.execute(query, (new_hash_password, user_id))
         con.commit()
+        print(email)
+        send_pwd_change_email(email)
         return True, ''
     else:
         return False, 'Wrong current password'
@@ -498,12 +517,13 @@ def editprofile(token, first_name, last_name):
     if user_id < 0:
         return False
 
-    # query_lock.acquire()
+    query_lock.acquire()
     cur = con.cursor()
     query = "update Users set first_name = %s, last_name = %s where user_id = %s"
     cur.execute(query, (first_name, last_name, user_id))
     con.commit()
 
+    query_lock.release()
     return True
     
 def changeemail(token, email):
@@ -515,11 +535,7 @@ def changeemail(token, email):
     if email_already_exists(email):
         return False, "Email already exists"
 
-    email_thread = threading.Thread(name="conf_email_thread",
-                                    args=(user_id, email),
-                                    target=send_confirm_email)
-    email_thread.start()
-
+    send_confirm_email(user_id, email)
     return True, ""
 
 def change_profile_pic(image_file, token):
@@ -537,7 +553,7 @@ def change_profile_pic(image_file, token):
     if u_id < 0:
         return -1, ''
 
-    # query_lock.acquire()
+    query_lock.acquire()
     cur = con.cursor()
     query = "select profile_pic_path from Users where user_id=%s"
     cur.execute(query, (u_id,))
@@ -575,7 +591,7 @@ def remove_profile_pic(token):
     if u_id < 0:
         return -1, ''
 
-    # query_lock.acquire()
+    query_lock.acquire()
     cur = con.cursor()
     query = "select profile_pic_path from Users where user_id=%s"
     cur.execute(query, (u_id,))
