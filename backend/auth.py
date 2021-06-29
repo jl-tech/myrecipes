@@ -291,8 +291,6 @@ def send_confirm_email(user_id, email):
                                     target=helpers.send_email)
     email_thread.start()
 
-    query_lock.release()
-
     return 0
 
 
@@ -569,7 +567,7 @@ def change_profile_pic(image_file, token):
     query = "update Users set profile_pic_path=%s where user_id=%s"
     cur.execute(query, (file_name, u_id))
     con.commit()
-
+    query_lock.release()
     # delete old image
     if old_path is not None:
         try:
