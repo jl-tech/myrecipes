@@ -76,7 +76,7 @@ function RegisterBody(props) {
             <Form.Control type="password" placeholder="Password" required onChange={e => setPassword(e.target.value)}/>
         </Form.Group>
         <Form.Group controlId="password">
-            <Form.Control type="password" placeholder="Password" required onChange={e => setPassword2(e.target.value)}/>
+            <Form.Control type="password" placeholder="Retype Password" required onChange={e => setPassword2(e.target.value)}/>
         </Form.Group>
         <Alert show={alertShow} variant="danger" onClose={() => setAlertShow(false)} dismissible>
             {alertText}

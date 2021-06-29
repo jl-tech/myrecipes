@@ -55,10 +55,17 @@ function ResetPasswordBody(props) {
     const [alertShow, setAlertShow] = useState(false);
     const [alertText, setAlertText] = useState('');
     const [password, setPassword] = useState('');
+    const [password2, setPassword2] = useState('');
     const [success, setSuccess] = useState(false);
 
     async function handleSubmit(event) {
         event.preventDefault();
+
+        if (password != password2) {
+            setAlertShow(true);
+            setAlertText('Passwords are different');
+            return;
+        }
 
         let response = await requestResetPassword(props.code, password)
             .catch(e => {
@@ -110,6 +117,9 @@ function ResetPasswordBody(props) {
             <Form onSubmit={handleSubmit}>
                 <Form.Group controlId="password">
                     <Form.Control type="password" placeholder="Password" required onChange={e => setPassword(e.target.value)}/>
+                </Form.Group>
+                <Form.Group controlId="password">
+                    <Form.Control type="password" placeholder="Retype Password" required onChange={e => setPassword2(e.target.value)}/>
                 </Form.Group>
                 <Alert show={alertShow} variant="danger" onClose={() => setAlertShow(false)} dismissible>
                     {alertText}
