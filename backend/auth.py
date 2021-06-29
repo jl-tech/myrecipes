@@ -598,7 +598,7 @@ def remove_profile_pic(token):
     query = "update Users set profile_pic_path=%s where user_id=%s"
     cur.execute(query, (None, u_id))
     con.commit()
-
+    query_lock.release()
     # delete old image
     if old_path is not None:
         try:
