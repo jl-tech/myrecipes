@@ -12,3 +12,12 @@ Week 2:
 Week 3:
 - Wrote software architecture discussion
 - Completed proposal
+
+Week 4:
+- Frontend
+  Auth: Register/Login/ForgetPassword/ResetPassword/EmailConfirm
+  Profile: Profile/Edit/EditName/EditEmail/EditPassword/EditPicture
+- Backend
+  Auth: email_confirm/verify_reset_code/remove_password
+  Fixed token validation
+- Integrated frontend and backend (Managing the API endpoints)
