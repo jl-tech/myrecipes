@@ -4,3 +4,19 @@ Week 1:
 * Discussed programming languages, stack framework, and few other things.
 * SQL for the database, python for backend, flask, and HTML templates.
 * For next week: Work on features to include in the project and proposal.
+
+Week 2:
+* Discussed 'novel' features and other functionalities of our project.
+* Discussed the scope of the user stories and how to present them on Jira.
+* Reviewed user stories on Jira and discussed them with the team to make sure they are aligned with the project spec.
+
+Week 3:
+* Finished review and discussion on 'novel' features and requirements with the team and double-checked with our tutor.
+* Reviewed team's system architecture system diagram.
+* Wrote the part of the background and similar systems for the proposal.
+* Proofread and edited the final project proposal.
+* Finished the proposal with the team.
+
+Week 4:
+* The team discussed the API for the frontend and how it will communicate with the backend.
+* Started sprint 1 for the next demo.
