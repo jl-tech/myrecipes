@@ -213,7 +213,7 @@ def route_auth_removepicture():
 
 @APP.route("/img/<filename>")
 def view_image(filename):
-    return flask.redirect(flask.url_for('static', filename='./server_resources/images/profile_pictures/' + filename), code=301)
+    return flask.redirect(flask.url_for('static', filename='./server_resources/images/' + filename), code=301)
 
 if __name__ == "__main__":
     # Testing code
@@ -225,7 +225,7 @@ if __name__ == "__main__":
     # print(auth.check_password('jonathan.liu2000@gmail.com', 'badpassword'))
     # print(auth.verify_email(132777754))
     # print(auth.send_reset('jonathan.liu2000@gmail.com'))
-    print(auth.reset_password('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwYXNzd29yZCI6IiQyYiQxMiRRMThSR1JhL0wwM3RXVHdWWkpNbS9PbEpvcC9WUmwuZkhOMGtqZk53MkVlR0ZjT0V3Z2VweSJ9._yDmsNIp1YmVztrmnuRWUQZ80W7-RCmcCAAxP1XXaPM', 'newpwd'))
+    # print(auth.reset_password('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwYXNzd29yZCI6IiQyYiQxMiRRMThSR1JhL0wwM3RXVHdWWkpNbS9PbEpvcC9WUmwuZkhOMGtqZk53MkVlR0ZjT0V3Z2VweSJ9._yDmsNIp1YmVztrmnuRWUQZ80W7-RCmcCAAxP1XXaPM', 'newpwd'))
     # End testing code
 
     if len(sys.argv) != 2:

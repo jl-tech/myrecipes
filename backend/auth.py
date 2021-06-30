@@ -561,7 +561,7 @@ def change_profile_pic(image_file, token):
     extension = mimetypes.guess_extension(image_file.mimetype) or ''
     file_name = file_name + extension
     img = Image.open(image_file)
-    out_path = f'./static/server_resources/images/profile_pictures/{file_name}'
+    out_path = f'./static/server_resources/images/{file_name}'
     img.save(out_path)
 
     query = "update Users set profile_pic_path=%s where user_id=%s"
