@@ -32,6 +32,7 @@ create table Recipes(
 create table Ingredients(
     recipe_id integer references Recipes(recipe_id),
     ingredient_no integer,
+    ingredient_name text,
     quantity text,
     primary key (recipe_id, ingredient_no)
 );
@@ -39,12 +40,14 @@ create table Ingredients(
 create table Steps(
     recipe_id integer references Recipes(recipe_id),
     step_no integer,
+    step_text text,
     primary key (recipe_id, step_no)
 );
 
 create table Photos(
     recipe_id integer references Recipes(recipe_id),
     photo_no integer,
+    photo_path text,
     is_thumbnail boolean,
     primary key (recipe_id, photo_no)
 );
