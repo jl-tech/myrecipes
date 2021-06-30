@@ -20,6 +20,34 @@ create table Users (
     primary key (user_id)
 );
 
+create table Recipes(
+    recipe_id serial,
+    created_by_user_id integer references Users(user_id),
+    name text,
+    type text,
+    serving_size int,
+    primary key(recipe_id)
+);
+
+create table Ingredients(
+    recipe_id integer references Recipes(recipe_id),
+    ingredient_no integer,
+    primary key (recipe_id, ingredient_no)
+);
+
+create table Steps(
+    recipe_id integer references Recipes(recipe_id),
+    step_no integer,
+    primary key (recipe_id, step_no)
+);
+
+create table Photos(
+    recipe_id integer references Recipes(recipe_id),
+    photo_no integer,
+    is_thumbnail boolean,
+    primary key (recipe_id, photo_no)
+);
+
 -- temporary test account
 insert ignore into Users(email, first_name, last_name, password_hash)
     values ('test@test.com', 'Test', 'Account', 'testing');
