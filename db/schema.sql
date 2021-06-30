@@ -32,6 +32,7 @@ create table Recipes(
 create table Ingredients(
     recipe_id integer references Recipes(recipe_id),
     ingredient_no integer,
+    quantity text,
     primary key (recipe_id, ingredient_no)
 );
 
