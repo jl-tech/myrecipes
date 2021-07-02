@@ -49,7 +49,7 @@ function ProfileEdit(props) {
             </Modal.Header>
             <Modal.Body>
                 <Container>
-                    <ProfileEditName firstName={props.firstName} setfirstName={props.setfirstName} lastName={props.lastName} setlastName={props.setlastName} />
+                    <ProfileEditName firstName={props.firstName} setfirstName={props.setfirstName} lastName={props.lastName} setlastName={props.setlastName} setButtonName={props.setButtonName}/>
                     <ProfileEditEmail email={props.email} />
                     <ProfileEditPassword />
                     <ProfileEditPicture imgUrl={props.imgUrl} setImgUrl={props.setImgUrl} />
