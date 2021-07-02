@@ -29,7 +29,7 @@ create table Recipes(
     primary key(recipe_id)
 );
 
-create table Ingredients(
+create table RecipeIngredients(
     recipe_id integer references Recipes(recipe_id),
     ingredient_no integer,
     ingredient_name text,
@@ -37,14 +37,14 @@ create table Ingredients(
     primary key (recipe_id, ingredient_no)
 );
 
-create table Steps(
+create table RecipeSteps(
     recipe_id integer references Recipes(recipe_id),
     step_no integer,
     step_text text,
     primary key (recipe_id, step_no)
 );
 
-create table Photos(
+create table RecipePhotos(
     recipe_id integer references Recipes(recipe_id),
     photo_no integer,
     photo_path text,
