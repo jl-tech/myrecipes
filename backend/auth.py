@@ -552,12 +552,7 @@ def change_profile_pic(image_file, token):
     cur.execute(query, (u_id,))
     old_path = cur.fetchone()['profile_pic_path']
 
-    file_name = hashlib.sha1(image_file.read()).hexdigest()
-    extension = mimetypes.guess_extension(image_file.mimetype) or ''
-    file_name = file_name + extension
-    img = Image.open(image_file)
-    out_path = f'./static/server_resources/images/{file_name}'
-    img.save(out_path)
+    file_name = helpers.store_image(image_file)
 
     query = "update Users set profile_pic_path=%s where user_id=%s"
     cur.execute(query, (file_name, u_id))
