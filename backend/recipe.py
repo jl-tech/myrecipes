@@ -46,8 +46,8 @@ def add_recipe(token, name, type, time, serving_size, ingredients, steps, photos
     '''
 
     cur.execute(query, (int(u_id), int(time), name, type, int(serving_size)))
-
-    created_recipe_id = cur.execute('select LAST_INSERT_ID()')
+    cur.execute('select LAST_INSERT_ID()')
+    created_recipe_id = cur.fetchall()[0]['LAST_INSERT_ID()']
 
     # do RecipeIngredients table
     query = '''
@@ -77,4 +77,69 @@ def add_recipe(token, name, type, time, serving_size, ingredients, steps, photos
         cur.execute(query, (int(created_recipe_id), int(index), path))
 
     con.commit()
+    query_lock.release()
     return 0
+
+def get_recipe_details(recipe_id):
+    '''
+    Gets details of a recipe.
+    :param recipe_id: the recipe id to get details of
+    :return: Dictionary with fields:
+        - name: string
+        - creation_time: string
+        - contributor_user_id: integer
+        - type: string
+        - time_to_cook: integer
+        - serving_size: integer
+        - ingredients: array of dictionaries (dict has keys  name, quantity, unit)
+        - steps: array of strings
+        - photos: array of strings (corresponding to path of image)
+        -1 if the recipe id was invalid
+    '''
+    query_lock.acquire()
+    cur = con.cursor()
+    out = {}
+    query = ''' select * from Recipes where recipe_id = %s'''
+    cur.execute(query, (int(recipe_id),))
+    result = cur.fetchall()
+    if len(result) != 1:
+        return -1
+    result = result[0]
+    out['name'] = result['name']
+    out['creation_time'] = result['creation_time']
+    out['created_by_user_id'] = result['created_by_user_id']
+    out['type'] = result['type']
+    out['time_to_cook'] = result['time_to_cook']
+    out['serving_size'] = result['serving_size']
+
+
+    # ingredients
+    query = '''select * from RecipeIngredients where recipe_id = %s order by ingredient_no'''
+    cur.execute(query, (int(recipe_id),))
+    result = cur.fetchall()
+    out['ingredients'] = []
+    for row in result:
+        curr_dict = {'name': row['ingredient_name'],
+                     'quantity': row['quantity'], 'unit': row['unit']}
+        out['ingredients'].append(curr_dict)
+
+
+    # steps
+    query = '''select * from RecipeSteps where recipe_id = %s order by step_no'''
+    cur.execute(query, (int(recipe_id),))
+    result = cur.fetchall()
+    out['steps'] = []
+    for row in result:
+        out['steps'].append(row['step_text'])
+
+    # photos
+    query = '''select * from RecipePhotos where recipe_id = %s order by 
+    photo_no'''
+    cur.execute(query, (int(recipe_id),))
+    result = cur.fetchall()
+    out['photos'] = []
+    for row in result:
+        out['photos'].append(row['photo_path'])
+
+    query_lock.release()
+    return out

@@ -14,7 +14,6 @@ def route_recipe_create():
     time = request.form['time']
     serving_size = request.form['serving_size']
     ingredients = json.loads(request.form['ingredients'])['ingredients']
-    print(ingredients)
     steps = json.loads(request.form['steps'])['steps']
     result = recipe.add_recipe(request.headers.get("Authorization"), name, type, int(time), int(serving_size),  ingredients, steps, photos)
     if result != 0:
@@ -23,5 +22,18 @@ def route_recipe_create():
         return response, 400
     else:
         response = jsonify({})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 200
+
+@RECIPE.route('/view', methods=['GET'])
+def route_recipe_view():
+    recipe_id = request.args.get('recipe_id')
+    result = recipe.get_recipe_details(recipe_id)
+    if result == -1:
+        response = jsonify({'error': 'Invalid recipe id'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
+    else:
+        response = jsonify(result)
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
