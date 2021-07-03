@@ -62,20 +62,20 @@ function RegisterBody(props) {
         return (
         <Form onSubmit={handleSubmit}>
         <Form.Row>
-            <Form.Group as={Col} controlId="firstname">
+            <Form.Group as={Col}>
                 <Form.Control placeholder="First name" required onChange={e => setfirstName(e.target.value)}/>
             </Form.Group>
-            <Form.Group as={Col} controlId="lastname">
+            <Form.Group as={Col}>
                 <Form.Control placeholder="Last name" required onChange={e => setlastName(e.target.value)}/>
             </Form.Group>
         </Form.Row>
-        <Form.Group controlId="email">
+        <Form.Group>
             <Form.Control type="email" placeholder="Email address" required onChange={e => setEmail(e.target.value)}/>
         </Form.Group>
-        <Form.Group controlId="password">
+        <Form.Group>
             <Form.Control type="password" placeholder="Password" required onChange={e => setPassword(e.target.value)}/>
         </Form.Group>
-        <Form.Group controlId="password">
+        <Form.Group>
             <Form.Control type="password" placeholder="Retype Password" required onChange={e => setPassword2(e.target.value)}/>
         </Form.Group>
         <Alert show={alertShow} variant="danger" onClose={() => setAlertShow(false)} dismissible>

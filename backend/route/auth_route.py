@@ -5,7 +5,7 @@ import auth
 
 AUTH = Blueprint('AUTH', __name__, template_folder='templates')
 
-@AUTH.route("register", methods=['POST'])
+@AUTH.route("/register", methods=['POST'])
 def route_auth_register():
     data = request.get_json()
     result = auth.add_new_user(data["email"], data["first_name"], data["last_name"], data["password"])
@@ -34,19 +34,6 @@ def route_auth_emailconfirm():
         response = jsonify({'error': 'Invalid email verification code'})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
-
-# @APP.route("/auth/verify", methods=['GET'])
-# def route_auth_verify():
-#     token = request.headers.get("Authorization")
-#     user_id = auth.verify(token)
-#     if user_id is not None:
-#         response = jsonify({'user_id': user_id})
-#         response.headers.add('Access-Control-Allow-Origin', '*')
-#         return response, 200
-#     else:
-#         response = jsonify({})
-#         response.headers.add('Access-Control-Allow-Origin', '*')
-#         return response, 400
 
 @AUTH.route("/verify", methods=['GET'])
 def route_auth_verify():

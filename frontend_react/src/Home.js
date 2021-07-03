@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Link, Switch, Route } from "react-router-dom";
+import { Link, Switch, Route, Redirect } from "react-router-dom";
 
 import Navbar from 'react-bootstrap/Navbar';
 import Dropdown from 'react-bootstrap/Dropdown';
@@ -12,6 +12,7 @@ import logo from './WIP_logo_2.png';
 import Cookie from 'universal-cookie';
 import Profile from "./profile/profile.js";
 import RecipeCreate from './recipe/create';
+import RecipeView from './recipe/view';
 
 async function profileUser(id) {
     let response = await fetch('http://localhost:5000/profile/view', {
@@ -94,11 +95,16 @@ function Home({ loggedIn, setLoggedIn, currId }) {
         <Route path="/profile/:id">
           <Profile currId={currId} loggedIn={loggedIn} setButtonName={setfirstName}/>
         </Route>
-        <Route path="/profile">
-          <Profile currId={currId} loggedIn={loggedIn} setButtonName={setfirstName} />
-        </Route>
+        <Route path="/profile" render={() => 
+            loggedIn
+            ? (<Redirect to={{pathname: "/profile/" + currId}} />)
+            : (<Redirect to= {{pathname: "/"}} />)
+        } />
         <Route path="/recipe/create">
           <RecipeCreate />
+        </Route>
+        <Route path="/recipe/:id">
+          <RecipeView />
         </Route>
     </Switch>
     </>

@@ -9,10 +9,9 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import Reorder from './reorder_black_24dp.svg';
 
 
-function RecipeCreateIngredient(props) {
+function RecipeCreateIngredient({ingredients, setIngredients}) {
 
     const [idCount, setIdCount] = useState(0);
-    const [ingredients, setIngredients] = useState([]);
 
     function handleOnDragEnd(e) {
         if (e.destination == null) return;

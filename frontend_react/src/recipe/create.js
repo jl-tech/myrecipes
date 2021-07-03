@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation, useHistory } from "react-router-dom";
 
-import Modal from 'react-bootstrap/Modal';
 import Container from 'react-bootstrap/Container';
 import Alert from 'react-bootstrap/Alert';
 import Row from 'react-bootstrap/Row';
@@ -14,21 +13,83 @@ import RecipeCreateStep from './createstep.js';
 import RecipeCreatePhoto from './createphoto.js';
 import Button from 'react-bootstrap/esm/Button';
 
+async function createRecipe(token, name, type, time, serving, ingredients, steps, photos) {
+    let data = new FormData();
+    data.append('name', name);
+    data.append('type', type);
+    data.append('time', time);
+    data.append('serving_size', serving);
+    data.append('ingredients', ingredients);
+    data.append('steps', steps);
+    for (let photo of photos) {
+        data.append('photos[]', photo);
+    }
+    let response = await fetch('http://localhost:5000/recipe/create', {
+        method: 'POST',
+        headers: {
+            'Authorization': token
+        },
+        body: data
+    }).catch(e => {
+        throw new Error(e);
+    });
+
+    let responseJson = await response.json();
+    
+    if (response.ok) return responseJson;
+    else throw new Error(responseJson.error);
+}
 
 function RecipeCreate(props) {
     
 
-    const [editMode, setEditMode] = useState(false);
+    const [name, setName] = useState(null);
+    const [type, setType] = useState(null);
+    const [time, setTime] = useState(null);
+    const [serving, setServing] = useState(null);
+    const [ingredients, setIngredients] = useState([]);
+    const [steps, setSteps] = useState([]);
+    const [photos, setPhotos] = useState([]);
 
-    const [newFirst, setNewFirst] = useState(props.firstName);
-    const [newLast, setNewLast] = useState(props.lastName);
     const [errorShow, setErrorShow] = useState(false);
     const [errorText, setErrorText] = useState('');
-    const [successShow, setSuccessShow] = useState(false);
 
     const cookie = new Cookie();
+    const history = useHistory();
 
-    
+    async function handleSubmit(event) {
+        event.preventDefault();
+
+        let ingredientsP = []
+        for (let ingredient of ingredients) {
+            ingredientsP.push({
+                "name": ingredient["name"],
+                "quantity": ingredient["quantity"],
+                "unit": ingredient["unit"]
+            });
+        }
+
+        let stepsP = []
+        for (let step of steps) {
+            stepsP.push(step["description"]);
+        }
+
+        let photosP = []
+        for (let photo of photos) {
+            photosP.push(photo["image"]);
+        }
+
+        let response = await createRecipe(cookie.get('token'), name, type, time, serving, JSON.stringify(ingredientsP), JSON.stringify(stepsP), photosP)
+            .catch(e => {
+                setErrorShow(true);
+                setErrorText(e.message);
+            });
+
+        if (response != null) {
+            history.push('/recipe/' + response.recipeId);
+        }
+    }
+
     return (
         <>
         <Container style={{marginTop:"1em"}}>
@@ -39,20 +100,25 @@ function RecipeCreate(props) {
                 </div>
                 </Col>
             </Row>
-            <RecipeCreateDesc />
-            <RecipeCreateIngredient />
-            <RecipeCreateStep />
-            <RecipeCreatePhoto />
-            <Row style={{marginTop:"2em",marginBottom:"2em",textAlign:"center"}}>
-                <Col>
-                    <Button variant="secondary" style={{color:"white"}}>
-                        Cancel
-                    </Button>
-                    <Button style={{marginLeft:"1em"}}>
-                        Submit
-                    </Button>
-                </Col>
-            </Row>
+            <Form onSubmit={handleSubmit}>
+                <RecipeCreateDesc setName={setName} setType={setType} setTime={setTime} setServing={setServing} />
+                <RecipeCreateIngredient ingredients={ingredients} setIngredients={setIngredients} />
+                <RecipeCreateStep steps={steps} setSteps={setSteps} />
+                <RecipeCreatePhoto photos={photos} setPhotos={setPhotos} />
+                <Alert show={errorShow} variant="danger" style={{marginTop:"1em"}} onClose={() => setErrorShow(false)} dismissible>
+                    {errorText}
+                </Alert>
+                <Row style={{marginTop:"1em",marginBottom:"2em",textAlign:"center"}}>
+                    <Col>
+                        {/* <Button variant="secondary" style={{color:"white", marginRight:"1em"}}>
+                            Cancel
+                        </Button> */}
+                        <Button type="submit" >
+                            Submit
+                        </Button>
+                    </Col>
+                </Row>
+            </Form>
         </Container>   
         </>
     );

@@ -72,8 +72,8 @@ def email_confirm(code):
     result = cur.fetchall()
     query_lock.release()
     if len(result) == 1:
-        query = "update Users set email = %s, email_verified = TRUE where user_id = %s"
-        changed_rows = cur.execute(query, (data["email"], int(data["user_id"])))
+        query = "update Users set email_verified = TRUE where user_id = %s"
+        changed_rows = cur.execute(query, (int(data["user_id"])))
         con.commit()
         return 0
     elif len(result) > 1:

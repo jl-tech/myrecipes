@@ -37,7 +37,7 @@ def add_recipe(token, name, type, time, serving_size, ingredients, steps, photos
     # -> get user id from token
     u_id = tokenise.token_to_id(token)
     if u_id < 0:
-        return u_id
+        return u_id, -1
 
     # -> do query
     query = '''
@@ -78,7 +78,8 @@ def add_recipe(token, name, type, time, serving_size, ingredients, steps, photos
 
     con.commit()
     query_lock.release()
-    return 0
+
+    return 0, created_recipe_id
 
 def get_recipe_details(recipe_id):
     '''

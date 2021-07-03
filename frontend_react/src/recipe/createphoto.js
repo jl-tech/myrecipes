@@ -15,10 +15,9 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import Reorder from './reorder_black_24dp.svg';
 
 
-function RecipeCreatePhoto(props) {
+function RecipeCreatePhoto({photos, setPhotos}) {
 
     const [idCount, setIdCount] = useState(0);
-    const [photos, setPhotos] = useState([]);
     const [errorShow, setErrorShow] = useState(false);
     const [errorText, setErrorText] = useState('');
     const [uploaded, setUploaded] = useState(false);
