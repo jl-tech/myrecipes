@@ -145,12 +145,26 @@ def get_recipe_details(recipe_id):
     return out
 
 def edit_recipe_description(token, recipe_id, name, type, time, serving_size):
+    '''
+        :param token:
+        :param recipe_id: recipe's id in database
+        :param name: new recipe's name
+        :param type: new recipe's type
+        :param time: new recipe's cooking time
+        :param serving_size: new recipe's serving size
+        :return:
+        -1 for invalid token
+        -2 for invalid recipe id
+        -3 for inconsistent editor(token) and creator('created_by_user_id' in database)
+        1 for success
+        '''
     query_lock.acquire()
     cur = con.cursor()
     # do Recipe table
     # -> get user id from token
     u_id = tokenise.token_to_id(token)
     if u_id < 0:
+        query_lock.release()
         return -1
 
     query = ''' select * from Recipes where recipe_id = %s'''
@@ -158,14 +172,124 @@ def edit_recipe_description(token, recipe_id, name, type, time, serving_size):
     result = cur.fetchall()
 
     if len(result) != 1:
+        query_lock.release()
         return -2
 
     #recipe can only edit by creator
     if int(result['created_by_user_id']) != int(u_id):
+        query_lock.release()
         return -3
 
     query = '''update Recipes set time_to_cook=%s, name=%s,type=%s,serving_size=%s where recipe_id=%s'''
     cur.execute(query, (int(time), name, type, int(serving_size), int(recipe_id),))
+    con.commit()
+    query_lock.release()
+    return 1
+
+def edit_recipe_ingredients(token, recipe_id, ingredients):
+    '''
+        :param token:
+        :param recipe_id: recipe's id in database
+        :param ingredients: ingredients of the recipe
+        :return:
+        -1 for invalid token
+        -2 for invalid recipe id
+        -3 for inconsistent editor(token) and creator('created_by_user_id' in database)
+        1 for success
+        '''
+    query_lock.acquire()
+    cur = con.cursor()
+    # do Recipe table
+    # -> get user id from token
+    u_id = tokenise.token_to_id(token)
+    if u_id < 0:
+        query_lock.release()
+        return -1
+
+    query = ''' select * from Recipes where recipe_id = %s'''
+    cur.execute(query, (int(recipe_id),))
+    result = cur.fetchall()
+
+    if len(result) != 1:
+        query_lock.release()
+        return -2
+
+    #recipe can only edit by creator
+    if int(result['created_by_user_id']) != int(u_id):
+        query_lock.release()
+        return -3
+
+    query_update = '''update RecipeIngredients set ingredient_name=%s, quantity=%s, unit=%s where recipe_id=%s and ingredient_no=%s'''
+    query_select = '''select * from RecipeIngredients where recipe_id = %s and ingredient_no=%s'''
+    query_insert = '''
+                    insert into RecipeIngredients(recipe_id, ingredient_no, ingredient_name, quantity, unit)
+                    values (%s, %s, %s, %s, %s) 
+                    '''
+    for index, ingredient in enumerate(ingredients):
+        cur.execute(query_select, (int(recipe_id), int(index),))
+        result = cur.fetchall()
+        #this ingredient_no doesn't exist in database
+        if len(result) == 0:
+            cur.execute(query_insert, (int(recipe_id), int(index), ingredient['name'], float(ingredient['quantity']), ingredient['unit']))
+        #exist
+        else:
+            cur.execute(query_update, (ingredient['name'], float(ingredient['quantity']), ingredient['unit'], int(recipe_id), int(index),))
+
+    con.commit()
+    query_lock.release()
+    return 1
+
+
+def edit_recipe_steps(token, recipe_id, steps):
+    '''
+        :param token:
+        :param recipe_id: recipe's id in database
+        :param steps: cooking steps of the recipe
+        :return:
+        -1 for invalid token
+        -2 for invalid recipe id
+        -3 for inconsistent editor(token) and creator('created_by_user_id' in database)
+        1 for success
+        '''
+    query_lock.acquire()
+    cur = con.cursor()
+    # do Recipe table
+    # -> get user id from token
+    u_id = tokenise.token_to_id(token)
+    if u_id < 0:
+        query_lock.release()
+        return -1
+
+    query = ''' select * from Recipes where recipe_id = %s'''
+    cur.execute(query, (int(recipe_id),))
+    result = cur.fetchall()
+
+    if len(result) != 1:
+        query_lock.release()
+        return -2
+
+    #recipe can only edit by creator
+    if int(result['created_by_user_id']) != int(u_id):
+        query_lock.release()
+        return -3
+
+    query_update = '''update RecipeSteps set step_text=%s where recipe_id=%s and step_no=%s'''
+    query_select = '''select * from RecipeSteps where recipe_id = %s and step_no=%s'''
+    query_insert = '''
+                insert into RecipeSteps(recipe_id, step_no, step_text, step_photo_path)
+                values (%s, %s, %s, NULL) 
+    '''
+
+    for index, step in enumerate(steps):
+        cur.execute(query_select, (int(recipe_id), int(index),))
+        result = cur.fetchall()
+        #this ingredient_no doesn't exist in database
+        if len(result) == 0:
+            cur.execute(query_insert, (int(recipe_id), int(index), step,))
+        #exist
+        else:
+            cur.execute(query_update, (step, int(recipe_id), int(index),))
+
     con.commit()
     query_lock.release()
     return 1
