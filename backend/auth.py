@@ -1,29 +1,17 @@
-import random
-import ssl
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-
 import os
 
 import helpers
 from constants import *
 
 import bcrypt
-import pymysql
-import smtplib
 
 import tokenise
 
 import sys
-import hashlib
-
-from PIL import Image
-
-import mimetypes
 
 import threading
 
-query_lock = threading.Lock()
+from tokenise import token_to_id, token_to_email
 
 DEFAULT_PIC = 'default.png'
 
@@ -110,71 +98,6 @@ def verify(token):
         return None
 
     return user_id
-
-def token_to_id(token):
-    '''
-    Given a jwt token, decodes that token into the user id corresponding
-    to the token's account
-    :param token: The token to decode
-    :return: The id of the account on success.
-    -1 if the token couldn't be decoded
-    -2 if the id decoded is not associated with an account
-    -3 if the email of the account decoded hasn't been verified
-    '''
-    if token is None:
-        return -1
-
-    token_decoded = tokenise.decode_token(token)
-    if token_decoded is None:
-        return -1
-
-    if 'user_id' not in token_decoded:
-        return -1
-    user_id = token_decoded['user_id']
-    print(user_id, file=sys.stderr)
-
-    query_lock.acquire()
-    cur = con.cursor()
-    # check email exists with an account
-    query = "select * from Users where user_id = %s"
-    cur.execute(query, (user_id,))
-    result = cur.fetchall()
-    if len(result) == 0:
-        query_lock.release()
-        return -2
-    query = "select * from Users where user_id = %s and email_verified = %s"
-    cur.execute(query, (user_id, True, ))
-    result = cur.fetchall()
-    if len(result) == 0:
-        query_lock.release()
-        return -3
-
-    query_lock.release()
-    return user_id
-
-def token_to_email(token):
-    '''
-    Given a jwt token, decodes that token into the user id corresponding
-    to the token's account, and then gets the email associated with that account.
-    :param token: The token to decode
-    :return: The email address of the account on success.
-    -1 if the token couldn't be decoded
-    -2 if the id decoded is not associated with an account
-    -3 if the email decoded hasn't been verified
-    '''
-    id = token_to_id(token)
-    if id == -1 or id == -2 or id == -3:
-        return id
-
-    query_lock.acquire()
-    cur = con.cursor()
-    query = 'select email from Users where user_id = %s'
-    cur.execute(query, (id,))
-    result = cur.fetchone()['email']
-
-    query_lock.release()
-    return result
-
 
 
 def hash_password(password):
@@ -557,12 +480,7 @@ def change_profile_pic(image_file, token):
     cur.execute(query, (u_id,))
     old_path = cur.fetchone()['profile_pic_path']
 
-    file_name = hashlib.sha1(image_file.read()).hexdigest()
-    extension = mimetypes.guess_extension(image_file.mimetype) or ''
-    file_name = file_name + extension
-    img = Image.open(image_file)
-    out_path = f'./static/server_resources/images/{file_name}'
-    img.save(out_path)
+    file_name = helpers.store_image(image_file)
 
     query = "update Users set profile_pic_path=%s where user_id=%s"
     cur.execute(query, (file_name, u_id))
