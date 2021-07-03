@@ -27,6 +27,8 @@ create table Users (
 create table Recipes(
     recipe_id serial,
     created_by_user_id integer references Users(user_id),
+    creation_time timestamp,
+    time_to_cook int,
     name text,
     type text,
     serving_size int,
@@ -37,7 +39,8 @@ create table RecipeIngredients(
     recipe_id integer references Recipes(recipe_id),
     ingredient_no integer,
     ingredient_name text,
-    quantity text,
+    quantity float,
+    unit text,
     primary key (recipe_id, ingredient_no)
 );
 
@@ -51,9 +54,8 @@ create table RecipeSteps(
 
 create table RecipePhotos(
     recipe_id integer references Recipes(recipe_id),
-    photo_no integer,
+    photo_no integer, -- photo no 1 is thumbnail
     photo_path text,
-    is_thumbnail boolean,
     primary key (recipe_id, photo_no)
 );
 
