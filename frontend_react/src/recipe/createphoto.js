@@ -98,7 +98,10 @@ function RecipeCreatePhoto({photos, setPhotos}) {
                                     {(provided) => (
                                         <ListGroup.Item as="li" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
                                             <Row >
-                                                <Col sm={6}>
+                                                <Col sm={1}>
+                                                    {index == 0 ? "1 (Main)" : index+1}
+                                                </Col>
+                                                <Col sm={5}>
                                                     <span>{image.name}</span>
                                                 </Col>
                                                 <Col sm={5}>
