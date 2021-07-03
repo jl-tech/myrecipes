@@ -17,7 +17,14 @@ function RecipeCreateDesc(props) {
         <Form.Row style={{marginTop:"1em"}}>
             <Form.Group as={Col}>
                 <Form.Label>Type</Form.Label>
-                <Form.Control onChange={e => props.setType(e.target.value)} required />
+                <Form.Control as="select" onChange={e => props.setType(e.target.value)} required >
+                    <option disabled selected hidden value="">-- Select an option --</option>
+                    <option>Breakfast</option>
+                    <option>Brunch</option>
+                    <option>Lunch</option>
+                    <option>Dinner</option>
+                    <option>Snack</option>
+                </Form.Control>
             </Form.Group>
             <Form.Group as={Col}>
                 <Form.Label>Time (minutes)</Form.Label>
