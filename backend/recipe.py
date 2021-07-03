@@ -143,3 +143,29 @@ def get_recipe_details(recipe_id):
 
     query_lock.release()
     return out
+
+def edit_recipe_description(token, recipe_id, name, type, time, serving_size):
+    query_lock.acquire()
+    cur = con.cursor()
+    # do Recipe table
+    # -> get user id from token
+    u_id = tokenise.token_to_id(token)
+    if u_id < 0:
+        return -1
+
+    query = ''' select * from Recipes where recipe_id = %s'''
+    cur.execute(query, (int(recipe_id),))
+    result = cur.fetchall()
+
+    if len(result) != 1:
+        return -2
+
+    #recipe can only edit by creator
+    if int(result['created_by_user_id']) != int(u_id):
+        return -3
+
+    query = '''update Recipes set time_to_cook=%s, name=%s,type=%s,serving_size=%s where recipe_id=%s'''
+    cur.execute(query, (int(time), name, type, int(serving_size), int(recipe_id),))
+    con.commit()
+    query_lock.release()
+    return 1
