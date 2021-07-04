@@ -144,7 +144,7 @@ function RecipeView(props) {
             <>
             <Container style={{marginTop:"1em",marginBottom:"2em"}}>
                 <RecipeViewPhoto photos={photos} />
-                <RecipeViewDesc recipeName={recipeName} setRecipeName={setRecipeName} time={time} setTime={setTime} serving={serving} setServing={setServing} mealType={mealType} setMealType={setMealType} photos={photos} setPhotos={setPhotos} editable={editable} />
+                <RecipeViewDesc recipeId={id} recipeName={recipeName} setRecipeName={setRecipeName} time={time} setTime={setTime} serving={serving} setServing={setServing} mealType={mealType} setMealType={setMealType} photos={photos} setPhotos={setPhotos} editable={editable} />
                 <Row style={{marginTop:"1em"}}>
                     <Col sm={2} style={{marginBottom:"1em"}}>
                         <RecipeViewContri userImgURL={userImgURL} contributorUID={contributorUID} firstName={firstName} lastName={lastName} createdAt={createdAt} editedAt={editedAt}/>

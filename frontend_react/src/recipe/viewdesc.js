@@ -7,8 +7,33 @@ import Button from 'react-bootstrap/Button';
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import Alert from "react-bootstrap/Alert";
+import Cookie from 'universal-cookie';
 
 import { EditPhoto } from './viewphoto.js';
+
+async function requestEditDesc(token, recipe_id, name, type, time, serving_size) {
+    let response = await fetch('http://localhost:5000/recipe/editdescription', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token
+        },
+        body: JSON.stringify({
+            name: name,
+            type: type,
+            time: time,
+            serving_size: serving_size,
+            recipe_id: recipe_id
+        })
+    }).catch(e => {
+        throw new Error(e);
+    });
+
+    let responseJson = await response.json();
+    
+    if (response.ok) return responseJson;
+    else throw new Error(responseJson.error);
+}
 
 function EditDesc(props) {
 
@@ -21,6 +46,31 @@ function EditDesc(props) {
 
     const [errorShow, setErrorShow] = useState(false);
     const [errorText, setErrorText] = useState('');
+
+    const [successShow, setSuccessShow] = useState(false);
+
+    const cookie = new Cookie();
+
+    async function handleSubmit(event) {
+        event.preventDefault();
+
+        let response = await requestEditDesc(cookie.get('token'), props.recipeId, name, type, time, serving)
+            .catch(e => {
+                setErrorShow(true);
+                setSuccessShow(false);
+                setErrorText(e.message);
+            });
+
+        if (response != null) {
+            setErrorShow(false);
+            props.setRecipeName(name);
+            props.setMealType(type);
+            props.setTime(time);
+            props.setServing(serving)
+            setSuccessShow(true);
+        }
+    }
+
     return (
         <Modal show={props.showDescEdit} onHide={editClose}>
             <Modal.Header closeButton>
@@ -29,7 +79,7 @@ function EditDesc(props) {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Form>
+                <Form onSubmit={handleSubmit}>
                     <Form.Row>
                         <Form.Group as={Col}>
                             <Form.Label>Name</Form.Label>
@@ -58,6 +108,9 @@ function EditDesc(props) {
                     </Form.Row>
                     <Alert show={errorShow} variant="danger" onClose={() => setErrorShow(false)} dismissible>
                         {errorText}
+                    </Alert>
+                    <Alert show={successShow} variant="success" onClose={() => setSuccessShow(false)} dismissible>
+                        Successfully updated recipe details
                     </Alert>
                     <div style={{textAlign:"center"}}>
                         <Button type="submit" size="sm">
@@ -121,8 +174,8 @@ function RecipeViewDesc(props) {
                 </Row></> : <></> }
             </Col>
         </Row>
-        <EditDesc showDescEdit={showDescEdit} setShowDescEdit={setShowDescEdit} recipeName={props.recipeName} setRecipeName={props.setRecipeName} time={props.time} setTime={props.setTime} serving={props.serving} setServing={props.setServing} mealType={props.mealType} setMealType={props.setMealType} />
-        <EditPhoto showPhotoEdit={showPhotoEdit} setShowPhotoEdit={setShowPhotoEdit} photos={props.photos} setPhotos={props.setPhotos} />
+        <EditDesc showDescEdit={showDescEdit} setShowDescEdit={setShowDescEdit} recipeId={props.recipeId} recipeName={props.recipeName} setRecipeName={props.setRecipeName} time={props.time} setTime={props.setTime} serving={props.serving} setServing={props.setServing} mealType={props.mealType} setMealType={props.setMealType} />
+        <EditPhoto showPhotoEdit={showPhotoEdit} setShowPhotoEdit={setShowPhotoEdit} recipeId={props.recipeId} photos={props.photos} setPhotos={props.setPhotos} />
         </>
     );
 }
