@@ -4,6 +4,7 @@ import { Link, Switch, Route, Redirect } from "react-router-dom";
 
 import Navbar from 'react-bootstrap/Navbar';
 import Dropdown from 'react-bootstrap/Dropdown';
+import Button from 'react-bootstrap/Button';
 
 import DropdownButton from 'react-bootstrap/DropdownButton';
 
@@ -35,7 +36,7 @@ async function profileUser(id) {
 
 function LoginButton() {
     return (
-        <Link to="/login" style={{color:"white"}}>Log In</Link>
+        <Link to="/login" component={Button} style={{color:"white"}}>Log In</Link>
     );
 }
 
@@ -100,12 +101,17 @@ function Home({ loggedIn, setLoggedIn, currId }) {
             ? (<Redirect to={{pathname: "/profile/" + currId}} />)
             : (<Redirect to= {{pathname: "/"}} />)
         } />
-        <Route path="/recipe/create">
-          <RecipeCreate />
-        </Route>
+        <Route path="/recipe/create" render={() => 
+            loggedIn
+            ? (<RecipeCreate />)
+            : (<Redirect to= {{pathname: "/"}} />)
+        } />
         <Route path="/recipe/:id">
           <RecipeView />
         </Route>
+        <Route path="/recipe" render={() => 
+            (<Redirect to= {{pathname: "/"}} />)
+        } />
         <Route path="/">
             <>
                 Work in progress

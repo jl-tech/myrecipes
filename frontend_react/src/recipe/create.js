@@ -42,7 +42,6 @@ async function createRecipe(token, name, type, time, serving, ingredients, steps
 
 function RecipeCreate(props) {
     
-
     const [name, setName] = useState(null);
     const [type, setType] = useState(null);
     const [time, setTime] = useState(null);
