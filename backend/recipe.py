@@ -18,6 +18,8 @@ import mimetypes
 
 import threading
 
+DEFAULT_PIC = 'default.png'
+
 def add_recipe(token, name, type, time, serving_size, ingredients, steps, photos):
     '''
     :param token:
@@ -57,7 +59,7 @@ def add_recipe(token, name, type, time, serving_size, ingredients, steps, photos
                values (%s, %s, %s, %s, %s) 
                '''
     for index, ingredient in enumerate(ingredients):
-        cur.execute(query, (int(created_recipe_id), int(index), ingredient['name'], float(ingredient['quantity']), ingredient['unit']))
+        cur.execute(query, (int(created_recipe_id), int(index), ingredient['name'], float(ingredient['quantity']) if ingredient['quantity'] is not None else None, ingredient['unit']))
 
     # do RecipeSteps table
     query = '''
@@ -102,21 +104,24 @@ def get_recipe_details(recipe_id):
     query_lock.acquire()
     cur = con.cursor()
     out = {}
-    query = ''' select * from Recipes where recipe_id = %s'''
+    query = ''' select * from Recipes join Users on user_id = created_by_user_id where recipe_id = %s'''
     cur.execute(query, (int(recipe_id),))
     result = cur.fetchall()
     if len(result) != 1:
         query_lock.release()
         return -1
     result = result[0]
+
     out['name'] = result['name']
     out['creation_time'] = result['creation_time']
     out['created_by_user_id'] = result['created_by_user_id']
     out['type'] = result['type']
     out['time_to_cook'] = result['time_to_cook']
     out['serving_size'] = result['serving_size']
-    out['edit_time'] = False
     out['edit_time'] = result['edit_time']
+    out['first_name'] = result['first_name']
+    out['last_name'] = result['last_name']
+    out['profile_pic_path'] = result['profile_pic_path'] if result['profile_pic_path'] is not None else DEFAULT_PIC
 
 
     # ingredients

@@ -7,22 +7,25 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Cookie from 'universal-cookie';
-import RecipeCreateDesc from './createdesc.js';
-import RecipeCreateIngredient from './createingredient.js';
-import RecipeCreateStep from './createstep.js';
-import RecipeCreatePhoto from './createphoto.js';
 import Button from 'react-bootstrap/esm/Button';
 import Image from "react-bootstrap/Image";
-import ProfileEdit from "../profile/edit";
 import Modal from "react-bootstrap/Modal";
-import create from "./create";
+
+import RecipeViewDesc from './viewdesc.js';
+import RecipeViewContri from './viewcontri.js';
+import RecipeViewIngredient from './viewingredient.js';
+import RecipeViewStep from './viewstep.js';
+import RecipeViewPhoto from './viewphoto.js';
 
 async function recipeView(recipe_id) {
-    let response = await fetch('http://localhost:5000/recipe/view?' + new URLSearchParams({'recipe_id': recipe_id}), {
-        method: 'GET',
+    let response = await fetch('http://localhost:5000/recipe/view', {
+        method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
-        }
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+        recipe_id: recipe_id
+    })
     }).catch(e => {
         throw new Error(e);
     });
@@ -33,28 +36,14 @@ async function recipeView(recipe_id) {
     else throw new Error(responseJson.error);
 }
 
-async function profileUser(userid) {
-    let response = await fetch('http://localhost:5000/profile/view', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            userid: userid
-        })
-    }).catch(e => {
-        throw new Error(e);
-    });
-}
-
 function RecipeView(props) {
     const [fetched, setFetched] = useState(false);
     const [success, setSuccess] = useState(false);
 
     const [recipeName, setRecipeName] = useState('');
-    const [coverImgURL, setCoverImageURL] = useState('')
+    const [photos, setPhotos] = useState('')
     const [createdAt, setCreatedAt] = useState('')
-    const [editedAt, setEditedAt] = useState('')
+    const [editedAt, setEditedAt] = useState(null)
     const [steps, setSteps] = useState([])
     const [serving, setServing] = useState('')
     const [time, setTime] = useState('')
@@ -65,22 +54,13 @@ function RecipeView(props) {
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
 
-
-
     const [ingredients, setIngredients] = useState('')
-    // const [lastName, setlastName] = useState('');
-    // const [email, setEmail] = useState('');
-    // const [imgUrl, setImgUrl] = useState('');
-    const [buttonType, setButtonType] = useState(0);
 
     let { id } = useParams();
     const history = useHistory();
 
     async function processId() {
-        let steps_html = ""
-        let ingredients_html = ""
         let id_ = id;
-        console.log(id_)
         if (id_ == null) {
             id_ = props.currId;
             if (id_ == null) history.push('/');
@@ -92,143 +72,74 @@ function RecipeView(props) {
             });
 
         if (response != null) {
+            setPhotos(response.photos);
+            
             setRecipeName(response.name);
-            setCoverImageURL(response.photos[0])
-            const creation_date = new Date(response.creation_time)
-            setCreatedAt(creation_date.toDateString() + " " + creation_date.toLocaleTimeString('en-US'))
+            setTime(response.time_to_cook)
             setMealType(response.type)
             setServing(response.serving_size)
-            setTime(response.time_to_cook)
-            setSteps(response.steps)
-            setContributorUID(response.created_by_user_id)
-            const edit_date = new Date(response.edit_time)
-            let edited_string = ""
-            if (edit_date == null) {
-                edited_string = "Never"
-            } else {
-                edited_string = edit_date.toDateString() + " " + edit_date.toLocaleTimeString('en-US')
-            }
-            setEditedAt(edited_string)
-            let ingredientsText = []
-            response.ingredients.forEach(function (item, index) {
-                ingredientsText[index] = `${item['name']}: ${item['quantity']} ${item['unit']}`
-            });
-            setIngredients(ingredientsText)
 
-            // setlastName(response.LastName);
-            // setEmail(response.Email);
-            // setImgUrl(response.ProfilePictureURL);
+            let stepsP = [];
+            let nsteps = 0;
+            for (let step of response.steps) {
+                stepsP.push({
+                    id: nsteps,
+                    description: step
+                });
+                nsteps++;
+            }
+            setSteps(stepsP);
+
+            let ingredientsP = [];
+            let ningredients = 0;
+            for (let ingredient of response.ingredients) {
+                ingredientsP.push({
+                    id: ningredients,
+                    quantity: ingredient["quantity"],
+                    unit: ingredient["unit"],
+                    name: ingredient["name"]
+                });
+                ningredients++;
+            }
+            setIngredients(ingredientsP);
+
+            setContributorUID(response.created_by_user_id);
+            setUserImageURL(response.profile_pic_path);
+            setFirstName(response.first_name);
+            setLastName(response.last_name);
+
+            let creation_date = new Date(response.creation_time);
+            setCreatedAt(creation_date.toDateString() + " " + creation_date.toLocaleTimeString('en-US'));
+            
+            if (response.edit_time != null) {
+                let edit_date = new Date(response.edit_time);
+                setEditedAt(edit_date.toDateString() + " " + edit_date.toLocaleTimeString('en-US'));
+            }
+
             setSuccess(true);
         }
 
-        response = await profileUser(response.created_by_user_id)
-            .catch(e => {
-
-            });
-
-        if (response != null) {
-            setUserImageURL(response.ProfilePictureURL)
-            setFirstName(response.FirstName);
-            setLastName(response.LastName);
-        }
-        if (props.loggedIn) {
-            if (id_ == props.currId) setButtonType(1);
-            else setButtonType(2);
-        }
-
         setFetched(true);
-    }
-
-    async function profileUser(userid) {
-    let response = await fetch('http://localhost:5000/profile/view', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            userid: userid
-        })
-    }).catch(e => {
-        throw new Error(e);
-    });
-
-    let responseJson = await response.json();
-
-    if (response.ok) return responseJson;
-    else throw new Error(responseJson.error);
     }
 
     useEffect(() => {
         if (!fetched) processId();
     }, []);
 
-
-    useEffect(() => {
-        if (!props.loggedIn) setButtonType(0);
-    }, [props.loggedIn]);
-
     if (success) {
         return (
             <>
-            <Container style={{marginTop:"1em"}}>
-                <Row>
-                    <Col>
-                        <div style={{textAlign:"center"}}>
-                            <Image src={"http://127.0.0.1:5000/img/" + coverImgURL} alt="Cover Image" roundedCircle height="200em"/>
-                        </div>
+            <Container style={{marginTop:"1em",marginBottom:"2em"}}>
+                <RecipeViewPhoto photos={photos} />
+                <RecipeViewDesc recipeName={recipeName} time={time} serving={serving} mealType={mealType} />
+                <Row style={{marginTop:"1em"}}>
+                    <Col sm={2} style={{marginBottom:"1em"}}>
+                        <RecipeViewContri userImgURL={userImgURL} contributorUID={contributorUID} firstName={firstName} lastName={lastName} createdAt={createdAt} editedAt={editedAt}/>
                     </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        <div style={{textAlign:"center"}}>
-                            <h1>{recipeName}</h1>
-                            <div>
-                                {buttonType == 1 ? <a href={"http://127.0.0.1:5000/recipe/edit/"> + {id}}><p> Edit Recipe </p></a> : <></>}
-                            </div>
-                        {/*{buttonType == 0 ? <></> : buttonType == 1 ? <ProfileEdit firstName={firstName} setfirstName={setfirstName} lastName={lastName} setlastName={setlastName} setButtonName={props.setButtonName} email={email} imgUrl={imgUrl} setImgUrl={setImgUrl} /> : <Button>Subscribe</Button>}*!/*/}
-                        </div>
-                    </Col>
-                </Row>
-                <Row style={{textAlign: "center"}}>
-                    <table style={{marginLeft: "auto", marginRight:"auto", borderSpacing: "10px"}}>
-                        <tr>
-                            <th style={{fontSize:"200%"}}> {time} </th>
-                            <th style={{fontSize:"200%"}}> {serving} </th>
-                            <th style={{fontSize:"200%"}}> {mealType} </th>
-                        </tr>
-                        <tr>
-                            <th> MINS </th>
-                            <th> SERVES </th>
-                            <th> MEAL </th>
-                        </tr>
-                    </table>
-                </Row>
-                <Row>
-                    <Col sm={2}>
-                        <p> CONTRIBUTOR <br/> <br/>
-                            <Image src={"http://127.0.0.1:5000/img/" + userImgURL} alt="Profile Picture" roundedCircle height="50em" style={{align:"left"}}/>
-                            <a href={"http://127.0.0.1:3000/profile/" + contributorUID }> <h5> {firstName} {lastName} </h5> </a>  <br/>
-                            CREATED <br/>
-                            {createdAt} <br/> <br/>
-                            EDITED <br/>
-                            {editedAt} <br/>
-                        </p>
-                    </Col>
-                    <Col sm={1}>
-
-                    </Col>
+                    <Col sm={1} />
                     <Col sm={9}>
-                        <h2> Ingredients </h2>
-                        <ul>
-                            {ingredients.map(
-                                (ingredients) => (<li>{ingredients}</li>))}
-                        </ul>
-
-                        <h2> Steps </h2>
-                        <ol>
-                            {steps.map(
-                                (step) => (<li>{step}</li>))}
-                        </ol>
+                        <RecipeViewIngredient ingredients={ingredients} />
+                        <RecipeViewStep steps={steps} />
                     </Col>
 
                 </Row>
