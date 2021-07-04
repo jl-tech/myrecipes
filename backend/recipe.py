@@ -37,6 +37,7 @@ def add_recipe(token, name, type, time, serving_size, ingredients, steps, photos
     # -> get user id from token
     u_id = tokenise.token_to_id(token)
     if u_id < 0:
+        query_lock.release()
         return u_id
 
     # -> do query
@@ -87,6 +88,7 @@ def get_recipe_details(recipe_id):
     :return: Dictionary with fields:
         - name: string
         - creation_time: string
+        - edit_time: string, null if not edited
         - contributor_user_id: integer
         - type: string
         - time_to_cook: integer
@@ -103,6 +105,7 @@ def get_recipe_details(recipe_id):
     cur.execute(query, (int(recipe_id),))
     result = cur.fetchall()
     if len(result) != 1:
+        query_lock.release()
         return -1
     result = result[0]
     out['name'] = result['name']
@@ -111,6 +114,8 @@ def get_recipe_details(recipe_id):
     out['type'] = result['type']
     out['time_to_cook'] = result['time_to_cook']
     out['serving_size'] = result['serving_size']
+    out['edit_time'] = False
+    out['edit_time'] = result['edit_time']
 
 
     # ingredients
@@ -176,11 +181,11 @@ def edit_recipe_description(token, recipe_id, name, type, time, serving_size):
         return -2
 
     # recipe can only edit by creator
-    if int(result['created_by_user_id']) != int(u_id):
+    if int(result[0]['created_by_user_id']) != int(u_id):
         query_lock.release()
         return -3
 
-    query = '''update Recipes set time_to_cook=%s, name=%s,type=%s,serving_size=%s where recipe_id=%s'''
+    query = '''update Recipes set time_to_cook=%s, name=%s,type=%s,serving_size=%s, edit_time=UTC_TIMESTAMP() where recipe_id=%s'''
     cur.execute(query, (int(time), name, type, int(serving_size), int(recipe_id),))
     con.commit()
     query_lock.release()
@@ -215,18 +220,22 @@ def edit_recipe_ingredients(token, recipe_id, ingredients):
         return -2
 
     # recipe can only edit by creator
-    if int(result['created_by_user_id']) != int(u_id):
+    if int(result[0]['created_by_user_id']) != int(u_id):
         query_lock.release()
         return -3
 
-    query_update = '''update RecipeIngredients set ingredient_name=%s, quantity=%s, unit=%s where recipe_id=%s and ingredient_no=%s'''
+    query_update = '''update RecipeIngredients 
+                        set ingredient_name=%s, quantity=%s, unit=%s 
+                        where recipe_id=%s and ingredient_no=%s'''
     query_select = '''select * from RecipeIngredients where recipe_id = %s and ingredient_no=%s'''
     query_insert = '''
                     insert into RecipeIngredients(recipe_id, ingredient_no, ingredient_name, quantity, unit)
                     values (%s, %s, %s, %s, %s) 
                     '''
+
+    last_idx = -1
     for index, ingredient in enumerate(ingredients):
-        cur.execute(query_select, (int(recipe_id), int(index),))
+        cur.execute(query_select, (int(recipe_id), int(index)))
         result = cur.fetchall()
         # this ingredient_no doesn't exist in database
         if len(result) == 0:
@@ -234,7 +243,23 @@ def edit_recipe_ingredients(token, recipe_id, ingredients):
         # exist
         else:
             cur.execute(query_update, (ingredient['name'], float(ingredient['quantity']), ingredient['unit'], int(recipe_id), int(index),))
+        last_idx = index
 
+    # delete remaining (excess) ingredients if the number of ingredients
+    # has been reduced
+    query_remove = '''delete from RecipeIngredients where recipe_id = %s and 
+    ingredient_no = %s '''
+    while True:
+        last_idx += 1
+        cur.execute(query_select, (int(recipe_id), int(last_idx)))
+        result = cur.fetchall()
+        if len(result) == 0:
+            break
+        else:
+            cur.execute(query_remove, (int(recipe_id), int(last_idx)))
+
+    query_update_edit = ''' update Recipes set edit_time = UTC_TIMESTAMP() where recipe_id = %s'''
+    cur.execute(query_update_edit, (int(recipe_id),))
     con.commit()
     query_lock.release()
     return 1

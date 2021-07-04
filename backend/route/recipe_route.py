@@ -45,7 +45,7 @@ def route_recipe_edit_description():
     type = data['type']
     time = data['time']
     serving_size = data['serving_size']
-    recipe_id = request.args.get('recipe_id')
+    recipe_id = data['recipe_id']
     token = request.headers.get("Authorization")
 
     result = recipe.edit_recipe_description(token, recipe_id, name, type, time, serving_size)
@@ -59,7 +59,7 @@ def route_recipe_edit_description():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
     elif result == -3:
-        response = jsonify({'error': 'No edit right'})
+        response = jsonify({'error': 'You don\'t have permission to edit this reicpe'})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
     else:
@@ -71,7 +71,7 @@ def route_recipe_edit_description():
 def route_recipe_edit_ingredients():
     data = request.get_json()
     ingredients = data['ingredients']
-    recipe_id = request.args.get('recipe_id')
+    recipe_id = data['recipe_id']
     token = request.headers.get("Authorization")
 
     result = recipe.edit_recipe_ingredients(token, recipe_id, ingredients)
