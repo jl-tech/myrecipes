@@ -28,6 +28,7 @@ create table Recipes(
     recipe_id serial,
     created_by_user_id integer references Users(user_id),
     creation_time timestamp,
+    edit_time timestamp,
     time_to_cook int,
     name text,
     type text,
