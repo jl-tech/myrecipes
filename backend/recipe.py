@@ -160,8 +160,7 @@ def edit_recipe_description(token, recipe_id, name, type, time, serving_size):
         '''
     query_lock.acquire()
     cur = con.cursor()
-    # do Recipe table
-    # -> get user id from token
+    # get user id from token
     u_id = tokenise.token_to_id(token)
     if u_id < 0:
         query_lock.release()
@@ -175,7 +174,7 @@ def edit_recipe_description(token, recipe_id, name, type, time, serving_size):
         query_lock.release()
         return -2
 
-    #recipe can only edit by creator
+    # recipe can only edit by creator
     if int(result['created_by_user_id']) != int(u_id):
         query_lock.release()
         return -3
@@ -188,9 +187,10 @@ def edit_recipe_description(token, recipe_id, name, type, time, serving_size):
 
 def edit_recipe_ingredients(token, recipe_id, ingredients):
     '''
+        overwrite all old ingredients in database by new ingredients
         :param token:
         :param recipe_id: recipe's id in database
-        :param ingredients: ingredients of the recipe
+        :param ingredients: new ingredients of the recipe
         :return:
         -1 for invalid token
         -2 for invalid recipe id
@@ -199,8 +199,7 @@ def edit_recipe_ingredients(token, recipe_id, ingredients):
         '''
     query_lock.acquire()
     cur = con.cursor()
-    # do Recipe table
-    # -> get user id from token
+    # get user id from token
     u_id = tokenise.token_to_id(token)
     if u_id < 0:
         query_lock.release()
@@ -214,7 +213,7 @@ def edit_recipe_ingredients(token, recipe_id, ingredients):
         query_lock.release()
         return -2
 
-    #recipe can only edit by creator
+    # recipe can only edit by creator
     if int(result['created_by_user_id']) != int(u_id):
         query_lock.release()
         return -3
@@ -228,10 +227,10 @@ def edit_recipe_ingredients(token, recipe_id, ingredients):
     for index, ingredient in enumerate(ingredients):
         cur.execute(query_select, (int(recipe_id), int(index),))
         result = cur.fetchall()
-        #this ingredient_no doesn't exist in database
+        # this ingredient_no doesn't exist in database
         if len(result) == 0:
             cur.execute(query_insert, (int(recipe_id), int(index), ingredient['name'], float(ingredient['quantity']), ingredient['unit']))
-        #exist
+        # exist
         else:
             cur.execute(query_update, (ingredient['name'], float(ingredient['quantity']), ingredient['unit'], int(recipe_id), int(index),))
 
@@ -244,7 +243,7 @@ def edit_recipe_steps(token, recipe_id, steps):
     '''
         :param token:
         :param recipe_id: recipe's id in database
-        :param steps: cooking steps of the recipe
+        :param steps: new cooking steps of the recipe
         :return:
         -1 for invalid token
         -2 for invalid recipe id
@@ -253,8 +252,7 @@ def edit_recipe_steps(token, recipe_id, steps):
         '''
     query_lock.acquire()
     cur = con.cursor()
-    # do Recipe table
-    # -> get user id from token
+    # get user id from token
     u_id = tokenise.token_to_id(token)
     if u_id < 0:
         query_lock.release()
@@ -268,7 +266,7 @@ def edit_recipe_steps(token, recipe_id, steps):
         query_lock.release()
         return -2
 
-    #recipe can only edit by creator
+    # recipe can only edit by creator
     if int(result['created_by_user_id']) != int(u_id):
         query_lock.release()
         return -3
@@ -283,10 +281,10 @@ def edit_recipe_steps(token, recipe_id, steps):
     for index, step in enumerate(steps):
         cur.execute(query_select, (int(recipe_id), int(index),))
         result = cur.fetchall()
-        #this ingredient_no doesn't exist in database
+        # this ingredient_no doesn't exist in database
         if len(result) == 0:
             cur.execute(query_insert, (int(recipe_id), int(index), step,))
-        #exist
+        # exist
         else:
             cur.execute(query_update, (step, int(recipe_id), int(index),))
 
