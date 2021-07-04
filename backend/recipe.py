@@ -18,6 +18,8 @@ import mimetypes
 
 import threading
 
+DEFAULT_PIC = 'default.png'
+
 def add_recipe(token, name, type, time, serving_size, ingredients, steps, photos):
     '''
     :param token:
@@ -119,6 +121,7 @@ def get_recipe_details(recipe_id):
     out['edit_time'] = result['edit_time']
     out['first_name'] = result['first_name']
     out['last_name'] = result['last_name']
+    out['profile_pic_path'] = result['profile_pic_path'] if result['profile_pic_path'] is not None else DEFAULT_PIC
 
 
     # ingredients

@@ -106,6 +106,11 @@ function Home({ loggedIn, setLoggedIn, currId }) {
         <Route path="/recipe/:id">
           <RecipeView />
         </Route>
+        <Route path="/">
+            <>
+                Work in progress
+            </>
+        </Route>
     </Switch>
     </>
     );

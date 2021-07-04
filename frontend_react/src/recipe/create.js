@@ -92,7 +92,7 @@ function RecipeCreate(props) {
 
     return (
         <>
-        <Container style={{marginTop:"1em"}}>
+        <Container style={{marginTop:"1em",marginBottom:"2em"}}>
             <Row>
                 <Col>
                 <div style={{textAlign:"center"}}>
@@ -108,7 +108,7 @@ function RecipeCreate(props) {
                 <Alert show={errorShow} variant="danger" style={{marginTop:"1em"}} onClose={() => setErrorShow(false)} dismissible>
                     {errorText}
                 </Alert>
-                <Row style={{marginTop:"1em",marginBottom:"2em",textAlign:"center"}}>
+                <Row style={{marginTop:"1em",textAlign:"center"}}>
                     <Col>
                         {/* <Button variant="secondary" style={{color:"white", marginRight:"1em"}}>
                             Cancel
