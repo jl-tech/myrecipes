@@ -54,6 +54,7 @@ function RecipeView(props) {
     const [recipeName, setRecipeName] = useState('');
     const [coverImgURL, setCoverImageURL] = useState('')
     const [createdAt, setCreatedAt] = useState('')
+    const [editedAt, setEditedAt] = useState('')
     const [steps, setSteps] = useState([])
     const [serving, setServing] = useState('')
     const [time, setTime] = useState('')
@@ -65,11 +66,12 @@ function RecipeView(props) {
     const [lastName, setLastName] = useState('')
 
 
+
     const [ingredients, setIngredients] = useState('')
     // const [lastName, setlastName] = useState('');
     // const [email, setEmail] = useState('');
     // const [imgUrl, setImgUrl] = useState('');
-     const [buttonType, setButtonType] = useState(0);
+    const [buttonType, setButtonType] = useState(0);
 
     let { id } = useParams();
     const history = useHistory();
@@ -99,6 +101,14 @@ function RecipeView(props) {
             setTime(response.time_to_cook)
             setSteps(response.steps)
             setContributorUID(response.created_by_user_id)
+            const edit_date = new Date(response.edit_time)
+            let edited_string = ""
+            if (edit_date == null) {
+                edited_string = "Never"
+            } else {
+                edited_string = edit_date.toDateString() + " " + edit_date.toLocaleTimeString('en-US')
+            }
+            setEditedAt(edited_string)
             let ingredientsText = []
             response.ingredients.forEach(function (item, index) {
                 ingredientsText[index] = `${item['name']}: ${item['quantity']} ${item['unit']}`
@@ -172,8 +182,10 @@ function RecipeView(props) {
                     <Col>
                         <div style={{textAlign:"center"}}>
                             <h1>{recipeName}</h1>
-
-                        {/*{buttonType == 0 ? <></> : buttonType == 1 ? <ProfileEdit firstName={firstName} setfirstName={setfirstName} lastName={lastName} setlastName={setlastName} setButtonName={props.setButtonName} email={email} imgUrl={imgUrl} setImgUrl={setImgUrl} /> : <Button>Subscribe</Button>}*/}
+                            <div>
+                                {buttonType == 1 ? <a href={"http://127.0.0.1:5000/recipe/edit/"> + {id}}><p> Edit Recipe </p></a> : <></>}
+                            </div>
+                        {/*{buttonType == 0 ? <></> : buttonType == 1 ? <ProfileEdit firstName={firstName} setfirstName={setfirstName} lastName={lastName} setlastName={setlastName} setButtonName={props.setButtonName} email={email} imgUrl={imgUrl} setImgUrl={setImgUrl} /> : <Button>Subscribe</Button>}*!/*/}
                         </div>
                     </Col>
                 </Row>
@@ -193,10 +205,14 @@ function RecipeView(props) {
                 </Row>
                 <Row>
                     <Col sm={2}>
-                        <p> CONTRIBUTOR </p>
-                        <Image src={"http://127.0.0.1:5000/img/" + userImgURL} alt="Profile Picture" roundedCircle height="50em" style={{align:"left"}}/>
-                        <a href={"http://127.0.0.1:3000/profile/" + contributorUID }> <h5> {firstName} {lastName} </h5> </a>
-                        <p> {createdAt}</p>
+                        <p> CONTRIBUTOR <br/> <br/>
+                            <Image src={"http://127.0.0.1:5000/img/" + userImgURL} alt="Profile Picture" roundedCircle height="50em" style={{align:"left"}}/>
+                            <a href={"http://127.0.0.1:3000/profile/" + contributorUID }> <h5> {firstName} {lastName} </h5> </a>  <br/>
+                            CREATED <br/>
+                            {createdAt} <br/> <br/>
+                            EDITED <br/>
+                            {editedAt} <br/>
+                        </p>
                     </Col>
                     <Col sm={1}>
 
