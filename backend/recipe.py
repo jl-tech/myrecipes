@@ -146,6 +146,7 @@ def get_recipe_details(recipe_id):
 
 def edit_recipe_description(token, recipe_id, name, type, time, serving_size):
     '''
+        edit given recipe's description
         :param token:
         :param recipe_id: recipe's id in database
         :param name: new recipe's name
@@ -187,7 +188,7 @@ def edit_recipe_description(token, recipe_id, name, type, time, serving_size):
 
 def edit_recipe_ingredients(token, recipe_id, ingredients):
     '''
-        overwrite all old ingredients in database by new ingredients
+        overwrite all old ingredients in database by new ingredients for given recipe
         :param token:
         :param recipe_id: recipe's id in database
         :param ingredients: new ingredients of the recipe
@@ -241,6 +242,7 @@ def edit_recipe_ingredients(token, recipe_id, ingredients):
 
 def edit_recipe_steps(token, recipe_id, steps):
     '''
+        overwrite all old steps in database by new steps for given recipe
         :param token:
         :param recipe_id: recipe's id in database
         :param steps: new cooking steps of the recipe
