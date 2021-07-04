@@ -48,7 +48,6 @@ def token_to_id(token):
     if 'user_id' not in token_decoded:
         return -1
     user_id = token_decoded['user_id']
-    print(user_id, file=sys.stderr)
 
     cur = con.cursor()
     # check email exists with an account

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Link, Switch, Route } from "react-router-dom";
+import { Link, Switch, Route, Redirect } from "react-router-dom";
 
 import Navbar from 'react-bootstrap/Navbar';
 import Dropdown from 'react-bootstrap/Dropdown';
@@ -11,6 +11,8 @@ import logo from './WIP_logo_2.png';
 
 import Cookie from 'universal-cookie';
 import Profile from "./profile/profile.js";
+import RecipeCreate from './recipe/create';
+import RecipeView from './recipe/view';
 
 async function profileUser(id) {
     let response = await fetch('http://localhost:5000/profile/view', {
@@ -40,7 +42,6 @@ function LoginButton() {
 function UserButton(props) {
     const cookie = new Cookie();
     const [imgUrl, setImgUrl] = useState('');
-    const [firstName, setfirstName] = useState('');
     const [fetched, setFetched] = useState(false);
 
     async function processId() {
@@ -50,7 +51,7 @@ function UserButton(props) {
             });
 
         if (response != null) {
-            setfirstName(response.FirstName);
+            props.setfirstName(response.FirstName);
             setImgUrl(response.ProfilePictureURL);
         }
 
@@ -67,7 +68,7 @@ function UserButton(props) {
     }
 
     return (
-    <DropdownButton menuAlign="right" title={firstName} >
+    <DropdownButton menuAlign="right" title={props.firstName} >
         <Link component={Dropdown.Item} to="/profile">Profile</Link>
         <Dropdown.Item onClick={logout}>Log Out</Dropdown.Item>
     </DropdownButton>
@@ -75,25 +76,35 @@ function UserButton(props) {
 }
 
 function Home({ loggedIn, setLoggedIn, currId }) {
-        return (
+
+    const [firstName, setfirstName] = useState('');
+    return (
     <>
-    <Navbar bg="dark" >
+    <Navbar style={{backgroundColor:"lightgray"}}>
         <Link to="/" >
             <img src={logo} height="50" />
         </Link>
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
             <Navbar.Text>
-                {loggedIn ? <UserButton setLoggedIn={setLoggedIn} currId={currId} /> : <LoginButton />}
+                {loggedIn ? <UserButton setLoggedIn={setLoggedIn} currId={currId} firstName={firstName} setfirstName={setfirstName} /> : <LoginButton />}
             </Navbar.Text>
         </Navbar.Collapse>
     </Navbar>
     <Switch>
         <Route path="/profile/:id">
-          <Profile currId={currId} loggedIn={loggedIn}/>
+          <Profile currId={currId} loggedIn={loggedIn} setButtonName={setfirstName}/>
         </Route>
-        <Route path="/profile">
-          <Profile currId={currId} loggedIn={loggedIn}/>
+        <Route path="/profile" render={() => 
+            loggedIn
+            ? (<Redirect to={{pathname: "/profile/" + currId}} />)
+            : (<Redirect to= {{pathname: "/"}} />)
+        } />
+        <Route path="/recipe/create">
+          <RecipeCreate />
+        </Route>
+        <Route path="/recipe/:id">
+          <RecipeView />
         </Route>
     </Switch>
     </>

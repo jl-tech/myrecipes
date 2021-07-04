@@ -173,7 +173,7 @@ function ProfileEditPicture(props) {
                 </Col>
                 <Col sm="2" style={{textAlign:"center"}}>
                     {uploaded
-                    ? <Button variant="primary" style={{color:"white",marginLeft:"1em"}} size="sm" onClick={handleSubmit}>Confirm</Button>
+                    ? <Button variant="primary" size="sm" onClick={handleSubmit}>Confirm</Button>
                     : <></>
                     }
                 </Col>
