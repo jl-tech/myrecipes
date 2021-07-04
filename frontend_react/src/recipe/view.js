@@ -59,9 +59,11 @@ function RecipeView(props) {
     const [time, setTime] = useState('')
     const [mealType, setMealType] = useState('')
 
+    const [contributorUID, setContributorUID] = useState('')
     const [userImgURL, setUserImageURL] = useState('')
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
+
 
     const [ingredients, setIngredients] = useState('')
     // const [lastName, setlastName] = useState('');
@@ -96,6 +98,7 @@ function RecipeView(props) {
             setServing(response.serving_size)
             setTime(response.time_to_cook)
             setSteps(response.steps)
+            setContributorUID(response.created_by_user_id)
             let ingredientsText = []
             response.ingredients.forEach(function (item, index) {
                 ingredientsText[index] = `${item['name']}: ${item['quantity']} ${item['unit']}`
@@ -192,7 +195,7 @@ function RecipeView(props) {
                     <Col sm={2}>
                         <p> CONTRIBUTOR </p>
                         <Image src={"http://127.0.0.1:5000/img/" + userImgURL} alt="Profile Picture" roundedCircle height="50em" style={{align:"left"}}/>
-                        <h5> {firstName} {lastName} </h5>
+                        <a href={"http://127.0.0.1:3000/profile/" + contributorUID }> <h5> {firstName} {lastName} </h5> </a>
                         <p> {createdAt}</p>
                     </Col>
                     <Col sm={1}>
