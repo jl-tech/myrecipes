@@ -42,7 +42,8 @@ function RecipeCreatePhoto({photos, setPhotos}) {
         items.push({
             id: idCount.toString(),
             url: url,
-            image: image
+            image: image,
+            name: image.name
         });
         setIdCount(idCount + 1);
         setPhotos(items);
@@ -92,7 +93,7 @@ function RecipeCreatePhoto({photos, setPhotos}) {
             <Droppable droppableId="photos">
                 {(provided) => (
                     <ListGroup as="ul" {...provided.droppableProps} ref={provided.innerRef}>
-                        {photos.map(({id, url, image}, index) => {
+                        {photos.map(({id, url, image, name}, index) => {
                             return (
                                 <Draggable key={id} draggableId={id} index={index}>
                                     {(provided) => (
@@ -102,7 +103,7 @@ function RecipeCreatePhoto({photos, setPhotos}) {
                                                     {index == 0 ? "1 (Main)" : index+1}
                                                 </Col>
                                                 <Col sm={5}>
-                                                    <span>{image.name}</span>
+                                                    <span>{name}</span>
                                                 </Col>
                                                 <Col sm={5}>
                                                     <Image src={url} width="10%"/>

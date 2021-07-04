@@ -20,7 +20,7 @@ import threading
 
 DEFAULT_PIC = 'default.png'
 
-def add_recipe(token, name, type, time, serving_size, ingredients, steps, photos):
+def add_recipe(token, name, type, time, serving_size, ingredients, steps, photos, photo_names):
     '''
     :param token:
     :param name:
@@ -59,7 +59,15 @@ def add_recipe(token, name, type, time, serving_size, ingredients, steps, photos
                values (%s, %s, %s, %s, %s) 
                '''
     for index, ingredient in enumerate(ingredients):
-        cur.execute(query, (int(created_recipe_id), int(index), ingredient['name'], float(ingredient['quantity']) if ingredient['quantity'] is not None else None, ingredient['unit']))
+        quantity = ingredient['quantity']
+        if quantity == '':
+            quantity = None
+        elif quantity is not None:
+            quantity = float(quantity)
+        unit = ingredient['unit']
+        if unit == '':
+            unit = None
+        cur.execute(query, (int(created_recipe_id), int(index), ingredient['name'], quantity, unit))
 
     # do RecipeSteps table
     query = '''
@@ -67,17 +75,17 @@ def add_recipe(token, name, type, time, serving_size, ingredients, steps, photos
                 values (%s, %s, %s, NULL) 
     '''
     for index, step in enumerate(steps):
-        cur.execute(query, (int(created_recipe_id), int(index), step))
+        cur.execute(query, (int(created_recipe_id), int(index), step['description']))
 
 
     # do RecipePhotos table
     query = '''
-                insert into RecipePhotos(recipe_id, photo_no, photo_path)
-                values (%s, %s, %s) 
+                insert into RecipePhotos(recipe_id, photo_no, photo_path, photo_name)
+                values (%s, %s, %s, %s) 
     '''
     for index, photo in enumerate(photos):
         path = helpers.store_image(photo)
-        cur.execute(query, (int(created_recipe_id), int(index), path))
+        cur.execute(query, (int(created_recipe_id), int(index), path, photo_names[index]))
 
     con.commit()
     query_lock.release()
@@ -141,7 +149,8 @@ def get_recipe_details(recipe_id):
     result = cur.fetchall()
     out['steps'] = []
     for row in result:
-        out['steps'].append(row['step_text'])
+        curr_dict = {'description': row['step_text']}
+        out['steps'].append(curr_dict)
 
     # photos
     query = '''select * from RecipePhotos where recipe_id = %s order by 
@@ -150,7 +159,9 @@ def get_recipe_details(recipe_id):
     result = cur.fetchall()
     out['photos'] = []
     for row in result:
-        out['photos'].append(row['photo_path'])
+        curr_dict = {'url': row['photo_path'],
+                     'name': row['photo_name']}
+        out['photos'].append(curr_dict)
 
     query_lock.release()
     return out

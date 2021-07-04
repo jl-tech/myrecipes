@@ -40,31 +40,31 @@ function RecipeView(props) {
     const [fetched, setFetched] = useState(false);
     const [success, setSuccess] = useState(false);
 
+    const [photos, setPhotos] = useState('');
+    const [createdAt, setCreatedAt] = useState('');
+    const [editedAt, setEditedAt] = useState(null);
+
     const [recipeName, setRecipeName] = useState('');
-    const [photos, setPhotos] = useState('')
-    const [createdAt, setCreatedAt] = useState('')
-    const [editedAt, setEditedAt] = useState(null)
-    const [steps, setSteps] = useState([])
-    const [serving, setServing] = useState('')
-    const [time, setTime] = useState('')
-    const [mealType, setMealType] = useState('')
+    const [serving, setServing] = useState('');
+    const [time, setTime] = useState('');
+    const [mealType, setMealType] = useState('');
 
-    const [contributorUID, setContributorUID] = useState('')
-    const [userImgURL, setUserImageURL] = useState('')
-    const [firstName, setFirstName] = useState('')
-    const [lastName, setLastName] = useState('')
+    const [contributorUID, setContributorUID] = useState('');
+    const [userImgURL, setUserImageURL] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
 
-    const [ingredients, setIngredients] = useState('')
+    const [steps, setSteps] = useState([]);
+    const [ingredients, setIngredients] = useState('');
+
+    const [editable, setEditable] = useState(false);
 
     let { id } = useParams();
     const history = useHistory();
 
     async function processId() {
         let id_ = id;
-        if (id_ == null) {
-            id_ = props.currId;
-            if (id_ == null) history.push('/');
-        }
+        if (id_ == null) history.push('/');
 
         let response = await recipeView(id_)
             .catch(e => {
@@ -72,7 +72,18 @@ function RecipeView(props) {
             });
 
         if (response != null) {
-            setPhotos(response.photos);
+            let photosP = [];
+            for (let photo of response.photos) {
+                let response = await fetch('http://127.0.0.1:5000/img/' + photo['url']);
+                let blob = await response.blob();
+                photosP.push({
+                    url: URL.createObjectURL(blob),
+                    image: blob,
+                    name: photo['name']
+                });
+            }
+            console.log(response.photos);
+            setPhotos(photosP);
             
             setRecipeName(response.name);
             setTime(response.time_to_cook)
@@ -80,28 +91,22 @@ function RecipeView(props) {
             setServing(response.serving_size)
 
             let stepsP = [];
-            let nsteps = 0;
             for (let step of response.steps) {
                 stepsP.push({
-                    id: nsteps,
-                    description: step
+                    description: step["description"]
                 });
-                nsteps++;
             }
             setSteps(stepsP);
 
             let ingredientsP = [];
-            let ningredients = 0;
             for (let ingredient of response.ingredients) {
                 ingredientsP.push({
-                    id: ningredients,
                     quantity: ingredient["quantity"],
                     unit: ingredient["unit"],
                     name: ingredient["name"]
                 });
-                ningredients++;
             }
-            setIngredients(ingredientsP);
+            setIngredients(response.ingredients);
 
             setContributorUID(response.created_by_user_id);
             setUserImageURL(response.profile_pic_path);
@@ -116,6 +121,10 @@ function RecipeView(props) {
                 setEditedAt(edit_date.toDateString() + " " + edit_date.toLocaleTimeString('en-US'));
             }
 
+            if (response.created_by_user_id == props.currId) {
+                setEditable(true);
+            }
+
             setSuccess(true);
         }
 
@@ -126,20 +135,24 @@ function RecipeView(props) {
         if (!fetched) processId();
     }, []);
 
+    useEffect(() => {
+        if (!props.loggedIn) setEditable(false);
+    }, [props.loggedIn]);
+
     if (success) {
         return (
             <>
             <Container style={{marginTop:"1em",marginBottom:"2em"}}>
                 <RecipeViewPhoto photos={photos} />
-                <RecipeViewDesc recipeName={recipeName} time={time} serving={serving} mealType={mealType} />
+                <RecipeViewDesc recipeName={recipeName} setRecipeName={setRecipeName} time={time} setTime={setTime} serving={serving} setServing={setServing} mealType={mealType} setMealType={setMealType} photos={photos} setPhotos={setPhotos} editable={editable} />
                 <Row style={{marginTop:"1em"}}>
                     <Col sm={2} style={{marginBottom:"1em"}}>
                         <RecipeViewContri userImgURL={userImgURL} contributorUID={contributorUID} firstName={firstName} lastName={lastName} createdAt={createdAt} editedAt={editedAt}/>
                     </Col>
                     <Col sm={1} />
                     <Col sm={9}>
-                        <RecipeViewIngredient ingredients={ingredients} />
-                        <RecipeViewStep steps={steps} />
+                        <RecipeViewIngredient ingredients={ingredients} editable={editable} />
+                        <RecipeViewStep steps={steps} editable={editable} />
                     </Col>
 
                 </Row>
@@ -152,8 +165,8 @@ function RecipeView(props) {
             <Modal.Body>
             <div style={{textAlign:"center"}}>
                 Invalid recipe ID<br />
-                <Link to="/" component={Button} style={{marginTop:"1em"}}>
-                    Return
+                <Link to="/" style={{marginTop:"1em"}}>
+                    <Button>Return</Button>
                 </Link>
             </div>
             </Modal.Body>

@@ -93,7 +93,6 @@ def email_confirm(code):
 def verify(token):
     user_id = token_to_id(token)
     
-    print(user_id, file=sys.stderr)
     if user_id < 0:
         return None
 

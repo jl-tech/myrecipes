@@ -27,10 +27,10 @@ function RecipeViewStep(props) {
         <Row>
             <Col>
             <ListGroup as="ul">
-                {props.steps.map(({id, description}) =>
-                    <ListGroup.Item as="li" key={id}>
+                {props.steps.map(({id, description}, index) =>
+                    <ListGroup.Item as="li" key={index}>
                     <Row>
-                        <Col sm={1}>{id+1}.</Col>
+                        <Col sm={1}>{index+1}.</Col>
                         <Col sm={11}>{description}</Col>
                     </Row>
                     </ListGroup.Item>

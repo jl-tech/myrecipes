@@ -57,6 +57,7 @@ create table RecipePhotos(
     recipe_id integer references Recipes(recipe_id),
     photo_no integer, -- photo no 1 is thumbnail
     photo_path text,
+    photo_name text,
     primary key (recipe_id, photo_no)
 );
 

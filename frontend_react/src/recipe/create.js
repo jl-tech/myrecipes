@@ -13,7 +13,7 @@ import RecipeCreateStep from './createstep.js';
 import RecipeCreatePhoto from './createphoto.js';
 import Button from 'react-bootstrap/esm/Button';
 
-async function createRecipe(token, name, type, time, serving, ingredients, steps, photos) {
+async function createRecipe(token, name, type, time, serving, ingredients, steps, photos, photoNames) {
     let data = new FormData();
     data.append('name', name);
     data.append('type', type);
@@ -21,6 +21,7 @@ async function createRecipe(token, name, type, time, serving, ingredients, steps
     data.append('serving_size', serving);
     data.append('ingredients', ingredients);
     data.append('steps', steps);
+    data.append('photo_names', photoNames);
     for (let photo of photos) {
         data.append('photos[]', photo);
     }
@@ -70,15 +71,19 @@ function RecipeCreate(props) {
 
         let stepsP = []
         for (let step of steps) {
-            stepsP.push(step["description"]);
+            stepsP.push({
+                "description": step["description"]
+            });
         }
 
         let photosP = []
+        let photoNames = []
         for (let photo of photos) {
             photosP.push(photo["image"]);
+            photoNames.push(photo["name"])
         }
 
-        let response = await createRecipe(cookie.get('token'), name, type, time, serving, JSON.stringify(ingredientsP), JSON.stringify(stepsP), photosP)
+        let response = await createRecipe(cookie.get('token'), name, type, time, serving, JSON.stringify(ingredientsP), JSON.stringify(stepsP), photosP, JSON.stringify(photoNames))
             .catch(e => {
                 setErrorShow(true);
                 setErrorText(e.message);

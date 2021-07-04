@@ -25,8 +25,8 @@ function RecipeViewIngredient(props) {
         <Row>
             <Col>
             <ListGroup as="ul">
-                {props.ingredients.map(({id, quantity, unit, name}) =>
-                    <ListGroup.Item as="li" key={id}>
+                {props.ingredients.map(({quantity, unit, name}, index) =>
+                    <ListGroup.Item as="li" key={index}>
                     <Row>
                         <Col sm={1}><Form.Check type="checkbox" /></Col>
                         <Col sm={11}>{quantity != null ? quantity : ''} {unit != null ? unit : ''} {name}</Col>

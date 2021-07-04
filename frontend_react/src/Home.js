@@ -36,7 +36,11 @@ async function profileUser(id) {
 
 function LoginButton() {
     return (
-        <Link to="/login" component={Button} style={{color:"white"}}>Log In</Link>
+        <Link to="/login">
+            <Button style={{color:"white"}}>
+                Log in
+            </Button>
+        </Link>
     );
 }
 
@@ -107,7 +111,7 @@ function Home({ loggedIn, setLoggedIn, currId }) {
             : (<Redirect to= {{pathname: "/"}} />)
         } />
         <Route path="/recipe/:id">
-          <RecipeView />
+          <RecipeView currId={currId} loggedIn={loggedIn} />
         </Route>
         <Route path="/recipe" render={() => 
             (<Redirect to= {{pathname: "/"}} />)

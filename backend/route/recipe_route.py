@@ -16,7 +16,8 @@ def route_recipe_create():
     serving_size = request.form['serving_size']
     ingredients = json.loads(request.form['ingredients'])
     steps = json.loads(request.form['steps'])
-    result, recipe_id = recipe.add_recipe(request.headers.get("Authorization"), name, type, int(time), int(serving_size),  ingredients, steps, photos)
+    photo_names = json.loads(request.form['photo_names'])
+    result, recipe_id = recipe.add_recipe(request.headers.get("Authorization"), name, type, int(time), int(serving_size),  ingredients, steps, photos, photo_names)
     if result != 0:
         response = jsonify({'error': 'Invalid token'})
         response.headers.add('Access-Control-Allow-Origin', '*')
