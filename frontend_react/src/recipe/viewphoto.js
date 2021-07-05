@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Carousel from "react-bootstrap/Carousel";
+import Cookie from 'universal-cookie';
 
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
@@ -14,6 +15,28 @@ import Image from 'react-bootstrap/Image';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import Reorder from './reorder_black_24dp.svg';
+
+async function requestEditPhotos(token, recipe_id, photos, names) {
+    let data = new FormData()
+    data.append('recipe_id', recipe_id)
+    photos.forEach(photo => data.append('photos[]', photo))
+    data.append('photo_names', names)
+
+    let response = await fetch('http://localhost:5000/recipe/editphotos', {
+        method: 'POST',
+        headers: {
+            'Authorization': token
+        },
+        body: data
+    }).catch(e => {
+        throw new Error(e);
+    });
+
+    let responseJson = await response.json();
+    
+    if (response.ok) return responseJson;
+    else throw new Error(responseJson.error);
+}
 
 export function EditPhoto(props) {
     const editClose = () => {
@@ -30,6 +53,7 @@ export function EditPhoto(props) {
     const [uploaded, setUploaded] = useState(false);
     const [url, setUrl] = useState('');
     const [image, setImage] = useState(null);
+    const cookie = new Cookie();
 
     function makeJson() {
         let photosP = [];
@@ -111,6 +135,26 @@ export function EditPhoto(props) {
         });   
     }
 
+    async function handleSubmit() {
+        let images = []
+        let names = []
+        console.log("debug")
+        photos.forEach(photo => {
+            images.push(photo.image)
+            names.push(photo.name)
+        });
+
+        let response = await requestEditPhotos(cookie.get('token'), props.recipeId, images, JSON.stringify(names))
+            .catch(e => {
+                setErrorShow(true);
+                setErrorText(e.message);
+            });
+
+        if (response != null) {
+            setErrorShow(false);
+        }
+    }
+
     return (
         <Modal show={props.showPhotoEdit} onHide={editClose}>
             <Modal.Header closeButton>
@@ -180,7 +224,7 @@ export function EditPhoto(props) {
                         {errorText2}
             </Alert>
             <div style={{textAlign:"center"}}>
-                <Button type="submit" size="sm">
+                <Button type="submit" size="sm" onClick={handleSubmit}>
                     Confirm
                 </Button>
             </div>
