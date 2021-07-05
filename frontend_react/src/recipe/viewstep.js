@@ -91,10 +91,16 @@ function RecipeViewStep(props) {
         return stepsP;
     }
 
-    function goEditMode() {
+    function showEditMode() {
         setSteps(makeJson());
         setIdCount(props.steps.length);
         setEditMode(true);
+    }
+
+    function hideEditMode() {
+        setErrorShow(false);
+        setSuccessShow(false);
+        setEditMode(false);
     }
 
     async function handleSubmit() {
@@ -135,7 +141,7 @@ function RecipeViewStep(props) {
                 </Col>
                 <Col sm={3} style={{textAlign:"right"}}>
                     <Button variant="primary" size="sm" style={{marginRight:"1em"}} onClick={handleSubmit}>Confirm</Button>
-                    <Button variant="outline-secondary" size="sm" onClick={() => setEditMode(false)}>Cancel</Button>
+                    <Button variant="outline-secondary" size="sm" onClick={hideEditMode}>Cancel</Button>
                 </Col>
                 <Col sm={6} />
                 <Col sm={6}>
@@ -197,7 +203,7 @@ function RecipeViewStep(props) {
                 {props.editable ?
                 <>
                 <Col sm={1} style={{textAlign:"right"}}>
-                    <Button variant="outline-secondary" size="sm" onClick={goEditMode}>Edit</Button>
+                    <Button variant="outline-secondary" size="sm" onClick={showEditMode}>Edit</Button>
                 </Col>
                 <Col sm={6} />
                 <Col sm={6}>

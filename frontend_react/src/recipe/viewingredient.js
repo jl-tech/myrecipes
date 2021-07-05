@@ -95,10 +95,16 @@ function RecipeViewIngredient(props) {
         return ingredientsP;
     }
 
-    function goEditMode() {
+    function showEditMode() {
         setIngredients(makeJson());
         setIdCount(props.ingredients.length);
         setEditMode(true);
+    }
+
+    function hideEditMode() {
+        setErrorShow(false);
+        setSuccessShow(false);
+        setEditMode(false);
     }
 
     async function handleSubmit() {
@@ -143,7 +149,7 @@ function RecipeViewIngredient(props) {
                 </Col>
                 <Col sm={3} style={{textAlign:"right"}}>
                     <Button variant="primary" size="sm" style={{marginRight:"1em"}} onClick={handleSubmit}>Confirm</Button>
-                    <Button variant="outline-secondary" size="sm" onClick={() => setEditMode(false)}>Cancel</Button>
+                    <Button variant="outline-secondary" size="sm" onClick={hideEditMode}>Cancel</Button>
                 </Col>
                 <Col sm={6} />
                 <Col sm={6}>
@@ -167,13 +173,13 @@ function RecipeViewIngredient(props) {
                                                         <Col sm={1}>
                                                             <span>{index+1}</span>
                                                         </Col>
-                                                        <Form.Group as={Col} sm={2} style={{marginBottom:"0"}}>
-                                                            <Form.Control placeholder="Quantity (if any)" type="number" onChange={e => updateIngredient(index, "quantity", e.target.value)} defaultValue={quantity}/>
+                                                        <Form.Group as={Col} sm={3} style={{marginBottom:"0"}}>
+                                                            <Form.Control placeholder="Quantity (if any)" type="number" onChange={e => updateIngredient(index, "quantity", e.target.value)} defaultValue={quantity} />
                                                         </Form.Group>
                                                         <Form.Group as={Col} sm={2} style={{marginBottom:"0"}}>
                                                             <Form.Control placeholder="Unit (if any)" onChange={e => updateIngredient(index, "unit", e.target.value)} defaultValue={unit}/>
                                                         </Form.Group>
-                                                        <Form.Group as={Col} sm={6} style={{marginBottom:"0"}}>
+                                                        <Form.Group as={Col} sm={5} style={{marginBottom:"0"}}>
                                                             <Form.Control placeholder="Name" required onChange={e => updateIngredient(index, "name", e.target.value)} defaultValue={name}/>
                                                         </Form.Group>
                                                         <Col sm={1}>
@@ -211,7 +217,7 @@ function RecipeViewIngredient(props) {
                 {props.editable ?
                 <>
                 <Col sm={1} style={{textAlign:"right"}}>
-                    <Button variant="outline-secondary" size="sm" onClick={goEditMode}>Edit</Button>
+                    <Button variant="outline-secondary" size="sm" onClick={showEditMode}>Edit</Button>
                 </Col>
                 <Col sm={6} />
                 <Col sm={6}>
