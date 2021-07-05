@@ -64,11 +64,11 @@ function RecipeCreateIngredient({ingredients, setIngredients}) {
                                                 <Form.Group as={Col} sm={2} style={{marginBottom:"0"}}>
                                                     <Form.Control placeholder="Quantity (if any)" type="number" onChange={e => updateIngredient(index, "quantity", e.target.value)}/>
                                                 </Form.Group>
-                                                <Form.Group as={Col} sm={2} style={{marginBottom:"0"}} onChange={e => updateIngredient(index, "unit", e.target.value)}>
-                                                    <Form.Control placeholder="Unit (if any)" />
+                                                <Form.Group as={Col} sm={2} style={{marginBottom:"0"}} >
+                                                    <Form.Control placeholder="Unit (if any)" onChange={e => updateIngredient(index, "unit", e.target.value)}/>
                                                 </Form.Group>
-                                                <Form.Group as={Col} sm={6} style={{marginBottom:"0"}} onChange={e => updateIngredient(index, "name", e.target.value)}>
-                                                    <Form.Control placeholder="Name" required />
+                                                <Form.Group as={Col} sm={6} style={{marginBottom:"0"}}>
+                                                    <Form.Control placeholder="Name" required onChange={e => updateIngredient(index, "name", e.target.value)}/>
                                                 </Form.Group>
                                                 <Col sm={1}>
                                                     <button type="button" className="close" onClick={() => removeIngredient(index)}>

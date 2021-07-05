@@ -255,11 +255,19 @@ def edit_recipe_ingredients(token, recipe_id, ingredients):
         cur.execute(query_select, (int(recipe_id), int(index)))
         result = cur.fetchall()
         # this ingredient_no doesn't exist in database
+        quantity = ingredient['quantity']
+        if quantity == '':
+            quantity = None
+        elif quantity is not None:
+            quantity = float(quantity)
+        unit = ingredient['unit']
+        if unit == '':
+            unit = None
         if len(result) == 0:
-            cur.execute(query_insert, (int(recipe_id), int(index), ingredient['name'], float(ingredient['quantity']), ingredient['unit']))
+            cur.execute(query_insert, (int(recipe_id), int(index), ingredient['name'], quantity, unit))
         # exist
         else:
-            cur.execute(query_update, (ingredient['name'], float(ingredient['quantity']), ingredient['unit'], int(recipe_id), int(index),))
+            cur.execute(query_update, (ingredient['name'], quantity, unit, int(recipe_id), int(index),))
         last_idx = index
 
     # delete remaining (excess) ingredients if the number of ingredients
