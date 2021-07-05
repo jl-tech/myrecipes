@@ -49,6 +49,7 @@ export function EditPhoto(props) {
     const [errorText, setErrorText] = useState('');
     const [errorShow2, setErrorShow2] = useState(false);
     const [errorText2, setErrorText2] = useState('');
+    const [successShow, setSuccessShow] = useState(false);
 
     const [uploaded, setUploaded] = useState(false);
     const [url, setUrl] = useState('');
@@ -146,12 +147,24 @@ export function EditPhoto(props) {
 
         let response = await requestEditPhotos(cookie.get('token'), props.recipeId, images, JSON.stringify(names))
             .catch(e => {
-                setErrorShow(true);
+                setErrorShow2(true);
+                setSuccessShow(false);
                 setErrorText(e.message);
             });
 
         if (response != null) {
-            setErrorShow(false);
+            setErrorShow2(false);
+            let photosP = [];
+            for (let photo of photos) {
+                photosP.push({
+                    url: photo.url,
+                    image: photo.image,
+                    name: photo.name
+                });
+            }
+            console.log(photosP);
+            props.setPhotos(photosP);
+            setSuccessShow(true);
         }
     }
 
@@ -221,7 +234,10 @@ export function EditPhoto(props) {
                 </Droppable>
             </DragDropContext>
             <Alert show={errorShow2} variant="danger" onClose={() => setErrorShow2(false)} dismissible>
-                        {errorText2}
+                {errorText2}
+            </Alert>
+            <Alert show={successShow} variant="success" onClose={() => setSuccessShow(false)} dismissible>
+                Successfully updated recipe details
             </Alert>
             <div style={{textAlign:"center"}}>
                 <Button type="submit" size="sm" onClick={handleSubmit}>
