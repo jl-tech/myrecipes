@@ -132,7 +132,7 @@ function RecipeViewStep(props) {
         }
     }
 
-    if (editMode) {
+    if (editMode && props.editable) {
         return (
         <>
             <Row style={{marginTop:"1em"}}>
