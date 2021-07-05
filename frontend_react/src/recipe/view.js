@@ -152,7 +152,7 @@ function RecipeView(props) {
                     <Col sm={1} />
                     <Col sm={9}>
                         <RecipeViewIngredient ingredients={ingredients} editable={editable} />
-                        <RecipeViewStep steps={steps} editable={editable} />
+                        <RecipeViewStep recipeId={id} steps={steps} setSteps={setSteps} editable={editable} />
                     </Col>
 
                 </Row>

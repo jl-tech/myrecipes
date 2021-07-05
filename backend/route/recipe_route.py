@@ -100,7 +100,7 @@ def route_recipe_edit_ingredients():
 def route_recipe_edit_steps():
     data = request.get_json()
     steps = data['steps']
-    recipe_id = request.args.get('recipe_id')
+    recipe_id = data['recipe_id']
     token = request.headers.get("Authorization")
 
     result = recipe.edit_recipe_steps(token, recipe_id, steps)

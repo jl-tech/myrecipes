@@ -311,7 +311,7 @@ def edit_recipe_steps(token, recipe_id, steps):
         return -2
 
     # recipe can only edit by creator
-    if int(result['created_by_user_id']) != int(u_id):
+    if int(result[0]['created_by_user_id']) != int(u_id):
         query_lock.release()
         return -3
 
@@ -327,10 +327,10 @@ def edit_recipe_steps(token, recipe_id, steps):
         result = cur.fetchall()
         # this ingredient_no doesn't exist in database
         if len(result) == 0:
-            cur.execute(query_insert, (int(recipe_id), int(index), step,))
+            cur.execute(query_insert, (int(recipe_id), int(index), step['description'],))
         # exist
         else:
-            cur.execute(query_update, (step, int(recipe_id), int(index),))
+            cur.execute(query_update, (step['description'], int(recipe_id), int(index),))
 
     con.commit()
     query_lock.release()

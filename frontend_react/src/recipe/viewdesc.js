@@ -164,12 +164,12 @@ function RecipeViewDesc(props) {
                 {props.editable ? <>
                 <Row>
                     <Col style={{textAlign:"right"}}>
-                        <Button variant="outline-primary" onClick={photoEditShow}>Edit photos</Button>
+                        <Button variant="outline-secondary" onClick={photoEditShow} size="sm">Edit photos</Button>
                     </Col>
                 </Row>
                 <Row style={{marginTop:"1em",textAlign:"right"}}>
                     <Col>
-                        <Button variant="outline-primary" onClick={descEditShow}>Edit details</Button>
+                        <Button variant="outline-secondary" onClick={descEditShow} size="sm">Edit details</Button>
                     </Col>
                 </Row></> : <></> }
             </Col>
