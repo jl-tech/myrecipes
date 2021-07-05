@@ -123,3 +123,10 @@ def route_recipe_edit_steps():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
 
+
+@RECIPE.route('/editphotos', methods=['POST'])
+def route_recipe_edit_photos():
+    photos = request.files.getlist('photos[]')
+    recipe_id = request.form['recipe_id']
+    photo_names = json.loads(request.form['photo_names'])
+    result = recipe.edit_recipe_photos(recipe_id, photos, photo_names)

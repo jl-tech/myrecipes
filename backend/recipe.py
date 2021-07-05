@@ -360,3 +360,46 @@ def edit_recipe_steps(token, recipe_id, steps):
     con.commit()
     query_lock.release()
     return 1
+
+def edit_recipe_photos(recipe_id, photos, photo_names):
+    '''
+    Edits the photos associated with a recipe
+    :recipe_id: the recipe id to change
+    :param photos: The new photos array
+    :param photo_names: The new photo_names array
+    :return: 0 on success. -1 if the recipe id couldn't be found.
+    '''
+    query_lock.acquire()
+
+    cur = con.cursor()
+
+    query = ''' select * from Recipes where recipe_id = %s'''
+    cur.execute(query, (recipe_id,))
+    if len(cur.fetchall()) == 0:
+        return -1
+
+    # delete existing photos and remove from database
+    query = ''' select photo_path from RecipePhotos where recipe_id = %s'''
+    cur.execute(query, (recipe_id,))
+    for photo_path in cur.fetchall():
+        try:
+            os.remove(photo_path)
+        except:
+            pass
+
+    query = ''' delete from RecipePhotos where recipe_id = %s '''
+    cur.execute(query, (recipe_id,))
+
+    # do RecipePhotos table
+    query = '''
+                    insert into RecipePhotos(recipe_id, photo_no, photo_path, 
+                    photo_name)
+                    values (%s, %s, %s, %s) 
+        '''
+    for index, photo in enumerate(photos):
+        path = helpers.store_image(photo)
+        cur.execute(query, (
+        int(recipe_id), int(index), path, photo_names[index]))
+
+    query_lock.release()
+    return 0
