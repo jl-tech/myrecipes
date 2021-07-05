@@ -376,6 +376,7 @@ def edit_recipe_photos(recipe_id, photos, photo_names):
     query = ''' select * from Recipes where recipe_id = %s'''
     cur.execute(query, (recipe_id,))
     if len(cur.fetchall()) == 0:
+        query_lock.release()
         return -1
 
     # delete existing photos and remove from database
