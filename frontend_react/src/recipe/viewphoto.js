@@ -149,7 +149,7 @@ export function EditPhoto(props) {
             .catch(e => {
                 setErrorShow2(true);
                 setSuccessShow(false);
-                setErrorText(e.message);
+                setErrorText2(e.message);
             });
 
         if (response != null) {
