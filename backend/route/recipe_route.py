@@ -130,7 +130,34 @@ def route_recipe_edit_photos():
     recipe_id = request.form['recipe_id']
     photo_names = json.loads(request.form['photo_names'])
     token = request.headers.get("Authorization")
+
     result = recipe.edit_recipe_photos(token, recipe_id, photos, photo_names)
+    
+    if result == -1:
+        response = jsonify({'error': 'Invalid token'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
+    elif result == -2:
+        response = jsonify({'error': 'Invalid recipe id'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
+    elif result == -3:
+        response = jsonify({'error': 'No edit right'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
+    else:
+        response = jsonify({})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 200
+
+@RECIPE.route('/delete', methods=['DELETE'])
+def route_recipe_delete():
+    token = request.headers.get("Authorization")
+    data = request.get_json()
+    recipe_id = data['recipe_id']
+
+    result = recipe.delete_recipe(token, recipe_id)
+
     if result == -1:
         response = jsonify({'error': 'Invalid token'})
         response.headers.add('Access-Control-Allow-Origin', '*')

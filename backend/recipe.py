@@ -393,3 +393,43 @@ def check_recipe_edit(token, recipe_id):
         return -3
 
     return 0
+
+def delete_recipe(token, recipe_id):
+    '''
+    :param token: The token of the user
+    :param recipe_id: The id of recipe attempting to delete
+    :return: 
+    0 if OK.
+    -1 if the token is invalid.
+    -2 if the recipe id is invalid.
+    -3 if the user isn't authorised to delete this recipe.
+    '''
+    query_lock.acquire()
+    cur = con.cursor()
+    check_result = check_recipe_edit(token, recipe_id)
+
+    if check_result != 0:
+        query_lock.release()
+        return check_result
+
+    query = '''delete from RecipeIngredients where recipe_id = %s'''
+    cur.execute(query, (recipe_id))
+    query = '''delete from RecipeSteps where recipe_id = %s'''
+    cur.execute(query, (recipe_id))
+    query = ''' select photo_path from RecipePhotos where recipe_id = %s'''
+    cur.execute(query, (recipe_id))
+
+    for photo_path in cur.fetchall():
+        try:
+            os.remove(photo_path)
+        except:
+            pass
+
+    query = '''delete from RecipePhotos where recipe_id = %s'''
+    cur.execute(query, (recipe_id))
+    query = '''delete from Recipes where recipe_id = %s'''
+    cur.execute(query, (recipe_id))
+
+    con.commit()
+    query_lock.release()
+    return 0
