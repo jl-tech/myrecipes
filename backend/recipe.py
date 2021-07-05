@@ -183,24 +183,11 @@ def edit_recipe_description(token, recipe_id, name, type, time, serving_size):
         '''
     query_lock.acquire()
     cur = con.cursor()
-    # get user id from token
-    u_id = tokenise.token_to_id(token)
-    if u_id < 0:
+    check_result = check_recipe_edit(token, recipe_id)
+    if check_result != 0:
         query_lock.release()
-        return -1
+        return check_result
 
-    query = ''' select * from Recipes where recipe_id = %s'''
-    cur.execute(query, (int(recipe_id),))
-    result = cur.fetchall()
-
-    if len(result) != 1:
-        query_lock.release()
-        return -2
-
-    # recipe can only edit by creator
-    if int(result[0]['created_by_user_id']) != int(u_id):
-        query_lock.release()
-        return -3
 
     query = '''update Recipes set time_to_cook=%s, name=%s,type=%s,serving_size=%s, edit_time=UTC_TIMESTAMP() where recipe_id=%s'''
     cur.execute(query, (int(time), name, type, int(serving_size), int(recipe_id),))
@@ -222,24 +209,11 @@ def edit_recipe_ingredients(token, recipe_id, ingredients):
         '''
     query_lock.acquire()
     cur = con.cursor()
-    # get user id from token
-    u_id = tokenise.token_to_id(token)
-    if u_id < 0:
-        query_lock.release()
-        return -1
 
-    query = ''' select * from Recipes where recipe_id = %s'''
-    cur.execute(query, (int(recipe_id),))
-    result = cur.fetchall()
-
-    if len(result) != 1:
+    check_result = check_recipe_edit(token, recipe_id)
+    if check_result != 0:
         query_lock.release()
-        return -2
-
-    # recipe can only edit by creator
-    if int(result[0]['created_by_user_id']) != int(u_id):
-        query_lock.release()
-        return -3
+        return check_result
 
     query_update = '''update RecipeIngredients 
                         set ingredient_name=%s, quantity=%s, unit=%s 
@@ -304,24 +278,11 @@ def edit_recipe_steps(token, recipe_id, steps):
         '''
     query_lock.acquire()
     cur = con.cursor()
-    # get user id from token
-    u_id = tokenise.token_to_id(token)
-    if u_id < 0:
-        query_lock.release()
-        return -1
 
-    query = ''' select * from Recipes where recipe_id = %s'''
-    cur.execute(query, (int(recipe_id),))
-    result = cur.fetchall()
-
-    if len(result) != 1:
+    check_result =check_recipe_edit(token, recipe_id)
+    if check_result != 0:
         query_lock.release()
-        return -2
-
-    # recipe can only edit by creator
-    if int(result[0]['created_by_user_id']) != int(u_id):
-        query_lock.release()
-        return -3
+        return check_result
 
     query_update = '''update RecipeSteps set step_text=%s where recipe_id=%s and step_no=%s'''
     query_select = '''select * from RecipeSteps where recipe_id = %s and step_no=%s'''
@@ -361,23 +322,23 @@ def edit_recipe_steps(token, recipe_id, steps):
     query_lock.release()
     return 1
 
-def edit_recipe_photos(recipe_id, photos, photo_names):
+def edit_recipe_photos(token, recipe_id, photos, photo_names):
     '''
     Edits the photos associated with a recipe
     :recipe_id: the recipe id to change
     :param photos: The new photos array
     :param photo_names: The new photo_names array
-    :return: 0 on success. -1 if the recipe id couldn't be found.
+    :return: 0 on success. -2 if the recipe id couldn't be found. -1 if the
+    token was invalid.
     '''
     query_lock.acquire()
 
     cur = con.cursor()
 
-    query = ''' select * from Recipes where recipe_id = %s'''
-    cur.execute(query, (recipe_id,))
-    if len(cur.fetchall()) == 0:
+    check_result = check_recipe_edit(token, recipe_id)
+    if check_result != 0:
         query_lock.release()
-        return -1
+        return check_result
 
     # delete existing photos and remove from database
     query = ''' select photo_path from RecipePhotos where recipe_id = %s'''
@@ -402,5 +363,33 @@ def edit_recipe_photos(recipe_id, photos, photo_names):
         cur.execute(query, (
         int(recipe_id), int(index), path, photo_names[index]))
 
+    con.commit()
     query_lock.release()
+    return 0
+
+def check_recipe_edit(token, recipe_id):
+    '''
+    Performs the auth and db checks necessary for a edit operation.
+    :param token: The token of the user
+    :param recipe_id: The recipe_id attempting to edit
+    :return: 0 if OK. -1 if the token is invalid. -2 if the recipe id is invalid.
+    -3 if the user isn't authorised to edit this recipe.
+    '''
+    cur = con.cursor()
+
+    # get user id from token
+    u_id = tokenise.token_to_id(token)
+    if u_id < 0:
+        return -1
+
+    query = ''' select * from Recipes where recipe_id = %s'''
+    cur.execute(query, (int(recipe_id),))
+    result = cur.fetchall()
+    if len(result) == 0:
+        return -2
+
+    # recipe can only edit by creator
+    if int(result[0]['created_by_user_id']) != int(u_id):
+        return -3
+
     return 0

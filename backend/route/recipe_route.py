@@ -129,4 +129,17 @@ def route_recipe_edit_photos():
     photos = request.files.getlist('photos[]')
     recipe_id = request.form['recipe_id']
     photo_names = json.loads(request.form['photo_names'])
-    result = recipe.edit_recipe_photos(recipe_id, photos, photo_names)
+    token = request.headers.get("Authorization")
+    result = recipe.edit_recipe_photos(token, recipe_id, photos, photo_names)
+    if result == -1:
+        response = jsonify({'error': 'Invalid token'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
+    elif result == -2:
+        response = jsonify({'error': 'Invalid recipe id'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
+    elif result == -3:
+        response = jsonify({'error': 'No edit right'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
