@@ -15,11 +15,6 @@ import ListGroup from "react-bootstrap/ListGroup";
 function RecipeViewContri(props) {
         return (
             <>
-            <Row>
-                <Col>
-                    <h4>CONTRIBUTOR</h4>
-                </Col>
-            </Row>
             <Row style={{marginTop:"1em"}}>
                 <Col style={{textAlign:"center"}}>
                     <Image src={"http://127.0.0.1:5000/img/" + props.userImgURL} alt="Profile Picture" roundedCircle height="50em" style={{align:"left"}}/>
@@ -33,23 +28,23 @@ function RecipeViewContri(props) {
                 </Col>
             </Row>
             <Row style={{marginTop:"1em"}}>
-                <Col>
-                    Created on:
+                <Col style={{textAlign:"center"}}>
+                    <b> Created on: </b>
                 </Col>
             </Row>
             <Row>
-                <Col style={{textAlign:"right"}}>
+                <Col style={{textAlign:"center"}}>
                     {props.createdAt}
                 </Col>
             </Row>
             {props.editedAt != null ?
             <><Row style={{marginTop:"1em"}}>
-                <Col>
-                    Last modified on:
+                <Col style={{textAlign:"center"}}>
+                    <b> Last modified on: </b>
                 </Col>
             </Row>
             <Row>
-                <Col style={{textAlign:"right"}}>
+                <Col style={{textAlign:"center"}}>
                     {props.editedAt}
                 </Col>
             </Row></> : <></>

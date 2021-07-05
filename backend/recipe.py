@@ -40,7 +40,7 @@ def add_recipe(token, name, type, time, serving_size, ingredients, steps, photos
     u_id = tokenise.token_to_id(token)
     if u_id < 0:
         query_lock.release()
-        return u_id, -1
+        return -1
 
     # -> do query
     query = '''
@@ -90,7 +90,7 @@ def add_recipe(token, name, type, time, serving_size, ingredients, steps, photos
     con.commit()
     query_lock.release()
 
-    return 0, created_recipe_id
+    return created_recipe_id
 
 def get_recipe_details(recipe_id):
     '''
@@ -329,7 +329,7 @@ def edit_recipe_steps(token, recipe_id, steps):
                 insert into RecipeSteps(recipe_id, step_no, step_text, step_photo_path)
                 values (%s, %s, %s, NULL) 
     '''
-
+    last_idx = -1
     for index, step in enumerate(steps):
         cur.execute(query_select, (int(recipe_id), int(index),))
         result = cur.fetchall()
@@ -339,7 +339,24 @@ def edit_recipe_steps(token, recipe_id, steps):
         # exist
         else:
             cur.execute(query_update, (step['description'], int(recipe_id), int(index),))
+        last_idx = index
 
+        # delete remaining (steps) ingredients if the number of ingredients
+        # has been reduced
+        query_remove = '''delete from RecipeSteps where recipe_id = %s 
+        and step_no = %s '''
+        while True:
+            last_idx += 1
+            cur.execute(query_select, (int(recipe_id), int(last_idx)))
+            result = cur.fetchall()
+            if len(result) == 0:
+                break
+            else:
+                cur.execute(query_remove, (int(recipe_id), int(last_idx)))
+
+    query_update_edit = ''' update Recipes set edit_time = UTC_TIMESTAMP() 
+    where recipe_id = %s'''
+    cur.execute(query_update_edit, (int(recipe_id),))
     con.commit()
     query_lock.release()
     return 1
