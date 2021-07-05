@@ -143,3 +143,7 @@ def route_recipe_edit_photos():
         response = jsonify({'error': 'No edit right'})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
+    else:
+        response = jsonify({})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 200
