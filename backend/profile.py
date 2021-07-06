@@ -160,3 +160,4 @@ def remove_profile_pic(token):
             pass
 
     return 0, DEFAULT_PIC
+

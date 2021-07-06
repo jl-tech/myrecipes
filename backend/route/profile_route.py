@@ -88,3 +88,4 @@ def route_profile_removepicture():
         response = jsonify({'url': file_name})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
+
