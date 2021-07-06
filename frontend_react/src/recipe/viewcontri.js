@@ -21,7 +21,7 @@ function RecipeViewContri(props) {
                 </Col>
             </Row>
             <Row>
-                <Col style={{textAlign:"center"}}>
+                <Col style={{textAlign:"center", fontSize:"140%"}}>
                     <Link to={`/profile/${props.contributorUID}`}>
                         {props.firstName} {props.lastName}
                     </Link>

@@ -40,11 +40,11 @@ function ProfileEdit(props) {
 
     return (
         <>
-        <Button onClick={editShow}>Edit Profile</Button>
+        <Button onClick={editShow}>Edit Profile & Account Details</Button>
         <Modal show={showEdit} onHide={editClose} centered>
             <Modal.Header closeButton>
                 <Modal.Title>
-                    Edit Profile
+                    Edit Profile & Account Details
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
