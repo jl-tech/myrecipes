@@ -170,15 +170,15 @@ def get_profile_recipe(user_id):
     out = []
     for recipe in data:
         dic = {}
-        dic['name'] = data['name']
-        dic['type'] = data['type']
-        dic['serving_size'] = data['serving_size']
-        dic['time_to_cook'] = data['time_to_cook']
-        dic['creation_time'] = data['creation_time']
-        dic['edit_time'] = data['edit_time']
+        dic['name'] = recipe['name']
+        dic['type'] = recipe['type']
+        dic['serving_size'] = recipe['serving_size']
+        dic['time_to_cook'] = recipe['time_to_cook']
+        dic['creation_time'] = recipe['creation_time']
+        dic['edit_time'] = recipe['edit_time']
         query2 = "select * from RecipePhotos where recipe_id=%s and photo_no=%s"
-        cur.execute(query2, (int(data['recipe_id']), 1, ))
+        cur.execute(query2, (int(recipe['recipe_id']), 1,))
         photo_data = cur.fetchall()
-        dic['photo_path'] = photo_data['photo_path']
+        dic['photo_path'] = photo_data[0]['photo_path']
         out.append(dic)
     return out
