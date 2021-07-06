@@ -167,7 +167,7 @@ def route_recipe_delete():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
     elif result == -3:
-        response = jsonify({'error': 'No edit right'})
+        response = jsonify({'error': 'No delete right'})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
     else:

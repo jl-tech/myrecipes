@@ -160,3 +160,21 @@ def remove_profile_pic(token):
             pass
 
     return 0, DEFAULT_PIC
+
+def get_profile_recipe(user_id):
+    query_lock.acquire()
+    cur = con.cursor()
+    query = "select * from Recipes where created_by_user_id=%s"
+    cur.execute(query, (int(user_id)),)
+    data = cur.fetchall()
+    out = []
+    for recipe in data:
+        dic = {'name': recipe['name'], 'type': recipe['type'], 'serving_size': recipe['serving_size'],
+               'time_to_cook': recipe['time_to_cook'], 'creation_time': recipe['creation_time'],
+               'edit_time': recipe['edit_time']}
+        query2 = "select * from RecipePhotos where recipe_id=%s and photo_no=%s"
+        cur.execute(query2, (int(recipe['recipe_id']), 1,))
+        photo_data = cur.fetchall()
+        dic['photo_path'] = photo_data[0]['photo_path']
+        out.append(dic)
+    return out
