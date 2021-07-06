@@ -169,13 +169,9 @@ def get_profile_recipe(user_id):
     data = cur.fetchall()
     out = []
     for recipe in data:
-        dic = {}
-        dic['name'] = recipe['name']
-        dic['type'] = recipe['type']
-        dic['serving_size'] = recipe['serving_size']
-        dic['time_to_cook'] = recipe['time_to_cook']
-        dic['creation_time'] = recipe['creation_time']
-        dic['edit_time'] = recipe['edit_time']
+        dic = {'name': recipe['name'], 'type': recipe['type'], 'serving_size': recipe['serving_size'],
+               'time_to_cook': recipe['time_to_cook'], 'creation_time': recipe['creation_time'],
+               'edit_time': recipe['edit_time']}
         query2 = "select * from RecipePhotos where recipe_id=%s and photo_no=%s"
         cur.execute(query2, (int(recipe['recipe_id']), 1,))
         photo_data = cur.fetchall()
