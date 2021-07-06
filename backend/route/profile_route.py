@@ -89,3 +89,8 @@ def route_profile_removepicture():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
 
+@PROFILE.route("/recipes", methods=['GET'])
+def route_profile_recipes():
+    data = request.get_json()
+    user_id = data['user_id']
+    return profile.get_profile_recipe(user_id)
