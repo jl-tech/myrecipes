@@ -35,6 +35,26 @@ async function requestEditDesc(token, recipe_id, name, type, time, serving_size)
     else throw new Error(responseJson.error);
 }
 
+async function requestDelete(token, recipe_id) {
+    let response = await fetch('http://localhost:5000/recipe/delete', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token
+        },
+        body: JSON.stringify({
+            recipe_id: recipe_id
+        })
+    }).catch(e => {
+        throw new Error(e);
+    });
+
+    let responseJson = await response.json();
+
+    if (response.ok) return responseJson;
+    else throw new Error(responseJson.error);
+}
+
 function EditDesc(props) {
 
     const editClose = () => props.setShowDescEdit(false);
@@ -123,6 +143,50 @@ function EditDesc(props) {
     );
 }
 
+function DeleteRecipe(props) {
+    const deleteClose = () => props.setShowDelete(false);
+
+    const [errorShow, setErrorShow] = useState(false);
+    const [errorText, setErrorText] = useState('');
+
+    const [successShow, setSuccessShow] = useState(false);
+
+    const cookie = new Cookie();
+
+    async function handleYes(event) {
+        event.preventDefault();
+
+        let response = await requestDelete(cookie.get('token'), props.recipeId)
+            .catch(e => {
+                setErrorShow(true);
+                setSuccessShow(false);
+                setErrorText(e.message);
+            });
+
+        if (response != null) {
+            setErrorShow(false);
+            setSuccessShow(true);
+            this.props.history.push('/')
+        }
+    }
+
+    return (
+        <Modal show={props.showDelete} onHide={deleteClose}>
+            <Modal.Header closeButton>
+                <Modal.Title>
+                    Confirm Delete
+                </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <div>
+                    Are you sure you want to delete this recipe? This action CANNOT
+                    be undone!
+                    <Button style="danger" onClick={handleYes} size="sm"> Yes, delete this recipe </Button>
+                </div>
+            </Modal.Body>
+        </Modal>
+    );
+}
 function RecipeViewDesc(props) {
 
     const [showDescEdit, setShowDescEdit] = useState(false);
@@ -130,6 +194,9 @@ function RecipeViewDesc(props) {
 
     const [showPhotoEdit, setShowPhotoEdit] = useState(false);
     const photoEditShow = () => setShowPhotoEdit(true);
+
+    const [showDelete, setShowDelete] = useState(false);
+    const deleteShow = () => setShowDelete(true);
 
     return (
         <>
@@ -171,11 +238,18 @@ function RecipeViewDesc(props) {
                     <Col>
                         <Button variant="outline-secondary" onClick={descEditShow} size="sm">Edit details</Button>
                     </Col>
-                </Row></> : <></> }
+                </Row>
+                <Row style={{marginTop:"1em",textAlign:"right"}}>
+                    <Col>
+                        <Button variant="outline-danger" onClick={deleteShow} size="sm">Delete recipe</Button>
+                    </Col>
+                </Row></>
+                    : <></> }
             </Col>
         </Row>
         <EditDesc showDescEdit={showDescEdit} setShowDescEdit={setShowDescEdit} recipeId={props.recipeId} recipeName={props.recipeName} setRecipeName={props.setRecipeName} time={props.time} setTime={props.setTime} serving={props.serving} setServing={props.setServing} mealType={props.mealType} setMealType={props.setMealType} />
         <EditPhoto showPhotoEdit={showPhotoEdit} setShowPhotoEdit={setShowPhotoEdit} recipeId={props.recipeId} photos={props.photos} setPhotos={props.setPhotos} />
+        <DeleteRecipe showDelete={showDelete} setShowDelete={setShowDelete} recipeId={props.recipeId}/>
         </>
     );
 }
