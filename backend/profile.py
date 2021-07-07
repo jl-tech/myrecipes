@@ -171,10 +171,14 @@ def get_profile_recipe(user_id):
     for recipe in data:
         dic = {'name': recipe['name'], 'type': recipe['type'], 'serving_size': recipe['serving_size'],
                'time_to_cook': recipe['time_to_cook'], 'creation_time': recipe['creation_time'],
-               'edit_time': recipe['edit_time']}
+               'edit_time': recipe['edit_time'], 'recipe_id': recipe['recipe_id']}
         query2 = "select * from RecipePhotos where recipe_id=%s and photo_no=%s"
-        cur.execute(query2, (int(recipe['recipe_id']), 1,))
-        photo_data = cur.fetchall()
-        dic['photo_path'] = photo_data[0]['photo_path']
+        cur.execute(query2, (int(recipe['recipe_id']), 0))
+        photo = cur.fetchall()
+        if len(photo) != 0:
+            dic['photo_path'] = photo[0]['photo_path']
+        else:
+            dic['photo_path'] = None
         out.append(dic)
+    query_lock.release()
     return out
