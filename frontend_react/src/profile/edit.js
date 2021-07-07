@@ -34,7 +34,7 @@ async function profileUser(id) {
 function ProfileEdit(props) {
     
 
-    const [showEdit, setShowEdit] = useState(false);
+    const [showEdit, setShowEdit] = useState(!!props.initOpen);
     const editShow = () => setShowEdit(true);
     const editClose = () => setShowEdit(false);
 

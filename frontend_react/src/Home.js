@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Link, Switch, Route, Redirect } from "react-router-dom";
+import { Link, Switch, Route, Redirect, NavLink } from "react-router-dom";
 
 import Navbar from 'react-bootstrap/Navbar';
 import Dropdown from 'react-bootstrap/Dropdown';
@@ -76,6 +76,7 @@ function UserButton(props) {
     return (
     <DropdownButton menuAlign="right" title={props.firstName} >
         <Link component={Dropdown.Item} to="/profile">Profile</Link>
+        <Link component={Dropdown.Item} to={"/profilesettings"}> Account Settings </Link>
         <Dropdown.Item onClick={logout}>Log Out</Dropdown.Item>
     </DropdownButton>
     );
@@ -90,6 +91,16 @@ function Home({ loggedIn, setLoggedIn, currId }) {
         <Link to="/" >
             <img src={logo} height="50" />
         </Link>
+
+        <NavLink style={{paddingLeft: '2rem', fontSize:"125%"}} to="/newsfeed" activeStyle={{ paddingLeft: '2rem', fontWeight: 'bold', fontSize:"125%"}}>
+            Newsfeed
+        </NavLink>
+        <NavLink style={{paddingLeft: '2rem', fontSize:"125%"}} to="/search" activeStyle={{ paddingLeft: '2rem', fontWeight: 'bold', fontSize:"125%"}}>
+            Search
+        </NavLink>
+        <NavLink style={{paddingLeft: '2rem', fontSize:"125%"}} to="/recipe/create" activeStyle={{ paddingLeft: '2rem', fontWeight: 'bold', fontSize:"125%"}}>
+            Create
+        </NavLink>
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
             <Navbar.Text>
@@ -98,14 +109,24 @@ function Home({ loggedIn, setLoggedIn, currId }) {
         </Navbar.Collapse>
     </Navbar>
     <Switch>
+
         <Route path="/profile/:id">
-          <Profile currId={currId} loggedIn={loggedIn} setButtonName={setfirstName}/>
+          <Profile currId={currId} loggedIn={loggedIn} settings={false} setButtonName={setfirstName}/>
         </Route>
-        <Route path="/profile" render={() => 
+        <Route path="/profile" render={() =>
             loggedIn
             ? (<Redirect to={{pathname: "/profile/" + currId}} />)
             : (<Redirect to= {{pathname: "/"}} />)
         } />
+        <Route path="/profilesettings/:id">
+          <Profile currId={currId} loggedIn={loggedIn} settings={true} setButtonName={setfirstName}/>
+        </Route>
+        <Route path="/profilesettings" render={() =>
+            loggedIn
+            ? (<Redirect to={{pathname: "/profilesettings/" + currId}} />)
+            : (<Redirect to= {{pathname: "/"}} />)
+        } />
+
         <Route path="/recipe/create" render={() => 
             loggedIn
             ? (<RecipeCreate />)

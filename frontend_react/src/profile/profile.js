@@ -42,9 +42,9 @@ function Profile(props) {
     const [email, setEmail] = useState('');
     const [imgUrl, setImgUrl] = useState('');
     const [buttonType, setButtonType] = useState(0);
-
     let { id } = useParams();
     const history = useHistory();
+
 
     async function processId() {
         let id_ = id;
@@ -67,12 +67,17 @@ function Profile(props) {
         }
 
         if (props.loggedIn) {
-            if (id_ == props.currId) setButtonType(1);
+            if (id_ == props.currId) {
+              setButtonType(1);
+            }
+
             else setButtonType(2);
         }
 
         setFetched(true);
     }
+
+
 
     useEffect(() => {
         if (!fetched) processId();
@@ -97,7 +102,7 @@ function Profile(props) {
                     <Col>
                     <div style={{textAlign:"center"}}>
                         <h1>{firstName} {lastName}</h1>
-                        {buttonType == 0 ? <></> : buttonType == 1 ? <ProfileEdit firstName={firstName} setfirstName={setfirstName} lastName={lastName} setlastName={setlastName} setButtonName={props.setButtonName} email={email} imgUrl={imgUrl} setImgUrl={setImgUrl} /> : <Button>Subscribe</Button>}
+                        {buttonType == 0 ? <></> : buttonType == 1 ? <ProfileEdit firstName={firstName} setfirstName={setfirstName} lastName={lastName} setlastName={setlastName} setButtonName={props.setButtonName} email={email} imgUrl={imgUrl} setImgUrl={setImgUrl} initOpen={props.settings}/> : <Button>Subscribe</Button>}
                     </div>
                     </Col>
                 </Row>
