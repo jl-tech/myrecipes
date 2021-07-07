@@ -15,6 +15,8 @@ import Profile from "./profile/profile.js";
 import RecipeCreate from './recipe/create';
 import RecipeView from './recipe/view';
 import DeleteSuccess from "./recipe/deletesuccess";
+import Form from "react-bootstrap/Form";
+import {FormControl} from "react-bootstrap";
 
 async function profileUser(id) {
     let response = await fetch('http://localhost:5000/profile/view', {
@@ -87,20 +89,24 @@ function Home({ loggedIn, setLoggedIn, currId }) {
     const [firstName, setfirstName] = useState('');
     return (
     <>
-    <Navbar style={{backgroundColor:"lightgray"}}>
+    <Navbar bg="light" variant="light">
         <Link to="/" >
             <img src={logo} height="50" />
         </Link>
 
+        <NavLink style={{paddingLeft: '2rem', fontSize:"125%"}} to="/home" activeStyle={{ paddingLeft: '2rem', fontWeight: 'bold', fontSize:"125%"}}>
+            Home
+        </NavLink>
         <NavLink style={{paddingLeft: '2rem', fontSize:"125%"}} to="/newsfeed" activeStyle={{ paddingLeft: '2rem', fontWeight: 'bold', fontSize:"125%"}}>
             Newsfeed
         </NavLink>
-        <NavLink style={{paddingLeft: '2rem', fontSize:"125%"}} to="/search" activeStyle={{ paddingLeft: '2rem', fontWeight: 'bold', fontSize:"125%"}}>
-            Search
-        </NavLink>
-        <NavLink style={{paddingLeft: '2rem', fontSize:"125%"}} to="/recipe/create" activeStyle={{ paddingLeft: '2rem', fontWeight: 'bold', fontSize:"125%"}}>
+        <NavLink style={{paddingLeft: '2rem', paddingRight: '2rem', fontSize:"125%"}} to="/recipe/create" activeStyle={{ paddingLeft: '2rem', fontWeight: 'bold', fontSize:"125%"}}>
             Create
         </NavLink>
+        <Form inline>
+            <FormControl  type="text" placeholder="Search Recipes" className=" mr-sm-2" />
+            <Button type="submit" variant="outline-secondary">Search</Button>
+        </Form>
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
             <Navbar.Text>
