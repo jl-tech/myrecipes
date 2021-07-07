@@ -6,10 +6,10 @@ import auth
 
 PROFILE = Blueprint('PROFILE', __name__, template_folder='templates')
 
-@PROFILE.route("/view", methods=['POST'])
+@PROFILE.route("/view", methods=['GET'])
 def route_profile_view():
-    data = request.get_json()
-    result = profile.profile_info(data["userid"])
+    data = request.args.get('user_id')
+    result = profile.profile_info(data)
     if result == 1:
         response = jsonify({'error': 'User ID Invalid'})
         response.headers.add('Access-Control-Allow-Origin', '*')

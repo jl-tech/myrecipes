@@ -18,21 +18,18 @@ import DeleteSuccess from "./recipe/deletesuccess";
 import Form from "react-bootstrap/Form";
 import {FormControl} from "react-bootstrap";
 
-async function profileUser(id) {
-    let response = await fetch('http://localhost:5000/profile/view', {
-        method: 'POST',
+async function profileUser(userid) {
+    let response = await fetch('http://localhost:5000/profile/view?' + new URLSearchParams({'user_id': userid}), {
+        method: 'GET',
         headers: {
             'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            userid: id
-        })
+        }
     }).catch(e => {
         throw new Error(e);
     });
 
     let responseJson = await response.json();
-    
+
     if (response.ok) return responseJson;
     else throw new Error(responseJson.error);
 }

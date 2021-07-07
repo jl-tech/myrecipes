@@ -18,14 +18,11 @@ import RecipeViewStep from './viewstep.js';
 import RecipeViewPhoto from './viewphoto.js';
 
 async function recipeView(recipe_id) {
-    let response = await fetch('http://localhost:5000/recipe/view', {
-        method: 'POST',
+    let response = await fetch('http://localhost:5000/recipe/view?' + new URLSearchParams({'recipe_id': recipe_id}), {
+        method: 'GET',
         headers: {
-        'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-        recipe_id: recipe_id
-    })
+            'Content-Type': 'application/json'
+        }
     }).catch(e => {
         throw new Error(e);
     });
@@ -60,6 +57,8 @@ function RecipeView(props) {
     const [editable, setEditable] = useState(false);
 
     const [deleted, setDeleted] = useState(false);
+
+    const [nonSuccessText, setNonSuccessText] = useState('One sec...')
 
     let { id } = useParams();
     const history = useHistory();
@@ -128,6 +127,8 @@ function RecipeView(props) {
             }
 
             setSuccess(true);
+        } else {
+            setNonSuccessText("That recipe could not be found.")
         }
 
         setFetched(true);
@@ -181,7 +182,7 @@ function RecipeView(props) {
             <Modal.Dialog>
             <Modal.Body>
             <div style={{textAlign:"center"}}>
-                Invalid recipe ID<br />
+                {nonSuccessText}<br />
                 <Link to="/" style={{marginTop:"1em"}}>
                     <Button>Return</Button>
                 </Link>

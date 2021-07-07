@@ -28,11 +28,10 @@ def route_recipe_create():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
 
-@RECIPE.route('/view', methods=['POST'])
+@RECIPE.route('/view', methods=['GET'])
 def route_recipe_view():
-    data = request.get_json()
-    recipe_id = data['recipe_id']
-    result = recipe.get_recipe_details(recipe_id)
+    data = request.args.get('recipe_id')
+    result = recipe.get_recipe_details(data)
     if result == -1:
         response = jsonify({'error': 'Invalid recipe id'})
         response.headers.add('Access-Control-Allow-Origin', '*')

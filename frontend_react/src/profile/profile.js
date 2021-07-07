@@ -12,37 +12,37 @@ import Col from 'react-bootstrap/Col';
 import Alert from 'react-bootstrap/Alert';
 
 import ProfileEdit from './edit.js';
+import ProfileRecipes from "./recipes";
 
 async function profileUser(userid) {
-    let response = await fetch('http://localhost:5000/profile/view', {
-        method: 'POST',
+    let response = await fetch('http://localhost:5000/profile/view?' + new URLSearchParams({'user_id': userid}), {
+        method: 'GET',
         headers: {
             'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            userid: userid
-        })
+        }
     }).catch(e => {
         throw new Error(e);
     });
 
     let responseJson = await response.json();
-    
+
     if (response.ok) return responseJson;
     else throw new Error(responseJson.error);
 }
 
 function Profile(props) {
-    
+
     const [fetched, setFetched] = useState(false);
     const [success, setSuccess] = useState(false);
-    
+
     const [firstName, setfirstName] = useState('');
     const [lastName, setlastName] = useState('');
     const [email, setEmail] = useState('');
     const [imgUrl, setImgUrl] = useState('');
     const [buttonType, setButtonType] = useState(0);
+    const [nonSuccessText, setNonSuccessText] = useState('One sec...')
     let { id } = useParams();
+    id = id == null ? props.currId : id
     const history = useHistory();
 
 
@@ -55,7 +55,7 @@ function Profile(props) {
 
         let response = await profileUser(id_)
             .catch(e => {
-                
+
             });
 
         if (response != null) {
@@ -65,7 +65,9 @@ function Profile(props) {
             setImgUrl(response.ProfilePictureURL);
             setSuccess(true);
         }
-
+        else {
+            setNonSuccessText("That user could not be found.")
+        }
         if (props.loggedIn) {
             if (id_ == props.currId) {
               setButtonType(1);
@@ -106,7 +108,18 @@ function Profile(props) {
                     </div>
                     </Col>
                 </Row>
-            </Container>   
+                <Row style={{textAlign:"center"}}>
+                    <Col>
+                        <br/>
+                        <h2> Recipes </h2>
+                    </Col>
+                </Row>
+                <Row className="mx-auto">
+                    <Col>
+                        <ProfileRecipes userID={id}/>
+                    </Col>
+                </Row>
+            </Container>
             </>
         );
     } else {
@@ -114,7 +127,7 @@ function Profile(props) {
             <Modal.Dialog>
             <Modal.Body>
             <div style={{textAlign:"center"}}>
-                Invalid user<br />
+                {nonSuccessText}<br />
                 <Link to="/" component={Button} style={{marginTop:"1em"}}>
                     Return
                 </Link>
