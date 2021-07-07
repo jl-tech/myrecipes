@@ -14,6 +14,7 @@ import Cookie from 'universal-cookie';
 import Profile from "./profile/profile.js";
 import RecipeCreate from './recipe/create';
 import RecipeView from './recipe/view';
+import DeleteSuccess from "./recipe/deletesuccess";
 
 async function profileUser(id) {
     let response = await fetch('http://localhost:5000/profile/view', {
@@ -110,12 +111,16 @@ function Home({ loggedIn, setLoggedIn, currId }) {
             ? (<RecipeCreate />)
             : (<Redirect to= {{pathname: "/"}} />)
         } />
+        <Route path="/recipe/deletesuccess">
+          <DeleteSuccess/>
+        </Route>
         <Route path="/recipe/:id">
           <RecipeView currId={currId} loggedIn={loggedIn} />
         </Route>
         <Route path="/recipe" render={() => 
             (<Redirect to= {{pathname: "/"}} />)
         } />
+
         <Route path="/">
             <>
                 Work in progress

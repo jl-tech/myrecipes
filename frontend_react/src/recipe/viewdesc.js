@@ -10,6 +10,7 @@ import Alert from "react-bootstrap/Alert";
 import Cookie from 'universal-cookie';
 
 import { EditPhoto } from './viewphoto.js';
+import {useHistory} from "react-router-dom";
 
 async function requestEditDesc(token, recipe_id, name, type, time, serving_size) {
     let response = await fetch('http://localhost:5000/recipe/editdescription', {
@@ -37,7 +38,7 @@ async function requestEditDesc(token, recipe_id, name, type, time, serving_size)
 
 async function requestDelete(token, recipe_id) {
     let response = await fetch('http://localhost:5000/recipe/delete', {
-        method: 'POST',
+        method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': token
@@ -149,6 +150,13 @@ function DeleteRecipe(props) {
     const [errorShow, setErrorShow] = useState(false);
     const [errorText, setErrorText] = useState('');
 
+    const [name, setName] = useState(props.recipeName);
+    const [type, setType] = useState(props.mealType);
+    const [time, setTime] = useState(props.time);
+    const [serving, setServing] = useState(props.serving);
+
+    const history = useHistory();
+
     const [successShow, setSuccessShow] = useState(false);
 
     const cookie = new Cookie();
@@ -166,7 +174,7 @@ function DeleteRecipe(props) {
         if (response != null) {
             setErrorShow(false);
             setSuccessShow(true);
-            this.props.history.push('/')
+            history.push('/recipe/deletesuccess')
         }
     }
 
@@ -178,12 +186,25 @@ function DeleteRecipe(props) {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <div>
-                    Are you sure you want to delete this recipe? This action CANNOT
-                    be undone!
-                    <Button style="danger" onClick={handleYes} size="sm"> Yes, delete this recipe </Button>
-                </div>
+                Are you sure you want to delete this recipe? This action cannot
+                be undone!
+                <Alert show={errorShow} variant="danger" onClose={() => setErrorShow(false)} dismissible>
+                        {errorText}
+                    </Alert>
+                <Alert show={successShow} variant="success" onClose={() => setSuccessShow(false)} dismissible>
+                        Successfully deleted recipe
+                </Alert>
             </Modal.Body>
+            <Modal.Footer>
+                <Button onClick={deleteClose}>
+                    Cancel
+                </Button>
+                <Button variant="danger" onClick={handleYes}>
+                    Delete recipe
+                </Button>
+            </Modal.Footer>
+
+
         </Modal>
     );
 }
@@ -249,7 +270,7 @@ function RecipeViewDesc(props) {
         </Row>
         <EditDesc showDescEdit={showDescEdit} setShowDescEdit={setShowDescEdit} recipeId={props.recipeId} recipeName={props.recipeName} setRecipeName={props.setRecipeName} time={props.time} setTime={props.setTime} serving={props.serving} setServing={props.setServing} mealType={props.mealType} setMealType={props.setMealType} />
         <EditPhoto showPhotoEdit={showPhotoEdit} setShowPhotoEdit={setShowPhotoEdit} recipeId={props.recipeId} photos={props.photos} setPhotos={props.setPhotos} />
-        <DeleteRecipe showDelete={showDelete} setShowDelete={setShowDelete} recipeId={props.recipeId}/>
+        <DeleteRecipe showDelete={showDelete} setShowDelete={setShowDelete} recipeId={props.recipeId} recipeName={props.recipeName} setRecipeName={props.setRecipeName} time={props.time} setTime={props.setTime} serving={props.serving} setServing={props.setServing} mealType={props.mealType} setMealType={props.setMealType} />
         </>
     );
 }
