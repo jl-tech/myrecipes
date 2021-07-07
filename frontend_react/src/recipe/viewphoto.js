@@ -225,7 +225,7 @@ export function EditPhoto(props) {
                                         </Alert>
                                     </Col>
                                     <Col sm={1}>
-                                        <Button variant="outline-secondary" style={{float:"right"}} onClick={addRow}>Add</Button>
+                                        <Button variant="outline-secondary" style={{float:"right"}} onClick={addRow} size="sm">Add</Button>
                                     </Col>
                                 </Row>
                             </ListGroup.Item>

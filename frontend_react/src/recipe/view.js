@@ -59,6 +59,8 @@ function RecipeView(props) {
 
     const [editable, setEditable] = useState(false);
 
+    const [deleted, setDeleted] = useState(false);
+
     let { id } = useParams();
     const history = useHistory();
 
@@ -140,25 +142,40 @@ function RecipeView(props) {
     }, [props.loggedIn]);
 
     if (success) {
-        return (
-            <>
-            <Container style={{marginTop:"1em",marginBottom:"2em"}}>
-                <RecipeViewPhoto photos={photos} />
-                <RecipeViewDesc recipeId={id} recipeName={recipeName} setRecipeName={setRecipeName} time={time} setTime={setTime} serving={serving} setServing={setServing} mealType={mealType} setMealType={setMealType} photos={photos} setPhotos={setPhotos} editable={editable} />
-                <Row style={{marginTop:"1em"}}>
-                    <Col sm={2} style={{marginBottom:"1em"}}>
-                        <RecipeViewContri userImgURL={userImgURL} contributorUID={contributorUID} firstName={firstName} lastName={lastName} createdAt={createdAt} editedAt={editedAt}/>
-                    </Col>
-                    <Col sm={1} />
-                    <Col sm={9}>
-                        <RecipeViewIngredient recipeId={id} ingredients={ingredients} setIngredients={setIngredients} editable={editable} />
-                        <RecipeViewStep recipeId={id} steps={steps} setSteps={setSteps} editable={editable} />
-                    </Col>
+        if (!deleted) {
+            return (
+                <>
+                <Container style={{marginTop:"1em",marginBottom:"2em"}}>
+                    <RecipeViewPhoto photos={photos} />
+                    <RecipeViewDesc recipeId={id} recipeName={recipeName} setRecipeName={setRecipeName} time={time} setTime={setTime} serving={serving} setServing={setServing} mealType={mealType} setMealType={setMealType} photos={photos} setPhotos={setPhotos} editable={editable} setDeleted={setDeleted} />
+                    <Row style={{marginTop:"1em"}}>
+                        <Col sm={2} style={{marginBottom:"1em"}}>
+                            <RecipeViewContri userImgURL={userImgURL} contributorUID={contributorUID} firstName={firstName} lastName={lastName} createdAt={createdAt} editedAt={editedAt}/>
+                        </Col>
+                        <Col sm={1} />
+                        <Col sm={9}>
+                            <RecipeViewIngredient recipeId={id} ingredients={ingredients} setIngredients={setIngredients} editable={editable} />
+                            <RecipeViewStep recipeId={id} steps={steps} setSteps={setSteps} editable={editable} />
+                        </Col>
 
-                </Row>
-            </Container>
-            </>
-        );
+                    </Row>
+                </Container>
+                </>
+            );
+        } else {
+            return (
+                <Modal.Dialog>
+                    <Modal.Body>
+                    <div style={{textAlign:"center"}}>
+                        Recipe deleted successfully <br />
+                        <Link to="/" component={Button} style={{marginTop:"1em"}}>
+                            Return to home
+                        </Link>
+                    </div>
+                    </Modal.Body>
+                </Modal.Dialog>
+            );
+        }
     } else {
         return (
             <Modal.Dialog>

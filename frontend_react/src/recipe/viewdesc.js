@@ -10,6 +10,7 @@ import Alert from "react-bootstrap/Alert";
 import Cookie from 'universal-cookie';
 
 import { EditPhoto } from './viewphoto.js';
+import RecipeDelete from "./delete.js";
 import {useHistory} from "react-router-dom";
 
 async function requestEditDesc(token, recipe_id, name, type, time, serving_size) {
@@ -32,26 +33,6 @@ async function requestEditDesc(token, recipe_id, name, type, time, serving_size)
 
     let responseJson = await response.json();
     
-    if (response.ok) return responseJson;
-    else throw new Error(responseJson.error);
-}
-
-async function requestDelete(token, recipe_id) {
-    let response = await fetch('http://localhost:5000/recipe/delete', {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token
-        },
-        body: JSON.stringify({
-            recipe_id: recipe_id
-        })
-    }).catch(e => {
-        throw new Error(e);
-    });
-
-    let responseJson = await response.json();
-
     if (response.ok) return responseJson;
     else throw new Error(responseJson.error);
 }
@@ -144,70 +125,6 @@ function EditDesc(props) {
     );
 }
 
-function DeleteRecipe(props) {
-    const deleteClose = () => props.setShowDelete(false);
-
-    const [errorShow, setErrorShow] = useState(false);
-    const [errorText, setErrorText] = useState('');
-
-    const [name, setName] = useState(props.recipeName);
-    const [type, setType] = useState(props.mealType);
-    const [time, setTime] = useState(props.time);
-    const [serving, setServing] = useState(props.serving);
-
-    const history = useHistory();
-
-    const [successShow, setSuccessShow] = useState(false);
-
-    const cookie = new Cookie();
-
-    async function handleYes(event) {
-        event.preventDefault();
-
-        let response = await requestDelete(cookie.get('token'), props.recipeId)
-            .catch(e => {
-                setErrorShow(true);
-                setSuccessShow(false);
-                setErrorText(e.message);
-            });
-
-        if (response != null) {
-            setErrorShow(false);
-            setSuccessShow(true);
-            history.push('/recipe/deletesuccess')
-        }
-    }
-
-    return (
-        <Modal show={props.showDelete} onHide={deleteClose}>
-            <Modal.Header closeButton>
-                <Modal.Title>
-                    Confirm Delete
-                </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                Are you sure you want to delete this recipe? This action cannot
-                be undone!
-                <Alert show={errorShow} variant="danger" onClose={() => setErrorShow(false)} dismissible>
-                        {errorText}
-                    </Alert>
-                <Alert show={successShow} variant="success" onClose={() => setSuccessShow(false)} dismissible>
-                        Successfully deleted recipe
-                </Alert>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={deleteClose}>
-                    Cancel
-                </Button>
-                <Button variant="danger" onClick={handleYes}>
-                    Delete recipe
-                </Button>
-            </Modal.Footer>
-
-
-        </Modal>
-    );
-}
 function RecipeViewDesc(props) {
 
     const [showDescEdit, setShowDescEdit] = useState(false);
@@ -270,7 +187,7 @@ function RecipeViewDesc(props) {
         </Row>
         <EditDesc showDescEdit={showDescEdit} setShowDescEdit={setShowDescEdit} recipeId={props.recipeId} recipeName={props.recipeName} setRecipeName={props.setRecipeName} time={props.time} setTime={props.setTime} serving={props.serving} setServing={props.setServing} mealType={props.mealType} setMealType={props.setMealType} />
         <EditPhoto showPhotoEdit={showPhotoEdit} setShowPhotoEdit={setShowPhotoEdit} recipeId={props.recipeId} photos={props.photos} setPhotos={props.setPhotos} />
-        <DeleteRecipe showDelete={showDelete} setShowDelete={setShowDelete} recipeId={props.recipeId} recipeName={props.recipeName} setRecipeName={props.setRecipeName} time={props.time} setTime={props.setTime} serving={props.serving} setServing={props.setServing} mealType={props.mealType} setMealType={props.setMealType} />
+        <RecipeDelete showDelete={showDelete} setShowDelete={setShowDelete} recipeId={props.recipeId} setDeleted={props.setDeleted} />
         </>
     );
 }
