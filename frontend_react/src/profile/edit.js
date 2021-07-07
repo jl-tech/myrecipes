@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation, useHistory } from "react-router-dom";
 
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
 
 import ProfileEditName from './editname.js';
 import ProfileEditEmail from './editemail.js';
@@ -34,7 +30,7 @@ async function profileUser(id) {
 function ProfileEdit(props) {
     
 
-    const [showEdit, setShowEdit] = useState(!!props.initOpen);
+    const [showEdit, setShowEdit] = useState(props.initOpen);
     const editShow = () => setShowEdit(true);
     const editClose = () => setShowEdit(false);
 

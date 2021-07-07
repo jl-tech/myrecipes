@@ -78,7 +78,7 @@ function UserButton(props) {
     return (
     <DropdownButton menuAlign="right" title={props.firstName} >
         <Link component={Dropdown.Item} to="/profile">Profile</Link>
-        <Link component={Dropdown.Item} to={"/profilesettings"}> Account Settings </Link>
+        <Link component={Dropdown.Item} to={"/settings"}> Account Settings </Link>
         <Dropdown.Item onClick={logout}>Log Out</Dropdown.Item>
     </DropdownButton>
     );
@@ -124,12 +124,9 @@ function Home({ loggedIn, setLoggedIn, currId }) {
             ? (<Redirect to={{pathname: "/profile/" + currId}} />)
             : (<Redirect to= {{pathname: "/"}} />)
         } />
-        <Route path="/profilesettings/:id">
-          <Profile currId={currId} loggedIn={loggedIn} settings={true} setButtonName={setfirstName}/>
-        </Route>
-        <Route path="/profilesettings" render={() =>
+        <Route path="/settings" render={() =>
             loggedIn
-            ? (<Redirect to={{pathname: "/profilesettings/" + currId}} />)
+            ? (<Profile currId={currId} loggedIn={loggedIn} settings={true} setButtonName={setfirstName}/>)
             : (<Redirect to= {{pathname: "/"}} />)
         } />
 
