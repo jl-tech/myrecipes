@@ -114,12 +114,10 @@ function RecipeView(props) {
             setFirstName(response.first_name);
             setLastName(response.last_name);
 
-            let creation_date = new Date(response.creation_time);
-            setCreatedAt(creation_date.toDateString() + " " + creation_date.toLocaleTimeString('en-US'));
+            setCreatedAt(response.creation_time);
             
             if (response.edit_time != null) {
-                let edit_date = new Date(response.edit_time);
-                setEditedAt(edit_date.toDateString() + " " + edit_date.toLocaleTimeString('en-US'));
+                setEditedAt(response.edit_time);
             }
 
             if (response.created_by_user_id == props.currId) {

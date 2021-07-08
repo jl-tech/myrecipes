@@ -12,6 +12,8 @@ import Card from "react-bootstrap/Card"
 
 import {Link, useHistory} from "react-router-dom";
 import {CardColumns, CardGroup} from "react-bootstrap";
+import ReactTimeAgo from "react-time-ago";
+
 
 async function requestRecipes(user_id) {
     let response = await fetch('http://localhost:5000/profile/recipes?' + new URLSearchParams({'user_id': user_id}), {
@@ -54,9 +56,9 @@ function ProfileRecipes(props) {
 
     function generateCard(recipe, index) {
         return(
-            <Link to={"/recipe/" + recipe.recipe_id}>
+            <Link style={{color:'black'}} to={"/recipe/" + recipe.recipe_id}>
                 <Card key={index}>
-                    <Card.Img className="top" src={"http://127.0.0.1:5000/img/" + recipe.photo_path}/>
+                    <Card.Img className="top" style={{width:"100%", height:"9vw", objectFit:"cover"}} src={"http://127.0.0.1:5000/img/" + recipe.photo_path}/>
                     <Card.Body>
                         <Card.Title>{recipe.name}</Card.Title>
                         <Card.Text>
@@ -66,7 +68,10 @@ function ProfileRecipes(props) {
                         </Card.Text>
                     </Card.Body>
                     <Card.Footer>
-                        {new Date(recipe.creation_time).toDateString() + " " + new Date(recipe.creation_time).toLocaleTimeString('en-US')}
+                        <small className={"text-muted"}>
+                            {"Created "}
+                            <ReactTimeAgo date={new Date(recipe.creation_time)} locale="en-US"/>
+                        </small>
                     </Card.Footer>
                 </Card>
             </Link>
@@ -75,7 +80,7 @@ function ProfileRecipes(props) {
 
     return(
 
-        <CardColumns>
+        <CardColumns style={{columnCount: 3}}>
             {recipeData.map(generateCard)}
         </CardColumns>
     )

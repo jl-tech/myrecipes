@@ -11,6 +11,7 @@ import Button from 'react-bootstrap/esm/Button';
 import Image from "react-bootstrap/Image";
 import Modal from "react-bootstrap/Modal";
 import ListGroup from "react-bootstrap/ListGroup";
+import ReactTimeAgo from "react-time-ago";
 
 function RecipeViewContri(props) {
         return (
@@ -29,23 +30,31 @@ function RecipeViewContri(props) {
             </Row>
             <Row style={{marginTop:"1em"}}>
                 <Col style={{textAlign:"center"}}>
-                    <b> Created on: </b>
+                    <b> Created </b>
                 </Col>
             </Row>
             <Row>
                 <Col style={{textAlign:"center"}}>
-                    {props.createdAt}
+                    <ReactTimeAgo date={new Date(props.createdAt)} locale="en-US"/>
+                    <br/>
+                    <small className={"text-muted"}>
+                        {new Date(props.createdAt).toDateString() + " " + new Date(props.createdAt).toLocaleTimeString('en-US')}
+                    </small>
                 </Col>
             </Row>
             {props.editedAt != null ?
             <><Row style={{marginTop:"1em"}}>
                 <Col style={{textAlign:"center"}}>
-                    <b> Last modified on: </b>
+                    <b> Last modified: </b>
                 </Col>
             </Row>
             <Row>
                 <Col style={{textAlign:"center"}}>
-                    {props.editedAt}
+                    <ReactTimeAgo date={new Date(props.editedAt)} locale="en-US"/>
+                    <br/>
+                    <small className={"text-muted"}>
+                        {new Date(props.editedAt).toDateString() + " " + new Date(props.editedAt).toLocaleTimeString('en-US')}
+                    </small>
                 </Col>
             </Row></> : <></>
             }
