@@ -112,6 +112,7 @@ function Profile(props) {
                     <Col>
                         <br/>
                         <h2> Recipes </h2>
+                        <br/>
                     </Col>
                 </Row>
                 <Row className="mx-auto">

@@ -11,7 +11,7 @@ import Cookie from 'universal-cookie';
 import Card from "react-bootstrap/Card"
 
 import {Link, useHistory} from "react-router-dom";
-import {CardColumns, CardGroup} from "react-bootstrap";
+import {CardColumns, CardDeck, CardGroup} from "react-bootstrap";
 import ReactTimeAgo from "react-time-ago";
 
 
@@ -57,8 +57,8 @@ function ProfileRecipes(props) {
     function generateCard(recipe, index) {
         return(
             <Link style={{color:'black'}} to={"/recipe/" + recipe.recipe_id}>
-                <Card key={index}>
-                    <Card.Img className="top" style={{width:"100%", height:"9vw", objectFit:"cover"}} src={"http://127.0.0.1:5000/img/" + recipe.photo_path}/>
+                <Card key={index} style={{maxWidth: "20rem", minWidth: "20rem", marginBottom:"1.5rem"}}>
+                    <Card.Img className="top" style={{width:"100%", height:"9vw", objectFit:"cover"}} alt="Recipe Image" src={recipe.photo_path == null ? "http://127.0.0.1:5000/img/default_recipe.png" : "http://127.0.0.1:5000/img/" + recipe.photo_path}/>
                     <Card.Body>
                         <Card.Title>{recipe.name}</Card.Title>
                         <Card.Text>
@@ -79,10 +79,10 @@ function ProfileRecipes(props) {
     }
 
     return(
-
-        <CardColumns style={{columnCount: 3}}>
+        recipeData.length === 0 ? <p style={{textAlign: 'center'}}> This user hasn't created any recipes. </p> :
+        <CardDeck style={{columnCount: 3}} className={'justify-content-center'}>
             {recipeData.map(generateCard)}
-        </CardColumns>
+        </CardDeck>
     )
 
 }
