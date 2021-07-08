@@ -345,7 +345,8 @@ def edit_recipe_photos(token, recipe_id, photos, photo_names):
     cur.execute(query, (recipe_id,))
     for photo_path in cur.fetchall():
         try:
-            os.remove(photo_path)
+            print("./static/server_resources/images/" + photo_path['photo_path'])
+            os.remove("./static/server_resources/images/" + photo_path['photo_path'])
         except:
             pass
 

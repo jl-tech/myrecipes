@@ -167,8 +167,8 @@ function RecipeView(props) {
                     <Modal.Body>
                     <div style={{textAlign:"center"}}>
                         Recipe deleted successfully <br />
-                        <Link to="/" component={Button} style={{marginTop:"1em"}}>
-                            Return to home
+                        <Link to="/profile" component={Button} style={{marginTop:"1em"}}>
+                            Return to profile
                         </Link>
                     </div>
                     </Modal.Body>

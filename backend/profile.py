@@ -123,7 +123,7 @@ def change_profile_pic(image_file, token):
     # delete old image
     if old_path is not None:
         try:
-            os.remove(old_path)
+            os.remove("./static/server_resources/images/" + old_path)
         except:
             pass
 
