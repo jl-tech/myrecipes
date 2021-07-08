@@ -174,7 +174,7 @@ function RecipeViewIngredient(props) {
                                                             <span>{index+1}</span>
                                                         </Col>
                                                         <Form.Group as={Col} sm={3} style={{marginBottom:"0"}}>
-                                                            <Form.Control placeholder="Quantity (if any)" type="number" onChange={e => updateIngredient(index, "quantity", e.target.value)} defaultValue={quantity} />
+                                                            <Form.Control placeholder="Quantity (if any)" type="number" step="any" onChange={e => updateIngredient(index, "quantity", e.target.value)} defaultValue={quantity} />
                                                         </Form.Group>
                                                         <Form.Group as={Col} sm={2} style={{marginBottom:"0"}}>
                                                             <Form.Control placeholder="Unit (if any)" onChange={e => updateIngredient(index, "unit", e.target.value)} defaultValue={unit}/>
