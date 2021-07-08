@@ -50,10 +50,10 @@ function RecipeViewContri(props) {
             </Row>
             <Row>
                 <Col style={{textAlign:"center"}}>
-                    <ReactTimeAgo date={new Date(props.editedAt)} locale="en-GB"/>
+                    <ReactTimeAgo date={new Date(props.editedAt)} locale="en-US"/>
                     <br/>
                     <small className={"text-muted"}>
-                        {new Date(props.editedAt).toDateString() + " " + new Date(props.editedAt).toLocaleTimeString('en-US')}
+                        {new Date(props.editedAt).toDateString() + " " + new Date(props.editedAt).toLocaleTimeString('en-GB')}
                     </small>
                 </Col>
             </Row></> : <></>
