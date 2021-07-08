@@ -7,6 +7,10 @@ grant all privileges on * . * to 'myrecipes'@'localhost';
 
 use myrecipes;
 drop table if exists Users;
+drop table if exists Recipes;
+drop table if exists RecipeIngredients;
+drop table if exists RecipeSteps;
+drop table if exists RecipePhotos;
 
 create table Users (
     user_id serial,
@@ -23,32 +27,37 @@ create table Users (
 create table Recipes(
     recipe_id serial,
     created_by_user_id integer references Users(user_id),
+    creation_time timestamp,
+    edit_time timestamp,
+    time_to_cook int,
     name text,
     type text,
     serving_size int,
     primary key(recipe_id)
 );
 
-create table Ingredients(
+create table RecipeIngredients(
     recipe_id integer references Recipes(recipe_id),
     ingredient_no integer,
     ingredient_name text,
-    quantity text,
+    quantity float,
+    unit text,
     primary key (recipe_id, ingredient_no)
 );
 
-create table Steps(
+create table RecipeSteps(
     recipe_id integer references Recipes(recipe_id),
     step_no integer,
     step_text text,
+    step_photo_path text,
     primary key (recipe_id, step_no)
 );
 
-create table Photos(
+create table RecipePhotos(
     recipe_id integer references Recipes(recipe_id),
-    photo_no integer,
+    photo_no integer, -- photo no 1 is thumbnail
     photo_path text,
-    is_thumbnail boolean,
+    photo_name text,
     primary key (recipe_id, photo_no)
 );
 

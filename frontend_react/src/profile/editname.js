@@ -55,6 +55,7 @@ function ProfileEditName(props) {
 
         if (response != null) {
             props.setfirstName(newFirst);
+            props.setButtonName(newFirst);
             props.setlastName(newLast);
             setErrorShow(false);
             setEditMode(false);

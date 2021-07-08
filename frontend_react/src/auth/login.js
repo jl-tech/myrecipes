@@ -52,7 +52,7 @@ function LoginBody() {
 
         if (response != null) {
             cookie.set('token', response.token, {path: '/'});
-            history.go('/');
+            history.go(0);
         }
     }
     

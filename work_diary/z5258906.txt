@@ -23,3 +23,9 @@
 - Profile pic functions
 - Early register & email confirm functions (modified by Eric substantially)
 - Debugging & testing backend with Insomnia
+*Week 5*
+- Database schema for recipe functionality
+- Backend functions for:
+    - recipe/create
+    - recipe/view
+- Part of the frontend work for recipe/view

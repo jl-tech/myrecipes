@@ -1,29 +1,13 @@
-import random
-import ssl
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-
-import os
-
 import helpers
 from constants import *
 
 import bcrypt
-import pymysql
-import smtplib
 
 import tokenise
 
-import sys
-import hashlib
-
-from PIL import Image
-
-import mimetypes
-
 import threading
 
-query_lock = threading.Lock()
+from tokenise import token_to_id
 
 DEFAULT_PIC = 'default.png'
 
@@ -84,8 +68,8 @@ def email_confirm(code):
     result = cur.fetchall()
     query_lock.release()
     if len(result) == 1:
-        query = "update Users set email = %s, email_verified = TRUE where user_id = %s"
-        changed_rows = cur.execute(query, (data["email"], int(data["user_id"])))
+        query = "update Users set email_verified = TRUE where user_id = %s"
+        changed_rows = cur.execute(query, (int(data["user_id"])))
         con.commit()
         return 0
     elif len(result) > 1:
@@ -105,76 +89,10 @@ def email_confirm(code):
 def verify(token):
     user_id = token_to_id(token)
     
-    print(user_id, file=sys.stderr)
     if user_id < 0:
         return None
 
     return user_id
-
-def token_to_id(token):
-    '''
-    Given a jwt token, decodes that token into the user id corresponding
-    to the token's account
-    :param token: The token to decode
-    :return: The id of the account on success.
-    -1 if the token couldn't be decoded
-    -2 if the id decoded is not associated with an account
-    -3 if the email of the account decoded hasn't been verified
-    '''
-    if token is None:
-        return -1
-
-    token_decoded = tokenise.decode_token(token)
-    if token_decoded is None:
-        return -1
-
-    if 'user_id' not in token_decoded:
-        return -1
-    user_id = token_decoded['user_id']
-    print(user_id, file=sys.stderr)
-
-    query_lock.acquire()
-    cur = con.cursor()
-    # check email exists with an account
-    query = "select * from Users where user_id = %s"
-    cur.execute(query, (user_id,))
-    result = cur.fetchall()
-    if len(result) == 0:
-        query_lock.release()
-        return -2
-    query = "select * from Users where user_id = %s and email_verified = %s"
-    cur.execute(query, (user_id, True, ))
-    result = cur.fetchall()
-    if len(result) == 0:
-        query_lock.release()
-        return -3
-
-    query_lock.release()
-    return user_id
-
-def token_to_email(token):
-    '''
-    Given a jwt token, decodes that token into the user id corresponding
-    to the token's account, and then gets the email associated with that account.
-    :param token: The token to decode
-    :return: The email address of the account on success.
-    -1 if the token couldn't be decoded
-    -2 if the id decoded is not associated with an account
-    -3 if the email decoded hasn't been verified
-    '''
-    id = token_to_id(token)
-    if id == -1 or id == -2 or id == -3:
-        return id
-
-    query_lock.acquire()
-    cur = con.cursor()
-    query = 'select email from Users where user_id = %s'
-    cur.execute(query, (id,))
-    result = cur.fetchone()['email']
-
-    query_lock.release()
-    return result
-
 
 
 def hash_password(password):
@@ -455,155 +373,3 @@ def send_pwd_change_email(email):
     email_thread.start()
 
 
-def profile_info(user_id):
-    '''
-    Gets all info associated to a specified user.
-    :param user_id: The id of the user
-    :return: The tuple containing all fields associated with that user. 1 if
-    the user id was not found.
-    '''
-    query_lock.acquire()
-    cur = con.cursor()
-    query = "select * from Users where user_id = %s"
-    cur.execute(query, (user_id,))
-    result = cur.fetchall()
-
-    query_lock.release()
-    if len(result) == 0:
-        return 1
-    else:
-        if result[0]['profile_pic_path'] is None:
-            result[0]['profile_pic_path'] = DEFAULT_PIC
-        return result[0]
-
-
-def change_password(token, oldpassword, newpassword):
-    '''
-    Changes the password for the account with the specified email.
-    :param email: The email address of the account
-    :param oldpassword: The old password
-    :param newpassword: The password to change to
-    :return: . True on success. False if the old password was incorrect
-    '''
-
-    user_id = token_to_id(token)
-    email = token_to_email(token)
-    if user_id < 0:
-        return False, 'Invalid token'
-
-    query_lock.acquire()
-    cur = con.cursor()
-    query = f"select password_hash from Users where user_id = %s"
-    cur.execute(query, (user_id,))
-    result = cur.fetchall()
-
-    query_lock.release()
-    if bcrypt.checkpw(oldpassword.encode('utf-8'), result[0]['password_hash'].encode('utf-8')):
-        new_hash_password = hash_password(newpassword)
-        query = 'update Users set password_hash=%s where user_id=%s'
-        cur.execute(query, (new_hash_password, user_id))
-        con.commit()
-        print(email)
-        send_pwd_change_email(email)
-        return True, ''
-    else:
-        return False, 'Wrong current password'
-
-def editprofile(token, first_name, last_name):
-    user_id = token_to_id(token)
-    
-    if user_id < 0:
-        return False
-
-    query_lock.acquire()
-    cur = con.cursor()
-    query = "update Users set first_name = %s, last_name = %s where user_id = %s"
-    cur.execute(query, (first_name, last_name, user_id))
-    con.commit()
-
-    query_lock.release()
-    return True
-    
-def changeemail(token, email):
-    user_id = token_to_id(token)
-    
-    if user_id < 0:
-        return False, "Invalid token"
-
-    if email_already_exists(email):
-        return False, "Email already exists"
-
-    send_confirm_email(user_id, email)
-    return True, ""
-
-def change_profile_pic(image_file, token):
-    '''
-    Changes the profile picture for the user associated with the token.
-    Does so by creating a file in root/server_resources/images/profile_pictures
-    and updating the database with that URL.
-    If a profile picture was previously set, that file will be deleted from
-    the profile_pictures folder.
-    :param image_file: The image file of the profile picture
-    :param token: The token for the user doing this operation
-    :return: 0 on success. -1 if the token was not valid. -2 on any other error.
-    '''
-    u_id = token_to_id(token)
-    if u_id < 0:
-        return -1, ''
-
-    query_lock.acquire()
-    cur = con.cursor()
-    query = "select profile_pic_path from Users where user_id=%s"
-    cur.execute(query, (u_id,))
-    old_path = cur.fetchone()['profile_pic_path']
-
-    file_name = hashlib.sha1(image_file.read()).hexdigest()
-    extension = mimetypes.guess_extension(image_file.mimetype) or ''
-    file_name = file_name + extension
-    img = Image.open(image_file)
-    out_path = f'./static/server_resources/images/{file_name}'
-    img.save(out_path)
-
-    query = "update Users set profile_pic_path=%s where user_id=%s"
-    cur.execute(query, (file_name, u_id))
-    con.commit()
-    query_lock.release()
-    # delete old image
-    if old_path is not None:
-        try:
-            os.remove(old_path)
-        except:
-            pass
-
-    return 0, file_name
-
-def remove_profile_pic(token):
-    '''
-    Removes the profile picture for the user associated with the token.
-    If a profile picture was previously set, that file will be deleted from
-    the profile_pictures folder.
-    :param token: The token for the user doing this operation
-    :return: 0 on success. -1 if the token was not valid. -2 on any other error.
-    '''
-    u_id = token_to_id(token)
-    if u_id < 0:
-        return -1, ''
-
-    query_lock.acquire()
-    cur = con.cursor()
-    query = "select profile_pic_path from Users where user_id=%s"
-    cur.execute(query, (u_id,))
-    old_path = cur.fetchone()['profile_pic_path']
-
-    query = "update Users set profile_pic_path=%s where user_id=%s"
-    cur.execute(query, (None, u_id))
-    con.commit()
-    query_lock.release()
-    # delete old image
-    if old_path is not None:
-        try:
-            os.remove(old_path)
-        except:
-            pass
-
-    return 0, DEFAULT_PIC
