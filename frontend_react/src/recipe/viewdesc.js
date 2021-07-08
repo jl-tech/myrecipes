@@ -12,6 +12,7 @@ import Cookie from 'universal-cookie';
 import { EditPhoto } from './viewphoto.js';
 import RecipeDelete from "./delete.js";
 import {useHistory} from "react-router-dom";
+import Dropdown from "react-bootstrap/Dropdown";
 
 async function requestEditDesc(token, recipe_id, name, type, time, serving_size) {
     let response = await fetch('http://localhost:5000/recipe/editdescription', {
@@ -179,7 +180,14 @@ function RecipeViewDesc(props) {
                 </Row>
                 <Row style={{marginTop:"1em",textAlign:"right"}}>
                     <Col>
-                        <Button variant="outline-danger" onClick={deleteShow} size="sm">Delete recipe</Button>
+                        <Dropdown>
+                            <Dropdown.Toggle  size="sm" variant="outline-secondary" id="dropdown-basic">
+                                More options
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu>
+                                <Dropdown.Item onClick={deleteShow} style={{color:"red"}} size="sm"> Delete recipe </Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
                     </Col>
                 </Row></>
                     : <></> }

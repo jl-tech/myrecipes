@@ -38,7 +38,7 @@ function RecipeViewContri(props) {
                     <ReactTimeAgo date={new Date(props.createdAt)} locale="en-US"/>
                     <br/>
                     <small className={"text-muted"}>
-                        {new Date(props.createdAt).toDateString() + " " + new Date(props.createdAt).toLocaleTimeString('en-GB')}
+                        {new Date(props.createdAt).toLocaleDateString('en-GB') + " " + new Date(props.createdAt).toLocaleTimeString('en-GB')}
                     </small>
                 </Col>
             </Row>
@@ -53,7 +53,7 @@ function RecipeViewContri(props) {
                     <ReactTimeAgo date={new Date(props.editedAt)} locale="en-US"/>
                     <br/>
                     <small className={"text-muted"}>
-                        {new Date(props.editedAt).toDateString() + " " + new Date(props.editedAt).toLocaleTimeString('en-GB')}
+                        {new Date(props.editedAt).toLocaleDateString('en-GB') + " " + new Date(props.editedAt).toLocaleTimeString('en-GB')}
                     </small>
                 </Col>
             </Row></> : <></>
