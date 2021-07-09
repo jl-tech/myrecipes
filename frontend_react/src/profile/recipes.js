@@ -11,7 +11,7 @@ import Cookie from 'universal-cookie';
 import Card from "react-bootstrap/Card"
 
 import {Link, useHistory} from "react-router-dom";
-import {CardColumns, CardDeck, CardGroup} from "react-bootstrap";
+import {CardColumns, CardDeck, CardGroup, Spinner} from "react-bootstrap";
 import ReactTimeAgo from "react-time-ago";
 
 
@@ -35,6 +35,7 @@ async function requestRecipes(user_id) {
 function ProfileRecipes(props) {
     const [recipeData, setRecipeData] = useState([])
     const [fetched, setFetched] = useState(false)
+    const [success, setSuccess] = useState(false)
 
     async function processId() {
         let response = await requestRecipes(props.userID)
@@ -44,6 +45,7 @@ function ProfileRecipes(props) {
 
         if (response != null) {
             setRecipeData(response)
+            setSuccess(true);
         }
         setFetched(true);
     }
@@ -77,13 +79,24 @@ function ProfileRecipes(props) {
             </Link>
         )
     }
-
-    return(
-        recipeData.length === 0 ? <p style={{textAlign: 'center'}}> This user hasn't created any recipes. </p> :
-        <CardDeck style={{columnCount: 3}} className={'justify-content-center'}>
-            {recipeData.map(generateCard)}
-        </CardDeck>
-    )
+    if (success) {
+        return (
+            recipeData.length === 0 ?
+                <p style={{textAlign: 'center'}}> This user hasn't created any
+                    recipes. </p> :
+                <CardDeck style={{columnCount: 3}}
+                          className={'justify-content-center'}>
+                    {recipeData.map(generateCard)}
+                </CardDeck>
+        )
+    }
+    else {
+        return (
+            <div style={{textAlign: "center"}}>
+                    <Spinner animation={"grow"}/>
+                </div>
+        )
+    }
 
 }
 
