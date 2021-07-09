@@ -137,7 +137,7 @@ function Profile(props) {
                 <Modal.Dialog>
                     <Modal.Body>
                         <div style={{textAlign: "center"}}>
-                            That recipe could not be found. <br/>
+                            That user could not be found. <br/>
                             <Link to="/" component={Button}
                                   style={{marginTop: "1em"}}>
                                 Return
