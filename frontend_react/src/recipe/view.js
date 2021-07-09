@@ -16,6 +16,7 @@ import RecipeViewContri from './viewcontri.js';
 import RecipeViewIngredient from './viewingredient.js';
 import RecipeViewStep from './viewstep.js';
 import RecipeViewPhoto from './viewphoto.js';
+import {Spinner} from "react-bootstrap";
 
 async function recipeView(recipe_id) {
     let response = await fetch('http://localhost:5000/recipe/view?' + new URLSearchParams({'recipe_id': recipe_id}), {
@@ -58,7 +59,7 @@ function RecipeView(props) {
 
     const [deleted, setDeleted] = useState(false);
 
-    const [nonSuccessText, setNonSuccessText] = useState('One sec...')
+    const [spinnerVisible, setSpinnerVisible] = useState(true)
 
     let { id } = useParams();
     const history = useHistory();
@@ -126,7 +127,7 @@ function RecipeView(props) {
 
             setSuccess(true);
         } else {
-            setNonSuccessText("That recipe could not be found.")
+            setSpinnerVisible(false)
         }
 
         setFetched(true);
@@ -176,18 +177,27 @@ function RecipeView(props) {
             );
         }
     } else {
-        return (
-            <Modal.Dialog>
-            <Modal.Body>
-            <div style={{textAlign:"center"}}>
-                {nonSuccessText}<br />
-                <Link to="/" style={{marginTop:"1em"}}>
-                    <Button>Return</Button>
-                </Link>
-            </div>
-            </Modal.Body>
-            </Modal.Dialog>
-        );
+        if (spinnerVisible === true) {
+            return (
+                <div style={{textAlign: "center"}}>
+                    <br/>
+                    <Spinner animation={"grow"}/>
+                </div>
+            )
+        } else {
+            return (
+                <Modal.Dialog>
+                    <Modal.Body>
+                        <div style={{textAlign: "center"}}>
+                            That recipe could not be found. <br/>
+                            <Link to="/" style={{marginTop: "1em"}}>
+                                <Button>Return</Button>
+                            </Link>
+                        </div>
+                    </Modal.Body>
+                </Modal.Dialog>
+            );
+        }
     }
 }
 
