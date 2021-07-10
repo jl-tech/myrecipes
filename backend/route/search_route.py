@@ -11,9 +11,9 @@ def route_search():
     type = data['type']
     serving_size = data['serving_size']
     ingredients = data['ingredients']
-    key_word = data['key_word']
+    key_words = data['key_word']
 
-    result = search.do_search(name, type, serving_size, ingredients, key_word)
+    result = search.do_search(name, type, serving_size, ingredients, key_words)
 
     return result
 
