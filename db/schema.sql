@@ -55,7 +55,7 @@ create table RecipeSteps(
 
 create table RecipePhotos(
     recipe_id integer references Recipes(recipe_id),
-    photo_no integer, -- photo no 1 is thumbnail
+    photo_no integer, -- photo no 0 is thumbnail
     photo_path text,
     photo_name text,
     primary key (recipe_id, photo_no)
@@ -63,8 +63,8 @@ create table RecipePhotos(
 
 create table SearchHistory(
     user_id integer references Users(user_id),
-    history_id integer,
-    recipe_name references Recipes(name)
+    history_no integer, -- 0..9
+    search_term text
 );
 
 -- temporary test account
