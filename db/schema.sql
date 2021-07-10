@@ -61,6 +61,12 @@ create table RecipePhotos(
     primary key (recipe_id, photo_no)
 );
 
+create table SearchHistory(
+    user_id integer references Users(user_id),
+    history_id integer,
+    recipe_name references Recipes(name)
+);
+
 -- temporary test account
 insert ignore into Users(email, first_name, last_name, password_hash)
     values ('test@test.com', 'Test', 'Account', 'testing');
