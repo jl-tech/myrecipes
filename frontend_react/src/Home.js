@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
-import { Link, Switch, Route, Redirect, NavLink } from "react-router-dom";
+import {
+    Link,
+    Switch,
+    Route,
+    Redirect,
+    NavLink,
+    useHistory
+} from "react-router-dom";
 
 import Navbar from 'react-bootstrap/Navbar';
 import Dropdown from 'react-bootstrap/Dropdown';
@@ -17,6 +24,9 @@ import RecipeView from './recipe/view';
 import DeleteSuccess from "./recipe/deletesuccess";
 import Form from "react-bootstrap/Form";
 import {FormControl} from "react-bootstrap";
+import HomePage from "./HomePage";
+import Search from "./search/search";
+import Alert from "react-bootstrap/Alert";
 
 async function profileUser(userid) {
     let response = await fetch('http://localhost:5000/profile/view?' + new URLSearchParams({'user_id': userid}), {
@@ -84,10 +94,22 @@ function UserButton(props) {
 function Home({ loggedIn, setLoggedIn, currId }) {
 
     const [firstName, setfirstName] = useState('');
+    const [navSearchTerm, setNavSearchTerm] = useState('')
+    const [errorShow, setErrorShow] = useState(false)
+    const history = useHistory()
+    async function handleSearch(event) {
+        event.preventDefault()
+        if (navSearchTerm === "") {
+            setErrorShow(true)
+        } else {
+            history.push(`/search?query=${navSearchTerm}`)
+        }
+
+    }
     return (
     <>
     <Navbar bg="light" variant="light">
-        <Link to="/" >
+        <Link to="/home" >
             <img src={logo} height="50" />
         </Link>
 
@@ -101,9 +123,15 @@ function Home({ loggedIn, setLoggedIn, currId }) {
             Create
         </NavLink>
         <Form inline>
-            <FormControl  type="text" placeholder="Search Recipes" className=" mr-sm-2" />
-            <Button type="submit" variant="outline-secondary">Search</Button>
+            <FormControl  type="text" placeholder="🔎︎ Search Recipes" className=" mr-sm-2"
+            required onChange={e => setNavSearchTerm(e.target.value)}/>
+            <Button type="button" variant="outline-secondary"
+                    onClick={handleSearch}>
+                Search</Button>
         </Form>
+        <Alert show={errorShow} variant="warning" onClose={() => setErrorShow(false)} dismissible>
+                        Please enter a search term.
+        </Alert>
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
             <Navbar.Text>
@@ -130,7 +158,7 @@ function Home({ loggedIn, setLoggedIn, currId }) {
         <Route path="/recipe/create" render={() => 
             loggedIn
             ? (<RecipeCreate />)
-            : (<Redirect to= {{pathname: "/"}} />)
+            : (<Redirect to= {{pathname: "/login"}} />)
         } />
         <Route path="/recipe/deletesuccess">
           <DeleteSuccess/>
@@ -141,7 +169,13 @@ function Home({ loggedIn, setLoggedIn, currId }) {
         <Route path="/recipe" render={() => 
             (<Redirect to= {{pathname: "/"}} />)
         } />
+        <Route path="/search">
+            <Search/>
+        </Route>
 
+        <Route path="/home">
+            <HomePage />
+        </Route>
         <Route path="/">
             <>
                 Work in progress
