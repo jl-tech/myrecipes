@@ -106,6 +106,11 @@ function Home({ loggedIn, setLoggedIn, currId }) {
         }
 
     }
+    async function handleOnKeyDown(e) {
+        if (e.key === 'Enter') {
+            handleSearch(e)
+        }
+    }
     return (
     <>
     <Navbar bg="light" variant="light">
@@ -124,7 +129,8 @@ function Home({ loggedIn, setLoggedIn, currId }) {
         </NavLink>
         <Form inline>
             <FormControl  type="text" placeholder="🔎︎ Search Recipes" className=" mr-sm-2"
-            required onChange={e => setNavSearchTerm(e.target.value)}/>
+            required onChange={e => setNavSearchTerm(e.target.value)}
+            onKeyDown={handleOnKeyDown}/>
             <Button type="button" variant="outline-secondary"
                     onClick={handleSearch}>
                 Search</Button>
@@ -147,12 +153,12 @@ function Home({ loggedIn, setLoggedIn, currId }) {
         <Route path="/profile" render={() =>
             loggedIn
             ? (<Redirect to={{pathname: "/profile/" + currId}} />)
-            : (<Redirect to= {{pathname: "/"}} />)
+            : (<Redirect to= {{pathname: "/login"}} />)
         } />
         <Route path="/settings" render={() =>
             loggedIn
             ? (<Profile currId={currId} loggedIn={loggedIn} settings={true} setButtonName={setfirstName}/>)
-            : (<Redirect to= {{pathname: "/"}} />)
+            : (<Redirect to= {{pathname: "/login"}} />)
         } />
 
         <Route path="/recipe/create" render={() => 
@@ -167,7 +173,7 @@ function Home({ loggedIn, setLoggedIn, currId }) {
           <RecipeView currId={currId} loggedIn={loggedIn} />
         </Route>
         <Route path="/recipe" render={() => 
-            (<Redirect to= {{pathname: "/"}} />)
+            (<Redirect to= {{pathname: "/login"}} />)
         } />
         <Route path="/search">
             <Search/>

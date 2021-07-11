@@ -38,7 +38,7 @@ function VisitorRoute(props) {
     <Route
       render={({ location }) =>
         props.loggedIn ? (
-          <Redirect to="/" />
+          <Redirect to="/home" />
         ) : (
           props.children
         )

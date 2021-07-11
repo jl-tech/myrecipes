@@ -138,9 +138,9 @@ function Profile(props) {
                     <Modal.Body>
                         <div style={{textAlign: "center"}}>
                             That user could not be found. <br/>
-                            <Link to="/" component={Button}
+                            <Link to="/home" component={Button}
                                   style={{marginTop: "1em"}}>
-                                Return
+                                Back to home
                             </Link>
                         </div>
                     </Modal.Body>

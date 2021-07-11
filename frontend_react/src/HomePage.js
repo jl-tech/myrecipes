@@ -25,10 +25,14 @@ function HomePage(props) {
         }
 
     }
-
+    async function handleOnKeyDown(e) {
+        if (e.key === 'Enter') {
+            handleSubmit(e)
+        }
+    }
     return (
         <>
-            <body  style={{overflow: 'hidden', background: "url(http://127.0.0.1:5000/img/home_cover.jpg)", backgroundSize: "cover",  height: "92.5vh", backgroundPosition: 'center', backgroundRepeat: 'no-repeat'}}>
+            <body style={{overflow: 'hidden', margin: 0, background: "url(http://127.0.0.1:5000/img/home_cover.jpg)", backgroundSize: "cover",  height: "92.5vh", width: "auto", backgroundPosition: 'center', backgroundRepeat: 'no-repeat'}}>
             <Container style={{textAlign: 'center', color: 'white', marginTop: "10vh"}} className={"mx-auto container-fluid"}>
                 <h1 style={{position: 'center'}}>Discover your next treat.</h1>
                 <p className="lead">Explore thousands of recipes or create your own.</p>
@@ -38,7 +42,8 @@ function HomePage(props) {
                     </Alert>
                     <Form.Control size="lg" type="text" placeholder="🔎︎ Search Recipes"
                                   style={{background: 'white', opacity:"80%", textAlign: "center", textColor:"black"}}
-                                  required onChange={e => setSearchTerm(e.target.value)}/>
+                                  required onChange={e => setSearchTerm(e.target.value)}
+                    onKeyDown={handleOnKeyDown}/>
 
                     <Button onClick={handleSubmit} type="button" style={{marginTop: '1vh', opacity: "80%"}}> Search </Button>
 
