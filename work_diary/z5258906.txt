@@ -29,3 +29,13 @@
     - recipe/create
     - recipe/view
 - Part of the frontend work for recipe/view
+*Week 6*
+- Create frontend for list of recipes on profile
+- Frontend navbar redesign
+- Add account settings option for frontend
+- Recipe/delete frontend initial work
+- Frontend date, loading + other various formatting updates
+- Update README for installation via VM
+- Edit/photos backend implementation
+- Refactoring backend routing to separate files, refactor profile functions into new file
+- Various bug fixes for backend
