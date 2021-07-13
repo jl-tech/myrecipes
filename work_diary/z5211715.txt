@@ -21,3 +21,13 @@ Week 4:
   Auth: email_confirm/verify_reset_code/remove_password
   Fixed token validation
 - Integrated frontend and backend (Managing the API endpoints)
+
+Week 5:
+- Frontend
+  Recipe: Create/CreateDesc/CreateIngredient/CreatePhoto/CreateStep
+- Integrated frontend and backend (Managing the API endpoints)
+
+Week 6:
+- Frontend
+  Recipe: Delete/View/ViewContri/ViewDesc/ViewIngredient/ViewPhoto/ViewStep
+- Integrated frontend and backend (Managing the API endpoints)
