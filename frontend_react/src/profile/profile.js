@@ -93,7 +93,7 @@ function Profile(props) {
     if (success) {
         return (
             <>
-            <Container style={{marginTop:"1em"}}>
+            <Container style={{marginTop:"1em", marginBottom:"2em"}}>
                 <Row>
                     <Col>
                     <div style={{textAlign:"center"}}>
@@ -116,10 +116,8 @@ function Profile(props) {
                         <br/>
                     </Col>
                 </Row>
-                <Row className="mx-auto">
-                    <Col>
-                        <ProfileRecipes userID={id}/>
-                    </Col>
+                <Row>
+                    <ProfileRecipes userID={id}/>
                 </Row>
             </Container>
             </>
