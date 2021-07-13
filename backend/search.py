@@ -48,7 +48,7 @@ def do_search(name, type, serving_size, ingredients, step_key_words):
         if len(step_key_words) is 0:
             return_recipe.append(recipe_id)
         for key_word in step_key_words:
-            query = "select * from RecipeSteps where recipe_id=%s AND match(step_text) against(%s in natural language mode"
+            query = "select * from RecipeSteps where recipe_id=%s AND match(step_text) against(%s in natural language mode)
             cur.execute(query, (recipe_id, "%"+key_word+"%",))
             if len(cur.fetchall()) != 0:
                 return_recipe.append(recipe_id)
