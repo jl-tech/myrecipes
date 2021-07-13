@@ -27,6 +27,9 @@ import {FormControl} from "react-bootstrap";
 import HomePage from "./HomePage";
 import Search from "./search/search";
 import Alert from "react-bootstrap/Alert";
+import InputGroup from "react-bootstrap/InputGroup";
+
+import SearchIcon from "./search_white_18dp.svg";
 
 async function profileUser(userid) {
     let response = await fetch('http://localhost:5000/profile/view?' + new URLSearchParams({'user_id': userid}), {
@@ -127,13 +130,17 @@ function Home({ loggedIn, setLoggedIn, currId }) {
         <NavLink style={{paddingLeft: '2rem', paddingRight: '2rem', fontSize:"125%"}} to="/recipe/create" activeStyle={{ paddingLeft: '2rem', fontWeight: 'bold', fontSize:"125%"}}>
             Create
         </NavLink>
-        <Form inline>
-            <FormControl  type="text" placeholder="🔎︎ Search Recipes" className=" mr-sm-2"
-            required onChange={e => setNavSearchTerm(e.target.value)}
-            onKeyDown={handleOnKeyDown}/>
-            <Button type="button" variant="outline-secondary"
-                    onClick={handleSearch}>
-                Search</Button>
+        <Form inline onSubmit={handleSearch}>
+            <InputGroup>
+                <FormControl type="text" placeholder="Search Recipes"
+                    required onChange={e => setNavSearchTerm(e.target.value)}
+                    onKeyDown={handleOnKeyDown}/>
+                <InputGroup.Append>
+                <Button type="submit" variant="primary">
+                    <img src={SearchIcon} />
+                </Button>
+                </InputGroup.Append>
+            </InputGroup>
         </Form>
         <Alert show={errorShow} variant="warning" onClose={() => setErrorShow(false)} dismissible>
                         Please enter a search term.
@@ -183,9 +190,7 @@ function Home({ loggedIn, setLoggedIn, currId }) {
             <HomePage />
         </Route>
         <Route path="/">
-            <>
-                Work in progress
-            </>
+            <HomePage />
         </Route>
     </Switch>
     </>

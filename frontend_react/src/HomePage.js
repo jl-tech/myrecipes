@@ -8,7 +8,9 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Cookie from 'universal-cookie';
 import Button from 'react-bootstrap/esm/Button';
-import Image from "react-bootstrap/Image";
+import InputGroup from "react-bootstrap/InputGroup";
+
+import SearchIcon from "./search_white_24dp.svg";
 
 
 function HomePage(props) {
@@ -36,28 +38,30 @@ function HomePage(props) {
             <Container style={{textAlign: 'center', color: 'white', marginTop: "10vh"}} className={"mx-auto container-fluid"}>
                 <h1 style={{position: 'center'}}>Discover your next treat.</h1>
                 <p className="lead">Explore thousands of recipes or create your own.</p>
-                <Row className={"justify-content-center"}>
-                    <Alert show={errorShow} variant="warning" onClose={() => setErrorShow(false)} dismissible>
+                <Form onSubmit={handleSubmit}>
+                    <Form.Row>
+                    <Col sm={3} />
+                    <Col sm={6}>
+                    <InputGroup>
+                    <Form.Control size="lg" type="text" placeholder="Search Recipes"
+                                    style={{background: 'white', opacity:"95%", textAlign: "center"}}
+                                    required onChange={e => setSearchTerm(e.target.value)}
+                        onKeyDown={handleOnKeyDown}/>
+                    <InputGroup.Append>
+                    <Button type="submit" variant="primary" style={{opacity: "95%"}}>
+                        <img src={SearchIcon} />
+                    </Button>
+                    </InputGroup.Append>
+                    </InputGroup>
+                    <Alert show={errorShow} variant="danger" style={{marginTop:'1em'}} onClose={() => setErrorShow(false)} dismissible>
                         Please enter a search term.
                     </Alert>
-                    <Form.Control size="lg" type="text" placeholder="🔎︎ Search Recipes"
-                                  style={{background: 'white', opacity:"80%", textAlign: "center", textColor:"black"}}
-                                  required onChange={e => setSearchTerm(e.target.value)}
-                    onKeyDown={handleOnKeyDown}/>
-
-                    <Button onClick={handleSubmit} type="button" style={{marginTop: '1vh', opacity: "80%"}}> Search </Button>
-
-                </Row>
-                <Row className={"justify-content-center"}>
-                    <Link to={"/recipe/create"}>
-                        <Button style={{marginTop: '5vh', opacity: "80%"}}> Create my own recipe </Button>
-                    </Link>
-                </Row>
-                <Row className={"justify-content-center"}>
-                    <Link to={"/newsfeed"}>
-                        <Button style={{marginTop: '1vh', opacity: "80%"}}> Go to newsfeed </Button>
-                    </Link>
-                </Row>
+                    </Col>
+                    </Form.Row>
+                </Form>
+                <Button variant="danger" style={{opacity: "95%", marginTop:"1em"}}>
+                    Browse all
+                </Button>
 
             </Container>
 
