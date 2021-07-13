@@ -27,4 +27,10 @@ Week 4
 - Discussed the potential issue of invalid tokens from users changing emails with the team
 
 Week 5
-- 
+- Helped design the APIs for the frontend to commuicate with the backend for sprint 2
+- Implemented submit functionality for /recipe/editphotos on the frontend
+- Finished /recipe/delete for backend
+
+Week 7
+- Edited grammatical errors in retrospective 1 including paraphrasing for greater clarity.
+- Discussed other issues relating to the sprints with the team and added it to the retrospective.
