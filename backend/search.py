@@ -135,3 +135,4 @@ def delete_search_history(token, search_term, time):
 
     con.commit()
     query_lock.release()
+    return 0

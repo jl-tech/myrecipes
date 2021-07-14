@@ -37,6 +37,15 @@ def route_search_history_remove():
     data = request.get_json()
     search_term = data['search_term']
     time = data['time']
-    response = jsonify({})
-    return response, 200
+
+    result = search.delete_search_history(token, search_term, time)
+
+    if result == -1:
+        response = jsonify({'error': 'Invalid token'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
+    else:
+        response = jsonify({})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 200
 
