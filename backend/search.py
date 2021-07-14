@@ -12,6 +12,9 @@ import tokenise
 
 import sys
 
+import time
+from datetime import datetime
+
 def do_search(name, type, serving_size, ingredients, step_key_words):
     query_lock.acquire()
     cur = con.cursor()
@@ -74,3 +77,29 @@ def do_search(name, type, serving_size, ingredients, step_key_words):
 
     query_lock.release()
     return results
+
+def add_search_history(token, name, ingredients, step):
+    u_id = tokenise.token_to_id(token)
+    if u_id < 0:
+        return
+
+    query_lock.acquire()
+    cur = con.cursor()
+
+    if name is not None:
+        term = name
+    elif ingredients is not None:
+        term = ingredients
+    else:
+        term = step
+
+    query = '''
+                insert into SearchHistory(user_id, time, search_term) 
+            values (%s, UTC_TIMESTAMP(), %s)
+        '''
+
+    time_stamp = datetime.now().timestamp()
+    cur.execute(query, (int(u_id), term,))
+
+    con.commit()
+    query_lock.release()
