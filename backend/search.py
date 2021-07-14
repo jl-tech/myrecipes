@@ -123,7 +123,9 @@ def get_search_history(token):
     return result
 
 def delete_search_history(token, search_term, time):
-    u_id = 2
+    u_id = tokenise.token_to_id(token)
+    if u_id < 0:
+        return -1
 
     query_lock.acquire()
     cur = con.cursor()
