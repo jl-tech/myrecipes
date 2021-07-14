@@ -4,6 +4,7 @@ import search
 
 SEARCH = Blueprint('SEARCH', __name__, template_folder='templates')
 
+
 @SEARCH.route("/", methods=['POST'])
 def route_search():
     token = request.headers.get("Authorization")
@@ -30,6 +31,7 @@ def route_search_history():
     response = jsonify(result)
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response, 200
+
 
 @SEARCH.route("/history/remove", methods=['DELETE'])
 def route_search_history_remove():

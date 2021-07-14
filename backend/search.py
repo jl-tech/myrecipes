@@ -15,6 +15,7 @@ import sys
 import time
 from datetime import datetime
 
+
 def do_search(name, type, serving_size, ingredients, step_key_words):
     query_lock.acquire()
     cur = con.cursor()
@@ -78,6 +79,7 @@ def do_search(name, type, serving_size, ingredients, step_key_words):
     query_lock.release()
     return results
 
+
 def add_search_history(token, name, ingredients, step):
     u_id = tokenise.token_to_id(token)
     if u_id < 0:
@@ -103,6 +105,7 @@ def add_search_history(token, name, ingredients, step):
     con.commit()
     query_lock.release()
 
+
 def get_search_history(token):
     u_id = tokenise.token_to_id(token)
     if u_id < 0:
@@ -121,6 +124,7 @@ def get_search_history(token):
     result = cur.fetchall()
     query_lock.release()
     return result
+
 
 def delete_search_history(token, search_term, time):
     u_id = tokenise.token_to_id(token)
