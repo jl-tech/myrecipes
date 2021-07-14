@@ -34,7 +34,8 @@ create table Recipes(
     name text,
     type text,
     serving_size int,
-    primary key(recipe_id)
+    primary key(recipe_id),
+    fulltext(name)
 );
 
 create table RecipeIngredients(
@@ -43,7 +44,8 @@ create table RecipeIngredients(
     ingredient_name text,
     quantity float,
     unit text,
-    primary key (recipe_id, ingredient_no)
+    primary key (recipe_id, ingredient_no),
+    fulltext(ingredient_name)
 );
 
 create table RecipeSteps(
@@ -51,7 +53,8 @@ create table RecipeSteps(
     step_no integer,
     step_text text,
     step_photo_path text,
-    primary key (recipe_id, step_no)
+    primary key (recipe_id, step_no),
+    fulltext(step_text)
 );
 
 create table RecipePhotos(
