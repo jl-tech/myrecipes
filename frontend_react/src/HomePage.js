@@ -6,7 +6,9 @@ import Alert from 'react-bootstrap/Alert';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
-import Cookie from 'universal-cookie';
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+
 import Button from 'react-bootstrap/esm/Button';
 import InputGroup from "react-bootstrap/InputGroup";
 
@@ -14,12 +16,14 @@ import SearchIcon from "./search_white_24dp.svg";
 import Image from "react-bootstrap/Image";
 import Card from "react-bootstrap/Card";
 import ReactTimeAgo from "react-time-ago";
+import { Typeahead } from 'react-bootstrap-typeahead';
 
 
 function HomePage(props) {
     const history = useHistory()
     const [searchTerm, setSearchTerm] = useState("")
     const [errorShow, setErrorShow] = useState(false)
+    const [showSuggestions, setShowSuggestions] = useState(false);
 
     async function handleSubmit(event) {
         event.preventDefault()
@@ -35,6 +39,10 @@ function HomePage(props) {
             handleSubmit(e)
         }
     }
+    function toggleSuggestions() {
+        setShowSuggestions(false);
+        setShowSuggestions(true);
+    }
 
     return (
         <>
@@ -47,19 +55,28 @@ function HomePage(props) {
                     <Col sm={3} />
                     <Col sm={6}>
                     <InputGroup>
-                    <Form.Control size="lg" type="text" placeholder="Search Recipes"
+                        {/* <Form.Control size="lg" type="text" placeholder="Search Recipes"
                                     style={{background: 'white', opacity:"95%", textAlign: "center"}}
                                     required onChange={e => setSearchTerm(e.target.value)}
-                        onKeyDown={handleOnKeyDown}/>
-                    <InputGroup.Append>
-                    <Button type="submit" variant="primary" style={{opacity: "95%"}}>
-                        <img src={SearchIcon} />
-                    </Button>
-                    </InputGroup.Append>
+                                    onKeyDown={handleOnKeyDown}  />
+                        <InputGroup.Append><DropdownButton style={{height:"100%"}}>
+                            <Dropdown.Menu style={{width:"100%"}}  >
+                                <Dropdown.Item>Apple</Dropdown.Item>
+                                <Dropdown.Item>Chicken</Dropdown.Item>
+                                <Dropdown.Divider />
+                                <Dropdown.Item>Clear All</Dropdown.Item>
+                            </Dropdown.Menu>
+                        </DropdownButton></InputGroup.Append> */}
+                        <Typeahead placeholder='Search Recipes' options={['apple', 'pear']} style={{width:"90%"}} emptyLabel="No related history"/>
+                        <InputGroup.Append>
+                            <Button type="submit" variant="primary" style={{opacity: "95%"}}>
+                                <img src={SearchIcon} />
+                            </Button>
+                        </InputGroup.Append>
                     </InputGroup>
-                    <Alert show={errorShow} variant="danger" style={{marginTop:'1em'}} onClose={() => setErrorShow(false)} dismissible>
+                    {/* <Alert show={errorShow} variant="danger" style={{marginTop:'1em'}} onClose={() => setErrorShow(false)} dismissible>
                         Please enter a search term.
-                    </Alert>
+                    </Alert> */}
                     </Col>
                     </Form.Row>
                 </Form>

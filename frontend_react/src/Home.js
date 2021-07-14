@@ -12,6 +12,7 @@ import {
 import Navbar from 'react-bootstrap/Navbar';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
+import CloseButton from 'react-bootstrap/CloseButton';
 
 import DropdownButton from 'react-bootstrap/DropdownButton';
 
@@ -30,6 +31,8 @@ import Alert from "react-bootstrap/Alert";
 import InputGroup from "react-bootstrap/InputGroup";
 
 import SearchIcon from "./search_white_18dp.svg";
+
+import { Typeahead } from 'react-bootstrap-typeahead';
 
 async function profileUser(userid) {
     let response = await fetch('http://localhost:5000/profile/view?' + new URLSearchParams({'user_id': userid}), {
@@ -114,6 +117,13 @@ function Home({ loggedIn, setLoggedIn, currId }) {
             handleSearch(e)
         }
     }
+
+    const [showSuggestions, setShowSuggestions] = useState(false);
+    function toggleSuggestions() {
+        setShowSuggestions(false);
+        setShowSuggestions(true);
+    }
+
     return (
     <>
     <Navbar bg="light" variant="light">
@@ -130,11 +140,20 @@ function Home({ loggedIn, setLoggedIn, currId }) {
         <NavLink style={{paddingLeft: '2rem', paddingRight: '2rem', fontSize:"125%"}} to="/recipe/create" activeStyle={{ paddingLeft: '2rem', fontWeight: 'bold', fontSize:"125%"}}>
             Create
         </NavLink>
-        <Form inline onSubmit={handleSearch}>
+        <Form onSubmit={handleSearch} >
             <InputGroup>
+                {/* <Dropdown onToggle={()=> setShowSuggestions(false)} show={showSuggestions}>
                 <FormControl type="text" placeholder="Search Recipes"
                     required onChange={e => setNavSearchTerm(e.target.value)}
-                    onKeyDown={handleOnKeyDown}/>
+                    onKeyDown={handleOnKeyDown} onClick={toggleSuggestions} />
+                <Dropdown.Menu style={{width:"100%"}} >
+                    <Dropdown.Item>Apple</Dropdown.Item>
+                    <Dropdown.Item>Chicken</Dropdown.Item>
+                    <Dropdown.Divider />
+                    <Dropdown.Item>Clear All</Dropdown.Item>
+                </Dropdown.Menu>
+                </Dropdown> */}
+                <Typeahead placeholder='Search Recipes' options={['apple', 'pear']} style={{width:"80%"}} emptyLabel="No related history"/>
                 <InputGroup.Append>
                 <Button type="submit" variant="primary">
                     <img src={SearchIcon} />
