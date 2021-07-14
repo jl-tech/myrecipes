@@ -81,8 +81,7 @@ def do_search(name, type, serving_size, ingredients, step_key_words):
 def add_search_history(token, name, ingredients, step):
     u_id = tokenise.token_to_id(token)
     if u_id < 0:
-        return
-
+        return -1
     query_lock.acquire()
     cur = con.cursor()
 
@@ -98,8 +97,26 @@ def add_search_history(token, name, ingredients, step):
             values (%s, UTC_TIMESTAMP(), %s)
         '''
 
-    time_stamp = datetime.now().timestamp()
     cur.execute(query, (int(u_id), term,))
 
     con.commit()
     query_lock.release()
+
+def get_search_history(token):
+    query_lock.acquire()
+    u_id = tokenise.token_to_id(token)
+    if u_id < 0:
+        return []
+
+
+    query = """
+        select search_term, time
+        from SearchHistory
+        where user_id=%s
+        order by time desc
+    """
+    cur = con.cursor()
+    cur.execute(query, (u_id,))
+    result = cur.fetchall()
+    query_lock.release()
+    return result

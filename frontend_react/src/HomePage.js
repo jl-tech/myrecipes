@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { Link, useLocation, useHistory } from "react-router-dom";
 
 import Container from 'react-bootstrap/Container';
@@ -16,14 +16,37 @@ import SearchIcon from "./search_white_24dp.svg";
 import Image from "react-bootstrap/Image";
 import Card from "react-bootstrap/Card";
 import ReactTimeAgo from "react-time-ago";
-import { Typeahead } from 'react-bootstrap-typeahead';
+import {Typeahead, Highlighter, Menu} from 'react-bootstrap-typeahead';
+import Cookie from 'universal-cookie';
+import MenuItem from "react-bootstrap-typeahead/lib/components/MenuItem";
 
+async function getHistory(token) {
+    let response = await fetch('http://localhost:5000/search/history', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token
+        },
+    }).catch(e => {
+        throw new Error(e);
+    });
+
+    let responseJson = await response.json();
+
+    if (response.ok) return responseJson;
+    else throw new Error(responseJson.error);
+}
 
 function HomePage(props) {
     const history = useHistory()
     const [searchTerm, setSearchTerm] = useState("")
     const [errorShow, setErrorShow] = useState(false)
     const [showSuggestions, setShowSuggestions] = useState(false);
+    const [searchHistoryTerms, setSearchHistoryTerms] = useState([]);
+    const [searchHistoryTimes, setSearchHistoryTimes] = useState([])
+    const [historyFetched, setHistoryFetched] = useState(false)
+
+    const cookie = new Cookie();
 
     async function handleSubmit(event) {
         event.preventDefault()
@@ -34,6 +57,7 @@ function HomePage(props) {
         }
 
     }
+
     async function handleOnKeyDown(e) {
         if (e.key === 'Enter') {
             handleSubmit(e)
@@ -43,6 +67,32 @@ function HomePage(props) {
         setShowSuggestions(false);
         setShowSuggestions(true);
     }
+
+    async function processHistory() {
+        let response = await getHistory(cookie.get('token'))
+            .catch(e => {
+
+            });
+
+        if (response != null) {
+            // setSearchHistoryTerms(response.map(item => {return item.search_term}))
+            // setSearchHistoryTimes(response.map(item => {return item.time}))
+            setSearchHistoryTerms(response)
+        }
+
+        setHistoryFetched(true);
+    }
+
+    function handleRemoveHistory(elementToRemove) {
+        let temp = searchHistoryTerms
+        temp.splice(searchHistoryTerms.indexOf(elementToRemove),1)
+        setSearchHistoryTerms(temp)
+    }
+
+    useEffect(() => {
+        if (!historyFetched) processHistory();
+    }, []);
+
 
     return (
         <>
@@ -67,7 +117,38 @@ function HomePage(props) {
                                 <Dropdown.Item>Clear All</Dropdown.Item>
                             </Dropdown.Menu>
                         </DropdownButton></InputGroup.Append> */}
-                        <Typeahead placeholder='Search Recipes' options={['apple', 'pear']} style={{width:"90%"}} emptyLabel="No related history"/>
+                        <Typeahead placeholder='Search Recipes' options={searchHistoryTerms}
+                                   style={{width:"90%"}}
+                                   labelKey={option => `${option.search_term}`}
+
+                                   renderMenuItemChildren={(option, { text }, index) => {
+                                       return(
+                                        <React.Fragment>
+                                            <Row>
+                                                <Col sm={11}>
+                                            <Highlighter search={text}>
+                                                {option.search_term}
+                                            </Highlighter>
+
+                                            <div>
+                                                <small>
+                                                   <ReactTimeAgo date={new Date(option.time)} locale="en-US"/>
+                                                </small>
+
+                                            </div>
+                                                </Col>
+                                                <Col sm={1.5} className={"mx-auto my-auto"}>
+                                                    <Button size={"sm"} variant={"outline-dark"} className={"align-middle"}
+                                                         onClick={ () =>
+                                                        handleRemoveHistory(option)
+                                                    }>
+                                                    ✕
+                                                </Button>
+                                                </Col>
+                                        </Row>
+                                        </React.Fragment>)
+                                    }}
+                                   emptyLabel="No related history"/>
                         <InputGroup.Append>
                             <Button type="submit" variant="primary" style={{opacity: "95%"}}>
                                 <img src={SearchIcon} />

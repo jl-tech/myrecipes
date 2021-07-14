@@ -15,11 +15,19 @@ def route_search():
     step = data['step_keywords']
 
     result = search.do_search(name, type, serving_size, ingredients, step)
-    search.add_search_history(token, name, ingredients, step)
+    if token is not None:
+        search.add_search_history(token, name, ingredients, step)
 
     response = jsonify(result)
+    response.headers.add('Access-Control-Allow-Origin', '*')
     return response, 200
 
 
-
+@SEARCH.route("/history", methods=['GET'])
+def route_search_history():
+    token = request.headers.get("Authorization")
+    result = search.get_search_history(token)
+    response = jsonify(result)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response, 200
 
