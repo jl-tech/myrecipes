@@ -82,6 +82,7 @@ def add_search_history(token, name, ingredients, step):
     u_id = tokenise.token_to_id(token)
     if u_id < 0:
         return -1
+    
     query_lock.acquire()
     cur = con.cursor()
 
@@ -103,11 +104,11 @@ def add_search_history(token, name, ingredients, step):
     query_lock.release()
 
 def get_search_history(token):
-    query_lock.acquire()
     u_id = tokenise.token_to_id(token)
     if u_id < 0:
         return []
 
+    query_lock.acquire()
 
     query = """
         select search_term, time
