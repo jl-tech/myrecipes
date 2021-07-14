@@ -15,7 +15,9 @@ def route_search():
 
     result = search.do_search(name, type, serving_size, ingredients, key_words)
 
-    return result
+    response = jsonify(result)
+    return response, 200
+
 
 
 

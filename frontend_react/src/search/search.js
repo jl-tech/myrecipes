@@ -6,6 +6,7 @@ import {useHistory} from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Dropdown from "react-bootstrap/Dropdown";
+import SearchResults from "./searchresults";
 
 function Search(props) {
     const [searchTerm, setSearchTerm] = useState("")
@@ -45,7 +46,7 @@ function Search(props) {
                     <Button> Filter </Button>
 
                 </Dropdown>
-                <Spinner animation={"grow"}/>
+                <SearchResults user_id={2}/>
             </Container>
         </>
     )

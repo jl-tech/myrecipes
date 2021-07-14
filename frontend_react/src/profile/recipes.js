@@ -14,7 +14,7 @@ import {Link, useHistory} from "react-router-dom";
 import {CardColumns, CardDeck, CardGroup, Spinner} from "react-bootstrap";
 import ReactTimeAgo from "react-time-ago";
 
-import Slider from '@material-ui/core/slider';
+import Slider from '@material-ui/core/Slider';
 
 
 async function requestRecipes(user_id) {

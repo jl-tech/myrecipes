@@ -56,6 +56,8 @@ def do_search(name, type, serving_size, ingredients, step_key_words):
 
     ary = []
     for recipe_id in return_recipe:
-        ary.append(recipe.get_recipe_details(recipe_id))
+        new = recipe.get_recipe_details(recipe_id)
+        new['recipe_id'] = recipe_id
+        ary.append(new)
 
     return ary

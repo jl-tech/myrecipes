@@ -11,6 +11,9 @@ import Button from 'react-bootstrap/esm/Button';
 import InputGroup from "react-bootstrap/InputGroup";
 
 import SearchIcon from "./search_white_24dp.svg";
+import Image from "react-bootstrap/Image";
+import Card from "react-bootstrap/Card";
+import ReactTimeAgo from "react-time-ago";
 
 
 function HomePage(props) {
@@ -32,6 +35,7 @@ function HomePage(props) {
             handleSubmit(e)
         }
     }
+
     return (
         <>
             <body style={{overflow: 'hidden', margin: 0, background: "url(http://127.0.0.1:5000/img/home_cover.jpg)", backgroundSize: "cover",  height: "92.5vh", width: "auto", backgroundPosition: 'center', backgroundRepeat: 'no-repeat'}}>
