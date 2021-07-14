@@ -31,3 +31,12 @@ def route_search_history():
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response, 200
 
+@SEARCH.route("/history/remove", methods=['DELETE'])
+def route_search_history_remove():
+    token = request.headers.get("Authorization")
+    data = request.get_json()
+    search_term = data['search_term']
+    time = data['time']
+    response = jsonify({})
+    return response, 200
+

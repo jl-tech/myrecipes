@@ -120,3 +120,6 @@ def get_search_history(token):
     result = cur.fetchall()
     query_lock.release()
     return result
+
+def delete_search_history(token, search_term, time):
+    return
