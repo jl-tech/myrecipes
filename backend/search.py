@@ -102,6 +102,8 @@ def add_search_history(token, name, ingredients, step):
 
     cur.execute(query, (int(u_id), term,))
 
+    #auto_update_search_history(token)
+
     con.commit()
     query_lock.release()
 
@@ -133,6 +135,37 @@ def delete_search_history(token, search_term, time):
 
     query_lock.acquire()
     cur = con.cursor()
+
+    query = '''delete from SearchHistory where user_id=%s and search_term=%s and time=%s'''
+    cur.execute(query, (int(u_id), search_term, time,))
+
+    con.commit()
+    query_lock.release()
+    return 0
+
+
+'''
+update the search history table to ensure only 10 history records
+'''
+def auto_update_search_history(token):
+    u_id = tokenise.token_to_id(token)
+    if u_id < 0:
+        return -1
+
+    query_lock.acquire()
+    cur = con.cursor()
+
+    query = '''select * from SearchHistory where user_id=%s'''
+
+    cur.execute(query, (int(u_id),))
+    result = cur.fetchall()
+
+    if len(result) <= 10:
+        query_lock.release()
+        return 0
+
+    search_term = result[0]['search_term']
+    time = result[0]['time']
 
     query = '''delete from SearchHistory where user_id=%s and search_term=%s and time=%s'''
     cur.execute(query, (int(u_id), search_term, time,))
