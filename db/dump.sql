@@ -16,56 +16,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `Ingredients`
---
-
-DROP TABLE IF EXISTS `Ingredients`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Ingredients` (
-  `recipe_id` int NOT NULL,
-  `ingredient_no` int NOT NULL,
-  `ingredient_name` text,
-  `quantity` text,
-  PRIMARY KEY (`recipe_id`,`ingredient_no`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `Ingredients`
---
-
-LOCK TABLES `Ingredients` WRITE;
-/*!40000 ALTER TABLE `Ingredients` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Ingredients` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `Photos`
---
-
-DROP TABLE IF EXISTS `Photos`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Photos` (
-  `recipe_id` int NOT NULL,
-  `photo_no` int NOT NULL,
-  `photo_path` text,
-  `is_thumbnail` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`recipe_id`,`photo_no`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `Photos`
---
-
-LOCK TABLES `Photos` WRITE;
-/*!40000 ALTER TABLE `Photos` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Photos` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `RecipeIngredients`
 --
 
@@ -78,7 +28,8 @@ CREATE TABLE `RecipeIngredients` (
   `ingredient_name` text,
   `quantity` float DEFAULT NULL,
   `unit` text,
-  PRIMARY KEY (`recipe_id`,`ingredient_no`)
+  PRIMARY KEY (`recipe_id`,`ingredient_no`),
+  FULLTEXT KEY `ingredient_name` (`ingredient_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -130,7 +81,8 @@ CREATE TABLE `RecipeSteps` (
   `step_no` int NOT NULL,
   `step_text` text,
   `step_photo_path` text,
-  PRIMARY KEY (`recipe_id`,`step_no`)
+  PRIMARY KEY (`recipe_id`,`step_no`),
+  FULLTEXT KEY `step_text` (`step_text`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -161,7 +113,8 @@ CREATE TABLE `Recipes` (
   `type` text,
   `serving_size` int DEFAULT NULL,
   PRIMARY KEY (`recipe_id`),
-  UNIQUE KEY `recipe_id` (`recipe_id`)
+  UNIQUE KEY `recipe_id` (`recipe_id`),
+  FULLTEXT KEY `name` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -183,9 +136,10 @@ DROP TABLE IF EXISTS `SearchHistory`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `SearchHistory` (
-  `user_id` int DEFAULT NULL,
-  `history_no` int DEFAULT NULL,
-  `search_term` text
+  `user_id` int NOT NULL,
+  `search_term` text,
+  `time` timestamp NOT NULL,
+  PRIMARY KEY (`user_id`,`time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -196,30 +150,6 @@ CREATE TABLE `SearchHistory` (
 LOCK TABLES `SearchHistory` WRITE;
 /*!40000 ALTER TABLE `SearchHistory` DISABLE KEYS */;
 /*!40000 ALTER TABLE `SearchHistory` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `Steps`
---
-
-DROP TABLE IF EXISTS `Steps`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Steps` (
-  `recipe_id` int NOT NULL,
-  `step_no` int NOT NULL,
-  `step_text` text,
-  PRIMARY KEY (`recipe_id`,`step_no`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `Steps`
---
-
-LOCK TABLES `Steps` WRITE;
-/*!40000 ALTER TABLE `Steps` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Steps` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -262,4 +192,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-07-14 13:16:24
+-- Dump completed on 2021-07-14 16:16:04

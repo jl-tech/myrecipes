@@ -67,8 +67,9 @@ create table RecipePhotos(
 
 create table SearchHistory(
     user_id integer references Users(user_id),
-    history_no integer, -- 0..9
-    search_term text
+    time timestamp,
+    search_term text,
+    primary key (user_id, time)
 );
 
 -- temporary test account
