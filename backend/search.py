@@ -17,7 +17,7 @@ def do_search(name, type, serving_size, ingredients, step_key_words):
     cur = con.cursor()
 
     query = """
-        select distinct R.recipe_id 
+        select distinct R.recipe_id, R.creation_time, R.edit_time, R.time_to_cook, R.type, R.serving_size
         from Recipes R
             join RecipeIngredients I on R.recipe_id = I.recipe_id
             join RecipeSteps S on I.recipe_id = S.recipe_id     
@@ -101,5 +101,6 @@ def do_search(name, type, serving_size, ingredients, step_key_words):
     #     new = recipe.get_recipe_details(recipe_id)
     #     new['recipe_id'] = recipe_id
     #     ary.append(new)
+
     query_lock.release()
     return results
