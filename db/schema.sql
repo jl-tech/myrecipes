@@ -11,6 +11,7 @@ drop table if exists Recipes;
 drop table if exists RecipeIngredients;
 drop table if exists RecipeSteps;
 drop table if exists RecipePhotos;
+drop table if exists SearchHistory;
 
 create table Users (
     user_id serial,
