@@ -23,3 +23,9 @@ Week 4:
 - created a nice-look frontend website with signin feature using Nicepage (rejected later for using third-party coding tool)
 - created an example of interaction between python and html
 - did part of backend build
+
+Week 5:
+- finished the first Progressive Demo with the group
+- had a meeting with group about the Retrospective
+- discussed with group about the behaviour of create a recipe
+- set up software working environment
