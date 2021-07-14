@@ -23,8 +23,8 @@ def do_search(name, type, serving_size, ingredients, step_key_words):
     if serving_size is None:
         serving_size = "%"
 
-    query = "select * from Recipes where name LIKE %s AND type LIKE %s AND serving_size LIKE %s"
-    cur.execute(query, (name, type, serving_size,))
+    query = "select * from Recipes where match(name) against(%s in natural language mode) AND type = %s AND serving_size == %s"
+    cur.execute(query, (name, type, int(serving_size)))
     results = cur.fetchall()
 
     return_recipe = []
@@ -48,7 +48,7 @@ def do_search(name, type, serving_size, ingredients, step_key_words):
         if len(step_key_words) is 0:
             return_recipe.append(recipe_id)
         for key_word in step_key_words:
-            query = "select * from RecipeSteps where recipe_id=%s AND step_text LIKE %s"
+            query = "select * from RecipeSteps where recipe_id=%s AND match(step_text) against(%s in natural language mode)
             cur.execute(query, (recipe_id, "%"+key_word+"%",))
             if len(cur.fetchall()) != 0:
                 return_recipe.append(recipe_id)
