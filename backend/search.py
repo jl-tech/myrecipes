@@ -17,7 +17,7 @@ def do_search(name, type, serving_size, ingredients, step_key_words):
     cur = con.cursor()
 
     query = """
-        select distinct R.recipe_id, R.creation_time, R.edit_time, R.time_to_cook, R.type, R.serving_size
+        select distinct R.recipe_id,  R.name, R.creation_time, R.edit_time, R.time_to_cook, R.type, R.serving_size
         from Recipes R
             join RecipeIngredients I on R.recipe_id = I.recipe_id
             join RecipeSteps S on I.recipe_id = S.recipe_id     
@@ -38,34 +38,38 @@ def do_search(name, type, serving_size, ingredients, step_key_words):
         if and_needed:
             query += "AND "
         else:
-            query += "type = %s "
             and_needed = True
+
+        query += "type = %s "
         args = args + (type,)
 
     if serving_size is not None:
         if and_needed:
             query += "AND "
         else:
-            query += "serving_size = %s "
             and_needed = True
+
+        query += "serving_size = %s "
+
         args = args + (int(serving_size),)
 
     if ingredients is not None:
         if and_needed:
             query += "AND "
         else:
-            query += "match(I.ingredient_name) against (%s in natural language mode) "
             and_needed = True
+        query += "match(I.ingredient_name) against (%s in natural language " \
+                 "mode) "
         args = args + (ingredients,)
 
     if step_key_words is not None:
         if and_needed:
             query += "AND "
-        else:
-            query += "match(S.step_text) against (%s in natural language mode)"
+        query += "match(S.step_text) against (%s in natural language mode)"
         args = args + (step_key_words,)
 
     print(query)
+    print(args)
     cur.execute(query, args)
     results = cur.fetchall()
 
