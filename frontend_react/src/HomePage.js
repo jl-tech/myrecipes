@@ -42,8 +42,7 @@ function HomePage(props) {
     const [searchTerm, setSearchTerm] = useState("")
     const [errorShow, setErrorShow] = useState(false)
     const [showSuggestions, setShowSuggestions] = useState(false);
-    const [searchHistoryTerms, setSearchHistoryTerms] = useState([]);
-    const [searchHistoryTimes, setSearchHistoryTimes] = useState([])
+    const [searchHistoryTerms, setSearchHistoryTerms] = useState([])
     const [historyFetched, setHistoryFetched] = useState(false)
 
     const cookie = new Cookie();
@@ -57,6 +56,7 @@ function HomePage(props) {
         }
 
     }
+
 
     async function handleOnKeyDown(e) {
         if (e.key === 'Enter') {
@@ -83,10 +83,37 @@ function HomePage(props) {
         setHistoryFetched(true);
     }
 
+    async function requestDeleteHistory(search_term, time, token) {
+    let response = await fetch('http://localhost:5000/search/history/remove', {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token
+        },
+        body: JSON.stringify({
+            search_term: search_term,
+            // from https://stackoverflow.com/questions/22806870/incorrect-datetime-value-database-error-number-1292
+            time: new Date(time).toISOString().slice(0, 19).replace('T', ' ')
+        })
+    }).catch(e => {
+        throw new Error(e);
+    });
+
+    let responseJson = await response.json();
+
+    if (response.ok) return responseJson;
+    else throw new Error(responseJson.error);
+}
+
     function handleRemoveHistory(elementToRemove) {
         let temp = searchHistoryTerms
         temp.splice(searchHistoryTerms.indexOf(elementToRemove),1)
         setSearchHistoryTerms(temp)
+        let response = requestDeleteHistory(elementToRemove.search_term, elementToRemove.time, cookie.get('token'))
+            .catch(e => {
+
+            });
+        return ""
     }
 
     useEffect(() => {
@@ -117,10 +144,13 @@ function HomePage(props) {
                                 <Dropdown.Item>Clear All</Dropdown.Item>
                             </Dropdown.Menu>
                         </DropdownButton></InputGroup.Append> */}
-                        <Typeahead placeholder='Search Recipes' options={searchHistoryTerms}
+                        <Typeahead id = 'typeahead' placeholder='Search Recipes' options={searchHistoryTerms}
                                    style={{width:"90%"}}
                                    labelKey={option => `${option.search_term}`}
-
+                                   open={showSuggestions}
+                                   onFocus={()=> setShowSuggestions(true)}
+                                   onBlur={() => setShowSuggestions(false)}
+                                   onInputChange={(text, event) => setSearchTerm(text)}
                                    renderMenuItemChildren={(option, { text }, index) => {
                                        return(
                                         <React.Fragment>
@@ -129,18 +159,16 @@ function HomePage(props) {
                                             <Highlighter search={text}>
                                                 {option.search_term}
                                             </Highlighter>
-
-                                            <div>
-                                                <small>
-                                                   <ReactTimeAgo date={new Date(option.time)} locale="en-US"/>
+                                                <small style={{color: "gray"}}>
+                                                   &nbsp; <ReactTimeAgo date={new Date(option.time)} locale="en-US"/>
                                                 </small>
-
-                                            </div>
                                                 </Col>
                                                 <Col sm={1.5} className={"mx-auto my-auto"}>
-                                                    <Button size={"sm"} variant={"outline-dark"} className={"align-middle"}
+                                                    <Button size={"sm"}
+                                                            style={{height:"2.5em", fontSize:"65%"}}
+                                                            variant={"outline-dark"} className={"align-middle"}
                                                          onClick={ () =>
-                                                        handleRemoveHistory(option)
+                                                        option.search_term = handleRemoveHistory(option)
                                                     }>
                                                     ✕
                                                 </Button>
@@ -150,7 +178,7 @@ function HomePage(props) {
                                     }}
                                    emptyLabel="No related history"/>
                         <InputGroup.Append>
-                            <Button type="submit" variant="primary" style={{opacity: "95%"}}>
+                            <Button type="submit" variant="primary" style={{opacity: "95%", height: "94%"}}>
                                 <img src={SearchIcon} />
                             </Button>
                         </InputGroup.Append>

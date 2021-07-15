@@ -109,11 +109,13 @@ def add_search_history(token, name, ingredients, step):
 
 
 def get_search_history(token):
+    query_lock.acquire()
     u_id = tokenise.token_to_id(token)
     if u_id < 0:
+        query_lock.release()
         return []
 
-    query_lock.acquire()
+
 
     query = """
         select search_term, time
@@ -131,6 +133,7 @@ def get_search_history(token):
 def delete_search_history(token, search_term, time):
     u_id = tokenise.token_to_id(token)
     if u_id < 0:
+        query_lock.release()
         return -1
 
     query_lock.acquire()
@@ -148,11 +151,13 @@ def delete_search_history(token, search_term, time):
 update the search history table to ensure only 10 history records
 '''
 def auto_update_search_history(token):
+    query_lock.acquire()
     u_id = tokenise.token_to_id(token)
     if u_id < 0:
+        query_lock.release()
         return -1
 
-    query_lock.acquire()
+
     cur = con.cursor()
 
     query = '''select * from SearchHistory where user_id=%s'''

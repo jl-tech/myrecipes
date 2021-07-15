@@ -32,7 +32,10 @@ import InputGroup from "react-bootstrap/InputGroup";
 
 import SearchIcon from "./search_white_18dp.svg";
 
-import { Typeahead } from 'react-bootstrap-typeahead';
+import {Highlighter, Typeahead} from 'react-bootstrap-typeahead';
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import ReactTimeAgo from "react-time-ago";
 
 async function profileUser(userid) {
     let response = await fetch('http://localhost:5000/profile/view?' + new URLSearchParams({'user_id': userid}), {
@@ -103,6 +106,11 @@ function Home({ loggedIn, setLoggedIn, currId }) {
     const [navSearchTerm, setNavSearchTerm] = useState('')
     const [errorShow, setErrorShow] = useState(false)
     const history = useHistory()
+    const [searchHistoryTerms, setSearchHistoryTerms] = useState([])
+    const [historyFetched, setHistoryFetched] = useState(false)
+    const [showSuggestions, setShowSuggestions] = useState(false)
+    const cookie = new Cookie()
+
     async function handleSearch(event) {
         event.preventDefault()
         if (navSearchTerm === "") {
@@ -118,11 +126,76 @@ function Home({ loggedIn, setLoggedIn, currId }) {
         }
     }
 
-    const [showSuggestions, setShowSuggestions] = useState(false);
-    function toggleSuggestions() {
-        setShowSuggestions(false);
-        setShowSuggestions(true);
+    async function getHistory(token) {
+    let response = await fetch('http://localhost:5000/search/history', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token
+        },
+    }).catch(e => {
+        throw new Error(e);
+    });
+
+    let responseJson = await response.json();
+
+    if (response.ok) return responseJson;
+    else throw new Error(responseJson.error);
+}
+
+    async function processHistory() {
+        let response = await getHistory(cookie.get('token'))
+
+            .catch(e => {
+
+            });
+
+        if (response != null) {
+            // setSearchHistoryTerms(response.map(item => {return item.search_term}))
+            // setSearchHistoryTimes(response.map(item => {return item.time}))
+            setSearchHistoryTerms(response)
+        }
+
+        setHistoryFetched(true);
     }
+
+    async function requestDeleteHistory(search_term, time, token) {
+    let response = await fetch('http://localhost:5000/search/history/remove', {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token
+        },
+        body: JSON.stringify({
+            search_term: search_term,
+            // from https://stackoverflow.com/questions/22806870/incorrect-datetime-value-database-error-number-1292
+            time: new Date(time).toISOString().slice(0, 19).replace('T', ' ')
+        })
+    }).catch(e => {
+        throw new Error(e);
+    });
+
+    let responseJson = await response.json();
+
+    if (response.ok) return responseJson;
+    else throw new Error(responseJson.error);
+}
+
+    function handleRemoveHistory(elementToRemove) {
+        let temp = searchHistoryTerms
+        temp.splice(searchHistoryTerms.indexOf(elementToRemove),1)
+        setSearchHistoryTerms(temp)
+        let response = requestDeleteHistory(elementToRemove.search_term, elementToRemove.time, cookie.get('token'))
+            .catch(e => {
+
+            });
+        return ""
+    }
+
+    useEffect(() => {
+        if (!historyFetched) processHistory();
+    }, []);
+
 
     return (
     <>
@@ -140,8 +213,8 @@ function Home({ loggedIn, setLoggedIn, currId }) {
         <NavLink style={{paddingLeft: '2rem', paddingRight: '2rem', fontSize:"125%"}} to="/recipe/create" activeStyle={{ paddingLeft: '2rem', fontWeight: 'bold', fontSize:"125%"}}>
             Create
         </NavLink>
-        <Form onSubmit={handleSearch} >
-            <InputGroup>
+        <Form onSubmit={handleSearch}>
+            <InputGroup className={"input-group-sm"}>
                 {/* <Dropdown onToggle={()=> setShowSuggestions(false)} show={showSuggestions}>
                 <FormControl type="text" placeholder="Search Recipes"
                     required onChange={e => setNavSearchTerm(e.target.value)}
@@ -153,11 +226,43 @@ function Home({ loggedIn, setLoggedIn, currId }) {
                     <Dropdown.Item>Clear All</Dropdown.Item>
                 </Dropdown.Menu>
                 </Dropdown> */}
-                <Typeahead placeholder='Search Recipes' options={['apple', 'pear']} style={{width:"80%"}} emptyLabel="No related history"/>
+                <Typeahead placeholder='Search Recipes' options={searchHistoryTerms}
+                                   labelKey={option => `${option.search_term}`}
+                                   open={showSuggestions}
+                                   onFocus={()=> setShowSuggestions(true)}
+                                   onBlur={() => setShowSuggestions(false)}
+                                    onInputChange={(text, event) => setNavSearchTerm(text)}
+                                   renderMenuItemChildren={(option, { text }, index) => {
+                                       return(
+                                        <React.Fragment>
+                                            <Row>
+                                                <Col sm={10}>
+                                            <Highlighter search={text}>
+                                                {option.search_term}
+                                            </Highlighter>
+                                            <small style={{color: "gray"}}>
+                                                  &nbsp; < ReactTimeAgo date={new Date(option.time)} timeStyle={"twitter"} locale="en-US"/>
+                                            </small>
+
+                                                </Col>
+                                                <Col sm={1.5} className={"mx-auto my-auto"}>
+                                                    <Button size={"sm"}
+                                                            style={{height:"3em", fontSize:"50%"}}
+                                                            variant={"outline-dark"} className={"align-middle"}
+                                                         onClick={() =>
+                                                        option.search_term = handleRemoveHistory(option)
+                                                    }>
+                                                    ✕
+                                                </Button>
+                                                </Col>
+                                        </Row>
+                                        </React.Fragment>)
+                                    }}
+                                   emptyLabel="No related history"/>
                 <InputGroup.Append>
-                <Button type="submit" variant="primary">
-                    <img src={SearchIcon} />
-                </Button>
+                    <Button size="sm" type="submit" variant="primary">
+                        <img src={SearchIcon} />
+                    </Button>
                 </InputGroup.Append>
             </InputGroup>
         </Form>
