@@ -81,12 +81,15 @@ def do_search(name, type, serving_size, ingredients, step_key_words):
 
 
 def add_search_history(token, name, ingredients, step):
+    query_lock.acquire()
     u_id = tokenise.token_to_id(token)
     if u_id < 0:
+        query_lock.release()
         return -1
 
-    query_lock.acquire()
+
     cur = con.cursor()
+
 
     if name is not None:
         term = name
@@ -95,14 +98,19 @@ def add_search_history(token, name, ingredients, step):
     else:
         term = step
 
-    query = '''
+    query = ''' select * from SearchHistory where search_term = %s and user_id = %s'''
+    cur.execute(query, (term, int(u_id)))
+    if len(cur.fetchall()) > 0:
+        query = '''update SearchHistory set time=UTC_TIMESTAMP() where search_term = %s and user_id = %s '''
+        cur.execute(query, (term, int(u_id)))
+    else:
+        query = '''
                 insert into SearchHistory(user_id, time, search_term) 
             values (%s, UTC_TIMESTAMP(), %s)
         '''
+        cur.execute(query, (int(u_id), term,))
 
-    cur.execute(query, (int(u_id), term,))
-
-    #auto_update_search_history(token)
+    auto_update_search_history(token)
 
     con.commit()
     query_lock.release()
@@ -114,8 +122,6 @@ def get_search_history(token):
     if u_id < 0:
         query_lock.release()
         return []
-
-
 
     query = """
         select search_term, time
@@ -151,22 +157,19 @@ def delete_search_history(token, search_term, time):
 update the search history table to ensure only 10 history records
 '''
 def auto_update_search_history(token):
-    query_lock.acquire()
     u_id = tokenise.token_to_id(token)
     if u_id < 0:
-        query_lock.release()
         return -1
 
 
     cur = con.cursor()
 
-    query = '''select * from SearchHistory where user_id=%s'''
+    query = '''select * from SearchHistory where user_id=%s order by time'''
 
     cur.execute(query, (int(u_id),))
     result = cur.fetchall()
 
     if len(result) <= 10:
-        query_lock.release()
         return 0
 
     search_term = result[0]['search_term']
@@ -176,5 +179,4 @@ def auto_update_search_history(token):
     cur.execute(query, (int(u_id), search_term, time,))
 
     con.commit()
-    query_lock.release()
     return 0

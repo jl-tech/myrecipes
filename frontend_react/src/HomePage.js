@@ -19,6 +19,7 @@ import ReactTimeAgo from "react-time-ago";
 import {Typeahead, Highlighter, Menu} from 'react-bootstrap-typeahead';
 import Cookie from 'universal-cookie';
 import MenuItem from "react-bootstrap-typeahead/lib/components/MenuItem";
+import CloseButton from "react-bootstrap/CloseButton";
 
 async function getHistory(token) {
     let response = await fetch('http://localhost:5000/search/history', {
@@ -156,22 +157,21 @@ function HomePage(props) {
                                         <React.Fragment>
                                             <Row>
                                                 <Col sm={11}>
-                                            <Highlighter search={text}>
+                                            <Highlighter search={text} style={{verticalAlign:"text-bottom", lineHeight:"2em"}}>
                                                 {option.search_term}
                                             </Highlighter>
-                                                <small style={{color: "gray"}}>
-                                                   &nbsp; <ReactTimeAgo date={new Date(option.time)} locale="en-US"/>
+                                                <small style={{color: "gray", float:"right", verticalAlign:"text-bottom", lineHeight:"2em"}}>
+                                                   &nbsp; <ReactTimeAgo date={new Date(option.time)} timeStyle={"twitter"} locale="en-US"/>
                                                 </small>
                                                 </Col>
                                                 <Col sm={1.5} className={"mx-auto my-auto"}>
-                                                    <Button size={"sm"}
-                                                            style={{height:"2.5em", fontSize:"65%"}}
-                                                            variant={"outline-dark"} className={"align-middle"}
-                                                         onClick={ () =>
-                                                        option.search_term = handleRemoveHistory(option)
-                                                    }>
-                                                    ✕
-                                                </Button>
+                                                    <div style={{position: "relative", top: "-0.1em"}}>
+                                                    <CloseButton
+                                                        className={"align-middle"}
+                                                        onClick={ () =>
+                                                        option.search_term = handleRemoveHistory(option)}
+                                                    />
+                                                    </div>
                                                 </Col>
                                         </Row>
                                         </React.Fragment>)

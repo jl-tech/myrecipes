@@ -237,23 +237,22 @@ function Home({ loggedIn, setLoggedIn, currId }) {
                                         <React.Fragment>
                                             <Row>
                                                 <Col sm={10}>
-                                            <Highlighter search={text}>
+                                            <Highlighter search={text} style={{verticalAlign:"text-bottom", lineHeight:"2em"}}>
                                                 {option.search_term}
                                             </Highlighter>
-                                            <small style={{color: "gray"}}>
-                                                  &nbsp; < ReactTimeAgo date={new Date(option.time)} timeStyle={"twitter"} locale="en-US"/>
-                                            </small>
+                                             <small style={{color: "gray", float:"right", verticalAlign:"text-bottom", lineHeight:"2em"}}>
+                                                   &nbsp; <ReactTimeAgo date={new Date(option.time)} timeStyle={"twitter"} locale="en-US"/>
+                                                </small>
 
                                                 </Col>
                                                 <Col sm={1.5} className={"mx-auto my-auto"}>
-                                                    <Button size={"sm"}
-                                                            style={{height:"3em", fontSize:"50%"}}
-                                                            variant={"outline-dark"} className={"align-middle"}
-                                                         onClick={() =>
-                                                        option.search_term = handleRemoveHistory(option)
-                                                    }>
-                                                    ✕
-                                                </Button>
+                                                    <div style={{position: "relative", top: "-0.1em"}}>
+                                                    <CloseButton
+                                                        className={"align-middle"}
+                                                        onClick={ () =>
+                                                        option.search_term = handleRemoveHistory(option)}
+                                                    />
+                                                    </div>
                                                 </Col>
                                         </Row>
                                         </React.Fragment>)
