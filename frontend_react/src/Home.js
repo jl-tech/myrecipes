@@ -6,7 +6,8 @@ import {
     Route,
     Redirect,
     NavLink,
-    useHistory
+    useHistory,
+    useLocation
 } from "react-router-dom";
 
 import Navbar from 'react-bootstrap/Navbar';
@@ -36,6 +37,7 @@ import {Highlighter, Typeahead} from 'react-bootstrap-typeahead';
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import ReactTimeAgo from "react-time-ago";
+import SearchBar from './search/bar';
 
 async function profileUser(userid) {
     let response = await fetch('http://localhost:5000/profile/view?' + new URLSearchParams({'user_id': userid}), {
@@ -103,100 +105,8 @@ function UserButton(props) {
 function Home({ loggedIn, setLoggedIn, currId }) {
 
     const [firstName, setfirstName] = useState('');
-    const [navSearchTerm, setNavSearchTerm] = useState('')
     const [errorShow, setErrorShow] = useState(false)
-    const history = useHistory()
-    const [searchHistoryTerms, setSearchHistoryTerms] = useState([])
-    const [historyFetched, setHistoryFetched] = useState(false)
-    const [showSuggestions, setShowSuggestions] = useState(false)
-    const cookie = new Cookie()
-
-    async function handleSearch(event) {
-        event.preventDefault()
-        if (navSearchTerm === "") {
-            setErrorShow(true)
-        } else {
-            history.push(`/search?query=${navSearchTerm}`)
-            history.go();
-        }
-
-    }
-    async function handleOnKeyDown(e) {
-        if (e.key === 'Enter') {
-            handleSearch(e)
-        }
-    }
-
-    async function getHistory(token) {
-    let response = await fetch('http://localhost:5000/search/history', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token
-        },
-    }).catch(e => {
-        throw new Error(e);
-    });
-
-    let responseJson = await response.json();
-
-    if (response.ok) return responseJson;
-    else throw new Error(responseJson.error);
-}
-
-    async function processHistory() {
-        let response = await getHistory(cookie.get('token'))
-
-            .catch(e => {
-
-            });
-
-        if (response != null) {
-            // setSearchHistoryTerms(response.map(item => {return item.search_term}))
-            // setSearchHistoryTimes(response.map(item => {return item.time}))
-            setSearchHistoryTerms(response)
-        }
-
-        setHistoryFetched(true);
-    }
-
-    async function requestDeleteHistory(search_term, time, token) {
-    let response = await fetch('http://localhost:5000/search/history/remove', {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token
-        },
-        body: JSON.stringify({
-            search_term: search_term,
-            // from https://stackoverflow.com/questions/22806870/incorrect-datetime-value-database-error-number-1292
-            time: new Date(time).toISOString().slice(0, 19).replace('T', ' ')
-        })
-    }).catch(e => {
-        throw new Error(e);
-    });
-
-    let responseJson = await response.json();
-
-    if (response.ok) return responseJson;
-    else throw new Error(responseJson.error);
-}
-
-    function handleRemoveHistory(elementToRemove) {
-        let temp = searchHistoryTerms
-        temp.splice(searchHistoryTerms.indexOf(elementToRemove),1)
-        setSearchHistoryTerms(temp)
-        let response = requestDeleteHistory(elementToRemove.search_term, elementToRemove.time, cookie.get('token'))
-            .catch(e => {
-
-            });
-        return ""
-    }
-
-    useEffect(() => {
-        if (!historyFetched) processHistory();
-    }, []);
-
+    const location = useLocation();
 
     return (
     <>
@@ -214,58 +124,7 @@ function Home({ loggedIn, setLoggedIn, currId }) {
         <NavLink style={{paddingLeft: '2rem', paddingRight: '2rem', fontSize:"125%"}} to="/recipe/create" activeStyle={{ paddingLeft: '2rem', fontWeight: 'bold', fontSize:"125%"}}>
             Create
         </NavLink>
-        <Form onSubmit={handleSearch}>
-            <InputGroup className={"input-group-sm"}>
-                {/* <Dropdown onToggle={()=> setShowSuggestions(false)} show={showSuggestions}>
-                <FormControl type="text" placeholder="Search Recipes"
-                    required onChange={e => setNavSearchTerm(e.target.value)}
-                    onKeyDown={handleOnKeyDown} onClick={toggleSuggestions} />
-                <Dropdown.Menu style={{width:"100%"}} >
-                    <Dropdown.Item>Apple</Dropdown.Item>
-                    <Dropdown.Item>Chicken</Dropdown.Item>
-                    <Dropdown.Divider />
-                    <Dropdown.Item>Clear All</Dropdown.Item>
-                </Dropdown.Menu>
-                </Dropdown> */}
-                <Typeahead placeholder='Search Recipes' options={searchHistoryTerms}
-                                   labelKey={option => `${option.search_term}`}
-                                   open={showSuggestions}
-                                   onFocus={()=> setShowSuggestions(true)}
-                                   onBlur={() => setShowSuggestions(false)}
-                                    onInputChange={(text, event) => setNavSearchTerm(text)}
-                                   renderMenuItemChildren={(option, { text }, index) => {
-                                       return(
-                                        <React.Fragment>
-                                            <Row>
-                                                <Col sm={10}>
-                                            <Highlighter search={text} style={{verticalAlign:"text-bottom", lineHeight:"2em"}}>
-                                                {option.search_term}
-                                            </Highlighter>
-                                             <small style={{color: "gray", float:"right", verticalAlign:"text-bottom", lineHeight:"2em"}}>
-                                                   &nbsp; <ReactTimeAgo date={new Date(option.time)} timeStyle={"twitter"} locale="en-US"/>
-                                                </small>
-
-                                                </Col>
-                                                <Col sm={1.5} className={"mx-auto my-auto"}>
-                                                    <div style={{position: "relative", top: "-0.1em"}}>
-                                                    <CloseButton
-                                                        className={"align-middle"}
-                                                        onClick={ () =>
-                                                        option.search_term = handleRemoveHistory(option)}
-                                                    />
-                                                    </div>
-                                                </Col>
-                                        </Row>
-                                        </React.Fragment>)
-                                    }}
-                                   emptyLabel={loggedIn ? "No related history" : "Log in for search history"}/>
-                <InputGroup.Append>
-                    <Button size="sm" type="submit" variant="primary">
-                        <img src={SearchIcon} />
-                    </Button>
-                </InputGroup.Append>
-            </InputGroup>
-        </Form>
+        {location.pathname != "/home" ? <SearchBar nav={true} loggedIn={loggedIn} setErrorShow={setErrorShow}/> : <></>}
         <Alert show={errorShow} variant="warning" onClose={() => setErrorShow(false)} dismissible>
                         Please enter a search term.
         </Alert>
@@ -313,9 +172,9 @@ function Home({ loggedIn, setLoggedIn, currId }) {
         <Route path="/home">
             <HomePage loggedIn={loggedIn}/>
         </Route>
-        <Route path="/">
-            <HomePage loggedIn={loggedIn}/>
-        </Route>
+        <Route path="/" render={() => 
+            (<Redirect to= {{pathname: "/home"}} />)
+        } />
     </Switch>
     </>
     );

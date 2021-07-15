@@ -100,8 +100,11 @@ def add_search_history(token, name, ingredients, step):
         term = name
     elif ingredients is not None:
         term = ingredients
-    else:
+    elif step is not None:
         term = step
+    else:
+        query_lock.release()
+        return
 
     query = ''' select * from SearchHistory where search_term = %s and user_id = %s'''
     cur.execute(query, (term, int(u_id)))
