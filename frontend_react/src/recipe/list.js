@@ -44,6 +44,41 @@ function generateCard(recipe, index) {
 function RecipeList(props) {
 
     console.log(props.recipeData);
+    const [recipeData, setRecipeData] = useState(props.recipeData);
+    const [mealFilters, setMealFilters] = useState(initMealFilters());
+    const [activeMealFilter, setActiveMealFilter] = useState([]);
+
+    function initMealFilters() {
+        let tempSet = new Set();
+        for (let i of props.recipeData) {
+            tempSet.add(i.type);
+        }
+        let mealTypes = ["Breakfast", "Brunch", "Lunch", "Dinner", "Snack"];
+        return Array.from(tempSet).sort(function(a, b) {
+            return mealTypes.indexOf(a) - mealTypes.indexOf(b);
+        });
+    }
+    
+    function toggleMealFilter(type, checked) {
+        let tempArray = Array.from(activeMealFilter);
+        if (checked) {
+            tempArray.push(type);
+        } else {
+            tempArray.splice(tempArray.indexOf(type), 1)
+        }
+        setActiveMealFilter(tempArray, filterRecipes());
+    }
+
+    function filterRecipes() {
+        let tempArray = Array.from(props.recipeData);
+        if (activeMealFilter.length != 0) {
+            tempArray = tempArray.filter(function(e) {
+                console.log(activeMealFilter.includes(e.type));
+                return activeMealFilter.includes(e.type);
+            })
+        }
+        setRecipeData(tempArray);
+    }
 
     function sortComparator(key) {
         return function(a, b) {
@@ -86,6 +121,10 @@ function RecipeList(props) {
         props.setRecipeData(copy);
     }
 
+    useEffect(() => {
+        filterRecipes();
+    }, [props.recipeData, activeMealFilter])
+
     return (<>
         <Col sm={3}>
         <Row>
@@ -93,14 +132,10 @@ function RecipeList(props) {
         </Row>
         <Row style={{marginTop:'1em'}}>
         <h6>Meal type</h6>
-        </Row><Row>
-        <Form.Check type='checkbox' label='Breakfast' />
-        </Row><Row>
-        <Form.Check type='checkbox' label='Lunch' />
-        </Row><Row>
-        <Form.Check type='checkbox' label='Dinner' />
-        </Row><Row>
         </Row>
+        {mealFilters.map((t) => 
+            <Row><Form.Check type='checkbox' label={t} onChange={e => toggleMealFilter(t, e.target.checked)}/></Row>
+        )}
         <Row style={{marginTop:'1em'}}>
         <h6>Time to cook</h6>
         </Row><Row style={{width: '80%'}}>
@@ -137,7 +172,7 @@ function RecipeList(props) {
             </Col>
         </Row>
         <Row sm={2} className="g-2">
-            {props.recipeData.map(generateCard)}
+            {recipeData.map(generateCard)}
         </Row>
         </Col>
         </>);
