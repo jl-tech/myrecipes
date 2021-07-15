@@ -250,13 +250,18 @@ export function EditPhoto(props) {
 }
 
 function RecipeViewPhoto(props) {
-
     return (
         <>
             <Row style={{marginBottom:"1em"}}>
                 <Col>
                     <Carousel >
-                    {props.photos.map(({url}, index) =>
+                    {props.photos.length == 0
+                    ? 
+                    <Carousel.Item key={0} style={{textAlign:"center", backgroundColor:"gray"}}>    
+                        <img src="http://127.0.0.1:5000/img/default_recipe.png" alt="Default photo" style={{height:"20em"}}/>
+                    </Carousel.Item>
+                    :
+                    props.photos.map(({url}, index) =>
                         <Carousel.Item key={index} style={{textAlign:"center", backgroundColor:"gray"}}>
                             <img src={url} className=""alt={`Photo ${index}`} style={{height:"20em"}}/>
                         </Carousel.Item>
