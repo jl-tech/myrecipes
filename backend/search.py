@@ -24,8 +24,8 @@ def do_search(name, type, serving_size, ingredients, step_key_words):
         select distinct R.recipe_id,  R.name, R.creation_time, R.edit_time, R.time_to_cook, R.type, R.serving_size, RP.photo_path
         from Recipes R
             left outer join (select * from RecipePhotos where photo_no = 0) RP on R.recipe_id = RP.recipe_id
-            join RecipeIngredients I on R.recipe_id = I.recipe_id
-            join RecipeSteps S on I.recipe_id = S.recipe_id     
+            left outer join RecipeIngredients I on R.recipe_id = I.recipe_id
+            left outer join RecipeSteps S on I.recipe_id = S.recipe_id     
         """
 
     and_needed = False
@@ -35,8 +35,10 @@ def do_search(name, type, serving_size, ingredients, step_key_words):
         query += "where "
 
     if name is not None:
-        query += "match(R.name) against(%s in natural language mode) "
-        args = args + (name,)
+        # query += "match(R.name) against (%s in natural language mode) "
+        query += "R.name like %s "
+        # args = args + (name,)
+        args = args + ('%'+name+'%',)
         and_needed = True
 
     if type is not None:
@@ -72,8 +74,11 @@ def do_search(name, type, serving_size, ingredients, step_key_words):
             query += "AND "
         query += "match(S.step_text) against (%s in natural language mode)"
         args = args + (step_key_words,)
+    print(query, file=sys.stderr)
+    print(args, file=sys.stderr)
 
     cur.execute(query, args)
+    print(cur._last_executed, file=sys.stderr)
     results = cur.fetchall()
 
     query_lock.release()

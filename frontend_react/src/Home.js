@@ -26,7 +26,7 @@ import DeleteSuccess from "./recipe/deletesuccess";
 import Form from "react-bootstrap/Form";
 import {FormControl} from "react-bootstrap";
 import HomePage from "./HomePage";
-import Search from "./search/search";
+import SearchResults from "./search/results";
 import Alert from "react-bootstrap/Alert";
 import InputGroup from "react-bootstrap/InputGroup";
 
@@ -117,6 +117,7 @@ function Home({ loggedIn, setLoggedIn, currId }) {
             setErrorShow(true)
         } else {
             history.push(`/search?query=${navSearchTerm}`)
+            history.go();
         }
 
     }
@@ -306,7 +307,7 @@ function Home({ loggedIn, setLoggedIn, currId }) {
             (<Redirect to= {{pathname: "/login"}} />)
         } />
         <Route path="/search">
-            <Search/>
+            <SearchResults/>
         </Route>
 
         <Route path="/home">

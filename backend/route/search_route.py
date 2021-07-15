@@ -1,6 +1,7 @@
 from flask import *
 import tokenise
 import search
+import sys
 
 SEARCH = Blueprint('SEARCH', __name__, template_folder='templates')
 
@@ -14,11 +15,14 @@ def route_search():
     serving_size = data['serving_size']
     ingredients = data['ingredients']
     step = data['step_keywords']
+    print(data, file=sys.stderr)
+    # result = []
 
     result = search.do_search(name, type, serving_size, ingredients, step)
     if token is not None:
         search.add_search_history(token, name, ingredients, step)
 
+    print(result, file=sys.stderr)
     response = jsonify(result)
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response, 200

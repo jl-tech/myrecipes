@@ -54,6 +54,7 @@ function HomePage(props) {
             setErrorShow(true)
         } else {
             history.push(`/search?query=${searchTerm}`)
+            history.go();
         }
 
     }

@@ -8,7 +8,7 @@ import Row from "react-bootstrap/Row";
 import Dropdown from "react-bootstrap/Dropdown";
 import SearchResults from "./searchresults";
 
-function Search(props) {
+function SearchAdvanced(props) {
     const [searchTerm, setSearchTerm] = useState("")
     const [errorShow, setErrorShow] = useState(false)
     const [query, setQuery] = useState(new URLSearchParams(window.location.search).get('query'));
@@ -52,4 +52,4 @@ function Search(props) {
     )
 }
 
-export default Search
+export default SearchAdvanced;
