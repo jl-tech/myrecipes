@@ -147,15 +147,15 @@ function RecipeView(props) {
                 <>
                 <Container style={{marginTop:"1em",marginBottom:"2em"}}>
                     <RecipeViewPhoto photos={photos} />
-                    <RecipeViewDesc recipeId={id} recipeName={recipeName} setRecipeName={setRecipeName} time={time} setTime={setTime} serving={serving} setServing={setServing} mealType={mealType} setMealType={setMealType} photos={photos} setPhotos={setPhotos} editable={editable} setDeleted={setDeleted} />
+                    <RecipeViewDesc recipeId={id} recipeName={recipeName} setRecipeName={setRecipeName} time={time} setTime={setTime} serving={serving} setServing={setServing} mealType={mealType} setMealType={setMealType} photos={photos} setPhotos={setPhotos} editable={editable} setDeleted={setDeleted} setEditedAt={setEditedAt}/>
                     <Row style={{marginTop:"1em"}}>
                         <Col sm={2} style={{marginBottom:"1em"}}>
                             <RecipeViewContri userImgURL={userImgURL} contributorUID={contributorUID} firstName={firstName} lastName={lastName} createdAt={createdAt} editedAt={editedAt}/>
                         </Col>
                         <Col sm={1} />
                         <Col sm={9}>
-                            <RecipeViewIngredient recipeId={id} ingredients={ingredients} setIngredients={setIngredients} editable={editable} />
-                            <RecipeViewStep recipeId={id} steps={steps} setSteps={setSteps} editable={editable} />
+                            <RecipeViewIngredient recipeId={id} ingredients={ingredients} setIngredients={setIngredients} editable={editable} setEditedAt={setEditedAt}/>
+                            <RecipeViewStep recipeId={id} steps={steps} setSteps={setSteps} editable={editable} setEditedAt={setEditedAt}/>
                         </Col>
 
                     </Row>

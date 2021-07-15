@@ -162,8 +162,8 @@ export function EditPhoto(props) {
                     name: photo.name
                 });
             }
-            console.log(photosP);
             props.setPhotos(photosP);
+            props.setEditedAt(response['edit_time']);
             setSuccessShow(true);
         }
     }
