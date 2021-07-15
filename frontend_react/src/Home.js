@@ -125,8 +125,8 @@ function Home({ loggedIn, setLoggedIn, currId }) {
             Create
         </NavLink>
         {location.pathname != "/home" && location.pathname != "/search" ? <SearchBar nav={true} loggedIn={loggedIn} setErrorShow={setErrorShow}/> : <></>}
-        <Alert show={errorShow} variant="warning" onClose={() => setErrorShow(false)} dismissible>
-                        Please enter a search term.
+        <Alert show={errorShow} variant="danger" onClose={() => setErrorShow(false)} dismissible style={{margin:"0", marginLeft:"1em"}}>
+            Please enter a valid search term.
         </Alert>
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">

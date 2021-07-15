@@ -25,9 +25,15 @@ function HomePage(props) {
                     <SearchBar loggedIn={props.loggedIn} setErrorShow={setErrorShow} />
                     </Col>
                 </Row>
-                <Alert show={errorShow} variant="danger" style={{marginTop:'1em'}} onClose={() => setErrorShow(false)} dismissible>
-                        Please enter a search term.
-                    </Alert>
+                <Row>
+                    <Col sm={3} />
+                    <Col sm={6}>
+                        <Alert show={errorShow} variant="danger" style={{marginTop:'1em'}} onClose={() => setErrorShow(false)} dismissible>
+                        Please enter a valid search term.
+                        </Alert>
+                    </Col>
+                </Row>
+                
                 <Link to="/search">
                     <Button variant="danger" style={{opacity: "95%", marginTop:"1em"}}>
                         Browse all

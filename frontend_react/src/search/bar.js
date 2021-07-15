@@ -65,9 +65,9 @@ function SearchBar(props) {
     const cookie = new Cookie()
     const searchInput = React.createRef();
 
-    async function handleSubmit(event) {
+    function handleSubmit(event) {
         event.preventDefault()
-        let searchTerm = searchInput.current.getInput().getAttribute('value');
+        let searchTerm = searchInput.current.getInput().getAttribute('value').trim();
         if (searchTerm === "") {
             props.setErrorShow(true)
         } else {
@@ -76,7 +76,7 @@ function SearchBar(props) {
         }
     }
 
-    async function handleOnKeyDown(e) {
+    function handleOnKeyDown(e) {
         if (e.key === 'Enter') {
             handleSubmit(e)
         }

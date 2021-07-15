@@ -17,8 +17,7 @@ import RecipeList from '../recipe/list';
 import SearchBar from './bar.js';
 import SearchAdvanced from './advanced.js';
 
-
-async function requestRecipes(token, name_keywords) {
+async function requestRecipes(token, name_keywords, type, serving_size, ingredients, step_keywords) {
     let response = await fetch('http://localhost:5000/search/', {
         method: 'POST',
         headers: {
@@ -27,10 +26,10 @@ async function requestRecipes(token, name_keywords) {
         },
         body: JSON.stringify({
             name_keywords: name_keywords,
-            type: null,
-            serving_size: null,
-            ingredients: null,
-            step_keywords: null
+            type: type,
+            serving_size: serving_size,
+            ingredients: ingredients,
+            step_keywords: step_keywords
         })
     }).catch(e => {
         throw new Error(e);
@@ -50,15 +49,30 @@ function SearchResults(props) {
     const [recipeData, setRecipeData] = useState([])
     const [fetched, setFetched] = useState(false)
     const [errorShow, setErrorShow] = useState(false)
+    const [errorShow2, setErrorShow2] = useState(false)
     const [success, setSuccess] = useState(false)
     const cookie = new Cookie();
-    const [advancedMode, setAdvancedMode] = useState(false);
     let query = useQuery();
+    const [advancedMode, setAdvancedMode] = useState(initAdvanced());
+
+    function validateType() {
+        let type = query.get('type');
+        let validTypes = ["Breakfast", "Brunch", "Lunch", "Dinner", "Snack"];
+        return validTypes.includes(type) ? type : null;
+    }
+
+    function initAdvanced() {
+        if (validateType() != null || query.get('serving') != null || query.get('ingredient') != null || query.get('step') != null) {
+            return true;
+        }
+        return false;
+    }
+
 
     async function processQuery() {
-        let response = await requestRecipes(cookie.get('token'), query.get('name'))
+        let type = validateType();
+        let response = await requestRecipes(cookie.get('token'), query.get('name'), type, query.get('serving'), query.get('ingredient'), query.get('step'))
             .catch(e => {
-
             });
 
         if (response != null) {
@@ -71,8 +85,6 @@ function SearchResults(props) {
     useEffect(() => {
         if (!fetched) processQuery();
     }, []);
-
-    // console.log(recipeData)
 
     if (success) {
         return (
@@ -87,7 +99,10 @@ function SearchResults(props) {
                 <Row style={{marginTop:"1em"}}>
                     <Col sm={3} />
                     <Col sm={6}>
-                    <SearchBar loggedIn={props.loggedIn} setErrorShow={setErrorShow} init={query.get('name')} disabled={advancedMode}/>
+                    <SearchBar loggedIn={props.loggedIn} setErrorShow={setErrorShow} init={query.get('name') != null ? query.get('name') : ""} disabled={advancedMode}/>
+                    <Alert show={errorShow} variant="danger" style={{marginTop:'1em'}} onClose={() => setErrorShow(false)} dismissible>
+                        Please enter a valid search term.
+                    </Alert>
                     <div style={{textAlign:"right"}}>
                         <a href="#" onClick={()=>{setAdvancedMode(!advancedMode)}}>Advanced options</a>
                     </div>
@@ -97,7 +112,10 @@ function SearchResults(props) {
                     <Row style={{marginTop:"1em"}}>
                         <Col sm={3} />
                         <Col sm={6}>
-                            <SearchAdvanced />
+                            <SearchAdvanced setErrorShow={setErrorShow2}/>
+                            <Alert show={errorShow2} variant="danger" style={{marginTop:'1em'}} onClose={() => setErrorShow(false)} dismissible>
+                                Please enter a valid search term in any field.
+                            </Alert>
                         </Col>
                     </Row>
                 : <></>}
