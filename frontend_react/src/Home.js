@@ -124,7 +124,7 @@ function Home({ loggedIn, setLoggedIn, currId }) {
         <NavLink style={{paddingLeft: '2rem', paddingRight: '2rem', fontSize:"125%"}} to="/recipe/create" activeStyle={{ paddingLeft: '2rem', fontWeight: 'bold', fontSize:"125%"}}>
             Create
         </NavLink>
-        {location.pathname != "/home" ? <SearchBar nav={true} loggedIn={loggedIn} setErrorShow={setErrorShow}/> : <></>}
+        {location.pathname != "/home" && location.pathname != "/search" ? <SearchBar nav={true} loggedIn={loggedIn} setErrorShow={setErrorShow}/> : <></>}
         <Alert show={errorShow} variant="warning" onClose={() => setErrorShow(false)} dismissible>
                         Please enter a search term.
         </Alert>
@@ -166,7 +166,7 @@ function Home({ loggedIn, setLoggedIn, currId }) {
             (<Redirect to= {{pathname: "/login"}} />)
         } />
         <Route path="/search">
-            <SearchResults/>
+            <SearchResults loggedIn={loggedIn}/>
         </Route>
 
         <Route path="/home">

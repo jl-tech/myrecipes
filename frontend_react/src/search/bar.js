@@ -71,7 +71,7 @@ function SearchBar(props) {
         if (searchTerm === "") {
             props.setErrorShow(true)
         } else {
-            history.push(`/search?query=${searchTerm}`)
+            history.push(`/search?name=${searchTerm}`)
             history.go();
         }
     }
@@ -113,12 +113,14 @@ function SearchBar(props) {
         <Form onSubmit={handleSubmit}>
             <InputGroup>
                 <Typeahead id = 'typeahead' placeholder='Search Recipes' options={searchHistoryTerms}
-                            style={{width: props.nav ? "": "90%"}}
+                            style={{width: props.nav ? "": "92%"}}
                             labelKey={option => `${option.search_term}`}
                             open={showSuggestions}
                             onFocus={()=> setShowSuggestions(true)}
                             onBlur={() => setShowSuggestions(false)}
+                            defaultInputValue={props.init}
                             ref={searchInput}
+                            disabled={props.disabled}
                             renderMenuItemChildren={(option, { text }, index) => {
                                 return(
                                 <React.Fragment>
@@ -146,7 +148,7 @@ function SearchBar(props) {
                             }}
                             emptyLabel= {props.loggedIn ? "No related history": "Log in to view your search history"}/>
                 <InputGroup.Append>
-                    <Button type="submit" size="sm" variant="primary">
+                    <Button type="submit" size="sm" variant="primary" disabled={props.disabled}>
                         <img src={props.nav ? SearchIconSmall : SearchIconBig} />
                     </Button>
                 </InputGroup.Append>

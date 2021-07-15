@@ -5,49 +5,63 @@ import React, {useState} from "react";
 import {useHistory} from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
-import Dropdown from "react-bootstrap/Dropdown";
-import SearchResults from "./searchresults";
+import Col from "react-bootstrap/Col";
 
 function SearchAdvanced(props) {
-    const [searchTerm, setSearchTerm] = useState("")
-    const [errorShow, setErrorShow] = useState(false)
-    const [query, setQuery] = useState(new URLSearchParams(window.location.search).get('query'));
-    const history = useHistory()
-    async function handleSubmit(event) {
-        event.preventDefault()
-        if (searchTerm === "") {
-            setErrorShow(true)
-        } else {
-            history.push(`/search?query=${searchTerm}`)
-        }
-
-    }
-    console.log(props)
     return (
         <>
-            <Container style={{marginTop:"5vh"}}>
-                <Row className={'justify-content-center'}>
-                <Form.Control size="lg" type="text" placeholder="🔎︎ New search"
-                                  style={{background: 'white', textAlign: "center", textColor:"black"}}
-                                  defaultValue={query} required onChange={e => setSearchTerm(e.target.value)}/>
-
-                                  <Button onClick={handleSubmit}> Search </Button>
-                    </Row>
-                <h1> Search results for "{query}" </h1>
-                <Dropdown>
-                    <Dropdown.Toggle  size="sm" variant="outline-secondary" id="dropdown-basic">
-                        Sort by
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                        <Dropdown.Item> Default </Dropdown.Item>
-                        <Dropdown.Item> Cooking time </Dropdown.Item>
-                        <Dropdown.Item> Likes </Dropdown.Item>
-                    </Dropdown.Menu>
-                    <Button> Filter </Button>
-
-                </Dropdown>
-                <SearchResults user_id={2}/>
-            </Container>
+            <Form>
+                <Form.Group as={Row}>
+                    <Form.Label column sm="3">Name</Form.Label>
+                    <Col sm="9">
+                        <Form.Control />
+                    </Col>
+                </Form.Group>
+                <Form.Group as={Row}>
+                    <Form.Label column sm="3">Serving size</Form.Label>
+                    <Col sm="9">
+                        <Form.Control />
+                    </Col>
+                </Form.Group>
+                {/* <Form.Group as={Row}>
+                    <Form.Label column sm="3">Time to cook</Form.Label>
+                    <Col sm="9">
+                        <Form.Control />
+                    </Col>
+                </Form.Group> */}
+                <Form.Group as={Row}>
+                    <Form.Label column sm="3">Meal type</Form.Label>
+                    <Col sm="9">
+                    <Form.Control as="select" onChange={e => props.setType(e.target.value)} defaultValue="">
+                        <option disabled hidden value="">-- Select an option --</option>
+                        <option>Breakfast</option>
+                        <option>Brunch</option>
+                        <option>Lunch</option>
+                        <option>Dinner</option>
+                        <option>Snack</option>
+                    </Form.Control>
+                    </Col>
+                </Form.Group>
+                <Form.Group as={Row}>
+                    <Form.Label column sm="3">Ingredients</Form.Label>
+                    <Col sm="9">
+                        <Form.Control />
+                    </Col>
+                </Form.Group>
+                <Form.Group as={Row}>
+                    <Form.Label column sm="3">Step keywords</Form.Label>
+                    <Col sm="9">
+                        <Form.Control />
+                    </Col>
+                </Form.Group>
+                <Row>
+                    <Col style={{textAlign:"right"}}>
+                        <Button type="submit">
+                            Search
+                        </Button>
+                    </Col>
+                </Row>
+            </Form>
         </>
     )
 }
