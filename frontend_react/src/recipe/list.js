@@ -29,7 +29,12 @@ function generateCard(recipe, index) {
                     <small className={"text-muted"}>
                         {"Created "}
                         <ReactTimeAgo date={new Date(recipe.creation_time)} locale="en-US"/>
+                        {recipe.edit_time != null ? <>
+                        {" | Modified "}
+                        <ReactTimeAgo date={new Date(recipe.edit_time)} locale="en-US"/> </>
+                        : ""}
                     </small>
+
                 </Card.Footer>
             </Card>
         </Link>

@@ -35,10 +35,10 @@ def do_search(name, type, serving_size, ingredients, step_key_words):
         query += "where "
 
     if name is not None:
-        # query += "match(R.name) against (%s in natural language mode) "
-        query += "R.name like %s "
-        # args = args + (name,)
-        args = args + ('%'+name+'%',)
+        query += "match(R.name) against (%s in natural language mode) "
+        # query += "R.name like %s "
+        args = args + (name,)
+        # args = args + ('%'+name+'%',)
         and_needed = True
 
     if type is not None:
