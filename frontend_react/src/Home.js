@@ -257,7 +257,7 @@ function Home({ loggedIn, setLoggedIn, currId }) {
                                         </Row>
                                         </React.Fragment>)
                                     }}
-                                   emptyLabel="No related history"/>
+                                   emptyLabel={loggedIn ? "No related history" : "Log in for search history"}/>
                 <InputGroup.Append>
                     <Button size="sm" type="submit" variant="primary">
                         <img src={SearchIcon} />
@@ -310,10 +310,10 @@ function Home({ loggedIn, setLoggedIn, currId }) {
         </Route>
 
         <Route path="/home">
-            <HomePage />
+            <HomePage loggedIn={loggedIn}/>
         </Route>
         <Route path="/">
-            <HomePage />
+            <HomePage loggedIn={loggedIn}/>
         </Route>
     </Switch>
     </>

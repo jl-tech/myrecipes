@@ -176,7 +176,7 @@ function HomePage(props) {
                                         </Row>
                                         </React.Fragment>)
                                     }}
-                                   emptyLabel="No related history"/>
+                                   emptyLabel= {props.loggedIn ? "No related history": "Log in to view your search history"}/>
                         <InputGroup.Append>
                             <Button type="submit" variant="primary" style={{opacity: "95%", height: "94%"}}>
                                 <img src={SearchIcon} />
