@@ -3,3 +3,16 @@ $theme-colors: (
     "secondary": #ff751a
 );
 @import "~bootstrap/scss/bootstrap";
+
+@import "~bootstrap/scss/bootstrap";
+
+
+@import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+
+body {
+    font-family: 'Inter UI', sans-serif;
+}
+
+h1 {
+  font-family: 'Inter UI Light', sans-serif;;
+}
