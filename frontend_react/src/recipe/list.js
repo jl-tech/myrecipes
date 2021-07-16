@@ -210,8 +210,8 @@ function RecipeList(props) {
             </Form.Group>
             </Col>
         </Row>
-        <Row sm={2} className="g-2">
-            {recipeData.slice(activePage*recipesPerPage, activePage+recipesPerPage).map(generateCard)}
+        <Row sm={2}>
+            {recipeData.slice(activePage*recipesPerPage, activePage*recipesPerPage+recipesPerPage).map(generateCard)}
         </Row>
         <Row>
             <Col>
