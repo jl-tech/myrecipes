@@ -92,6 +92,15 @@ function RecipeList(props) {
         setRecipeData(tempArray);
     }
 
+    function clearFilters() {
+        setActiveMealFilter([]);
+        setActiveServingFilters([Math.min(...servingFilters), Math.max(...servingFilters)]);
+        let checkboxes = document.getElementsByClassName("form-check-input");
+        for (let checkbox of checkboxes) {  
+            checkbox.checked = false;
+        }
+    }
+
     function sortComparator(key) {
         return function(a, b) {
             switch (key) {
@@ -155,7 +164,7 @@ function RecipeList(props) {
         <Slider value={activeServingFilters} min={Math.min(...servingFilters)} max={Math.max(...servingFilters)} valueLabelDisplay="on" onChange={(e, v) => setActiveServingFilters(v)}/>
         </Row>
         <Row style={{marginTop:'1em'}}>
-        <Button size="sm" variant="outline-secondary">Clear all</Button>
+        <Button size="sm" variant="outline-secondary" onClick={clearFilters}>Clear all</Button>
         </Row>
         </Col>
         <Col sm={9}>
