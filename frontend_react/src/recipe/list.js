@@ -47,6 +47,8 @@ function RecipeList(props) {
     const [recipeData, setRecipeData] = useState(props.recipeData);
     const [mealFilters, setMealFilters] = useState(initMealFilters());
     const [activeMealFilter, setActiveMealFilter] = useState([]);
+    const [servingFilters, setServingFilters] = useState(initServingFilters());
+    const [activeServingFilters, setActiveServingFilters] = useState([Math.min(...servingFilters), Math.max(...servingFilters)]);
 
     function initMealFilters() {
         let tempSet = new Set();
@@ -66,17 +68,27 @@ function RecipeList(props) {
         } else {
             tempArray.splice(tempArray.indexOf(type), 1)
         }
-        setActiveMealFilter(tempArray, filterRecipes());
+        setActiveMealFilter(tempArray);
+    }
+
+    function initServingFilters() {
+        let tempSet = new Set();
+        for (let i of props.recipeData) {
+            tempSet.add(i.serving_size);
+        }
+        return Array.from(tempSet).sort();
     }
 
     function filterRecipes() {
         let tempArray = Array.from(props.recipeData);
         if (activeMealFilter.length != 0) {
             tempArray = tempArray.filter(function(e) {
-                console.log(activeMealFilter.includes(e.type));
                 return activeMealFilter.includes(e.type);
             })
         }
+        tempArray = tempArray.filter(function(e) {
+            return e.serving_size >= activeServingFilters[0] && e.serving_size <= activeServingFilters[1];
+        })
         setRecipeData(tempArray);
     }
 
@@ -123,7 +135,7 @@ function RecipeList(props) {
 
     useEffect(() => {
         filterRecipes();
-    }, [props.recipeData, activeMealFilter])
+    }, [props.recipeData, activeMealFilter, activeServingFilters])
 
     return (<>
         <Col sm={3}>
@@ -137,18 +149,10 @@ function RecipeList(props) {
             <Row><Form.Check type='checkbox' label={t} onChange={e => toggleMealFilter(t, e.target.checked)}/></Row>
         )}
         <Row style={{marginTop:'1em'}}>
-        <h6>Time to cook</h6>
-        </Row><Row style={{width: '80%'}}>
-        <Col sm={6}>
-        <Form.Control size="sm" type="number" placeholder="Min" />
-        </Col>
-        <Col sm={6}>
-        <Form.Control size="sm" type="number" placeholder="Max" />
-        </Col>
-
-        </Row>
-        <Row style={{width: '80%'}}>
-        <Slider value={[20, 80]}/>
+        <h6>Serving Size</h6>
+        </Row >
+        <Row style={{width: '80%', marginTop:"2em"}}>
+        <Slider value={activeServingFilters} min={Math.min(...servingFilters)} max={Math.max(...servingFilters)} valueLabelDisplay="on" onChange={(e, v) => setActiveServingFilters(v)}/>
         </Row>
         <Row style={{marginTop:'1em'}}>
         <Button size="sm" variant="outline-secondary">Clear all</Button>
