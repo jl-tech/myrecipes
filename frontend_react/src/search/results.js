@@ -114,7 +114,7 @@ function SearchResults(props) {
                         <Col sm={3} />
                         <Col sm={6}>
                             <SearchAdvanced setErrorShow={setErrorShow2}/>
-                            <Alert show={errorShow2} variant="danger" style={{marginTop:'1em'}} onClose={() => setErrorShow(false)} dismissible>
+                            <Alert show={errorShow2} variant="danger" style={{marginTop:'1em'}} onClose={() => setErrorShow2(false)} dismissible>
                                 Please enter a valid search term in any field.
                             </Alert>
                         </Col>

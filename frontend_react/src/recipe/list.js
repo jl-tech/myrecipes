@@ -6,6 +6,7 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/esm/Button';
 import Card from "react-bootstrap/Card";
+import Pagination from "react-bootstrap/Pagination";
 
 import ReactTimeAgo from "react-time-ago";
 
@@ -51,6 +52,8 @@ function RecipeList(props) {
     const [activeServingFilters, setActiveServingFilters] = useState([Math.min(...servingFilters), Math.max(...servingFilters)]);
     const [timeFilters, setTimeFilters] = useState(initTimeFilters());
     const [activeTimeFilters, setActiveTimeFilters] = useState([Math.min(...timeFilters), Math.max(...timeFilters)]);
+    const [activePage, setActivePage] = useState(0);
+    const recipesPerPage = 2;
 
     function initMealFilters() {
         let tempSet = new Set();
@@ -103,6 +106,9 @@ function RecipeList(props) {
             return e.time_to_cook >= activeTimeFilters[0] && e.time_to_cook <= activeTimeFilters[1];
         })
         setRecipeData(tempArray);
+        if (activePage > Math.ceil(tempArray.length/recipesPerPage) - 1) {
+            setActivePage(Math.ceil(tempArray.length/recipesPerPage) - 1);
+        }
     }
 
     function clearFilters() {
@@ -205,7 +211,16 @@ function RecipeList(props) {
             </Col>
         </Row>
         <Row sm={2} className="g-2">
-            {recipeData.map(generateCard)}
+            {recipeData.slice(activePage*recipesPerPage, activePage+recipesPerPage).map(generateCard)}
+        </Row>
+        <Row>
+            <Col>
+            <Pagination>
+                {[...Array(Math.ceil(recipeData.length / recipesPerPage)).keys()].map(i => 
+                    <Pagination.Item key={i} active={i == activePage} onClick={()=>setActivePage(i)}>{i+1}</Pagination.Item>
+                )}
+            </Pagination>
+            </Col>
         </Row>
         </Col>
         </>);
