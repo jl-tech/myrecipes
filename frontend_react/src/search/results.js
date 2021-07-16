@@ -17,7 +17,7 @@ import RecipeList from '../recipe/list';
 import SearchBar from './bar.js';
 import SearchAdvanced from './advanced.js';
 
-async function requestRecipes(token, name_keywords, type, serving_size, ingredients, step_keywords) {
+async function requestRecipes(token, name_keywords, type, serving_size, time_to_cook, ingredients, step_keywords) {
     let response = await fetch('http://localhost:5000/search/', {
         method: 'POST',
         headers: {
@@ -28,6 +28,7 @@ async function requestRecipes(token, name_keywords, type, serving_size, ingredie
             name_keywords: name_keywords,
             type: type,
             serving_size: serving_size,
+            time_to_cook: time_to_cook,
             ingredients: ingredients,
             step_keywords: step_keywords
         })
@@ -71,7 +72,7 @@ function SearchResults(props) {
 
     async function processQuery() {
         let type = validateType();
-        let response = await requestRecipes(cookie.get('token'), query.get('name'), type, query.get('serving'), query.get('ingredient'), query.get('step'))
+        let response = await requestRecipes(cookie.get('token'), query.get('name'), type, query.get('serving'), query.get('time'), query.get('ingredient'), query.get('step'))
             .catch(e => {
             });
 

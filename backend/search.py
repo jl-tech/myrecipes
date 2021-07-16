@@ -16,7 +16,7 @@ import time
 from datetime import datetime
 
 
-def do_search(name, type, serving_size, ingredients, step_key_words):
+def do_search(name, type, serving_size, time_to_cook, ingredients, step_key_words):
     query_lock.acquire()
     cur = con.cursor()
 
@@ -31,7 +31,7 @@ def do_search(name, type, serving_size, ingredients, step_key_words):
     and_needed = False
     args = tuple()
 
-    if name is not None or type is not None or serving_size is not None or ingredients is not None or step_key_words is not None:
+    if name is not None or type is not None or serving_size is not None or time_to_cook is not None or ingredients is not None or step_key_words is not None:
         query += "where "
 
     if name is not None:
@@ -59,6 +59,16 @@ def do_search(name, type, serving_size, ingredients, step_key_words):
         query += "serving_size = %s "
 
         args = args + (int(serving_size),)
+
+    if time_to_cook is not None:
+        if and_needed:
+            query += "AND "
+        else:
+            and_needed = True
+
+        query += "time_to_cook = %s "
+
+        args = args + (int(time_to_cook),)
 
     if ingredients is not None:
         if and_needed:

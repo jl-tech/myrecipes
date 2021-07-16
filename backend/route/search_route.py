@@ -13,16 +13,14 @@ def route_search():
     name = data['name_keywords']
     type = data['type']
     serving_size = data['serving_size']
+    time_to_cook = data['time_to_cook']
     ingredients = data['ingredients']
     step = data['step_keywords']
-    print(data, file=sys.stderr)
-    # result = []
 
-    result = search.do_search(name, type, serving_size, ingredients, step)
+    result = search.do_search(name, type, serving_size, time_to_cook, ingredients, step)
     if token is not None:
         search.add_search_history(token, name, ingredients, step)
 
-    print(result, file=sys.stderr)
     response = jsonify(result)
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response, 200

@@ -16,6 +16,7 @@ function SearchAdvanced(props) {
     let query = useQuery();
     const [name, setName] = useState(query.get('name'));
     const [serving, setServing] = useState(query.get('serving'));
+    const [time, setTime] = useState(query.get('time'));
     const [meal, setMeal] = useState(validateType());
     const [ingredient, setIngredient] = useState(query.get('ingredient'));
     const [step, setStep] = useState(query.get('step'));
@@ -37,6 +38,11 @@ function SearchAdvanced(props) {
         if (serving != null) {
             if (serving.trim() != "") {
                 url = url + "serving=" + serving + "&";
+            }
+        }
+        if (time != null) {
+            if (time.trim() != "") {
+                url = url + "time=" + time + "&";
             }
         }
         if (meal != null) {
@@ -74,15 +80,15 @@ function SearchAdvanced(props) {
                 <Form.Group as={Row}>
                     <Form.Label column sm="3">Serving size</Form.Label>
                     <Col sm="9">
-                        <Form.Control defaultValue={serving} type="number"  onChange={e => setServing(e.target.value)}/>
+                        <Form.Control defaultValue={serving} type="number" onChange={e => setServing(e.target.value)}/>
                     </Col>
                 </Form.Group>
-                {/* <Form.Group as={Row}>
+                <Form.Group as={Row}>
                     <Form.Label column sm="3">Time to cook</Form.Label>
                     <Col sm="9">
-                        <Form.Control />
+                        <Form.Control defaultValue={serving} type="number" onChange={e => setTime(e.target.value)}/>
                     </Col>
-                </Form.Group> */}
+                </Form.Group>
                 <Form.Group as={Row}>
                     <Form.Label column sm="3">Meal type</Form.Label>
                     <Col sm="9">
