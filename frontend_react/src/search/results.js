@@ -37,6 +37,7 @@ async function requestRecipes(token, name_keywords, type, serving_size, time_to_
     });
 
     let responseJson = await response.json();
+    console.log(responseJson)
 
     if (response.ok) return responseJson;
     else throw new Error(responseJson.error);

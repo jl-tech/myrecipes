@@ -6,6 +6,7 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/esm/Button';
 import Card from "react-bootstrap/Card";
+import Image from "react-bootstrap/Image";
 import Pagination from "react-bootstrap/Pagination";
 
 import ReactTimeAgo from "react-time-ago";
@@ -21,10 +22,19 @@ function generateCard(recipe, index) {
                 <Card.Body>
                     <Card.Title className={"text-truncate"}>{recipe.name}</Card.Title>
                     <Card.Text>
-                        <b> Serving size: </b> {recipe.serving_size} <br />
-                        <b> Time to cook:</b> {recipe.time_to_cook} minutes <br />
-                        <b> Meal: </b> {recipe.type} <br />
-                        <b> Calories: </b>
+                        <Row>
+                            <Col sm={9}>
+                                <b> Serving size: </b> {recipe.serving_size} <br />
+                                <b> Time to cook:</b> {recipe.time_to_cook} minutes <br />
+                                <b> Meal: </b> {recipe.type} <br />
+                                <b> Calories: </b>
+                            </Col>
+                            <Col sm={3} style={{textAlign:"center"}}>
+                                <Image src={"http://127.0.0.1:5000/img/" + recipe.profile_pic_path} alt="Profile Picture" roundedCircle width="50em"/>
+                                <br />
+                                {recipe.first_name}
+                            </Col>
+                        </Row>
                     </Card.Text>
                     <Card.Text className="text-truncate" style={{height:"1.5em"}}>
                         {recipe.description}
@@ -46,6 +56,7 @@ function generateCard(recipe, index) {
             </div>
     )
 }
+
 function RecipeList(props) {
 
     console.log(props.recipeData);

@@ -164,7 +164,7 @@ def remove_profile_pic(token):
 def get_profile_recipe(user_id):
     query_lock.acquire()
     cur = con.cursor()
-    query = "select * from Recipes where created_by_user_id=%s order by creation_time desc"
+    query = "select R.*, U.first_name, U.profile_pic_path from Recipes R join Users U on U.user_id = R.created_by_user_id where created_by_user_id=%s order by creation_time desc"
     cur.execute(query, (int(user_id)),)
     data = cur.fetchall()
     out = []
