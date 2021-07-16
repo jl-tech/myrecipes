@@ -9,6 +9,7 @@ import auth
 import threading
 
 from route.auth_route import AUTH
+from route.newsfeed_route import NEWSFEED
 from route.profile_route import PROFILE
 from route.recipe_route import RECIPE
 from flask import *
@@ -20,6 +21,7 @@ APP.register_blueprint(AUTH, url_prefix='/auth')
 APP.register_blueprint(PROFILE, url_prefix='/profile')
 APP.register_blueprint(RECIPE, url_prefix='/recipe')
 APP.register_blueprint(SEARCH, url_prefix='/search')
+APP.register_blueprint(NEWSFEED, url_prefix='/newsfeed')
 
 CORS(APP)
 
