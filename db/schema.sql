@@ -72,6 +72,28 @@ create table SearchHistory(
     primary key (user_id, time)
 );
 
+create table SubscribedTo(
+    user_id integer references Users(user_id),
+    is_subscribed_to integer references Users(user_id),
+    primary key (user_id, is_subscribed_to)
+);
+
+create table Comments(
+    recipe_id integer references Recipes(recipe_id),
+    comment_no integer, -- unique number for this recipe
+    time_created timestamp,
+    time_edited timestamp,
+    by_user_id integer references Users(user_id),
+    comment_text text,
+    primary key (recipe_id, comment_no)
+);
+
+create table Likes(
+    recipe_id integer references Recipes(recipe_id),
+    liked_by_user_id integer references Users(user_id),
+    primary key (recipe_id, liked_by_user_id)
+);
+
 -- temporary test account
 insert ignore into Users(email, first_name, last_name, password_hash)
     values ('test@test.com', 'Test', 'Account', 'testing');
