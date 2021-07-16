@@ -34,6 +34,7 @@ create table Recipes(
     name text,
     type text,
     serving_size int,
+    description text,
     primary key(recipe_id),
     fulltext(name)
 );

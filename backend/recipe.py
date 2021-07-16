@@ -20,7 +20,7 @@ import threading
 
 DEFAULT_PIC = 'default.png'
 
-def add_recipe(token, name, type, time, serving_size, ingredients, steps, photos, photo_names):
+def add_recipe(token, name, type, time, serving_size, ingredients, steps, photos, photo_names, description):
     '''
     :param token:
     :param name:
@@ -30,6 +30,7 @@ def add_recipe(token, name, type, time, serving_size, ingredients, steps, photos
     :param ingredients: Array of dictionaries of the form with fields name, quantity, unit
     :param steps: Array of text
     :param photos: Array of files
+    :param description: recipe description
     :return:
     '''
 
@@ -44,11 +45,11 @@ def add_recipe(token, name, type, time, serving_size, ingredients, steps, photos
 
     # -> do query
     query = '''
-            insert into Recipes(created_by_user_id, creation_time, time_to_cook, name, type, serving_size) 
-            values (%s, UTC_TIMESTAMP(), %s, %s, %s, %s)
+            insert into Recipes(created_by_user_id, creation_time, time_to_cook, name, type, serving_size, description) 
+            values (%s, UTC_TIMESTAMP(), %s, %s, %s, %s, %s)
     '''
 
-    cur.execute(query, (int(u_id), int(time), name, type, int(serving_size)))
+    cur.execute(query, (int(u_id), int(time), name, type, int(serving_size), description))
     cur.execute('select LAST_INSERT_ID()')
     created_recipe_id = cur.fetchall()[0]['LAST_INSERT_ID()']
 
@@ -111,7 +112,6 @@ def get_recipe_details(recipe_id):
     '''
     query_lock.acquire()
     cur = con.cursor()
-    out = {}
     query = ''' select * from Recipes join Users on user_id = created_by_user_id where recipe_id = %s'''
     cur.execute(query, (int(recipe_id),))
     result = cur.fetchall()
@@ -120,15 +120,7 @@ def get_recipe_details(recipe_id):
         return -1
     result = result[0]
 
-    out['name'] = result['name']
-    out['creation_time'] = result['creation_time']
-    out['created_by_user_id'] = result['created_by_user_id']
-    out['type'] = result['type']
-    out['time_to_cook'] = result['time_to_cook']
-    out['serving_size'] = result['serving_size']
-    out['edit_time'] = result['edit_time']
-    out['first_name'] = result['first_name']
-    out['last_name'] = result['last_name']
+    out = result
     out['profile_pic_path'] = result['profile_pic_path'] if result['profile_pic_path'] is not None else DEFAULT_PIC
 
 
@@ -166,7 +158,7 @@ def get_recipe_details(recipe_id):
     query_lock.release()
     return out
 
-def edit_recipe_description(token, recipe_id, name, type, time, serving_size):
+def edit_recipe_description(token, recipe_id, name, type, time, serving_size, description):
     '''
         edit given recipe's description
         :param token:
@@ -175,6 +167,7 @@ def edit_recipe_description(token, recipe_id, name, type, time, serving_size):
         :param type: new recipe's type
         :param time: new recipe's cooking time
         :param serving_size: new recipe's serving size
+        :param description: new description
         :return:
         -1 for invalid token
         -2 for invalid recipe id
@@ -189,8 +182,8 @@ def edit_recipe_description(token, recipe_id, name, type, time, serving_size):
         return check_result, None
 
 
-    query = '''update Recipes set time_to_cook=%s, name=%s,type=%s,serving_size=%s, edit_time=UTC_TIMESTAMP() where recipe_id=%s'''
-    cur.execute(query, (int(time), name, type, int(serving_size), int(recipe_id),))
+    query = '''update Recipes set time_to_cook=%s, name=%s,type=%s,serving_size=%s, edit_time=UTC_TIMESTAMP(), description=%s where recipe_id=%s'''
+    cur.execute(query, (int(time), name, type, int(serving_size), int(recipe_id), description))
     con.commit()
 
     query = ''' select edit_time from Recipes where recipe_id = %s'''
