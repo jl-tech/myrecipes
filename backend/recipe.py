@@ -1,4 +1,5 @@
 import os
+import requests
 
 import helpers
 from constants import *
@@ -457,3 +458,55 @@ def delete_recipe(token, recipe_id):
     con.commit()
     query_lock.release()
     return 0
+
+def recipe_nutrition(recipe_id):
+    '''
+    :param recipe_id: The id of recipe
+    :return:
+    nutrition dictionary
+    -1 if the recipe id is invalid.
+    '''
+    query_lock.acquire()
+    cur = con.cursor()
+    query = '''select ingredient_name, quantity, unit from RecipeIngredients where recipe_id = %s'''
+
+    if cur.execute(query, (recipe_id)) == 0:
+        query_lock.release()
+        return -1
+
+    nutrition = {
+        'calories': 0,
+        'total_fat': 0,
+        'saturated_fat': 0,
+        'cholesterol': 0,
+        'sodium': 0,
+        'total_carbohydrate': 0,
+        'dietary_fiber': 0,
+        'sugars': 0,
+        'protein': 0,
+        'potassium': 0,
+        'p': 0
+    }
+    url = 'https://trackapi.nutritionix.com/v2/natural/nutrients'
+    headers = {'Content-Type': 'application/json', 'x-app-id': 'c7b72621', 'x-app-key': '4b5b2810ca6b16b967317e359e7c5d91', 'x-remote-user-id': '0'}
+
+    for ingredients in cur.fetchall():
+        q = ' '.join((ingredients['quantity'], ingredients['unit'], ingredients['ingredient_name']))
+        payload = {'query': q}
+        r = requests.post(url, headers = headers, json = payload)
+
+        for n in r.json()['foods']:
+            nutrition['calories'] += n['nf_calories']
+            nutrition['total_fat'] += n['nf_total_fat']
+            nutrition['saturated_fat'] += n['nf_saturated_fat']
+            nutrition['cholesterol'] += n['nf_cholesterol']
+            nutrition['sodium'] += n['nf_sodium']
+            nutrition['total_carbohydrate'] += n['nf_total_carbohydrate']
+            nutrition['dietary_fiber'] += n['nf_dietary_fiber']
+            nutrition['sugars'] += n['nf_sugars']
+            nutrition['protein'] += n['nf_protein']
+            nutrition['potassium'] += n['nf_potassium']
+            nutrition['p'] += n['nf_p']
+
+    query_lock.release()
+    return nutrition

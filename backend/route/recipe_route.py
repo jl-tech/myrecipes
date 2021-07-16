@@ -173,3 +173,17 @@ def route_recipe_delete():
         response = jsonify({})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
+
+@RECIPE.route('/nutrition', methods=['GET'])
+def route_recipe_nutrition():
+    recipe_id = request.args.get('recipe_id')
+    result = recipe.recipe_nutrition(recipe_id)
+
+    if result == -1:
+        response = jsonify({'error': 'Invalid recipe id'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
+    else:
+        response = jsonify(result)
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 200
