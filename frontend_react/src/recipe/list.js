@@ -19,7 +19,7 @@ function generateCard(recipe, index) {
             <Card key={index}>
                 <Card.Img variant="Top" style={{width:"100%", height:"9vw", objectFit:"cover"}} alt="Recipe Image" src={recipe.photo_path == null ? "http://127.0.0.1:5000/img/default_recipe.png" : "http://127.0.0.1:5000/img/" + recipe.photo_path}/>
                 <Card.Body>
-                    <Card.Title>{recipe.name}</Card.Title>
+                    <Card.Title className={"text-truncate"}>{recipe.name}</Card.Title>
                     <Card.Text>
                         <b> Serving size: </b> {recipe.serving_size} <br />
                         <b> Time to cook:</b> {recipe.time_to_cook} minutes <br />
