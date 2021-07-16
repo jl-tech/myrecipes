@@ -14,6 +14,7 @@ import Alert from 'react-bootstrap/Alert';
 import ProfileEdit from './edit.js';
 import ProfileRecipes from "./recipes";
 import {Spinner} from "react-bootstrap";
+import SubscribeButton from "../newsfeed/subscribe";
 
 async function profileUser(userid) {
     let response = await fetch('http://localhost:5000/profile/view?' + new URLSearchParams({'user_id': userid}), {
@@ -105,7 +106,7 @@ function Profile(props) {
                     <Col>
                     <div style={{textAlign:"center"}}>
                         <h1>{firstName} {lastName}</h1>
-                        {buttonType == 0 ? <></> : buttonType == 1 ? <ProfileEdit firstName={firstName} setfirstName={setfirstName} lastName={lastName} setlastName={setlastName} setButtonName={props.setButtonName} email={email} imgUrl={imgUrl} setImgUrl={setImgUrl} initOpen={props.settings}/> : <Button>Subscribe</Button>}
+                        {buttonType == 0 ? <></> : buttonType == 1 ? <ProfileEdit firstName={firstName} setfirstName={setfirstName} lastName={lastName} setlastName={setlastName} setButtonName={props.setButtonName} email={email} imgUrl={imgUrl} setImgUrl={setImgUrl} initOpen={props.settings}/> : <SubscribeButton userid={id}/>}
                     </div>
                     </Col>
                 </Row>
