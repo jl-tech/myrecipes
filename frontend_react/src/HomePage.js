@@ -11,7 +11,6 @@ import SearchBar from './search/bar';
 
 
 function HomePage(props) {
-    const [errorShow, setErrorShow] = useState(false)
 
     return (
         <>
@@ -22,15 +21,7 @@ function HomePage(props) {
                 <Row>
                     <Col sm={3} />
                     <Col sm={6}>
-                    <SearchBar loggedIn={props.loggedIn} setErrorShow={setErrorShow} />
-                    </Col>
-                </Row>
-                <Row>
-                    <Col sm={3} />
-                    <Col sm={6}>
-                        <Alert show={errorShow} variant="danger" style={{marginTop:'1em'}} onClose={() => setErrorShow(false)} dismissible>
-                        Please enter a valid search term.
-                        </Alert>
+                    <SearchBar loggedIn={props.loggedIn} />
                     </Col>
                 </Row>
                 

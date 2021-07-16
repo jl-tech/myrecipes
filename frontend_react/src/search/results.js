@@ -50,7 +50,6 @@ function SearchResults(props) {
     const [recipeData, setRecipeData] = useState([])
     const [fetched, setFetched] = useState(false)
     const [errorShow, setErrorShow] = useState(false)
-    const [errorShow2, setErrorShow2] = useState(false)
     const [success, setSuccess] = useState(false)
     const cookie = new Cookie();
     let query = useQuery();
@@ -100,10 +99,7 @@ function SearchResults(props) {
                 <Row style={{marginTop:"1em"}}>
                     <Col sm={3} />
                     <Col sm={6}>
-                    <SearchBar loggedIn={props.loggedIn} setErrorShow={setErrorShow} init={query.get('name') != null ? query.get('name') : ""} disabled={advancedMode}/>
-                    <Alert show={errorShow} variant="danger" style={{marginTop:'1em'}} onClose={() => setErrorShow(false)} dismissible>
-                        Please enter a valid search term.
-                    </Alert>
+                    <SearchBar loggedIn={props.loggedIn} init={query.get('name') != null ? query.get('name') : ""} disabled={advancedMode}/>
                     <div style={{textAlign:"right"}}>
                         <a href="#" onClick={()=>{setAdvancedMode(!advancedMode)}}>Advanced options</a>
                     </div>
@@ -113,8 +109,8 @@ function SearchResults(props) {
                     <Row style={{marginTop:"1em"}}>
                         <Col sm={3} />
                         <Col sm={6}>
-                            <SearchAdvanced setErrorShow={setErrorShow2}/>
-                            <Alert show={errorShow2} variant="danger" style={{marginTop:'1em'}} onClose={() => setErrorShow2(false)} dismissible>
+                            <SearchAdvanced setErrorShow={setErrorShow}/>
+                            <Alert show={errorShow} variant="danger" style={{marginTop:'1em'}} onClose={() => setErrorShow(false)} dismissible>
                                 Please enter a valid search term in any field.
                             </Alert>
                         </Col>

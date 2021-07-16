@@ -69,11 +69,11 @@ function SearchBar(props) {
         event.preventDefault()
         let searchTerm = searchInput.current.getInput().getAttribute('value').trim();
         if (searchTerm === "") {
-            props.setErrorShow(true)
+            history.push(`/search`)
         } else {
-            history.push(`/search?name=${searchTerm}`)
-            history.go();
+            history.push(`/search?name=${searchTerm}`)   
         }
+        history.go();
     }
 
     function handleOnKeyDown(e) {
@@ -110,7 +110,7 @@ function SearchBar(props) {
     }, []);
 
     return (
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit} onKeyDown={handleOnKeyDown}>
             <InputGroup>
                 <Typeahead id = 'typeahead' placeholder='Search Recipes' options={searchHistoryTerms}
                             style={{width: props.nav ? "": "92%"}}

@@ -105,7 +105,6 @@ function UserButton(props) {
 function Home({ loggedIn, setLoggedIn, currId }) {
 
     const [firstName, setfirstName] = useState('');
-    const [errorShow, setErrorShow] = useState(false)
     const location = useLocation();
 
     return (
@@ -124,10 +123,7 @@ function Home({ loggedIn, setLoggedIn, currId }) {
         <NavLink style={{paddingLeft: '2rem', paddingRight: '2rem', fontSize:"125%"}} to="/recipe/create" activeStyle={{ paddingLeft: '2rem', fontWeight: 'bold', fontSize:"125%"}}>
             Create
         </NavLink>
-        {location.pathname != "/home" && location.pathname != "/search" ? <SearchBar nav={true} loggedIn={loggedIn} setErrorShow={setErrorShow}/> : <></>}
-        <Alert show={errorShow} variant="danger" onClose={() => setErrorShow(false)} dismissible style={{margin:"0", marginLeft:"1em"}}>
-            Please enter a valid search term.
-        </Alert>
+        {location.pathname != "/home" && location.pathname != "/search" ? <SearchBar nav={true} loggedIn={loggedIn} /> : <></>}
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
             <Navbar.Text>
