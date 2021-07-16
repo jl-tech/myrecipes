@@ -24,6 +24,10 @@ function generateCard(recipe, index) {
                         <b> Serving size: </b> {recipe.serving_size} <br />
                         <b> Time to cook:</b> {recipe.time_to_cook} minutes <br />
                         <b> Meal: </b> {recipe.type} <br />
+                        <b> Calories: </b>
+                    </Card.Text>
+                    <Card.Text className="text-truncate" style={{height:"1.5em"}}>
+                        {recipe.description}
                     </Card.Text>
                 </Card.Body>
                 <Card.Footer>

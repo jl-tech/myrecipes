@@ -125,7 +125,7 @@ function SearchBar(props) {
                                 return(
                                 <React.Fragment>
                                     <Row>
-                                        <Col sm={props.nav ? 7 : 10} style={{overflow:"hidden", textOverflow:"ellipsis"}}>
+                                        <Col sm={props.nav ? 7 : 10} className="text-truncate">
                                         <Highlighter search={text} style={{verticalAlign:"text-bottom", lineHeight:"2em"}}>
                                             {option.search_term}
                                         </Highlighter>

@@ -152,7 +152,7 @@ export function RecipeViewDescription(props) {
         <Row>
             <Col>
                 <ListGroup>
-                    <ListGroup.Item>
+                    <ListGroup.Item style={{textAlign:"justify"}}>
                         {props.description}
                     </ListGroup.Item>
                 </ListGroup>
