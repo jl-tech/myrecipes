@@ -13,11 +13,12 @@ def route_recipe_create():
     name = request.form['name']
     type = request.form['type']
     time = request.form['time']
+    description = request.form['description']
     serving_size = request.form['serving_size']
     ingredients = json.loads(request.form['ingredients'])
     steps = json.loads(request.form['steps'])
     photo_names = json.loads(request.form['photo_names'])
-    recipe_id = recipe.add_recipe(request.headers.get("Authorization"), name, type, int(time), int(serving_size),  ingredients, steps, photos, photo_names)
+    recipe_id = recipe.add_recipe(request.headers.get("Authorization"), name, type, int(time), int(serving_size),  ingredients, steps, photos, photo_names, description)
     if recipe_id < 0:
         print(recipe_id)
         response = jsonify({'error': 'Invalid token'})
@@ -49,9 +50,10 @@ def route_recipe_edit_description():
     time = data['time']
     serving_size = data['serving_size']
     recipe_id = data['recipe_id']
+    description = data['description']
     token = request.headers.get("Authorization")
 
-    result, ret = recipe.edit_recipe_description(token, recipe_id, name, type, time, serving_size)
+    result, ret = recipe.edit_recipe_description(token, recipe_id, name, type, time, serving_size, description)
 
     if result == -1:
         response = jsonify({'error': 'Invalid token'})
