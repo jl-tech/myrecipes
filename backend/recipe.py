@@ -484,7 +484,7 @@ def recipe_nutrition(recipe_id):
     headers = {'Content-Type': 'application/json', 'x-app-id': 'c7b72621', 'x-app-key': '4b5b2810ca6b16b967317e359e7c5d91', 'x-remote-user-id': '0'}
 
     for ingredients in cur.fetchall():
-        q = ' '.join((ingredients['quantity'], ingredients['unit'], ingredients['ingredient_name']))
+        q = ' '.join((str(ingredients['quantity']), ingredients['unit'] if ingredients['unit'] is not None else "", ingredients['ingredient_name']))
         payload = {'query': q}
         r = requests.post(url, headers = headers, json = payload)
 
