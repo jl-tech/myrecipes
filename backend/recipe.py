@@ -186,14 +186,19 @@ def edit_recipe_description(token, recipe_id, name, type, time, serving_size):
     check_result = check_recipe_edit(token, recipe_id)
     if check_result != 0:
         query_lock.release()
-        return check_result
+        return check_result, None
 
 
     query = '''update Recipes set time_to_cook=%s, name=%s,type=%s,serving_size=%s, edit_time=UTC_TIMESTAMP() where recipe_id=%s'''
     cur.execute(query, (int(time), name, type, int(serving_size), int(recipe_id),))
     con.commit()
+
+    query = ''' select edit_time from Recipes where recipe_id = %s'''
+    cur.execute(query, (int(recipe_id),))
+    result = cur.fetchall()
+
     query_lock.release()
-    return 1
+    return 1, result[0]
 
 def edit_recipe_ingredients(token, recipe_id, ingredients):
     '''
@@ -213,7 +218,7 @@ def edit_recipe_ingredients(token, recipe_id, ingredients):
     check_result = check_recipe_edit(token, recipe_id)
     if check_result != 0:
         query_lock.release()
-        return check_result
+        return check_result, None
 
     query_update = '''update RecipeIngredients 
                         set ingredient_name=%s, quantity=%s, unit=%s 
@@ -260,8 +265,13 @@ def edit_recipe_ingredients(token, recipe_id, ingredients):
     query_update_edit = ''' update Recipes set edit_time = UTC_TIMESTAMP() where recipe_id = %s'''
     cur.execute(query_update_edit, (int(recipe_id),))
     con.commit()
+
+    query = ''' select edit_time from Recipes where recipe_id = %s'''
+    cur.execute(query, (int(recipe_id),))
+    result = cur.fetchall()
+
     query_lock.release()
-    return 1
+    return 1, result[0]
 
 
 def edit_recipe_steps(token, recipe_id, steps):
@@ -279,10 +289,10 @@ def edit_recipe_steps(token, recipe_id, steps):
     query_lock.acquire()
     cur = con.cursor()
 
-    check_result =check_recipe_edit(token, recipe_id)
+    check_result = check_recipe_edit(token, recipe_id)
     if check_result != 0:
         query_lock.release()
-        return check_result
+        return check_result, None
 
     query_update = '''update RecipeSteps set step_text=%s where recipe_id=%s and step_no=%s'''
     query_select = '''select * from RecipeSteps where recipe_id = %s and step_no=%s'''
@@ -319,8 +329,13 @@ def edit_recipe_steps(token, recipe_id, steps):
     where recipe_id = %s'''
     cur.execute(query_update_edit, (int(recipe_id),))
     con.commit()
+
+    query = ''' select edit_time from Recipes where recipe_id = %s'''
+    cur.execute(query, (int(recipe_id),))
+    result = cur.fetchall()
+
     query_lock.release()
-    return 1
+    return 1, result[0]
 
 def edit_recipe_photos(token, recipe_id, photos, photo_names):
     '''
@@ -338,7 +353,7 @@ def edit_recipe_photos(token, recipe_id, photos, photo_names):
     check_result = check_recipe_edit(token, recipe_id)
     if check_result != 0:
         query_lock.release()
-        return check_result
+        return check_result, None
 
     # delete existing photos and remove from database
     query = ''' select photo_path from RecipePhotos where recipe_id = %s'''
@@ -364,9 +379,17 @@ def edit_recipe_photos(token, recipe_id, photos, photo_names):
         cur.execute(query, (
         int(recipe_id), int(index), path, photo_names[index]))
 
+    query_update_edit = ''' update Recipes set edit_time = UTC_TIMESTAMP() 
+    where recipe_id = %s'''
+    cur.execute(query_update_edit, (int(recipe_id),))
     con.commit()
+
+    query = ''' select edit_time from Recipes where recipe_id = %s'''
+    cur.execute(query, (int(recipe_id),))
+    result = cur.fetchall()
+
     query_lock.release()
-    return 0
+    return 0, result[0]
 
 def check_recipe_edit(token, recipe_id):
     '''

@@ -16,6 +16,7 @@ import RecipeViewContri from './viewcontri.js';
 import RecipeViewIngredient from './viewingredient.js';
 import RecipeViewStep from './viewstep.js';
 import RecipeViewPhoto from './viewphoto.js';
+import {Spinner} from "react-bootstrap";
 
 async function recipeView(recipe_id) {
     let response = await fetch('http://localhost:5000/recipe/view?' + new URLSearchParams({'recipe_id': recipe_id}), {
@@ -58,7 +59,7 @@ function RecipeView(props) {
 
     const [deleted, setDeleted] = useState(false);
 
-    const [nonSuccessText, setNonSuccessText] = useState('One sec...')
+    const [spinnerVisible, setSpinnerVisible] = useState(true)
 
     let { id } = useParams();
     const history = useHistory();
@@ -126,7 +127,7 @@ function RecipeView(props) {
 
             setSuccess(true);
         } else {
-            setNonSuccessText("That recipe could not be found.")
+            setSpinnerVisible(false)
         }
 
         setFetched(true);
@@ -146,15 +147,15 @@ function RecipeView(props) {
                 <>
                 <Container style={{marginTop:"1em",marginBottom:"2em"}}>
                     <RecipeViewPhoto photos={photos} />
-                    <RecipeViewDesc recipeId={id} recipeName={recipeName} setRecipeName={setRecipeName} time={time} setTime={setTime} serving={serving} setServing={setServing} mealType={mealType} setMealType={setMealType} photos={photos} setPhotos={setPhotos} editable={editable} setDeleted={setDeleted} />
+                    <RecipeViewDesc recipeId={id} recipeName={recipeName} setRecipeName={setRecipeName} time={time} setTime={setTime} serving={serving} setServing={setServing} mealType={mealType} setMealType={setMealType} photos={photos} setPhotos={setPhotos} editable={editable} setDeleted={setDeleted} setEditedAt={setEditedAt}/>
                     <Row style={{marginTop:"1em"}}>
                         <Col sm={2} style={{marginBottom:"1em"}}>
                             <RecipeViewContri userImgURL={userImgURL} contributorUID={contributorUID} firstName={firstName} lastName={lastName} createdAt={createdAt} editedAt={editedAt}/>
                         </Col>
                         <Col sm={1} />
                         <Col sm={9}>
-                            <RecipeViewIngredient recipeId={id} ingredients={ingredients} setIngredients={setIngredients} editable={editable} />
-                            <RecipeViewStep recipeId={id} steps={steps} setSteps={setSteps} editable={editable} />
+                            <RecipeViewIngredient recipeId={id} ingredients={ingredients} setIngredients={setIngredients} editable={editable} setEditedAt={setEditedAt}/>
+                            <RecipeViewStep recipeId={id} steps={steps} setSteps={setSteps} editable={editable} setEditedAt={setEditedAt}/>
                         </Col>
 
                     </Row>
@@ -176,18 +177,27 @@ function RecipeView(props) {
             );
         }
     } else {
-        return (
-            <Modal.Dialog>
-            <Modal.Body>
-            <div style={{textAlign:"center"}}>
-                {nonSuccessText}<br />
-                <Link to="/" style={{marginTop:"1em"}}>
-                    <Button>Return</Button>
-                </Link>
-            </div>
-            </Modal.Body>
-            </Modal.Dialog>
-        );
+        if (spinnerVisible === true) {
+            return (
+                <div style={{textAlign: "center"}}>
+                    <br/>
+                    <Spinner animation={"grow"}/>
+                </div>
+            )
+        } else {
+            return (
+                <Modal.Dialog>
+                    <Modal.Body>
+                        <div style={{textAlign: "center"}}>
+                            That recipe could not be found. <br/>
+                            <Link to="/" style={{marginTop: "1em"}}>
+                                <Button>Return</Button>
+                            </Link>
+                        </div>
+                    </Modal.Body>
+                </Modal.Dialog>
+            );
+        }
     }
 }
 

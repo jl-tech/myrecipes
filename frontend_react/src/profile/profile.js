@@ -13,6 +13,7 @@ import Alert from 'react-bootstrap/Alert';
 
 import ProfileEdit from './edit.js';
 import ProfileRecipes from "./recipes";
+import {Spinner} from "react-bootstrap";
 
 async function profileUser(userid) {
     let response = await fetch('http://localhost:5000/profile/view?' + new URLSearchParams({'user_id': userid}), {
@@ -40,7 +41,7 @@ function Profile(props) {
     const [email, setEmail] = useState('');
     const [imgUrl, setImgUrl] = useState('');
     const [buttonType, setButtonType] = useState(0);
-    const [nonSuccessText, setNonSuccessText] = useState('One sec...')
+    const [showSpinner, setShowSpinner] = useState(true)
     let { id } = useParams();
     id = id == null ? props.currId : id
     const history = useHistory();
@@ -66,7 +67,7 @@ function Profile(props) {
             setSuccess(true);
         }
         else {
-            setNonSuccessText("That user could not be found.")
+            setShowSpinner(false)
         }
         if (props.loggedIn) {
             if (id_ == props.currId) {
@@ -92,7 +93,7 @@ function Profile(props) {
     if (success) {
         return (
             <>
-            <Container style={{marginTop:"1em"}}>
+            <Container style={{marginTop:"1em", marginBottom:"2em"}}>
                 <Row>
                     <Col>
                     <div style={{textAlign:"center"}}>
@@ -115,27 +116,35 @@ function Profile(props) {
                         <br/>
                     </Col>
                 </Row>
-                <Row className="mx-auto">
-                    <Col>
-                        <ProfileRecipes userID={id}/>
-                    </Col>
+                <Row>
+                    <ProfileRecipes userID={id}/>
                 </Row>
             </Container>
             </>
         );
     } else {
-        return (
-            <Modal.Dialog>
-            <Modal.Body>
-            <div style={{textAlign:"center"}}>
-                {nonSuccessText}<br />
-                <Link to="/" component={Button} style={{marginTop:"1em"}}>
-                    Return
-                </Link>
-            </div>
-            </Modal.Body>
-            </Modal.Dialog>
-        );
+        if (showSpinner === true) {
+            return (
+                <div style={{textAlign: "center"}}>
+                    <br/>
+                    <Spinner animation={"grow"}/>
+                </div>
+            )
+        } else {
+            return (
+                <Modal.Dialog>
+                    <Modal.Body>
+                        <div style={{textAlign: "center"}}>
+                            That user could not be found. <br/>
+                            <Link to="/home" component={Button}
+                                  style={{marginTop: "1em"}}>
+                                Back to home
+                            </Link>
+                        </div>
+                    </Modal.Body>
+                </Modal.Dialog>
+            );
+        }
     }
 }
 

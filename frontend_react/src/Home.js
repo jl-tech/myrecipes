@@ -1,10 +1,19 @@
 import React, { useState, useEffect } from 'react';
 
-import { Link, Switch, Route, Redirect, NavLink } from "react-router-dom";
+import {
+    Link,
+    Switch,
+    Route,
+    Redirect,
+    NavLink,
+    useHistory,
+    useLocation
+} from "react-router-dom";
 
 import Navbar from 'react-bootstrap/Navbar';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
+import CloseButton from 'react-bootstrap/CloseButton';
 
 import DropdownButton from 'react-bootstrap/DropdownButton';
 
@@ -17,6 +26,18 @@ import RecipeView from './recipe/view';
 import DeleteSuccess from "./recipe/deletesuccess";
 import Form from "react-bootstrap/Form";
 import {FormControl} from "react-bootstrap";
+import HomePage from "./HomePage";
+import SearchResults from "./search/results";
+import Alert from "react-bootstrap/Alert";
+import InputGroup from "react-bootstrap/InputGroup";
+
+import SearchIcon from "./search_white_18dp.svg";
+
+import {Highlighter, Typeahead} from 'react-bootstrap-typeahead';
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import ReactTimeAgo from "react-time-ago";
+import SearchBar from './search/bar';
 
 async function profileUser(userid) {
     let response = await fetch('http://localhost:5000/profile/view?' + new URLSearchParams({'user_id': userid}), {
@@ -84,10 +105,12 @@ function UserButton(props) {
 function Home({ loggedIn, setLoggedIn, currId }) {
 
     const [firstName, setfirstName] = useState('');
+    const location = useLocation();
+
     return (
     <>
     <Navbar bg="light" variant="light">
-        <Link to="/" >
+        <Link to="/home" >
             <img src={logo} height="50" />
         </Link>
 
@@ -100,10 +123,7 @@ function Home({ loggedIn, setLoggedIn, currId }) {
         <NavLink style={{paddingLeft: '2rem', paddingRight: '2rem', fontSize:"125%"}} to="/recipe/create" activeStyle={{ paddingLeft: '2rem', fontWeight: 'bold', fontSize:"125%"}}>
             Create
         </NavLink>
-        <Form inline>
-            <FormControl  type="text" placeholder="Search Recipes" className=" mr-sm-2" />
-            <Button type="submit" variant="outline-secondary">Search</Button>
-        </Form>
+        {location.pathname != "/home" && location.pathname != "/search" ? <SearchBar nav={true} loggedIn={loggedIn} /> : <></>}
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
             <Navbar.Text>
@@ -119,18 +139,18 @@ function Home({ loggedIn, setLoggedIn, currId }) {
         <Route path="/profile" render={() =>
             loggedIn
             ? (<Redirect to={{pathname: "/profile/" + currId}} />)
-            : (<Redirect to= {{pathname: "/"}} />)
+            : (<Redirect to= {{pathname: "/login"}} />)
         } />
         <Route path="/settings" render={() =>
             loggedIn
             ? (<Profile currId={currId} loggedIn={loggedIn} settings={true} setButtonName={setfirstName}/>)
-            : (<Redirect to= {{pathname: "/"}} />)
+            : (<Redirect to= {{pathname: "/login"}} />)
         } />
 
         <Route path="/recipe/create" render={() => 
             loggedIn
             ? (<RecipeCreate />)
-            : (<Redirect to= {{pathname: "/"}} />)
+            : (<Redirect to= {{pathname: "/login"}} />)
         } />
         <Route path="/recipe/deletesuccess">
           <DeleteSuccess/>
@@ -139,14 +159,18 @@ function Home({ loggedIn, setLoggedIn, currId }) {
           <RecipeView currId={currId} loggedIn={loggedIn} />
         </Route>
         <Route path="/recipe" render={() => 
-            (<Redirect to= {{pathname: "/"}} />)
+            (<Redirect to= {{pathname: "/login"}} />)
         } />
-
-        <Route path="/">
-            <>
-                Work in progress
-            </>
+        <Route path="/search">
+            <SearchResults loggedIn={loggedIn}/>
         </Route>
+
+        <Route path="/home">
+            <HomePage loggedIn={loggedIn}/>
+        </Route>
+        <Route path="/" render={() => 
+            (<Redirect to= {{pathname: "/home"}} />)
+        } />
     </Switch>
     </>
     );

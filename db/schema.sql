@@ -11,6 +11,7 @@ drop table if exists Recipes;
 drop table if exists RecipeIngredients;
 drop table if exists RecipeSteps;
 drop table if exists RecipePhotos;
+drop table if exists SearchHistory;
 
 create table Users (
     user_id serial,
@@ -33,7 +34,8 @@ create table Recipes(
     name text,
     type text,
     serving_size int,
-    primary key(recipe_id)
+    primary key(recipe_id),
+    fulltext(name)
 );
 
 create table RecipeIngredients(
@@ -42,7 +44,8 @@ create table RecipeIngredients(
     ingredient_name text,
     quantity float,
     unit text,
-    primary key (recipe_id, ingredient_no)
+    primary key (recipe_id, ingredient_no),
+    fulltext(ingredient_name)
 );
 
 create table RecipeSteps(
@@ -50,15 +53,23 @@ create table RecipeSteps(
     step_no integer,
     step_text text,
     step_photo_path text,
-    primary key (recipe_id, step_no)
+    primary key (recipe_id, step_no),
+    fulltext(step_text)
 );
 
 create table RecipePhotos(
     recipe_id integer references Recipes(recipe_id),
-    photo_no integer, -- photo no 1 is thumbnail
+    photo_no integer, -- photo no 0 is thumbnail
     photo_path text,
     photo_name text,
     primary key (recipe_id, photo_no)
+);
+
+create table SearchHistory(
+    user_id integer references Users(user_id),
+    time timestamp,
+    search_term text,
+    primary key (user_id, time)
 );
 
 -- temporary test account

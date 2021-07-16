@@ -13,10 +13,13 @@ from route.profile_route import PROFILE
 from route.recipe_route import RECIPE
 from flask import *
 
+from route.search_route import SEARCH
+
 APP = Flask(__name__)
 APP.register_blueprint(AUTH, url_prefix='/auth')
 APP.register_blueprint(PROFILE, url_prefix='/profile')
 APP.register_blueprint(RECIPE, url_prefix='/recipe')
+APP.register_blueprint(SEARCH, url_prefix='/search')
 
 CORS(APP)
 

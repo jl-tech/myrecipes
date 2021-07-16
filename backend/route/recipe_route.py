@@ -51,7 +51,7 @@ def route_recipe_edit_description():
     recipe_id = data['recipe_id']
     token = request.headers.get("Authorization")
 
-    result = recipe.edit_recipe_description(token, recipe_id, name, type, time, serving_size)
+    result, ret = recipe.edit_recipe_description(token, recipe_id, name, type, time, serving_size)
 
     if result == -1:
         response = jsonify({'error': 'Invalid token'})
@@ -66,7 +66,7 @@ def route_recipe_edit_description():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
     else:
-        response = jsonify({})
+        response = jsonify(ret)
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
 
@@ -77,7 +77,7 @@ def route_recipe_edit_ingredients():
     recipe_id = data['recipe_id']
     token = request.headers.get("Authorization")
 
-    result = recipe.edit_recipe_ingredients(token, recipe_id, ingredients)
+    result, ret = recipe.edit_recipe_ingredients(token, recipe_id, ingredients)
 
     if result == -1:
         response = jsonify({'error': 'Invalid token'})
@@ -92,7 +92,7 @@ def route_recipe_edit_ingredients():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
     else:
-        response = jsonify({})
+        response = jsonify(ret)
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
 
@@ -103,7 +103,7 @@ def route_recipe_edit_steps():
     recipe_id = data['recipe_id']
     token = request.headers.get("Authorization")
 
-    result = recipe.edit_recipe_steps(token, recipe_id, steps)
+    result, ret = recipe.edit_recipe_steps(token, recipe_id, steps)
 
     if result == -1:
         response = jsonify({'error': 'Invalid token'})
@@ -118,7 +118,7 @@ def route_recipe_edit_steps():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
     else:
-        response = jsonify({})
+        response = jsonify(ret)
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
 
@@ -130,7 +130,7 @@ def route_recipe_edit_photos():
     photo_names = json.loads(request.form['photo_names'])
     token = request.headers.get("Authorization")
 
-    result = recipe.edit_recipe_photos(token, recipe_id, photos, photo_names)
+    result, ret = recipe.edit_recipe_photos(token, recipe_id, photos, photo_names)
     
     if result == -1:
         response = jsonify({'error': 'Invalid token'})
@@ -145,7 +145,7 @@ def route_recipe_edit_photos():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
     else:
-        response = jsonify({})
+        response = jsonify(ret)
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
 

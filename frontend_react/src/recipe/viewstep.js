@@ -127,6 +127,7 @@ function RecipeViewStep(props) {
                 });
             }
             props.setSteps(stepsP);
+            props.setEditedAt(response['edit_time']);
             setSuccessShow(true);
             setEditMode(false);
         }
