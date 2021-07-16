@@ -13,12 +13,13 @@ import RecipeCreateStep from './createstep.js';
 import RecipeCreatePhoto from './createphoto.js';
 import Button from 'react-bootstrap/esm/Button';
 
-async function createRecipe(token, name, type, time, serving, ingredients, steps, photos, photoNames) {
+async function createRecipe(token, name, type, time, serving, description, ingredients, steps, photos, photoNames) {
     let data = new FormData();
     data.append('name', name);
     data.append('type', type);
     data.append('time', time);
     data.append('serving_size', serving);
+    data.append('description', description);
     data.append('ingredients', ingredients);
     data.append('steps', steps);
     data.append('photo_names', photoNames);
@@ -47,6 +48,7 @@ function RecipeCreate(props) {
     const [type, setType] = useState(null);
     const [time, setTime] = useState(null);
     const [serving, setServing] = useState(null);
+    const [description, setDescription] = useState(null);
     const [ingredients, setIngredients] = useState([]);
     const [steps, setSteps] = useState([]);
     const [photos, setPhotos] = useState([]);
@@ -83,7 +85,7 @@ function RecipeCreate(props) {
             photoNames.push(photo["name"])
         }
 
-        let response = await createRecipe(cookie.get('token'), name, type, time, serving, JSON.stringify(ingredientsP), JSON.stringify(stepsP), photosP, JSON.stringify(photoNames))
+        let response = await createRecipe(cookie.get('token'), name, type, time, serving, description, JSON.stringify(ingredientsP), JSON.stringify(stepsP), photosP, JSON.stringify(photoNames))
             .catch(e => {
                 setErrorShow(true);
                 setErrorText(e.message);
@@ -105,7 +107,7 @@ function RecipeCreate(props) {
                 </Col>
             </Row>
             <Form onSubmit={handleSubmit}>
-                <RecipeCreateDesc setName={setName} setType={setType} setTime={setTime} setServing={setServing} />
+                <RecipeCreateDesc setName={setName} setType={setType} setTime={setTime} setServing={setServing} setDescription={setDescription} />
                 <RecipeCreateIngredient ingredients={ingredients} setIngredients={setIngredients} />
                 <RecipeCreateStep steps={steps} setSteps={setSteps} />
                 <RecipeCreatePhoto photos={photos} setPhotos={setPhotos} />

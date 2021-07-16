@@ -35,6 +35,12 @@ function RecipeCreateDesc(props) {
                 <Form.Control onChange={e => props.setServing(e.target.value)} type="number" required />
             </Form.Group>
         </Form.Row>
+        <Form.Row style={{marginTop:"1em"}}>
+           <Form.Group as={Col}>
+           <Form.Label>Description</Form.Label>
+           <Form.Control as="textarea" rows={3} onChange={e => props.setDescription(e.target.value)} />
+            </Form.Group>
+        </Form.Row>
         </>
     );
 }

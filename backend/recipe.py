@@ -184,7 +184,7 @@ def edit_recipe_description(token, recipe_id, name, type, time, serving_size, de
 
 
     query = '''update Recipes set time_to_cook=%s, name=%s,type=%s,serving_size=%s, edit_time=UTC_TIMESTAMP(), description=%s where recipe_id=%s'''
-    cur.execute(query, (int(time), name, type, int(serving_size), int(recipe_id), description))
+    cur.execute(query, (int(time), name, type, int(serving_size), description, int(recipe_id)))
     con.commit()
 
     query = ''' select edit_time from Recipes where recipe_id = %s'''

@@ -7,14 +7,16 @@ import Button from 'react-bootstrap/Button';
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import Alert from "react-bootstrap/Alert";
+import ListGroup from "react-bootstrap/ListGroup";
 import Cookie from 'universal-cookie';
 
 import { EditPhoto } from './viewphoto.js';
 import RecipeDelete from "./delete.js";
 import {useHistory} from "react-router-dom";
 import Dropdown from "react-bootstrap/Dropdown";
+import { List } from '@material-ui/core';
 
-async function requestEditDesc(token, recipe_id, name, type, time, serving_size) {
+async function requestEditDesc(token, recipe_id, name, type, time, serving_size, description) {
     let response = await fetch('http://localhost:5000/recipe/editdescription', {
         method: 'POST',
         headers: {
@@ -26,6 +28,7 @@ async function requestEditDesc(token, recipe_id, name, type, time, serving_size)
             type: type,
             time: time,
             serving_size: serving_size,
+            description: description,
             recipe_id: recipe_id
         })
     }).catch(e => {
@@ -39,13 +42,17 @@ async function requestEditDesc(token, recipe_id, name, type, time, serving_size)
 }
 
 function EditDesc(props) {
-
-    const editClose = () => props.setShowDescEdit(false);
+    const editClose = () => {
+        setSuccessShow(false);
+        setErrorShow(false);
+        props.setShowDescEdit(false);
+    }
 
     const [name, setName] = useState(props.recipeName);
     const [type, setType] = useState(props.mealType);
     const [time, setTime] = useState(props.time);
     const [serving, setServing] = useState(props.serving);
+    const [description, setDescription] = useState(props.description);
 
     const [errorShow, setErrorShow] = useState(false);
     const [errorText, setErrorText] = useState('');
@@ -57,7 +64,7 @@ function EditDesc(props) {
     async function handleSubmit(event) {
         event.preventDefault();
 
-        let response = await requestEditDesc(cookie.get('token'), props.recipeId, name, type, time, serving)
+        let response = await requestEditDesc(cookie.get('token'), props.recipeId, name, type, time, serving, description)
             .catch(e => {
                 setErrorShow(true);
                 setSuccessShow(false);
@@ -70,6 +77,7 @@ function EditDesc(props) {
             props.setMealType(type);
             props.setTime(time);
             props.setServing(serving)
+            props.setDescription(description)
             props.setEditedAt(response['edit_time']);
             setSuccessShow(true);
         }
@@ -110,6 +118,12 @@ function EditDesc(props) {
                             <Form.Control onChange={e => setServing(e.target.value)} type="number" required defaultValue={serving}/>
                         </Form.Group>
                     </Form.Row>
+                    <Form.Row style={{marginTop:"1em"}}>
+                        <Form.Group as={Col}>
+                            <Form.Label>Description</Form.Label>
+                            <Form.Control as="textarea" rows={3} onChange={e => setDescription(e.target.value)} defaultValue={description} />
+                        </Form.Group>
+                    </Form.Row>
                     <Alert show={errorShow} variant="danger" onClose={() => setErrorShow(false)} dismissible>
                         {errorText}
                     </Alert>
@@ -124,6 +138,27 @@ function EditDesc(props) {
                 </Form>
             </Modal.Body>
         </Modal>
+    );
+}
+
+export function RecipeViewDescription(props) {
+    return (
+        <>
+        <Row style={{marginTop:"1em"}}>
+            <Col>
+                <h3> Description </h3>
+            </Col>
+        </Row>
+        <Row>
+            <Col>
+                <ListGroup>
+                    <ListGroup.Item>
+                        {props.description}
+                    </ListGroup.Item>
+                </ListGroup>
+            </Col>
+        </Row>
+        </>
     );
 }
 
@@ -194,7 +229,7 @@ function RecipeViewDesc(props) {
                     : <></> }
             </Col>
         </Row>
-        <EditDesc showDescEdit={showDescEdit} setShowDescEdit={setShowDescEdit} recipeId={props.recipeId} recipeName={props.recipeName} setRecipeName={props.setRecipeName} time={props.time} setTime={props.setTime} serving={props.serving} setServing={props.setServing} mealType={props.mealType} setMealType={props.setMealType} setEditedAt={props.setEditedAt}/>
+        <EditDesc showDescEdit={showDescEdit} setShowDescEdit={setShowDescEdit} recipeId={props.recipeId} recipeName={props.recipeName} setRecipeName={props.setRecipeName} time={props.time} setTime={props.setTime} serving={props.serving} setServing={props.setServing} mealType={props.mealType} setMealType={props.setMealType} setEditedAt={props.setEditedAt} description={props.description} setDescription={props.setDescription} />
         <EditPhoto showPhotoEdit={showPhotoEdit} setShowPhotoEdit={setShowPhotoEdit} recipeId={props.recipeId} photos={props.photos} setPhotos={props.setPhotos} setEditedAt={props.setEditedAt}/>
         <RecipeDelete showDelete={showDelete} setShowDelete={setShowDelete} recipeId={props.recipeId} setDeleted={props.setDeleted} />
         </>

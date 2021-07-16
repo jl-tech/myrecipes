@@ -11,7 +11,7 @@ import Button from 'react-bootstrap/esm/Button';
 import Image from "react-bootstrap/Image";
 import Modal from "react-bootstrap/Modal";
 
-import RecipeViewDesc from './viewdesc.js';
+import RecipeViewDesc, { RecipeViewDescription } from './viewdesc.js';
 import RecipeViewContri from './viewcontri.js';
 import RecipeViewIngredient from './viewingredient.js';
 import RecipeViewStep from './viewstep.js';
@@ -46,6 +46,7 @@ function RecipeView(props) {
     const [serving, setServing] = useState('');
     const [time, setTime] = useState('');
     const [mealType, setMealType] = useState('');
+    const [description, setDescription] = useState('');
 
     const [contributorUID, setContributorUID] = useState('');
     const [userImgURL, setUserImageURL] = useState('');
@@ -84,13 +85,13 @@ function RecipeView(props) {
                     name: photo['name']
                 });
             }
-            console.log(response.photos);
             setPhotos(photosP);
             
             setRecipeName(response.name);
-            setTime(response.time_to_cook)
-            setMealType(response.type)
-            setServing(response.serving_size)
+            setTime(response.time_to_cook);
+            setMealType(response.type);
+            setServing(response.serving_size);
+            setDescription(response.description);
 
             let stepsP = [];
             for (let step of response.steps) {
@@ -147,13 +148,14 @@ function RecipeView(props) {
                 <>
                 <Container style={{marginTop:"1em",marginBottom:"2em"}}>
                     <RecipeViewPhoto photos={photos} />
-                    <RecipeViewDesc recipeId={id} recipeName={recipeName} setRecipeName={setRecipeName} time={time} setTime={setTime} serving={serving} setServing={setServing} mealType={mealType} setMealType={setMealType} photos={photos} setPhotos={setPhotos} editable={editable} setDeleted={setDeleted} setEditedAt={setEditedAt}/>
+                    <RecipeViewDesc recipeId={id} recipeName={recipeName} setRecipeName={setRecipeName} time={time} setTime={setTime} serving={serving} setServing={setServing} mealType={mealType} setMealType={setMealType} photos={photos} setPhotos={setPhotos} editable={editable} setDeleted={setDeleted} setEditedAt={setEditedAt} description={description} setDescription={setDescription} />
                     <Row style={{marginTop:"1em"}}>
                         <Col sm={2} style={{marginBottom:"1em"}}>
                             <RecipeViewContri userImgURL={userImgURL} contributorUID={contributorUID} firstName={firstName} lastName={lastName} createdAt={createdAt} editedAt={editedAt}/>
                         </Col>
                         <Col sm={1} />
                         <Col sm={9}>
+                            <RecipeViewDescription description={description}/>
                             <RecipeViewIngredient recipeId={id} ingredients={ingredients} setIngredients={setIngredients} editable={editable} setEditedAt={setEditedAt}/>
                             <RecipeViewStep recipeId={id} steps={steps} setSteps={setSteps} editable={editable} setEditedAt={setEditedAt}/>
                         </Col>

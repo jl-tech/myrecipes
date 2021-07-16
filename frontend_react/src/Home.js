@@ -95,8 +95,8 @@ function UserButton(props) {
 
     return (
     <DropdownButton menuAlign="right" title={props.firstName} >
-        <Link component={Dropdown.Item} to="/profile">Profile</Link>
-        <Link component={Dropdown.Item} to={"/settings"}> Account Settings </Link>
+        <Dropdown.Item as={Link} to="/profile">Profile</Dropdown.Item>
+        <Dropdown.Item as={Link} to="/settings">Account Settings</Dropdown.Item>
         <Dropdown.Item onClick={logout}>Log Out</Dropdown.Item>
     </DropdownButton>
     );
