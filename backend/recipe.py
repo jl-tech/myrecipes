@@ -466,6 +466,7 @@ def recipe_nutrition(recipe_id):
     if cur.execute(query, (recipe_id)) == 0:
         query_lock.release()
         return -1
+    query_lock.release()
 
     nutrition = {
         'calories': 0,
@@ -483,23 +484,23 @@ def recipe_nutrition(recipe_id):
     url = 'https://trackapi.nutritionix.com/v2/natural/nutrients'
     headers = {'Content-Type': 'application/json', 'x-app-id': 'c7b72621', 'x-app-key': '4b5b2810ca6b16b967317e359e7c5d91', 'x-remote-user-id': '0'}
 
+    missed_ingredients = []
     for ingredients in cur.fetchall():
         q = ' '.join((str(ingredients['quantity']), ingredients['unit'] if ingredients['unit'] is not None else "", ingredients['ingredient_name']))
         payload = {'query': q}
         r = requests.post(url, headers = headers, json = payload)
 
         for n in r.json()['foods']:
-            nutrition['calories'] += n['nf_calories']
-            nutrition['total_fat'] += n['nf_total_fat']
-            nutrition['saturated_fat'] += n['nf_saturated_fat']
-            nutrition['cholesterol'] += n['nf_cholesterol']
-            nutrition['sodium'] += n['nf_sodium']
-            nutrition['total_carbohydrate'] += n['nf_total_carbohydrate']
-            nutrition['dietary_fiber'] += n['nf_dietary_fiber']
-            nutrition['sugars'] += n['nf_sugars']
-            nutrition['protein'] += n['nf_protein']
-            nutrition['potassium'] += n['nf_potassium']
-            nutrition['p'] += n['nf_p']
+            nutrition['calories'] += n['nf_calories'] if n['nf_calories'] is not None else 0
+            nutrition['total_fat'] += n['nf_total_fat'] if n['nf_total_fat'] is not None else 0
+            nutrition['saturated_fat'] += n['nf_saturated_fat'] if n['nf_saturated_fat'] is not None else 0
+            nutrition['cholesterol'] += n['nf_cholesterol'] if n['nf_cholesterol'] is not None else 0
+            nutrition['sodium'] += n['nf_sodium'] if n['nf_sodium'] is not None else 0
+            nutrition['total_carbohydrate'] += n['nf_total_carbohydrate'] if n['nf_total_carbohydrate'] is not None else 0
+            nutrition['dietary_fiber'] += n['nf_dietary_fiber'] if n['nf_dietary_fiber'] is not None else 0
+            nutrition['sugars'] += n['nf_sugars'] if n['nf_sugars'] is not None else 0
+            nutrition['protein'] += n['nf_protein'] if n['nf_protein'] is not None else 0
+            nutrition['potassium'] += n['nf_potassium'] if n['nf_potassium'] is not None else 0
+            nutrition['p'] += n['nf_p'] if n['nf_p'] is not None else 0
 
-    query_lock.release()
     return nutrition
