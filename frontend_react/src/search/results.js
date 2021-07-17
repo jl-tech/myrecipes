@@ -92,7 +92,7 @@ function SearchResults(props) {
         return (
             <>
             <Helmet>
-                <title> Search results for '{query.get('name')}' - MyRecipes </title>
+                <title> {query.get('name') != null ? `'${query.get('name')}': Search Results`: 'Browse All Recipes' } - MyRecipes </title>
             </Helmet>
             <Container style={{marginTop:"1em",marginBottom:"2em"}}>
                 <Row>
