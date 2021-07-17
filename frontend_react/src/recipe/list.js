@@ -20,20 +20,24 @@ function generateCard(recipe, index) {
             <Card key={index}>
                 <Link style={{color:'black'}} to={"/recipe/" + recipe.recipe_id} >
                 <Card.Img variant="Top" style={{width:"100%", height:"9vw", objectFit:"cover"}} alt="Recipe Image" src={recipe.photo_path == null ? "http://127.0.0.1:5000/img/default_recipe.png" : "http://127.0.0.1:5000/img/" + recipe.photo_path}/>
-                <Card.Body>
+                <Card.Body style={{textAlign: "center"}}>
                     <Card.Title className={"text-truncate"}>{recipe.name}</Card.Title>
                     <Card.Text className="text-truncate" style={{height:"1.5em"}}>
                         {recipe.description}
                     </Card.Text>
-                    <Card.Text>
-                        <Row>
-                            <Col>
-                                <b> Serving size: </b> {recipe.serving_size} <br />
-                                <b> Time to cook:</b> {recipe.time_to_cook} minutes <br />
-                                <b> Meal: </b> {recipe.type} <br />
-                                <b> Calories: </b>
-                            </Col>
-                        </Row>
+                    <Card.Text style={{textAlign: "center"}}>
+                        <table style={{marginLeft:"auto", marginRight:"auto", borderCollapse:"separate", borderSpacing:"2em 0em"}}><tbody>
+                        <tr>
+                            <th style={{fontSize:"110%"}}> {recipe.time_to_cook} </th>
+                            <th style={{fontSize:"110%"}}> {recipe.serving_size} </th>
+                            <th style={{fontSize:"110%"}}> {recipe.type} </th>
+                        </tr>
+                        <tr>
+                            <td> MINS </td>
+                            <td> SERVES </td>
+                            <td> MEAL </td>
+                        </tr>
+                    </tbody></table>
                     </Card.Text>
 
                 </Card.Body>
