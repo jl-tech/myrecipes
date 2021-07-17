@@ -85,13 +85,16 @@ def do_search(name, type, serving_size, time_to_cook, ingredients, step_key_word
             query += "AND "
         query += "match(S.step_text) against (%s in natural language mode)"
         args = args + (step_key_words,)
-    print(query, file=sys.stderr)
-    print(args, file=sys.stderr)
-
     cur.execute(query, args)
-    print(cur._last_executed, file=sys.stderr)
     results = cur.fetchall()
 
+    # if no results found, change MATCH to also include ingredients
+    if len(results) == 0:
+        query = query.replace("match(R.name) against", "match(I.ingredient_name) against")
+    print(query)
+    cur.execute(query, args)
+
+    results = cur.fetchall()
     query_lock.release()
     return results
 
