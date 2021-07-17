@@ -57,6 +57,7 @@ function RecipeViewNutri(props) {
                 <>
                     <h5 style={{textAlign: "center"}}> Nutritional Info </h5>
                     <p style={{textAlign: "center"}}> per serving</p>
+                    <small style={{textAlign: "center"}}> powered by Nutritionix </small>
                     <p style={{textAlign: "center"}}>
                         Failed to fetch nutrition. Try again later. <br/>
                         <small> Is the API limit exceeded? </small>
@@ -71,6 +72,8 @@ function RecipeViewNutri(props) {
                         <br/>
                         <small> This may take a while</small>
                     </div>
+                    <br/>
+                    <p style={{textAlign: "center"}}> <small> powered by <Image style={{height:"2em", width:"auto"}} src={"https://www.nutritionix.com/nix_assets/images/nutritionix_small.png"}/> </small> </p>
                 </>
         )
     } else {
@@ -122,7 +125,9 @@ function RecipeViewNutri(props) {
                         </tr>
                     </Table>
                 </Row>
+                <p style={{textAlign: "center"}}> <small> powered by <Image style={{height:"2em", width:"auto"}} src={"https://www.nutritionix.com/nix_assets/images/nutritionix_small.png"}/> </small> </p>
             </>
+
         );
     }
 }
