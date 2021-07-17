@@ -185,6 +185,10 @@ def route_recipe_nutrition():
         response = jsonify({'error': 'Invalid recipe id'})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
+    if result == -2:
+        response = jsonify({'error': 'Could not fetch nutrition data at this time'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
     else:
         response = jsonify(result)
         response.headers.add('Access-Control-Allow-Origin', '*')

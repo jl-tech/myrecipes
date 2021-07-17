@@ -17,6 +17,7 @@ import RecipeViewIngredient from './viewingredient.js';
 import RecipeViewStep from './viewstep.js';
 import RecipeViewPhoto from './viewphoto.js';
 import {Spinner} from "react-bootstrap";
+import RecipeViewNutri from "./viewnutrition";
 
 async function recipeView(recipe_id) {
     let response = await fetch('http://localhost:5000/recipe/view?' + new URLSearchParams({'recipe_id': recipe_id}), {
@@ -150,10 +151,11 @@ function RecipeView(props) {
                     <RecipeViewPhoto photos={photos} />
                     <RecipeViewDesc recipeId={id} recipeName={recipeName} setRecipeName={setRecipeName} time={time} setTime={setTime} serving={serving} setServing={setServing} mealType={mealType} setMealType={setMealType} photos={photos} setPhotos={setPhotos} editable={editable} setDeleted={setDeleted} setEditedAt={setEditedAt} description={description} setDescription={setDescription} />
                     <Row style={{marginTop:"1em"}}>
-                        <Col sm={2} style={{marginBottom:"1em"}}>
+                        <Col sm={3} style={{marginBottom:"1em"}}>
                             <RecipeViewContri userImgURL={userImgURL} contributorUID={contributorUID} firstName={firstName} lastName={lastName} createdAt={createdAt} editedAt={editedAt}/>
+                            <br/> <br/>
+                            <RecipeViewNutri recipeId={id}/>
                         </Col>
-                        <Col sm={1} />
                         <Col sm={9}>
                             <RecipeViewDescription description={description}/>
                             <RecipeViewIngredient recipeId={id} ingredients={ingredients} setIngredients={setIngredients} editable={editable} setEditedAt={setEditedAt}/>
