@@ -461,7 +461,7 @@ def recipe_nutrition(recipe_id):
     '''
     query_lock.acquire()
     cur = con.cursor()
-    query = '''select ingredient_name, quantity, unit from RecipeIngredients where recipe_id = %s'''
+    query = '''select ingredient_name, quantity, unit, serving_size from RecipeIngredients RI join Recipes R on RI.recipe_id = R.recipe_id where RI.recipe_id = %s'''
 
     if cur.execute(query, (recipe_id)) == 0:
         query_lock.release()
@@ -485,7 +485,8 @@ def recipe_nutrition(recipe_id):
     headers = {'Content-Type': 'application/json', 'x-app-id': 'c7b72621', 'x-app-key': '4b5b2810ca6b16b967317e359e7c5d91', 'x-remote-user-id': '0'}
 
     missed_ingredients = []
-    for ingredients in cur.fetchall():
+    result = cur.fetchall()
+    for ingredients in result:
         q = ' '.join((str(ingredients['quantity']), ingredients['unit'] if ingredients['unit'] is not None else "", ingredients['ingredient_name']))
         payload = {'query': q}
         r = requests.post(url, headers = headers, json = payload)
@@ -502,5 +503,8 @@ def recipe_nutrition(recipe_id):
             nutrition['protein'] += n['nf_protein'] if n['nf_protein'] is not None else 0
             nutrition['potassium'] += n['nf_potassium'] if n['nf_potassium'] is not None else 0
             nutrition['p'] += n['nf_p'] if n['nf_p'] is not None else 0
+
+    for i in nutrition:
+        nutrition[i] = nutrition[i] / result[0]['serving_size']
 
     return nutrition

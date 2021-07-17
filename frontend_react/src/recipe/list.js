@@ -21,27 +21,31 @@ function generateCard(recipe, index) {
                 <Card.Img variant="Top" style={{width:"100%", height:"9vw", objectFit:"cover"}} alt="Recipe Image" src={recipe.photo_path == null ? "http://127.0.0.1:5000/img/default_recipe.png" : "http://127.0.0.1:5000/img/" + recipe.photo_path}/>
                 <Card.Body>
                     <Card.Title className={"text-truncate"}>{recipe.name}</Card.Title>
+                    <Card.Text className="text-truncate" style={{height:"1.5em"}}>
+                        {recipe.description}
+                    </Card.Text>
                     <Card.Text>
                         <Row>
-                            <Col sm={9}>
+                            <Col>
                                 <b> Serving size: </b> {recipe.serving_size} <br />
                                 <b> Time to cook:</b> {recipe.time_to_cook} minutes <br />
                                 <b> Meal: </b> {recipe.type} <br />
                                 <b> Calories: </b>
                             </Col>
-                            <Col sm={3} style={{textAlign:"center"}}>
-                                <Image src={"http://127.0.0.1:5000/img/" + recipe.profile_pic_path} alt="Profile Picture" roundedCircle width="50em"/>
-                                <br />
-                                {recipe.first_name}
-                            </Col>
                         </Row>
                     </Card.Text>
-                    <Card.Text className="text-truncate" style={{height:"1.5em"}}>
-                        {recipe.description}
-                    </Card.Text>
+
                 </Card.Body>
-                <Card.Footer>
-                    <small className={"text-muted"}>
+                <Card.Footer className={"text-truncate"}>
+                    <Row>
+                        <Col sm={2} className={"mx-auto my-auto"}>
+                            <Image src={"http://127.0.0.1:5000/img/" + recipe.profile_pic_path} alt="Profile Picture" roundedCircle width="40em"/>
+
+                        </Col>
+                    <Col sm={10}>
+                        {recipe.first_name + " " + recipe.last_name} <br/>
+                     <small className={"text-muted"}>
+
                         {"Created "}
                         <ReactTimeAgo date={new Date(recipe.creation_time)} locale="en-US"/>
                         {recipe.edit_time != null ? <>
@@ -49,7 +53,8 @@ function generateCard(recipe, index) {
                         <ReactTimeAgo date={new Date(recipe.edit_time)} locale="en-US"/> </>
                         : ""}
                     </small>
-
+                        </Col>
+                    </Row>
                 </Card.Footer>
             </Card>
         </Link>

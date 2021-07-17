@@ -21,7 +21,7 @@ def do_search(name, type, serving_size, time_to_cook, ingredients, step_key_word
     cur = con.cursor()
 
     query = """
-        select distinct R.recipe_id,  R.name, R.creation_time, R.edit_time, R.time_to_cook, R.type, R.serving_size, RP.photo_path, R.description, U.first_name, U.profile_pic_path 
+        select distinct R.recipe_id,  R.name, R.creation_time, R.edit_time, R.time_to_cook, R.type, R.serving_size, RP.photo_path, R.description, U.first_name, U.last_name, U.profile_pic_path 
         from Recipes R
             left outer join (select * from RecipePhotos where photo_no = 0) RP on R.recipe_id = RP.recipe_id
             left outer join RecipeIngredients I on R.recipe_id = I.recipe_id
