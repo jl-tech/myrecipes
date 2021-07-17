@@ -70,7 +70,7 @@ function RecipeViewNutri(props) {
                     <div style={{textAlign: "center"}}>
                         <Spinner animation={"grow"} size={"sm"}/>
                         <br/>
-                        <small> This may take a while</small>
+                        <small> One sec... </small>
                     </div>
                     <br/>
                     <p style={{textAlign: "center"}}> <small> powered by <Image style={{height:"2em", width:"auto"}} src={"https://www.nutritionix.com/nix_assets/images/nutritionix_small.png"}/> </small> </p>
