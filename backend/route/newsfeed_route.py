@@ -66,7 +66,8 @@ def route_is_subscribed():
 @NEWSFEED.route("/get_feed", methods=['GET'])
 def route_get_feed():
     token = request.headers.get("Authorization")
-    result = newsfeed.get_feed(token)
+    page = request.args.get("page")
+    result = newsfeed.get_feed(token, page)
     if result == -1:
         response = jsonify({'error': 'Invalid token'})
         response.headers.add('Access-Control-Allow-Origin', '*')

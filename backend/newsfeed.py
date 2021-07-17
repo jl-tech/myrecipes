@@ -104,5 +104,24 @@ def is_subscribed(token, user_id):
     query_lock.release()
     return len(result) != 0
 
-def get_feed(token):
-    pass
+def get_feed(token, page):
+    query_lock.acquire()
+    u_id = tokenise.token_to_id(token)
+    if u_id < 0:
+        query_lock.release()
+        return -1
+
+    offset = page * 10
+
+    cur = con.cursor()
+    query = """
+        select * 
+        from Recipes 
+        where created_by_user_id in (select is_subscribed_to from SubscribedTo where user_id = %s)
+        order by DATE(creation_time) desc, TIME(creation_time) desc-- TODO number of times liked
+        limit %s offset %s
+    """
+    cur.execute(query, (u_id, int(10), int((int(page) - 1) * 10)))
+    result = cur.fetchall()
+    query_lock.release()
+    return result

@@ -31,11 +31,14 @@ function generateCard(recipe, index) {
                             <th style={{fontSize:"110%"}}> {recipe.time_to_cook} </th>
                             <th style={{fontSize:"110%"}}> {recipe.serving_size} </th>
                             <th style={{fontSize:"110%"}}> {recipe.type} </th>
+                            <th style={{fontSize:"110%"}}> N/A
+                            G</th>
                         </tr>
                         <tr>
                             <td> MINS </td>
                             <td> SERVES </td>
                             <td> MEAL </td>
+                            <td> CAL </td>
                         </tr>
                     </tbody></table>
                     </Card.Text>
