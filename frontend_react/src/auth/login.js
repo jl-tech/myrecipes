@@ -12,6 +12,7 @@ import Cookie from 'universal-cookie';
 
 import Register from './register.js';
 import ForgetPassword from './forgetpassword.js';
+import {Helmet} from "react-helmet";
 
 async function loginUser(email, password) {
     let response = await fetch('http://localhost:5000/auth/login', {
@@ -58,6 +59,9 @@ function LoginBody() {
     
     return (
         <>
+            <Helmet>
+                <title> Log In - MyRecipes </title>
+            </Helmet>
         <Modal.Body>
             <Form onSubmit={handleSubmit}>
                 <Form.Group controlId="email">

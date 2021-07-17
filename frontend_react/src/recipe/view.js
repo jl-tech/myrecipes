@@ -18,6 +18,7 @@ import RecipeViewStep from './viewstep.js';
 import RecipeViewPhoto from './viewphoto.js';
 import {Spinner} from "react-bootstrap";
 import RecipeViewNutri from "./viewnutrition";
+import {Helmet} from "react-helmet";
 
 async function recipeView(recipe_id) {
     let response = await fetch('http://localhost:5000/recipe/view?' + new URLSearchParams({'recipe_id': recipe_id}), {
@@ -148,6 +149,9 @@ function RecipeView(props) {
         if (!deleted) {
             return (
                 <>
+                <Helmet>
+                <title> {recipeName} by {firstName} {lastName} - MyRecipes </title>
+                </Helmet>
                 <Container style={{marginTop:"1em",marginBottom:"2em"}}>
                     <RecipeViewPhoto photos={photos} />
                     <RecipeViewDesc recipeId={id} recipeName={recipeName} calories={calories} setRecipeName={setRecipeName} time={time} setTime={setTime} serving={serving} setServing={setServing} mealType={mealType} setMealType={setMealType} photos={photos} setPhotos={setPhotos} editable={editable} setDeleted={setDeleted} setEditedAt={setEditedAt} description={description} setDescription={setDescription} />

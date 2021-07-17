@@ -12,6 +12,7 @@ import RecipeCreateIngredient from './createingredient.js';
 import RecipeCreateStep from './createstep.js';
 import RecipeCreatePhoto from './createphoto.js';
 import Button from 'react-bootstrap/esm/Button';
+import {Helmet} from "react-helmet";
 
 async function createRecipe(token, name, type, time, serving, description, ingredients, steps, photos, photoNames) {
     let data = new FormData();
@@ -98,6 +99,9 @@ function RecipeCreate(props) {
 
     return (
         <>
+        <Helmet>
+                <title> Create Recipe - MyRecipes </title>
+         </Helmet>
         <Container style={{marginTop:"1em",marginBottom:"2em"}}>
             <Row>
                 <Col>

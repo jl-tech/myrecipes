@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useHistory } from "react-router-dom";
+import { Helmet } from "react-helmet"
 
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import Spinner from "react-bootstrap/Spinner";
 
 async function requestEmailConfirm(code) {
     let response = await fetch('http://localhost:5000/auth/emailconfirm', {
@@ -54,10 +56,22 @@ function EmailConfirm() {
 
     if (!fetched) {
         return (
-            <Modal.Dialog></Modal.Dialog>
+            <>
+            <Modal.Dialog style={{textAlign: "center"}}>
+                <Helmet>
+                    <title> Verifying email - MyRecipes </title>
+                </Helmet>
+                <Spinner animation={"grow"} style={{marginLeft:"auto", marginRight:"auto"}}/>
+            </Modal.Dialog>
+            </>
         );
     } else {
         return (
+            <>
+                <Helmet>
+                    <title> {message} - MyRecipes </title>
+                </Helmet>
+
             <Modal.Dialog>
             <Modal.Body>
             <div style={{textAlign:"center"}}>
@@ -68,6 +82,7 @@ function EmailConfirm() {
             </div>
             </Modal.Body>
             </Modal.Dialog>
+            </>
         );
     }
 

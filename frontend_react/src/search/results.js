@@ -16,6 +16,7 @@ import ReactTimeAgo from "react-time-ago";
 import RecipeList from '../recipe/list';
 import SearchBar from './bar.js';
 import SearchAdvanced from './advanced.js';
+import {Helmet} from "react-helmet";
 
 async function requestRecipes(token, name_keywords, type, serving_size, time_to_cook, ingredients, step_keywords) {
     let response = await fetch('http://localhost:5000/search/', {
@@ -89,6 +90,10 @@ function SearchResults(props) {
 
     if (success) {
         return (
+            <>
+            <Helmet>
+                <title> Search results for '{query.get('name')}' - MyRecipes </title>
+            </Helmet>
             <Container style={{marginTop:"1em",marginBottom:"2em"}}>
                 <Row>
                     <Col>
@@ -125,6 +130,7 @@ function SearchResults(props) {
                 <RecipeList recipeData={recipeData} setRecipeData={setRecipeData}/>}
                 </Row>
             </Container>
+            </>
         )
     }
     else {

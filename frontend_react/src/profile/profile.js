@@ -15,6 +15,7 @@ import ProfileEdit from './edit.js';
 import ProfileRecipes from "./recipes";
 import {Spinner} from "react-bootstrap";
 import SubscribeButton from "../newsfeed/subscribe";
+import {Helmet} from "react-helmet";
 
 async function profileUser(userid) {
     let response = await fetch('http://localhost:5000/profile/view?' + new URLSearchParams({'user_id': userid}), {
@@ -94,6 +95,9 @@ function Profile(props) {
     if (success) {
         return (
             <>
+            <Helmet>
+                <title> {firstName} {lastName}'s Profile - MyRecipes </title>
+            </Helmet>
             <Container style={{marginTop:"1em", marginBottom:"2em"}}>
                 <Row>
                     <Col>

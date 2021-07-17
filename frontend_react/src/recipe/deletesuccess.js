@@ -7,6 +7,7 @@ import Button from 'react-bootstrap/Button';
 function DeleteSuccess() {
 
     return (
+        <>
         <Modal.Dialog>
             <Modal.Body>
             <div style={{textAlign:"center"}}>
@@ -17,7 +18,9 @@ function DeleteSuccess() {
             </div>
             </Modal.Body>
             </Modal.Dialog>
+        </>
         );
+
 
 }
 

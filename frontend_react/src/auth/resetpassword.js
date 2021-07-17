@@ -7,6 +7,7 @@ import Form from 'react-bootstrap/Form';
 import Alert from 'react-bootstrap/Alert';
 
 import logo from '../WIP_logo_2.png';
+import {Helmet} from "react-helmet";
 
 async function verifyResetCode(reset_code) {
     let response = await fetch('http://localhost:5000/auth/verifyresetcode', {
@@ -81,6 +82,9 @@ function ResetPasswordBody(props) {
     if (success) {
         return (
             <>
+            <Helmet>
+                <title> Reset Password - MyRecipes </title>
+            </Helmet>
             <div style={{textAlign:"center",marginTop:"1em"}}>
                 <img src={logo} alt="Logo" style={{maxWidth:"500px"}}/>
             </div>
@@ -104,6 +108,9 @@ function ResetPasswordBody(props) {
     } else {
         return (
             <>
+            <Helmet>
+                <title> Reset Password - MyRecipes </title>
+            </Helmet>
             <div style={{textAlign:"center"}}>
                 <img src={logo} alt="Logo" style={{maxWidth:"500px"}}/>
             </div>

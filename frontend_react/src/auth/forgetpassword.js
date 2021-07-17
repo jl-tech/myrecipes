@@ -5,6 +5,7 @@ import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
+import {Helmet} from "react-helmet";
 
 async function requestForgetPassword(email) {
     let response = await fetch('http://localhost:5000/auth/forgetpassword', {
@@ -48,6 +49,9 @@ function ForgetPassword() {
     if (!submitted) {
         return (
             <>
+                <Helmet>
+                    <title> Forgot Password - MyRecipes </title>
+                </Helmet>
             <Modal.Header>
                 <Modal.Title>
                 Forget Password
