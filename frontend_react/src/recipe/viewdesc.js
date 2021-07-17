@@ -192,11 +192,13 @@ function RecipeViewDesc(props) {
                             <th style={{fontSize:"200%"}}> {props.time} </th>
                             <th style={{fontSize:"200%"}}> {props.serving} </th>
                             <th style={{fontSize:"200%"}}> {props.mealType} </th>
+                            <th style={{fontSize: "200%"}}> {props.calories == null ? "N/A" : props.calories} </th>
                         </tr>
                         <tr>
                             <td> MINS </td>
                             <td> SERVES </td>
                             <td> MEAL </td>
+                            <td> APPROX CAL </td>
                         </tr>
                     </tbody></table>
                     </Col>

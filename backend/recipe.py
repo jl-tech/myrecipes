@@ -510,4 +510,13 @@ def recipe_nutrition(recipe_id):
     for i in nutrition:
         nutrition[i] = round(nutrition[i] / result[0]['serving_size'], 1)
 
+    query_lock.acquire()
+    query = """
+    update Recipes
+    set calories = %s
+    where recipe_id = %s
+    """
+    cur.execute(query, (round(nutrition['calories'] / 100,  0) * 100, recipe_id ))
+    con.commit()
+    query_lock.release()
     return nutrition

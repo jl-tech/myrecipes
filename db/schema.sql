@@ -35,6 +35,7 @@ create table Recipes(
     type text,
     serving_size int,
     description text,
+    calories int, -- rounded to 100th
     primary key(recipe_id),
     fulltext(name)
 );

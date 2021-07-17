@@ -31,7 +31,7 @@ function generateCard(recipe, index) {
                             <th style={{fontSize:"110%"}}> {recipe.time_to_cook} </th>
                             <th style={{fontSize:"110%"}}> {recipe.serving_size} </th>
                             <th style={{fontSize:"110%"}}> {recipe.type} </th>
-                            <th style={{fontSize:"110%"}}> N/A </th>
+                            <th style={{fontSize:"110%"}}> {recipe.calories == null ? "N/A" : recipe.calories }</th>
                         </tr>
                         <tr>
                             <td> MINS </td>
