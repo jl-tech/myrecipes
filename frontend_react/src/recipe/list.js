@@ -13,62 +13,7 @@ import ReactTimeAgo from "react-time-ago";
 
 import Slider from '@material-ui/core/Slider';
 
-function generateCard(recipe, index) {
-    return(
-        <div  style={{padding:"1em"}}>
 
-            <Card key={index}>
-                <Link style={{color:'black'}} to={"/recipe/" + recipe.recipe_id} >
-                <Card.Img variant="Top" style={{width:"100%", height:"9vw", objectFit:"cover"}} alt="Recipe Image" src={recipe.photo_path == null ? "http://127.0.0.1:5000/img/default_recipe.png" : "http://127.0.0.1:5000/img/" + recipe.photo_path}/>
-                <Card.Body style={{textAlign: "center"}}>
-                    <Card.Title className={"text-truncate"}>{recipe.name}</Card.Title>
-                    <Card.Text className="text-truncate" style={{height:"1.5em"}}>
-                        {recipe.description == null ? "No description available" : recipe.description}
-                    </Card.Text>
-                    <Card.Text style={{textAlign: "center"}}>
-                        <table style={{marginLeft:"auto", marginRight:"auto", borderCollapse:"separate", borderSpacing:"2em 0em"}}><tbody>
-                        <tr>
-                            <th style={{fontSize:"110%"}}> {recipe.time_to_cook} </th>
-                            <th style={{fontSize:"110%"}}> {recipe.serving_size} </th>
-                            <th style={{fontSize:"110%"}}> {recipe.type} </th>
-                            <th style={{fontSize:"110%"}}> {recipe.calories == null ? "N/A" : recipe.calories }</th>
-                        </tr>
-                        <tr>
-                            <td> MINS </td>
-                            <td> SERVES </td>
-                            <td> MEAL </td>
-                            <td> CAL </td>
-                        </tr>
-                    </tbody></table>
-                    </Card.Text>
-
-                </Card.Body>
-                </Link>
-
-                <Card.Footer className={"text-truncate"}>
-                    <Row>
-                        <Col sm={2} className={"mx-auto my-auto"}>
-                            <Image src={"http://127.0.0.1:5000/img/" + recipe.profile_pic_path} alt="Profile Picture" roundedCircle width="40em"/>
-
-                        </Col>
-                    <Col sm={10}>
-                        <Link style={{color:'black'}} to={"/profile/" + recipe.user_id} > {recipe.first_name + " " + recipe.last_name} <br/> </Link>
-                     <small className={"text-muted"}>
-
-                        {"Created "}
-                        <ReactTimeAgo date={new Date(recipe.creation_time)} locale="en-US"/>
-                        {recipe.edit_time != null ? <>
-                        {" | Modified "}
-                        <ReactTimeAgo date={new Date(recipe.edit_time)} locale="en-US"/> </>
-                        : ""}
-                    </small>
-                        </Col>
-                    </Row>
-                </Card.Footer>
-            </Card>
-            </div>
-    )
-}
 
 function RecipeList(props) {
 
@@ -81,7 +26,68 @@ function RecipeList(props) {
     const [timeFilters, setTimeFilters] = useState(initTimeFilters());
     const [activeTimeFilters, setActiveTimeFilters] = useState([Math.min(...timeFilters), Math.max(...timeFilters)]);
     const [activePage, setActivePage] = useState(0);
+    const [hoveredRecipeId, setHoveredRecipeId] = useState(-1)
     const recipesPerPage = 4;
+
+    function generateCard(recipe, index) {
+        return(
+            <div  style={{padding:"1em"}}>
+
+                <Card key={index}
+                      onMouseEnter={() => setHoveredRecipeId(recipe.recipe_id)}
+                      onMouseLeave={() => setHoveredRecipeId(-1)}
+                      className={hoveredRecipeId === recipe.recipe_id ? 'shadow-lg' : 'shadow-sm'}>
+                    <Link style={{color:'black', textDecoration: 'none'}} to={"/recipe/" + recipe.recipe_id} >
+                        <Card.Img variant="Top" style={{width:"100%", height:"9vw", objectFit:"cover"}} alt="Recipe Image" src={recipe.photo_path == null ? "http://127.0.0.1:5000/img/default_recipe.png" : "http://127.0.0.1:5000/img/" + recipe.photo_path}/>
+                        <Card.Body style={{textAlign: "center"}}>
+                            <Card.Title className={"text-truncate"}>{recipe.name}</Card.Title>
+                            <Card.Text className="text-truncate" style={{height:"1.5em", textDecoration: 'none'}}>
+                                {recipe.description == null ? "No description available" : recipe.description}
+                            </Card.Text>
+                            <Card.Text style={{textAlign: "center"}}>
+                                <table style={{marginLeft:"auto", marginRight:"auto", borderCollapse:"separate", borderSpacing:"2em 0em"}}><tbody>
+                                <tr>
+                                    <th style={{fontSize:"110%"}}> {recipe.time_to_cook} </th>
+                                    <th style={{fontSize:"110%"}}> {recipe.serving_size} </th>
+                                    <th style={{fontSize:"110%"}}> {recipe.type} </th>
+                                    <th style={{fontSize:"110%"}}> {recipe.calories == null ? "N/A" : recipe.calories }</th>
+                                </tr>
+                                <tr>
+                                    <td> MINS </td>
+                                    <td> SERVES </td>
+                                    <td> MEAL </td>
+                                    <td> CAL </td>
+                                </tr>
+                                </tbody></table>
+                            </Card.Text>
+
+                        </Card.Body>
+                    </Link>
+
+                    <Card.Footer className={"text-truncate"}>
+                        <Row>
+                            <Col sm={2} className={"mx-auto my-auto"}>
+                                <Image src={"http://127.0.0.1:5000/img/" + recipe.profile_pic_path} alt="Profile Picture" roundedCircle width="40em"/>
+
+                            </Col>
+                            <Col sm={10}>
+                                <Link style={{color:'black'}} to={"/profile/" + recipe.user_id} > {recipe.first_name + " " + recipe.last_name} <br/> </Link>
+                                <small className={"text-muted"}>
+
+                                    {"Created "}
+                                    <ReactTimeAgo date={new Date(recipe.creation_time)} locale="en-US"/>
+                                    {recipe.edit_time != null ? <>
+                                            {" | Modified "}
+                                            <ReactTimeAgo date={new Date(recipe.edit_time)} locale="en-US"/> </>
+                                        : ""}
+                                </small>
+                            </Col>
+                        </Row>
+                    </Card.Footer>
+                </Card>
+            </div>
+        )
+    }
 
     function initMealFilters() {
         let tempSet = new Set();

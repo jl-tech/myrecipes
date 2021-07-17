@@ -109,7 +109,7 @@ function Home({ loggedIn, setLoggedIn, currId }) {
 
     return (
     <>
-    <Navbar bg="light" variant="light">
+    <Navbar bg="light" variant="light" className={"shadow-sm"}>
         <Link to="/home" >
             <img src={logo} height="50" />
         </Link>
