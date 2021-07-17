@@ -93,7 +93,7 @@ function SearchResults(props) {
                 <Row>
                     <Col>
                         <div style={{textAlign:"center"}}>
-                            <h2>Search Recipe</h2>
+                            <h2>Search Recipes </h2>
                         </div>
                     </Col>
                 </Row>
@@ -101,8 +101,9 @@ function SearchResults(props) {
                     <Col sm={3} />
                     <Col sm={6}>
                     <SearchBar loggedIn={props.loggedIn} init={query.get('name') != null ? query.get('name') : ""} disabled={advancedMode}/>
-                    <div style={{textAlign:"right"}}>
-                        <a href="#" onClick={()=>{setAdvancedMode(!advancedMode)}}>Advanced options</a>
+                    <div style={{marginTop:"0.5em"}}>
+                        {recipeData.length} recipes found
+                        <a href="#" style={{float:"right"}} onClick={()=>{setAdvancedMode(!advancedMode)}}>Advanced options</a>
                     </div>
                     </Col>
                 </Row>

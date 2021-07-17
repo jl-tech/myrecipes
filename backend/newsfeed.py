@@ -103,3 +103,6 @@ def is_subscribed(token, user_id):
     result = cur.fetchall()
     query_lock.release()
     return len(result) != 0
+
+def get_feed(token):
+    pass

@@ -16,8 +16,9 @@ import Slider from '@material-ui/core/Slider';
 function generateCard(recipe, index) {
     return(
         <div  style={{padding:"1em"}}>
-        <Link style={{color:'black'}} to={"/recipe/" + recipe.recipe_id} >
+
             <Card key={index}>
+                <Link style={{color:'black'}} to={"/recipe/" + recipe.recipe_id} >
                 <Card.Img variant="Top" style={{width:"100%", height:"9vw", objectFit:"cover"}} alt="Recipe Image" src={recipe.photo_path == null ? "http://127.0.0.1:5000/img/default_recipe.png" : "http://127.0.0.1:5000/img/" + recipe.photo_path}/>
                 <Card.Body>
                     <Card.Title className={"text-truncate"}>{recipe.name}</Card.Title>
@@ -36,6 +37,8 @@ function generateCard(recipe, index) {
                     </Card.Text>
 
                 </Card.Body>
+                </Link>
+
                 <Card.Footer className={"text-truncate"}>
                     <Row>
                         <Col sm={2} className={"mx-auto my-auto"}>
@@ -43,7 +46,7 @@ function generateCard(recipe, index) {
 
                         </Col>
                     <Col sm={10}>
-                        {recipe.first_name + " " + recipe.last_name} <br/>
+                        <Link style={{color:'black'}} to={"/profile/" + recipe.user_id} > {recipe.first_name + " " + recipe.last_name} <br/> </Link>
                      <small className={"text-muted"}>
 
                         {"Created "}
@@ -57,7 +60,6 @@ function generateCard(recipe, index) {
                     </Row>
                 </Card.Footer>
             </Card>
-        </Link>
             </div>
     )
 }
