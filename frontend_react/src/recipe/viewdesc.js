@@ -64,7 +64,7 @@ function EditDesc(props) {
     async function handleSubmit(event) {
         event.preventDefault();
 
-        let response = await requestEditDesc(cookie.get('token'), props.recipeId, name, type, time, serving, description)
+        let response = await requestEditDesc(cookie.get('token'), props.recipeId, name, type, time, serving, description === "null" || description === "" ? null : description)
             .catch(e => {
                 setErrorShow(true);
                 setSuccessShow(false);
@@ -153,7 +153,7 @@ export function RecipeViewDescription(props) {
             <Col>
                 <ListGroup>
                     <ListGroup.Item style={{textAlign:"justify"}}>
-                        {props.description}
+                        {props.description == null ? "No description available" : props.description}
                     </ListGroup.Item>
                 </ListGroup>
             </Col>

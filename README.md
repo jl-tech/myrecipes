@@ -10,7 +10,14 @@ Instructions for Lubuntu VM.
 1. Setup & install mySQL Server 8 with `sudo apt-get update && sudo apt-get install mysql-server`
 2. Start mySQL server with `sudo service mysql start`
 3. Run `sudo mysql` command in Terminal.
-4. When in the `mysql` environment, run `source [path_to_project]/db/schema.sql`
+4. FOR CLEAN DATABASE: when in the `mysql` environment, run `source [path_to_project]/db/schema.sql`
+5. FOR SAMPLE DATA:when in the `mysql` environment, run `source [path_to_project]/db/dump.sql`
+
+Sample database login:
+
+Username: `jonathan.liu2000@gmail.com`
+
+Password: `myrecipes`
 
 ### Backend
 1. Install pip3 with `sudo apt-get install python3-pip`

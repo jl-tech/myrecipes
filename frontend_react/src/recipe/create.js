@@ -86,7 +86,7 @@ function RecipeCreate(props) {
             photoNames.push(photo["name"])
         }
 
-        let response = await createRecipe(cookie.get('token'), name, type, time, serving, description, JSON.stringify(ingredientsP), JSON.stringify(stepsP), photosP, JSON.stringify(photoNames))
+        let response = await createRecipe(cookie.get('token'), name, type, time, serving, description === "null" || description === ""? null : description, JSON.stringify(ingredientsP), JSON.stringify(stepsP), photosP, JSON.stringify(photoNames))
             .catch(e => {
                 setErrorShow(true);
                 setErrorText(e.message);

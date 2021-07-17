@@ -4,6 +4,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import Col from 'react-bootstrap/Col';
 
 import RecipeList from '../recipe/list';
+import Container from "react-bootstrap/Container";
 
 
 async function requestRecipes(user_id) {
@@ -55,9 +56,9 @@ function ProfileRecipes(props) {
         );
     } else {
         return (
-            <div style={{textAlign: "center"}}>
+            <Container style={{textAlign: "center"}}>
                 <Spinner animation={"grow"}/>
-            </div>
+            </Container>
         );
     }
 

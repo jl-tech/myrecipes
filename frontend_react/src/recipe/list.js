@@ -23,7 +23,7 @@ function generateCard(recipe, index) {
                 <Card.Body style={{textAlign: "center"}}>
                     <Card.Title className={"text-truncate"}>{recipe.name}</Card.Title>
                     <Card.Text className="text-truncate" style={{height:"1.5em"}}>
-                        {recipe.description}
+                        {recipe.description == null ? "No description available" : recipe.description}
                     </Card.Text>
                     <Card.Text style={{textAlign: "center"}}>
                         <table style={{marginLeft:"auto", marginRight:"auto", borderCollapse:"separate", borderSpacing:"2em 0em"}}><tbody>
@@ -81,7 +81,7 @@ function RecipeList(props) {
     const [timeFilters, setTimeFilters] = useState(initTimeFilters());
     const [activeTimeFilters, setActiveTimeFilters] = useState([Math.min(...timeFilters), Math.max(...timeFilters)]);
     const [activePage, setActivePage] = useState(0);
-    const recipesPerPage = 2;
+    const recipesPerPage = 4;
 
     function initMealFilters() {
         let tempSet = new Set();
@@ -178,7 +178,9 @@ function RecipeList(props) {
     function sortChange(e) {
         let key = "creation_time";
         switch (e.target.value) {
-            case "1":
+            case "0":
+                window.location.reload();
+            case "2":
                 key = "edit_time"
                 break;
             default:
@@ -229,10 +231,11 @@ function RecipeList(props) {
                 <Form.Label column sm={4}>Sort by:</Form.Label>
                 <Col sm={8}>
                 <Form.Control as="select" onChange={(e) => sortChange(e)}>
-                <option value="0">Date created</option>
-                <option value="1">Date modified</option>
-                <option value="2">Likes</option>
-                <option value="3">Comments</option>
+                <option value="0"> Relevance</option>
+                <option value="1">Date created</option>
+                <option value="2">Date modified</option>
+                <option value="3">Likes</option>
+                <option value="4">Comments</option>
                 </Form.Control>
                 </Col>
             </Form.Group>

@@ -482,9 +482,10 @@ def recipe_nutrition(recipe_id):
         'p': 0
     }
     url = 'https://trackapi.nutritionix.com/v2/natural/nutrients'
-    # myrecipes 1 app-id key = c7b72621 f4f179ad2b66776956d0ca1daa4213c2
-    # myrecipes 2 app-id key = 5773eec9 724bb52ca50b08599849779c1101a3d3
-    headers = {'Content-Type': 'application/json', 'x-app-id': '5773eec9', 'x-app-key': '724bb52ca50b08599849779c1101a3d3', 'x-remote-user-id': '0'}
+    # myrecipes 1 (app-id key) = c7b72621 f4f179ad2b66776956d0ca1daa4213c2
+    # myrecipes 2 (app-id key) = 5773eec9 724bb52ca50b08599849779c1101a3d3
+    # myrecipes 3 (app-id key) = 6944d86b 9453e5df6bc944849f07a9aa40c3e2ed
+    headers = {'Content-Type': 'application/json', 'x-app-id': '6944d86b', 'x-app-key': '9453e5df6bc944849f07a9aa40c3e2ed', 'x-remote-user-id': '0'}
 
     result = cur.fetchall()
     all_ingredients = ""
