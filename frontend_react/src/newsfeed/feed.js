@@ -33,11 +33,12 @@ async function requestFeed(token, page) {
     else throw new Error(responseJson.error);
 }
 
-async function profileUser(userid) {
-    let response = await fetch('http://localhost:5000/profile/view?' + new URLSearchParams({'user_id': userid}), {
+async function profileUser(token) {
+    let response = await fetch('http://localhost:5000/newsfeed/get_subscriptions', {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': token
         }
     }).catch(e => {
         throw new Error(e);
@@ -57,7 +58,7 @@ function Feed(props) {
     const [lastName, setlastName] = useState('');
     const [recipeCount, setRecipeCount] = useState(0);
     const [subscribers, setSubscribers] = useState([]);
-    const [email, setEmail] = useState('');
+    const [subscriptions, setSubscriptions] = useState([]);
     const [imgUrl, setImgUrl] = useState('');
 
     const [recipes, setRecipes] = useState(null);
@@ -86,17 +87,19 @@ function Feed(props) {
     }
 
     async function getProfile() {
-        let response = await profileUser(props.currId)
+        let response = await profileUser(cookie.get('token'))
             .catch(e => {
 
             });
 
         if (response != null) {
+            console.log(response)
             setfirstName(response.FirstName);
             setlastName(response.LastName);
             setImgUrl(response.ProfilePictureURL);
             setRecipeCount(response.RecipeCount);
             setSubscribers(response.Subscribers);
+            setSubscriptions(response.Subscriptions);
         }
         
         setFetchedProfile(true);
@@ -227,9 +230,21 @@ function Feed(props) {
                 <Row>
                     <Col>
                     <ListGroup>
-                        <ListGroup.Item variant="primary">#TODO Subscriptions</ListGroup.Item>
-                        <ListGroup.Item>Tom</ListGroup.Item>
-                        <ListGroup.Item>Harry</ListGroup.Item>
+                        <ListGroup.Item variant="primary">Subscriptions</ListGroup.Item>
+                        {subscriptions.map(({first_name, last_name, user_id, profile_pic_path})=>
+                            <ListGroup.Item>
+                            <Link to={"/profile/" + user_id}  style={{width:"100%"}} onClick={() => history.go(0)}>
+                                <Row>
+                                <Col sm={3}>
+                                <Image src={"http://127.0.0.1:5000/img/" + profile_pic_path} alt="Profile Picture" roundedCircle width="40em"/>
+                                </Col>
+                                <Col >
+                                    {first_name} {last_name}
+                                </Col>
+                                </Row>
+                                </Link>
+                            </ListGroup.Item>
+                        )}
                     </ListGroup>
                     </Col>
                 </Row>

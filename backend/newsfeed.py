@@ -137,3 +137,46 @@ def get_feed(token, page):
 
     query_lock.release()
     return result, math.ceil(count[0]['COUNT(*)'] / 10)
+
+def get_subscriptions(token):
+    
+    query_lock.acquire()
+    u_id = tokenise.token_to_id(token)
+    if u_id < 0:
+        query_lock.release()
+        return -1
+
+    cur = con.cursor()
+    query = "select * from Users where user_id = %s"
+    cur.execute(query, (u_id,))
+    result = cur.fetchall()
+
+    if result[0]['profile_pic_path'] is None:
+        result[0]['profile_pic_path'] = DEFAULT_PIC
+
+    query = "select COUNT(*) from Recipes where created_by_user_id = %s"
+    cur.execute(query, (u_id,))
+    recipe_count = cur.fetchall()
+    result[0]['recipe_count'] = recipe_count[0]['COUNT(*)']
+
+    query = """
+        select S.user_id, U.first_name, U.last_name, U.profile_pic_path
+        from SubscribedTo S
+            join Users U on S.user_id = U.user_id
+        where S.is_subscribed_to = %s"""
+    cur.execute(query, (u_id,))
+    subscribers = cur.fetchall()
+    result[0]['subscribers'] = subscribers
+
+    query = """
+        select U.user_id, U.first_name, U.last_name, U.profile_pic_path
+        from SubscribedTo S
+            join Users U on S.is_subscribed_to = U.user_id
+        where S.user_id = %s
+    """
+    cur.execute(query, (u_id, ))
+    subscriptions = cur.fetchall()
+    result[0]['subscriptions'] = subscriptions
+    
+    query_lock.release()
+    return result[0]

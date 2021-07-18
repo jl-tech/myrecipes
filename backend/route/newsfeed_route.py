@@ -76,3 +76,19 @@ def route_get_feed():
         response = jsonify({'feed': result, 'count': count})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
+
+@NEWSFEED.route("/get_subscriptions", methods=['GET'])
+def route_get_subscriptions():
+    token = request.headers.get("Authorization")
+    result = newsfeed.get_subscriptions(token)
+    if result == -1:
+        response = jsonify({'error': 'Invalid token'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
+    else:
+        response = jsonify({'Email': result['email'], 'FirstName': result['first_name'],
+                  'LastName': result['last_name'], 'ProfilePictureURL': result['profile_pic_path'],
+                  'RecipeCount': result['recipe_count'], 'Subscribers': result['subscribers'],
+                  'Subscriptions': result['subscriptions']})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 200
