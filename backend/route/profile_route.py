@@ -17,7 +17,7 @@ def route_profile_view():
     else:
         response = jsonify({'Email': result['email'], 'FirstName': result['first_name'],
                   'LastName': result['last_name'], 'ProfilePictureURL': result['profile_pic_path'],
-                  'RecipeCount': result['recipes'], 'SubCount': result['subscribers']})
+                  'RecipeCount': result['recipe_count'], 'Subscribers': result['subscribers']})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
 

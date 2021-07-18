@@ -32,12 +32,12 @@ def profile_info(user_id):
         query = "select COUNT(*) from Recipes where created_by_user_id = %s"
         cur.execute(query, (user_id,))
         recipe_count = cur.fetchall()
-        result[0]['recipes'] = recipe_count[0]['COUNT(*)']
+        result[0]['recipe_count'] = recipe_count[0]['COUNT(*)']
 
-        query = "select COUNT(*) from SubscribedTo where is_subscribed_to = %s"
+        query = "select S.user_id, U.first_name, U.last_name, U.profile_pic_path from SubscribedTo S join Users U on S.user_id = U.user_id where S.is_subscribed_to = %s"
         cur.execute(query, (user_id,))
-        subscribe_count = cur.fetchall()
-        result[0]['subscribers'] = subscribe_count[0]['COUNT(*)']
+        subscribers = cur.fetchall()
+        result[0]['subscribers'] = subscribers
         
         query_lock.release()
         return result[0]

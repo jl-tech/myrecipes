@@ -56,9 +56,9 @@ function ProfileRecipes(props) {
         );
     } else {
         return (
-            <Container style={{textAlign: "center"}}>
+            <div style={{textAlign: "center"}}>
                 <Spinner animation={"grow"}/>
-            </Container>
+            </div>
         );
     }
 

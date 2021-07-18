@@ -16,6 +16,7 @@ import ProfileRecipes from "./recipes";
 import {Spinner} from "react-bootstrap";
 import SubscribeButton from "../newsfeed/subscribe";
 import {Helmet} from "react-helmet";
+import Subscribers from '../newsfeed/subscribers.js';
 
 async function profileUser(userid) {
     let response = await fetch('http://localhost:5000/profile/view?' + new URLSearchParams({'user_id': userid}), {
@@ -41,7 +42,7 @@ function Profile(props) {
     const [firstName, setfirstName] = useState('');
     const [lastName, setlastName] = useState('');
     const [recipeCount, setRecipeCount] = useState(0);
-    const [subCount, setSubCount] = useState(0);
+    const [subscribers, setSubscribers] = useState([]);
     const [email, setEmail] = useState('');
     const [imgUrl, setImgUrl] = useState('');
     const [buttonType, setButtonType] = useState(0);
@@ -69,7 +70,7 @@ function Profile(props) {
             setEmail(response.Email);
             setImgUrl(response.ProfilePictureURL);
             setRecipeCount(response.RecipeCount);
-            setSubCount(response.SubCount);
+            setSubscribers(response.Subscribers);
             setSuccess(true);
         }
         else {
@@ -120,7 +121,9 @@ function Profile(props) {
                     <table style={{marginLeft:"auto", marginRight:"auto", borderCollapse:"separate", borderSpacing:"2em 0em"}}><tbody>
                         <tr>
                             <th style={{fontSize:"200%"}}> {recipeCount} </th>
-                            <th style={{fontSize:"200%"}}> {subCount} </th>
+                            <th style={{fontSize:"200%"}}>
+                                <Subscribers subscribers={subscribers} />
+                            </th>
                         </tr>
                         <tr>
                             <td> RECIPES </td>
@@ -131,7 +134,7 @@ function Profile(props) {
                 </Row>
                 <Row>
                     <Col>
-                    <div style={{textAlign:"center"}}>
+                    <div style={{textAlign:"center", marginTop:"1em"}}>
                         {buttonType == 0 ? <></> : buttonType == 1 ? <ProfileEdit firstName={firstName} setfirstName={setfirstName} lastName={lastName} setlastName={setlastName} setButtonName={props.setButtonName} email={email} imgUrl={imgUrl} setImgUrl={setImgUrl} initOpen={props.settings}/> : <SubscribeButton userid={id}/>}
                     </div>
                     </Col>
