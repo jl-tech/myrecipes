@@ -2,21 +2,17 @@ import React, {useEffect, useState} from 'react';
 
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
 
 import Container from "react-bootstrap/Container";
-import Form from "react-bootstrap/Form";
 import Alert from "react-bootstrap/Alert";
 import Cookie from 'universal-cookie';
-import Card from "react-bootstrap/Card"
+import Spinner from "react-bootstrap/Spinner"
 
-import {Link, useHistory, useLocation} from "react-router-dom";
-import {CardColumns, CardDeck, CardGroup, Spinner} from "react-bootstrap";
-import ReactTimeAgo from "react-time-ago";
+import { useLocation } from "react-router-dom";
 import RecipeList from '../recipe/list';
 import SearchBar from './bar.js';
 import SearchAdvanced from './advanced.js';
-import {Helmet} from "react-helmet";
+import {Helmet} from "react-helmet-async";
 import {Collapse} from "@material-ui/core";
 
 async function requestRecipes(token, name_keywords, type, serving_size, time_to_cook, ingredients, step_keywords) {
@@ -39,7 +35,6 @@ async function requestRecipes(token, name_keywords, type, serving_size, time_to_
     });
 
     let responseJson = await response.json();
-    console.log(responseJson)
 
     if (response.ok) return responseJson;
     else throw new Error(responseJson.error);

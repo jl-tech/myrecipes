@@ -7,8 +7,7 @@ import {
     BrowserRouter as Router,
     Switch,
     Route,
-    Redirect,
-    useHistory,
+    Redirect
 } from "react-router-dom";
 
 import Cookie from 'universal-cookie';
@@ -63,10 +62,10 @@ function App() {
         });
       
       if (response != null) {
-        if (response.status == 0) {
+        if (response.status === 0) {
           setCurrId(response.user_id);
           setLoggedIn(true);
-        } else if (response.status == 1) {
+        } else if (response.status === 1) {
           cookie.remove('token', {path: '/'});
         } else {
           setLoggedIn(true);

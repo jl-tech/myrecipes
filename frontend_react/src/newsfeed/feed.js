@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useHistory, useLocation, useParams } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 
 import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
@@ -13,7 +13,7 @@ import Pagination from "react-bootstrap/Pagination";
 import ListGroup from "react-bootstrap/ListGroup";
 import ReactTimeAgo from "react-time-ago";
 
-import {Helmet} from "react-helmet";
+import {Helmet} from "react-helmet-async";
 import Subscribers from "./subscribers.js"
 
 async function requestFeed(token, page) {
@@ -64,7 +64,6 @@ function Feed(props) {
     const [recipes, setRecipes] = useState(null);
     const [pages, setPages] = useState(null);
     const [hoveredRecipeId, setHoveredRecipeId] = useState(-1)
-    const [hoveredFooterRecipeId, setHoveredFooterRecipeId] = useState(-1)
     const [activePage, setActivePage] = useState(null);
     let { page } = useParams();
     const cookie = new Cookie()
@@ -93,7 +92,6 @@ function Feed(props) {
             });
 
         if (response != null) {
-            console.log(response)
             setfirstName(response.FirstName);
             setlastName(response.LastName);
             setImgUrl(response.ProfilePictureURL);
@@ -113,19 +111,19 @@ function Feed(props) {
 
     function generateCard(recipe, index) {
         return(
-            <div style={{padding:"1em",width:'100%'}}>
-                <Card key={index}
+            <div style={{padding:"1em",width:'100%'}} key={index}>
+                <Card
                     onMouseEnter={() => setHoveredRecipeId(recipe.recipe_id)}
                     onMouseLeave={() => setHoveredRecipeId(-1)}
                     className={hoveredRecipeId === recipe.recipe_id ? 'shadow-lg' : 'shadow-sm'}>
-                    <Link style={{color:'black', textDecoration: 'none'}} to={"/recipe/" + recipe.recipe_id} >
+                    <div style={{color:'black', textDecoration: 'none', cursor:'pointer'}} role="link" onClick={()=>history.push("/recipe/" + recipe.recipe_id)} >
                         <Card.Img variant="Top" style={{width:"100%", height:"9vw", objectFit:"cover"}} alt="Recipe Image" src={recipe.photo_path == null ? "http://127.0.0.1:5000/img/default_recipe.png" : "http://127.0.0.1:5000/img/" + recipe.photo_path}/>
                         <Card.Body style={{textAlign: "center"}}>
                             <Card.Title className={"text-truncate"}>{recipe.name}</Card.Title>
                             <Card.Text className="text-truncate" style={{height:"1.5em", textDecoration: 'none'}}>
                                 {recipe.description == null ? "No description available" : recipe.description}
                             </Card.Text>
-                            <Card.Text style={{textAlign: "center"}}>
+                            <div style={{textAlign: "center"}}>
                                 <table style={{marginLeft:"auto", marginRight:"auto", borderCollapse:"separate", borderSpacing:"2em 0em"}}><tbody>
                                 <tr>
                                     <th style={{fontSize:"95%"}}> {recipe.time_to_cook} </th>
@@ -140,7 +138,7 @@ function Feed(props) {
                                     <td style={{fontSize:"80%"}}> CAL </td>
                                 </tr>
                                 </tbody></table>
-                            </Card.Text>
+                            </div>
 
                         </Card.Body>
 
@@ -167,7 +165,7 @@ function Feed(props) {
                             </Col>
                         </Row>
                     </Card.Footer>
-                        </Link>
+                        </div>
                 </Card>
             </div>
         )
@@ -182,7 +180,7 @@ function Feed(props) {
         <>
         <Helmet>
             <title> Newsfeed - MyRecipes </title>
-            </Helmet>
+        </Helmet>
         <Container  style={{marginTop:'1em', marginBottom:"2em"}}>
             <Row>
             <Col sm={3}>
@@ -231,8 +229,8 @@ function Feed(props) {
                     <Col>
                     <ListGroup>
                         <ListGroup.Item variant="primary">Subscriptions</ListGroup.Item>
-                        {subscriptions.map(({first_name, last_name, user_id, profile_pic_path})=>
-                            <ListGroup.Item>
+                        {subscriptions.map(({first_name, last_name, user_id, profile_pic_path}, index)=>
+                            <ListGroup.Item key={index}>
                             <Link to={"/profile/" + user_id}  style={{width:"100%"}}>
                                 <Row>
                                 <Col sm={3}>
@@ -261,14 +259,14 @@ function Feed(props) {
                 <>
                 <Row>
                     <Col>
-                    {recipes.length == 0 ? <Modal.Dialog><Modal.Body>No recipes found</Modal.Body></Modal.Dialog>: recipes.map(generateCard)}
+                    {recipes.length === 0 ? <Modal.Dialog><Modal.Body>No recipes found</Modal.Body></Modal.Dialog>: recipes.map(generateCard)}
                     </Col>
                 </Row>
                 <Row>
                     <Col>
                     <Pagination style={{padding:"1em"}}>
                         {[...Array(pages).keys()].map(i => 
-                            <Pagination.Item key={i} active={i+1 == activePage} onClick={()=>navigatePage(i+1)}>{i+1}</Pagination.Item>
+                            <Pagination.Item key={i} active={i+1 === activePage} onClick={()=>navigatePage(i+1)}>{i+1}</Pagination.Item>
                         )}
                     </Pagination>
                     </Col>

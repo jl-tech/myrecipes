@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useHistory } from "react-router-dom";
-import { Helmet } from "react-helmet"
+import { Helmet } from "react-helmet-async";
 
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';

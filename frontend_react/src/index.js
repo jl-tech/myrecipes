@@ -4,15 +4,17 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import TimeAgo from 'javascript-time-ago'
+import {HelmetProvider} from 'react-helmet-async';
 
 import en from 'javascript-time-ago/locale/en'
-import ru from 'javascript-time-ago/locale/ru'
 
 TimeAgo.addDefaultLocale(en)
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <HelmetProvider>
+      <App />
+    </HelmetProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -41,7 +41,7 @@ function RegisterBody(props) {
     async function handleSubmit(event) {
         event.preventDefault();
 
-        if (password != password2) {
+        if (password !== password2) {
             setAlertShow(true);
             setAlertText('Passwords are different');
             return;

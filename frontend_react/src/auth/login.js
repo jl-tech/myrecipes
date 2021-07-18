@@ -12,7 +12,7 @@ import Cookie from 'universal-cookie';
 
 import Register from './register.js';
 import ForgetPassword from './forgetpassword.js';
-import {Helmet} from "react-helmet";
+import {Helmet} from "react-helmet-async";
 
 async function loginUser(email, password) {
     let response = await fetch('http://localhost:5000/auth/login', {

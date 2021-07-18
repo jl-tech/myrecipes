@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useLocation, useHistory } from "react-router-dom";
+import React, { useState } from 'react';
 import imageCompression from 'browser-image-compression';
 
-import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 import Row from 'react-bootstrap/Row';
@@ -97,7 +95,6 @@ function ProfileEditPicture(props) {
             setErrorShow(false);
             setUploaded(true);
         }).catch(e => {
-            console.log(e);
             setNewImage(null);
             setNewUrl('');
             setUploaded(false);
@@ -137,7 +134,7 @@ function ProfileEditPicture(props) {
                 <Row style={{borderTopColor:"gray",borderTopWidth:"1px",borderTopStyle:"solid",paddingTop:"1em", marginTop:"1em"}}>
                     <Col sm={8}><h5>Picture</h5></Col>
                     <Col sm={2} >
-                        { props.imgUrl == 'default.png' ? <></> : <Button variant="outline-primary" size="sm" onClick={handleRemoveImage}>Delete</Button>}</Col>
+                        { props.imgUrl === 'default.png' ? <></> : <Button variant="outline-primary" size="sm" onClick={handleRemoveImage}>Delete</Button>}</Col>
                     <Col sm={2} ><Button variant="outline-secondary" size="sm" onClick={() => setEditMode(true)}>Edit</Button></Col>
                 </Row>
                 <Row>

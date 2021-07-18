@@ -74,7 +74,7 @@ function RecipeCreateIngredient({ingredients, setIngredients}) {
                                                     <button type="button" className="close" onClick={() => removeIngredient(index)}>
                                                         <span>×</span>
                                                     </button>
-                                                    <img src={Reorder} />
+                                                    <img src={Reorder} alt=""/>
                                                 </Col>
                                             </Form.Row>
                                         </ListGroup.Item>

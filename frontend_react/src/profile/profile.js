@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation, useHistory, useParams } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
@@ -8,14 +8,11 @@ import Row from 'react-bootstrap/Row';
 import Modal from 'react-bootstrap/Modal';
 
 import Col from 'react-bootstrap/Col';
-
-import Alert from 'react-bootstrap/Alert';
-
 import ProfileEdit from './edit.js';
 import ProfileRecipes from "./recipes";
 import {Spinner} from "react-bootstrap";
 import SubscribeButton from "../newsfeed/subscribe";
-import {Helmet} from "react-helmet";
+import {Helmet} from "react-helmet-async";
 import Subscribers from '../newsfeed/subscribers.js';
 
 async function profileUser(userid) {
@@ -77,7 +74,7 @@ function Profile(props) {
             setShowSpinner(false)
         }
         if (props.loggedIn) {
-            if (id_ == props.currId) {
+            if (id_ === props.currId) {
               setButtonType(1);
             }
 
@@ -135,7 +132,7 @@ function Profile(props) {
                 <Row>
                     <Col>
                     <div style={{textAlign:"center", marginTop:"1em"}}>
-                        {buttonType == 0 ? <></> : buttonType == 1 ? <ProfileEdit firstName={firstName} setfirstName={setfirstName} lastName={lastName} setlastName={setlastName} setButtonName={props.setButtonName} email={email} imgUrl={imgUrl} setImgUrl={setImgUrl} initOpen={props.settings}/> : <SubscribeButton userid={id}/>}
+                        {buttonType === 0 ? <></> : buttonType === 1 ? <ProfileEdit firstName={firstName} setfirstName={setfirstName} lastName={lastName} setlastName={setlastName} setButtonName={props.setButtonName} email={email} imgUrl={imgUrl} setImgUrl={setImgUrl} initOpen={props.settings}/> : <SubscribeButton userid={id}/>}
                     </div>
                     </Col>
                 </Row>

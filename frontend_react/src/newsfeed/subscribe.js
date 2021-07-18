@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation, useHistory } from "react-router-dom";
-
-import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-import Alert from 'react-bootstrap/Alert';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
 import Cookie from 'universal-cookie';
 
 async function requestSubscribe(token, userid, toSubscribe) {
@@ -51,8 +44,6 @@ function SubscribeButton(props) {
 
     const [fetched, setFetched] = useState(false);
     const [subscribed, setSubscribed] = useState(null);
-    const [errorShow, setErrorShow] = useState(true);
-    const [errorText, setErrorText] = useState('he');
     const cookie = new Cookie()
 
     async function processId() {
@@ -75,8 +66,6 @@ function SubscribeButton(props) {
     async function handleButton(toSubscribe) {
         let response = await requestSubscribe(cookie.get('token'), props.userid, toSubscribe)
             .catch(e => {
-                setErrorShow(true);
-                setErrorText(e.message);
             });
 
         if (response != null) {

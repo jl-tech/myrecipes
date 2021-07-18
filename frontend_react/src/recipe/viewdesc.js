@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useState } from 'react';
 
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -12,9 +12,7 @@ import Cookie from 'universal-cookie';
 
 import { EditPhoto } from './viewphoto.js';
 import RecipeDelete from "./delete.js";
-import {useHistory} from "react-router-dom";
 import Dropdown from "react-bootstrap/Dropdown";
-import { List } from '@material-ui/core';
 
 async function requestEditDesc(token, recipe_id, name, type, time, serving_size, description) {
     let response = await fetch('http://localhost:5000/recipe/editdescription', {

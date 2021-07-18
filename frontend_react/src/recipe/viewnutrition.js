@@ -1,17 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import { Link, useLocation, useHistory, useParams } from "react-router-dom";
-
-import Container from 'react-bootstrap/Container';
-import Alert from 'react-bootstrap/Alert';
 import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
-import Cookie from 'universal-cookie';
-import Button from 'react-bootstrap/esm/Button';
 import Image from "react-bootstrap/Image";
-import Modal from "react-bootstrap/Modal";
-import ListGroup from "react-bootstrap/ListGroup";
-import ReactTimeAgo from "react-time-ago";
 import {Spinner, Table} from "react-bootstrap";
 
 async function requestNutrition(recipeId) {
@@ -83,6 +72,7 @@ function RecipeViewNutri(props) {
                 <p style={{textAlign: "center"}}> per serving</p>
                 <Row className={"mx-auto align-content-center"}>
                     <Table bordered hover size={"sm"} className={"shadow-sm"}>
+                        <tbody>
                         <tr>
                             <th>Calories</th>
                             <td>{nutritionData['calories']}</td>
@@ -123,6 +113,7 @@ function RecipeViewNutri(props) {
                             <th> Protein</th>
                             <td>{nutritionData['protein']} g</td>
                         </tr>
+                        </tbody>
                     </Table>
                 </Row>
                 <p style={{textAlign: "center"}}> <small> powered by <Image style={{height:"2em", width:"auto"}} src={"https://www.nutritionix.com/nix_assets/images/nutritionix_small.png"}/> </small> </p>

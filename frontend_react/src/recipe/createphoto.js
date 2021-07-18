@@ -78,7 +78,6 @@ function RecipeCreatePhoto({photos, setPhotos}) {
             setErrorShow(false);
             setUploaded(true);
         }).catch(e => {
-            console.log(e);
             setImage(null);
             setUrl('');
             setUploaded(false);
@@ -100,7 +99,7 @@ function RecipeCreatePhoto({photos, setPhotos}) {
                                         <ListGroup.Item as="li" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
                                             <Row >
                                                 <Col sm={1}>
-                                                    {index == 0 ? "1 (Main)" : index+1}
+                                                    {index === 0 ? "1 (Main)" : index+1}
                                                 </Col>
                                                 <Col sm={5}>
                                                     <span>{name}</span>
@@ -112,7 +111,7 @@ function RecipeCreatePhoto({photos, setPhotos}) {
                                                     <button type="button" className="close" onClick={() => removePhoto(index)}>
                                                         <span>×</span>
                                                     </button>
-                                                    <img src={Reorder} />
+                                                    <img src={Reorder} alt=""/>
                                                 </Col>
                                             </Row>
                                         </ListGroup.Item>

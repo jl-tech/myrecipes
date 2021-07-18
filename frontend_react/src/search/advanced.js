@@ -1,8 +1,6 @@
-import Container from "react-bootstrap/Container";
-import {Spinner} from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-import React, {useState} from "react";
-import {useLocation, useHistory} from "react-router-dom";
+import React, { useState } from "react";
+import { useLocation, useHistory } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -31,36 +29,36 @@ function SearchAdvanced(props) {
         event.preventDefault()
         let url = '';
         if (name != null) {
-            if (name.trim() != "") {
+            if (name.trim() !== "") {
                 url = url + "name=" + name + "&";
             }
         }
         if (serving != null) {
-            if (serving.trim() != "") {
+            if (serving.trim() !== "") {
                 url = url + "serving=" + serving + "&";
             }
         }
         if (time != null) {
-            if (time.trim() != "") {
+            if (time.trim() !== "") {
                 url = url + "time=" + time + "&";
             }
         }
         if (meal != null) {
-            if (meal.trim() != "") {
+            if (meal.trim() !== "") {
                 url = url + "type=" + meal + "&";
             }
         }
         if (ingredient != null) {
-            if (ingredient.trim() != "") {
+            if (ingredient.trim() !== "") {
                 url = url + "ingredient=" + ingredient + "&";
             }
         }
         if (step != null) {
-            if (step.trim() != "") {
+            if (step.trim() !== "") {
                 url = url + "step=" + step + "&";
             }
         }
-        if (url != '') {
+        if (url !== '') {
             history.push(`/search?${url}`)
             history.go();
         } else {

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useState } from 'react';
 import imageCompression from 'browser-image-compression';
 
 import Button from 'react-bootstrap/Button';
@@ -128,7 +128,6 @@ export function EditPhoto(props) {
             setErrorShow(false);
             setUploaded(true);
         }).catch(e => {
-            console.log(e);
             setImage(null);
             setUrl('');
             setUploaded(false);
@@ -139,7 +138,6 @@ export function EditPhoto(props) {
     async function handleSubmit() {
         let images = []
         let names = []
-        console.log("debug")
         photos.forEach(photo => {
             images.push(photo.image)
             names.push(photo.name)
@@ -187,7 +185,7 @@ export function EditPhoto(props) {
                                             <ListGroup.Item as="li" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
                                                 <Row >
                                                     <Col sm={2}>
-                                                        {index == 0 ? "1 (Main)" : index+1}
+                                                        {index === 0 ? "1 (Main)" : index+1}
                                                     </Col>
                                                     <Col sm={4}>
                                                         <span>{name}</span>
@@ -199,7 +197,7 @@ export function EditPhoto(props) {
                                                         <button type="button" className="close" onClick={() => removePhoto(index)}>
                                                             <span>×</span>
                                                         </button>
-                                                        <img src={Reorder} />
+                                                        <img src={Reorder} alt="" />
                                                     </Col>
                                                 </Row>
                                             </ListGroup.Item>
@@ -255,16 +253,16 @@ function RecipeViewPhoto(props) {
             <Row style={{marginBottom:"1em"}}>
                 <Col>
                     <Carousel className={"shadow"}>
-                    {props.photos.length == 0
+                    {props.photos.length === 0
                     ? 
                     <Carousel.Item key={0} style={{textAlign:"center", backgroundColor:"white"}}>
-                        <img src="http://127.0.0.1:5000/img/default_recipe.png" alt="Default photo" style={{height:"20em"}}/>
+                        <img src="http://127.0.0.1:5000/img/default_recipe.png" alt="Default" style={{height:"20em"}}/>
                     </Carousel.Item>
                     :
                     props.photos.map(({url}, index) =>
                         <Carousel.Item key={index} style={{textAlign:"center"}}>
-                            <img src={url} className="shadow-lg" alt={`Photo ${index}`} style={{zIndex: 1, position: 'absolute', height:"20em", width:"auto", marginLeft: "auto", marginRight: "auto", left: 0, right: 0, textAlign:"center"}}/>
-                            <img src={url} className="" alt={`Photo ${index} background`} style={{ objectFit: "cover", height:"20em", width:"100%", filter:"blur(15px) brightness(60%)"}}/>
+                            <img src={url} className="shadow-lg" alt={`Capture ${index}`} style={{zIndex: 1, position: 'absolute', height:"20em", width:"auto", marginLeft: "auto", marginRight: "auto", left: 0, right: 0, textAlign:"center"}}/>
+                            <img src={url} className="" alt={`Capture ${index} background`} style={{ objectFit: "cover", height:"20em", width:"100%", filter:"blur(15px) brightness(60%)"}}/>
                         </Carousel.Item>
                     )}
                     </Carousel>

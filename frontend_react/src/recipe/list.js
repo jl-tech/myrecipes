@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { Link, useLocation, useHistory, useParams } from "react-router-dom";
+import { Link, useLocation, useHistory } from "react-router-dom";
 
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -16,9 +16,8 @@ import Slider from '@material-ui/core/Slider';
 
 
 function RecipeList(props) {
-
-    console.log(props.recipeData);
     const [recipeData, setRecipeData] = useState(props.recipeData);
+    const [recipeDataFiltered, setRecipeDataFiltered] = useState(props.recipeData);
     const [mealFilters, setMealFilters] = useState(initMealFilters());
     const [activeMealFilter, setActiveMealFilter] = useState([]);
     const [servingFilters, setServingFilters] = useState(initServingFilters());
@@ -27,25 +26,25 @@ function RecipeList(props) {
     const [activeTimeFilters, setActiveTimeFilters] = useState([Math.min(...timeFilters), Math.max(...timeFilters)]);
     const [activePage, setActivePage] = useState(0);
     const [hoveredRecipeId, setHoveredRecipeId] = useState(-1)
-    const [hoveredFooterRecipeId, setHoveredFooterRecipeId] = useState(-1)
     const recipesPerPage = 4;
+    const history = useHistory();
 
     function generateCard(recipe, index) {
         return(
-            <div  style={{padding:"1em"}}>
+            <div style={{padding:"1em"}}  key={index}>
 
-                <Card key={index}
+                <Card
                       onMouseEnter={() => setHoveredRecipeId(recipe.recipe_id)}
                       onMouseLeave={() => setHoveredRecipeId(-1)}
                       className={hoveredRecipeId === recipe.recipe_id ? 'shadow-lg' : 'shadow-sm'}>
-                    <Link style={{color:'black', textDecoration: 'none'}} to={"/recipe/" + recipe.recipe_id} >
+                    <div style={{color:'black', textDecoration: 'none', cursor:'pointer'}} role="link" onClick={()=>history.push("/recipe/" + recipe.recipe_id)} >
                         <Card.Img variant="Top" style={{width:"100%", height:"9vw", objectFit:"cover"}} alt="Recipe Image" src={recipe.photo_path == null ? "http://127.0.0.1:5000/img/default_recipe.png" : "http://127.0.0.1:5000/img/" + recipe.photo_path}/>
                         <Card.Body style={{textAlign: "center"}}>
                             <Card.Title className={"text-truncate"}>{recipe.name}</Card.Title>
                             <Card.Text className="text-truncate" style={{height:"1.5em", textDecoration: 'none'}}>
                                 {recipe.description == null ? "No description available" : recipe.description}
                             </Card.Text>
-                            <Card.Text style={{textAlign: "center"}}>
+                            <div style={{textAlign: "center"}}>
                                 <table style={{marginLeft:"auto", marginRight:"auto", borderCollapse:"separate", borderSpacing:"2em 0em"}}><tbody>
                                 <tr>
                                     <th style={{fontSize:"95%"}}> {recipe.time_to_cook} </th>
@@ -60,7 +59,7 @@ function RecipeList(props) {
                                     <td style={{fontSize:"80%"}}> CAL </td>
                                 </tr>
                                 </tbody></table>
-                            </Card.Text>
+                            </div>
 
                         </Card.Body>
 
@@ -87,7 +86,7 @@ function RecipeList(props) {
                             </Col>
                         </Row>
                     </Card.Footer>
-                        </Link>
+                        </div>
                 </Card>
             </div>
         )
@@ -131,8 +130,8 @@ function RecipeList(props) {
     }
 
     function filterRecipes() {
-        let tempArray = Array.from(props.recipeData);
-        if (activeMealFilter.length != 0) {
+        let tempArray = Array.from(recipeData);
+        if (activeMealFilter.length !== 0) {
             tempArray = tempArray.filter(function(e) {
                 return activeMealFilter.includes(e.type);
             })
@@ -143,7 +142,7 @@ function RecipeList(props) {
         tempArray = tempArray.filter(function(e) {
             return e.time_to_cook >= activeTimeFilters[0] && e.time_to_cook <= activeTimeFilters[1];
         })
-        setRecipeData(tempArray);
+        setRecipeDataFiltered(tempArray);
         if (activePage > Math.ceil(tempArray.length/recipesPerPage) - 1) {
             setActivePage(Math.ceil(tempArray.length/recipesPerPage) - 1);
         }
@@ -189,7 +188,8 @@ function RecipeList(props) {
         let key = "creation_time";
         switch (e.target.value) {
             case "0":
-                window.location.reload();
+                setRecipeData(props.recipeData);
+                return;
             case "2":
                 key = "edit_time"
                 break;
@@ -199,12 +199,12 @@ function RecipeList(props) {
         let copy = Array.from(props.recipeData);
         copy.sort(sortComparator(key));
         copy.reverse();
-        props.setRecipeData(copy);
+        setRecipeData(copy);
     }
 
     useEffect(() => {
         filterRecipes();
-    }, [props.recipeData, activeMealFilter, activeServingFilters, activeTimeFilters])
+    }, [recipeData, activeMealFilter, activeServingFilters, activeTimeFilters])
 
     return (<>
         <Col sm={3}>
@@ -214,8 +214,8 @@ function RecipeList(props) {
         <Row style={{marginTop:'1em'}}>
         <h6>Meal type</h6>
         </Row>
-        {mealFilters.map((t) => 
-            <Row><Form.Check type='checkbox' label={t} onChange={e => toggleMealFilter(t, e.target.checked)}/></Row>
+        {mealFilters.map((t, index) => 
+            <Row key={index}><Form.Check type='checkbox' label={t} onChange={e => toggleMealFilter(t, e.target.checked)}/></Row>
         )}
         <Row style={{marginTop:'1em'}}>
         <h6>Serving Size</h6>
@@ -252,13 +252,13 @@ function RecipeList(props) {
             </Col>
         </Row>
         <Row sm={2}>
-            {recipeData.slice(activePage*recipesPerPage, activePage*recipesPerPage+recipesPerPage).map(generateCard)}
+            {recipeDataFiltered.slice(activePage*recipesPerPage, activePage*recipesPerPage+recipesPerPage).map(generateCard)}
         </Row>
         <Row>
             <Col>
             <Pagination>
-                {[...Array(Math.ceil(recipeData.length / recipesPerPage)).keys()].map(i => 
-                    <Pagination.Item key={i} active={i == activePage} onClick={()=>setActivePage(i)}>{i+1}</Pagination.Item>
+                {[...Array(Math.ceil(recipeDataFiltered.length / recipesPerPage)).keys()].map(i => 
+                    <Pagination.Item key={i} active={i === activePage} onClick={()=>setActivePage(i)}>{i+1}</Pagination.Item>
                 )}
             </Pagination>
             </Col>

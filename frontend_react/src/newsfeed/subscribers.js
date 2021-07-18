@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 
 import Modal from 'react-bootstrap/Modal';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 
-import { Link, useLocation, useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import Image from 'react-bootstrap/Image';
 
@@ -29,8 +29,8 @@ function Subscribers(props) {
             </Modal.Header>
             <Modal.Body>
                 <ListGroup>
-                    {props.subscribers.map(({first_name, last_name, user_id, profile_pic_path})=>
-                        <ListGroup.Item>
+                    {props.subscribers.map(({first_name, last_name, user_id, profile_pic_path}, index)=>
+                        <ListGroup.Item key={index}>
                         <Link to={"/profile/" + user_id}  style={{width:"100%"}} onClick={() => {history.push("/profile/"+user_id);history.go(0);}}>
                             <Row>
                             <Col sm={2}>

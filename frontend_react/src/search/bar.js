@@ -5,10 +5,9 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
 import Form from "react-bootstrap/Form";
-import Alert from "react-bootstrap/Alert";
 import Cookie from 'universal-cookie';
 
-import {Link, useHistory, useLocation} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import ReactTimeAgo from "react-time-ago";
 
 import InputGroup from "react-bootstrap/InputGroup";
@@ -102,7 +101,7 @@ function SearchBar(props) {
             .catch(e => {
 
             });
-        return ""
+        return response;
     }
 
     useEffect(() => {
@@ -149,7 +148,7 @@ function SearchBar(props) {
                             emptyLabel= {props.loggedIn ? "No related history": "Log in to view your search history"}/>
                 <InputGroup.Append>
                     <Button type="submit" size="sm" variant="primary" disabled={props.disabled}>
-                        <img src={props.nav ? SearchIconSmall : SearchIconBig} />
+                        <img src={props.nav ? SearchIconSmall : SearchIconBig} alt=""/>
                     </Button>
                 </InputGroup.Append>
             </InputGroup>

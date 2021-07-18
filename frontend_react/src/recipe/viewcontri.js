@@ -1,16 +1,9 @@
-import React, {useEffect, useState} from 'react';
-import { Link, useLocation, useHistory, useParams } from "react-router-dom";
+import React from 'react';
+import { Link } from "react-router-dom";
 
-import Container from 'react-bootstrap/Container';
-import Alert from 'react-bootstrap/Alert';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
-import Cookie from 'universal-cookie';
-import Button from 'react-bootstrap/esm/Button';
 import Image from "react-bootstrap/Image";
-import Modal from "react-bootstrap/Modal";
-import ListGroup from "react-bootstrap/ListGroup";
 import ReactTimeAgo from "react-time-ago";
 
 function RecipeViewContri(props) {

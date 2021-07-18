@@ -66,7 +66,7 @@ function RecipeCreateStep({steps, setSteps}) {
                                                     <button type="button" className="close" onClick={() => removeStep(index)}>
                                                         <span>×</span>
                                                     </button>
-                                                    <img src={Reorder} />
+                                                    <img src={Reorder} alt=""/>
                                                 </Col>
                                             </Form.Row>
                                         </ListGroup.Item>

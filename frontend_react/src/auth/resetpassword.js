@@ -7,7 +7,7 @@ import Form from 'react-bootstrap/Form';
 import Alert from 'react-bootstrap/Alert';
 
 import logo from '../WIP_logo_2.png';
-import {Helmet} from "react-helmet";
+import {Helmet} from "react-helmet-async";
 
 async function verifyResetCode(reset_code) {
     let response = await fetch('http://localhost:5000/auth/verifyresetcode', {
@@ -62,7 +62,7 @@ function ResetPasswordBody(props) {
     async function handleSubmit(event) {
         event.preventDefault();
 
-        if (password != password2) {
+        if (password !== password2) {
             setAlertShow(true);
             setAlertText('Passwords are different');
             return;

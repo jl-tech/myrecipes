@@ -4,8 +4,6 @@ import Spinner from 'react-bootstrap/Spinner';
 import Col from 'react-bootstrap/Col';
 
 import RecipeList from '../recipe/list';
-import Container from "react-bootstrap/Container";
-
 
 async function requestRecipes(user_id) {
     let response = await fetch('http://localhost:5000/profile/recipes?' + new URLSearchParams({'user_id': user_id}), {

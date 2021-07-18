@@ -1,7 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useLocation, useHistory } from "react-router-dom";
-
-import Modal from 'react-bootstrap/Modal';
+import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 import Row from 'react-bootstrap/Row';
@@ -48,7 +45,7 @@ function ProfileEditPassword(props) {
     async function handleSubmit(event) {
         event.preventDefault();
 
-        if (newPass != newPass2) {
+        if (newPass !== newPass2) {
             setErrorShow(true);
             setErrorText('Passwords are different');
             return;

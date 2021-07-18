@@ -1,15 +1,10 @@
-import React, {useEffect, useState} from 'react';
-import { Link, useLocation, useHistory, useParams } from "react-router-dom";
-
-import Container from 'react-bootstrap/Container';
+import React, { useState } from 'react';
 import Alert from 'react-bootstrap/Alert';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Cookie from 'universal-cookie';
 import Button from 'react-bootstrap/esm/Button';
-import Image from "react-bootstrap/Image";
-import Modal from "react-bootstrap/Modal";
 import ListGroup from "react-bootstrap/ListGroup";
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import Reorder from './reorder_black_24dp.svg';
@@ -173,7 +168,7 @@ function RecipeViewStep(props) {
                                                             <button type="button" className="close" onClick={() => removeStep(index)}>
                                                                 <span>×</span>
                                                             </button>
-                                                            <img src={Reorder} />
+                                                            <img src={Reorder} alt=""/>
                                                         </Col>
                                                     </Form.Row>
                                                 </ListGroup.Item>

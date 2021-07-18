@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useLocation, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import Container from 'react-bootstrap/Container';
 import Alert from 'react-bootstrap/Alert';
@@ -12,7 +12,7 @@ import RecipeCreateIngredient from './createingredient.js';
 import RecipeCreateStep from './createstep.js';
 import RecipeCreatePhoto from './createphoto.js';
 import Button from 'react-bootstrap/esm/Button';
-import {Helmet} from "react-helmet";
+import {Helmet} from "react-helmet-async";
 import {Collapse} from "react-bootstrap";
 
 async function createRecipe(token, name, type, time, serving, description, ingredients, steps, photos, photoNames) {
@@ -150,9 +150,9 @@ function RecipeCreate(props) {
             </Row>
             <Form onSubmit={handleSubmit}>
                 <div style={{textAlign: "right"}}>
-                    <Link onClick={showAll}> Show all </Link> &nbsp; &nbsp; <Link onClick={collapseAll}> Collapse all </Link>
+                    <a href="#" onClick={showAll}> Show all </a> &nbsp; &nbsp; <a href="#" onClick={collapseAll}> Collapse all </a>
                     </div>
-                <Link onClick={formDetailsOpen ? () => setFormDetailsOpen(false) : () => setFormDetailsOpen(true)}> <h4> {formDetailsOpen ? `▼ Details` : `▶ Details`}  </h4> </Link>
+                <a href="#" onClick={formDetailsOpen ? () => setFormDetailsOpen(false) : () => setFormDetailsOpen(true)}> <h4> {formDetailsOpen ? `▼ Details` : `▶ Details`}  </h4> </a>
                 <Collapse in={formDetailsOpen}>
                     <div>
                          <RecipeCreateDesc setName={setName} setType={setType} setTime={setTime} setServing={setServing} setDescription={setDescription} />
@@ -160,7 +160,7 @@ function RecipeCreate(props) {
                     </div>
                 </Collapse>
                 <br/>
-                <Link onClick={formIngredientsOpen ? () => setFormIngredientsOpen(false) : () => setFormIngredientsOpen(true)}> <h4> {formIngredientsOpen ? `▼ Ingredients` : `▶ Ingredients`}  </h4> </Link>
+                <a href="#" onClick={formIngredientsOpen ? () => setFormIngredientsOpen(false) : () => setFormIngredientsOpen(true)}> <h4> {formIngredientsOpen ? `▼ Ingredients` : `▶ Ingredients`}  </h4> </a>
                 <Collapse in={formIngredientsOpen}>
                     <div>
                         <RecipeCreateIngredient ingredients={ingredients} setIngredients={setIngredients} />
@@ -169,7 +169,7 @@ function RecipeCreate(props) {
                     </div>
                 </Collapse>
                 <br/>
-                <Link onClick={formDirectionsOpen ? () => setFormDirectionsOpen(false) : () => setFormDirectionsOpen(true)}> <h4> {formDirectionsOpen ? `▼ Directions` : `▶ Directions`}  </h4> </Link>
+                <a href="#" onClick={formDirectionsOpen ? () => setFormDirectionsOpen(false) : () => setFormDirectionsOpen(true)}> <h4> {formDirectionsOpen ? `▼ Directions` : `▶ Directions`}  </h4> </a>
                 <Collapse in={formDirectionsOpen}>
                     <div>
                         <RecipeCreateStep steps={steps} setSteps={setSteps} />
@@ -178,7 +178,7 @@ function RecipeCreate(props) {
                     </div>
                 </Collapse>
                 <br/>
-                <Link onClick={formPhotosOpen ? () => setFormPhotosOpen(false) : () => setFormPhotosOpen(true)}> <h4> {formPhotosOpen ? `▼ Photos` : `▶ Photos`}  </h4> </Link>
+                <a href="#" onClick={formPhotosOpen ? () => setFormPhotosOpen(false) : () => setFormPhotosOpen(true)}> <h4> {formPhotosOpen ? `▼ Photos` : `▶ Photos`}  </h4> </a>
                 <Collapse in={formPhotosOpen}>
                     <div>
                     <RecipeCreatePhoto photos={photos} setPhotos={setPhotos} />
