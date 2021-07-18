@@ -23,7 +23,6 @@ import Cookie from 'universal-cookie';
 import Profile from "./profile/profile.js";
 import RecipeCreate from './recipe/create';
 import RecipeView from './recipe/view';
-import DeleteSuccess from "./recipe/deletesuccess";
 import Form from "react-bootstrap/Form";
 import {FormControl} from "react-bootstrap";
 import HomePage from "./HomePage";
@@ -130,12 +129,13 @@ function Home({ loggedIn, setLoggedIn, currId }) {
         <NavLink style={{paddingLeft: '2rem', fontSize:"125%"}} to="/home" activeStyle={{ paddingLeft: '2rem', fontWeight: 'bold', fontSize:"125%"}}>
             Home
         </NavLink>
+        {loggedIn ?<>
         <NavLink style={{paddingLeft: '2rem', fontSize:"125%"}} to="/newsfeed" activeStyle={{ paddingLeft: '2rem', fontWeight: 'bold', fontSize:"125%"}}>
             Newsfeed
         </NavLink>
         <NavLink style={{paddingLeft: '2rem', paddingRight: '2rem', fontSize:"125%"}} to="/recipe/create" activeStyle={{ paddingLeft: '2rem', fontWeight: 'bold', fontSize:"125%"}}>
             Create
-        </NavLink>
+        </NavLink> </>:<></>}
         {location.pathname != "/home" && location.pathname != "/search" ? <SearchBar nav={true} loggedIn={loggedIn} /> : <></>}
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
@@ -145,44 +145,45 @@ function Home({ loggedIn, setLoggedIn, currId }) {
         </Navbar.Collapse>
     </Navbar>
     <Switch>
-
         <Route path="/profile/:id">
           <Profile currId={currId} loggedIn={loggedIn} settings={false} setButtonName={setfirstName}/>
         </Route>
         <Route path="/profile" render={() =>
             loggedIn
             ? (<Redirect to={{pathname: "/profile/" + currId}} />)
-            : (<Redirect to= {{pathname: "/login"}} />)
+            : (<Redirect to= {{pathname: "/home"}} />)
         } />
         <Route path="/settings" render={() =>
             loggedIn
             ? (<Profile currId={currId} loggedIn={loggedIn} settings={true} setButtonName={setfirstName}/>)
-            : (<Redirect to= {{pathname: "/login"}} />)
+            : (<Redirect to= {{pathname: "/home"}} />)
         } />
 
         <Route path="/recipe/create" render={() => 
             loggedIn
             ? (<RecipeCreate />)
-            : (<Redirect to= {{pathname: "/login"}} />)
+            : (<Redirect to= {{pathname: "/home"}} />)
         } />
-        <Route path="/recipe/deletesuccess">
-          <DeleteSuccess/>
-        </Route>
         <Route path="/recipe/:id">
           <RecipeView currId={currId} loggedIn={loggedIn} />
         </Route>
         <Route path="/recipe" render={() => 
-            (<Redirect to= {{pathname: "/login"}} />)
+            (<Redirect to= {{pathname: "/home"}} />)
         } />
         <Route path="/search">
             <SearchResults loggedIn={loggedIn}/>
         </Route>
-        <Route path="/newsfeed/:page">
-            <Feed loggedIn={loggedIn} currId={currId}/>
-        </Route>
-        <Route path="/newsfeed">
-            <Feed loggedIn={loggedIn} currId={currId}/>
-        </Route>
+        <Route path="/newsfeed/:page" render={() => 
+            loggedIn
+            ? (<Feed loggedIn={loggedIn} currId={currId}/>)
+            : (<Redirect to= {{pathname: "/home"}} />)
+        } />
+
+        <Route path="/newsfeed" render={() => 
+            loggedIn
+            ? (<Feed loggedIn={loggedIn} currId={currId}/>)
+            : (<Redirect to= {{pathname: "/home"}} />)
+        } />
 
         <Route path="/home">
             <HomePage loggedIn={loggedIn}/>
