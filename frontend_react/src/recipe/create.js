@@ -62,6 +62,7 @@ function RecipeCreate(props) {
     const [formIngredientsOpen, setFormIngredientsOpen] = useState(false)
     const [formDirectionsOpen, setFormDirectionsOpen] = useState(false)
     const [formPhotosOpen, setFormPhotosOpen] = useState(false)
+    const [guidedFormIsDone, setGuidedFormIsDone] = useState(false)
 
     const cookie = new Cookie();
     const history = useHistory();
@@ -111,6 +112,7 @@ function RecipeCreate(props) {
     }
 
     function showAll() {
+        setGuidedFormIsDone(true)
         setFormIngredientsOpen(true)
         setFormDetailsOpen(true)
         setFormDirectionsOpen(true)
@@ -129,6 +131,7 @@ function RecipeCreate(props) {
     function toPhotos() {
         collapseAll()
         setFormPhotosOpen(true)
+        setGuidedFormIsDone(true)
     }
 
 
@@ -154,7 +157,6 @@ function RecipeCreate(props) {
                     <div>
                          <RecipeCreateDesc setName={setName} setType={setType} setTime={setTime} setServing={setServing} setDescription={setDescription} />
                          <Button onClick={toIngredients}> Next: Ingredients </Button>
-
                     </div>
                 </Collapse>
                 <br/>
@@ -190,8 +192,8 @@ function RecipeCreate(props) {
                         {/* <Button variant="secondary" style={{color:"white", marginRight:"1em"}}>
                             Cancel
                         </Button> */}
-                        <Button type="submit" onClick={() => setFormDetailsOpen(true)} >
-                            Submit
+                        <Button type="submit"  variant={!guidedFormIsDone ? "outline-secondary" : "primary"}  onClick={() => setFormDetailsOpen(true)} >
+                            Create Recipe
                         </Button>
                     </Col>
                 </Row>
