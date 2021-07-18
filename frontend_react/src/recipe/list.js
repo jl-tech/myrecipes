@@ -48,16 +48,16 @@ function RecipeList(props) {
                             <Card.Text style={{textAlign: "center"}}>
                                 <table style={{marginLeft:"auto", marginRight:"auto", borderCollapse:"separate", borderSpacing:"2em 0em"}}><tbody>
                                 <tr>
-                                    <th style={{fontSize:"110%"}}> {recipe.time_to_cook} </th>
-                                    <th style={{fontSize:"110%"}}> {recipe.serving_size} </th>
-                                    <th style={{fontSize:"110%"}}> {recipe.type} </th>
-                                    <th style={{fontSize:"110%"}}> {recipe.calories == null ? "N/A" : recipe.calories }</th>
+                                    <th style={{fontSize:"95%"}}> {recipe.time_to_cook} </th>
+                                    <th style={{fontSize:"95%"}}> {recipe.serving_size} </th>
+                                    <th style={{fontSize:"95%"}}> {recipe.type} </th>
+                                    <th style={{fontSize:"95%"}}> {recipe.calories == null ? "N/A" : recipe.calories }</th>
                                 </tr>
                                 <tr>
-                                    <td> MINS </td>
-                                    <td> SERVES </td>
-                                    <td> MEAL </td>
-                                    <td> CAL </td>
+                                    <td style={{fontSize:"80%"}}> MINS </td>
+                                    <td style={{fontSize:"80%"}}> SERVES </td>
+                                    <td style={{fontSize:"80%"}}> MEAL </td>
+                                    <td style={{fontSize:"80%"}}> CAL </td>
                                 </tr>
                                 </tbody></table>
                             </Card.Text>
