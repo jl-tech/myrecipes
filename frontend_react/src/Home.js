@@ -39,6 +39,7 @@ import Col from "react-bootstrap/Col";
 import ReactTimeAgo from "react-time-ago";
 import SearchBar from './search/bar';
 import Image from "react-bootstrap/Image";
+import Feed from './newsfeed/feed';
 
 async function profileUser(userid) {
     let response = await fetch('http://localhost:5000/profile/view?' + new URLSearchParams({'user_id': userid}), {
@@ -175,6 +176,12 @@ function Home({ loggedIn, setLoggedIn, currId }) {
         } />
         <Route path="/search">
             <SearchResults loggedIn={loggedIn}/>
+        </Route>
+        <Route path="/newsfeed/:page">
+            <Feed loggedIn={loggedIn} currId={currId}/>
+        </Route>
+        <Route path="/newsfeed">
+            <Feed loggedIn={loggedIn} currId={currId}/>
         </Route>
 
         <Route path="/home">

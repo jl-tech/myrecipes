@@ -67,12 +67,12 @@ def route_is_subscribed():
 def route_get_feed():
     token = request.headers.get("Authorization")
     page = request.args.get("page")
-    result = newsfeed.get_feed(token, page)
+    result, count = newsfeed.get_feed(token, page)
     if result == -1:
         response = jsonify({'error': 'Invalid token'})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
     else:
-        response = jsonify(result)
+        response = jsonify({'feed': result, 'count': count})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200

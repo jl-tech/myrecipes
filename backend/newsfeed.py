@@ -3,6 +3,7 @@ import os
 import bcrypt
 
 import helpers
+import math
 import tokenise
 from constants import *
 
@@ -111,17 +112,28 @@ def get_feed(token, page):
         query_lock.release()
         return -1
 
-    offset = page * 10
-
     cur = con.cursor()
     query = """
-        select * 
-        from Recipes 
-        where created_by_user_id in (select is_subscribed_to from SubscribedTo where user_id = %s)
-        order by DATE(creation_time) desc, TIME(creation_time) desc-- TODO number of times liked
+        select distinct R.recipe_id,  R.name, R.creation_time, R.edit_time, R.time_to_cook, R.type, R.serving_size, RP.photo_path, R.description, U.first_name, U.last_name, U.profile_pic_path, U.user_id, R.calories
+        from Recipes R
+            left outer join (select * from RecipePhotos where photo_no = 0) RP on R.recipe_id = RP.recipe_id
+            left outer join RecipeIngredients I on R.recipe_id = I.recipe_id
+            left outer join RecipeSteps S on I.recipe_id = S.recipe_id
+            join Users U on R.created_by_user_id = U.user_id 
+        where R.created_by_user_id in (select is_subscribed_to from SubscribedTo where user_id = %s)
+        order by DATE(R.creation_time) desc, TIME(R.creation_time) desc-- TODO number of times liked
         limit %s offset %s
     """
     cur.execute(query, (u_id, int(10), int((int(page) - 1) * 10)))
     result = cur.fetchall()
+
+    query = """
+        select COUNT(*) 
+        from Recipes 
+        where created_by_user_id in (select is_subscribed_to from SubscribedTo where user_id = %s)
+    """
+    cur.execute(query, (u_id, ))
+    count = cur.fetchall()
+
     query_lock.release()
-    return result
+    return result, math.ceil(count[0]['COUNT(*)'] / 10)
