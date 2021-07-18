@@ -88,7 +88,7 @@ function RecipeCreatePhoto({photos, setPhotos}) {
 
     return (
         <>
-        <Form.Label style={{marginTop:"2em"}}>Photos</Form.Label>
+        <Form.Label>Photos</Form.Label>
         <DragDropContext onDragEnd={handleOnDragEnd}>
             <Droppable droppableId="photos">
                 {(provided) => (

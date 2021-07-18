@@ -17,6 +17,7 @@ import RecipeList from '../recipe/list';
 import SearchBar from './bar.js';
 import SearchAdvanced from './advanced.js';
 import {Helmet} from "react-helmet";
+import {Collapse} from "@material-ui/core";
 
 async function requestRecipes(token, name_keywords, type, serving_size, time_to_cook, ingredients, step_keywords) {
     let response = await fetch('http://localhost:5000/search/', {
@@ -112,7 +113,7 @@ function SearchResults(props) {
                     </div>
                     </Col>
                 </Row>
-                {advancedMode ?
+                <Collapse in={advancedMode}>
                     <Row style={{marginTop:"1em"}}>
                         <Col sm={3} />
                         <Col sm={6}>
@@ -122,7 +123,7 @@ function SearchResults(props) {
                             </Alert>
                         </Col>
                     </Row>
-                : <></>}
+                </Collapse>
                 <Row style={{marginTop:"1em"}}>
                 
                 {recipeData.length === 0 ?

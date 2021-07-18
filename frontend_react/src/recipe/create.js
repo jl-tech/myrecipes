@@ -13,6 +13,7 @@ import RecipeCreateStep from './createstep.js';
 import RecipeCreatePhoto from './createphoto.js';
 import Button from 'react-bootstrap/esm/Button';
 import {Helmet} from "react-helmet";
+import {Collapse} from "react-bootstrap";
 
 async function createRecipe(token, name, type, time, serving, description, ingredients, steps, photos, photoNames) {
     let data = new FormData();
@@ -57,6 +58,11 @@ function RecipeCreate(props) {
     const [errorShow, setErrorShow] = useState(false);
     const [errorText, setErrorText] = useState('');
 
+    const [formDetailsOpen, setFormDetailsOpen] = useState(true)
+    const [formIngredientsOpen, setFormIngredientsOpen] = useState(false)
+    const [formDirectionsOpen, setFormDirectionsOpen] = useState(false)
+    const [formPhotosOpen, setFormPhotosOpen] = useState(false)
+
     const cookie = new Cookie();
     const history = useHistory();
 
@@ -97,6 +103,35 @@ function RecipeCreate(props) {
         }
     }
 
+    function collapseAll() {
+        setFormIngredientsOpen(false)
+        setFormDetailsOpen(false)
+        setFormDirectionsOpen(false)
+        setFormPhotosOpen(false)
+    }
+
+    function showAll() {
+        setFormIngredientsOpen(true)
+        setFormDetailsOpen(true)
+        setFormDirectionsOpen(true)
+        setFormPhotosOpen(true)
+    }
+
+    function toIngredients() {
+        collapseAll()
+        setFormIngredientsOpen(true)
+    }
+
+    function toDirections() {
+        collapseAll()
+        setFormDirectionsOpen(true)
+    }
+    function toPhotos() {
+        collapseAll()
+        setFormPhotosOpen(true)
+    }
+
+
     return (
         <>
         <Helmet>
@@ -111,10 +146,42 @@ function RecipeCreate(props) {
                 </Col>
             </Row>
             <Form onSubmit={handleSubmit}>
-                <RecipeCreateDesc setName={setName} setType={setType} setTime={setTime} setServing={setServing} setDescription={setDescription} />
-                <RecipeCreateIngredient ingredients={ingredients} setIngredients={setIngredients} />
-                <RecipeCreateStep steps={steps} setSteps={setSteps} />
-                <RecipeCreatePhoto photos={photos} setPhotos={setPhotos} />
+                <div style={{textAlign: "right"}}>
+                    <Link onClick={showAll}> Show all </Link> &nbsp; &nbsp; <Link onClick={collapseAll}> Collapse all </Link>
+                    </div>
+                <Link onClick={formDetailsOpen ? () => setFormDetailsOpen(false) : () => setFormDetailsOpen(true)}> <h4> {formDetailsOpen ? `Details ▼` : `Details ▶`}  </h4> </Link>
+                <Collapse in={formDetailsOpen}>
+                    <div>
+                         <RecipeCreateDesc setName={setName} setType={setType} setTime={setTime} setServing={setServing} setDescription={setDescription} />
+                         <Button onClick={toIngredients}> Next: Ingredients </Button>
+
+                    </div>
+                </Collapse>
+                <br/>
+                <Link onClick={formIngredientsOpen ? () => setFormIngredientsOpen(false) : () => setFormIngredientsOpen(true)}> <h4> {formIngredientsOpen ? `Ingredients ▼` : `Ingredients ▶`}  </h4> </Link>
+                <Collapse in={formIngredientsOpen}>
+                    <div>
+                        <RecipeCreateIngredient ingredients={ingredients} setIngredients={setIngredients} />
+                        <br/>
+                        <Button onClick={toDirections}> Next: Directions </Button>
+                    </div>
+                </Collapse>
+                <br/>
+                <Link onClick={formDirectionsOpen ? () => setFormDirectionsOpen(false) : () => setFormDirectionsOpen(true)}> <h4> {formDirectionsOpen ? `Directions ▼` : `Directions ▶`}  </h4> </Link>
+                <Collapse in={formDirectionsOpen}>
+                    <div>
+                        <RecipeCreateStep steps={steps} setSteps={setSteps} />
+                        <br/>
+                        <Button onClick={toPhotos}> Next: Photos </Button>
+                    </div>
+                </Collapse>
+                <br/>
+                <Link onClick={formPhotosOpen ? () => setFormPhotosOpen(false) : () => setFormPhotosOpen(true)}> <h4> {formPhotosOpen ? `Photos ▼` : `Photos ▶`}  </h4> </Link>
+                <Collapse in={formPhotosOpen}>
+                    <div>
+                    <RecipeCreatePhoto photos={photos} setPhotos={setPhotos} />
+                    </div>
+                </Collapse>
                 <Alert show={errorShow} variant="danger" style={{marginTop:"1em"}} onClose={() => setErrorShow(false)} dismissible>
                     {errorText}
                 </Alert>
@@ -123,7 +190,7 @@ function RecipeCreate(props) {
                         {/* <Button variant="secondary" style={{color:"white", marginRight:"1em"}}>
                             Cancel
                         </Button> */}
-                        <Button type="submit" >
+                        <Button type="submit" onClick={() => setFormDetailsOpen(true)} >
                             Submit
                         </Button>
                     </Col>

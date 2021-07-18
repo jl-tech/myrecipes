@@ -47,7 +47,7 @@ function RecipeCreateIngredient({ingredients, setIngredients}) {
 
     return (
         <>
-        <Form.Label style={{marginTop:"1em"}}>Ingredients</Form.Label>
+        <Form.Label>Ingredients</Form.Label>
         <DragDropContext onDragEnd={handleOnDragEnd}>
             <Droppable droppableId="ingredients">
                 {(provided) => (

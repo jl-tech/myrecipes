@@ -45,7 +45,7 @@ function RecipeCreateStep({steps, setSteps}) {
 
     return (
         <>
-        <Form.Label style={{marginTop:"2em"}}>Directions</Form.Label>
+        <Form.Label>Directions</Form.Label>
         <DragDropContext onDragEnd={handleOnDragEnd}>
             <Droppable droppableId="steps">
                 {(provided) => (
@@ -54,7 +54,7 @@ function RecipeCreateStep({steps, setSteps}) {
                             return (
                                 <Draggable key={id} draggableId={id} index={index}>
                                     {(provided) => (
-                                        <ListGroup.Item as="li" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
+                                        <ListGroup.Item as="li"  ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
                                             <Form.Row >
                                                 <Col sm={1}>
                                                     <span>{index+1}</span>
