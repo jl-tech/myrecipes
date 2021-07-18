@@ -18,7 +18,7 @@ function HomePage(props) {
             <Helmet>
                 <title> Home - MyRecipes </title>
             </Helmet>
-            <body style={{overflow: 'hidden', margin: 0, background: "url(http://127.0.0.1:5000/img/home_cover.jpg)", backgroundSize: "cover",  height: "94vh", width: "auto", backgroundPosition: 'center', backgroundRepeat: 'no-repeat'}}>
+            <body style={{overflow: 'hidden', margin: 0, background: "url(http://127.0.0.1:5000/img/home_cover.jpg)", backgroundSize: "cover",  height: "calc(100vh - 4em)", width: "auto", backgroundPosition: 'center', backgroundRepeat: 'no-repeat'}}>
             <Container style={{textAlign: 'center', color: 'white', marginTop: "10vh"}} className={"mx-auto container-fluid"}>
                 <h1 style={{position: 'center'}}>Discover your next treat.</h1>
                 <p className="lead">Explore thousands of recipes or create your own.</p>
