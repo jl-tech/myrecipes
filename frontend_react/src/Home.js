@@ -122,7 +122,7 @@ function Home({ loggedIn, setLoggedIn, currId }) {
     return (
     <>
     <Navbar style={{height: "4em"}} bg="light" variant="light" className={"shadow-sm"}>
-        <Link to="/home" >
+        <Link to="/" >
             <img src={logo} height="40vh" />
         </Link>
 
@@ -151,24 +151,24 @@ function Home({ loggedIn, setLoggedIn, currId }) {
         <Route path="/profile" render={() =>
             loggedIn
             ? (<Redirect to={{pathname: "/profile/" + currId}} />)
-            : (<Redirect to= {{pathname: "/home"}} />)
+            : (<Redirect to= {{pathname: "/"}} />)
         } />
         <Route path="/settings" render={() =>
             loggedIn
             ? (<Profile currId={currId} loggedIn={loggedIn} settings={true} setButtonName={setfirstName}/>)
-            : (<Redirect to= {{pathname: "/home"}} />)
+            : (<Redirect to= {{pathname: "/"}} />)
         } />
 
         <Route path="/recipe/create" render={() => 
             loggedIn
             ? (<RecipeCreate />)
-            : (<Redirect to= {{pathname: "/home"}} />)
+            : (<Redirect to= {{pathname: "/"}} />)
         } />
         <Route path="/recipe/:id">
           <RecipeView currId={currId} loggedIn={loggedIn} />
         </Route>
         <Route path="/recipe" render={() => 
-            (<Redirect to= {{pathname: "/home"}} />)
+            (<Redirect to= {{pathname: "/"}} />)
         } />
         <Route path="/search">
             <SearchResults loggedIn={loggedIn}/>
@@ -176,20 +176,22 @@ function Home({ loggedIn, setLoggedIn, currId }) {
         <Route path="/newsfeed/:page" render={() => 
             loggedIn
             ? (<Feed loggedIn={loggedIn} currId={currId}/>)
-            : (<Redirect to= {{pathname: "/home"}} />)
+            : (<Redirect to= {{pathname: "/"}} />)
         } />
 
         <Route path="/newsfeed" render={() => 
             loggedIn
             ? (<Feed loggedIn={loggedIn} currId={currId}/>)
-            : (<Redirect to= {{pathname: "/home"}} />)
+            : (<Redirect to= {{pathname: "/"}} />)
         } />
 
         <Route path="/home">
             <HomePage loggedIn={loggedIn}/>
         </Route>
         <Route path="/" render={() => 
-            (<Redirect to= {{pathname: "/home"}} />)
+            loggedIn
+            ? (<Redirect to= {{pathname: "/newsfeed"}} />)
+            : (<Redirect to= {{pathname: "/home"}} />)
         } />
     </Switch>
     </>
