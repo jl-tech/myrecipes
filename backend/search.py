@@ -37,8 +37,9 @@ def do_search(name, type, serving_size, time_to_cook, ingredients, step_key_word
 
     if name is not None:
         query += "match(R.name) against (%s in natural language mode) "
+        query = query.replace("select distinct", "select distinct match(R.name) against (%s in natural language mode) as name_relevance, ")
         # query += "R.name like %s "
-        args = args + (name,)
+        args = args + (name, name,)
         # args = args + ('%'+name+'%',)
         and_needed = True
 
@@ -85,17 +86,48 @@ def do_search(name, type, serving_size, time_to_cook, ingredients, step_key_word
             query += "AND "
         query += "match(S.step_text) against (%s in natural language mode)"
         args = args + (step_key_words,)
-    cur.execute(query, args)
-    results = cur.fetchall()
 
-    # if no results found, change MATCH to also include ingredients
-    if len(results) == 0:
-        query = query.replace("match(R.name) against", "match(I.ingredient_name) against")
-    print(query)
-    cur.execute(query, args)
+    order_by_needed = True
+    if name is not None:
+        query += "ORDER BY "
+        order_by_needed = False
+        query += "name_relevance desc"
 
+    cur.execute(query, args)
     results = cur.fetchall()
     query_lock.release()
+
+    ## Stage 2: include name matches for ingredients
+    # Sorts by number of ingredients which contain the name
+    if name is not None:
+        query_lock.acquire()
+        query = """
+        select count(*), R.recipe_id,  R.name, R.creation_time, R.edit_time, R.time_to_cook, R.type, R.serving_size, RP.photo_path, R.description, U.first_name, U.last_name, U.profile_pic_path, U.user_id, R.calories
+        from Recipes R
+            left outer join (select * from RecipePhotos where photo_no = 0) RP on R.recipe_id = RP.recipe_id
+            left outer join RecipeIngredients I on R.recipe_id = I.recipe_id
+            join Users U on R.created_by_user_id = U.user_id 
+        where match(I.ingredient_name) against (%s in natural language mode)
+        group by R.recipe_id
+        order by count(*) desc
+        """
+        cur.execute(query, (name,))
+        result2= cur.fetchall()
+        query_lock.release()
+        print(result2)
+        for result in result2:
+            is_not_duplicate = True
+            for r in results:
+                if result['recipe_id'] == r['recipe_id']:
+                    is_not_duplicate = False
+                    break
+            if is_not_duplicate:
+                results.append(result)
+
+
+
+
+    print(results)
     return results
 
 
