@@ -40,6 +40,8 @@ function Profile(props) {
 
     const [firstName, setfirstName] = useState('');
     const [lastName, setlastName] = useState('');
+    const [recipeCount, setRecipeCount] = useState(0);
+    const [subCount, setSubCount] = useState(0);
     const [email, setEmail] = useState('');
     const [imgUrl, setImgUrl] = useState('');
     const [buttonType, setButtonType] = useState(0);
@@ -66,6 +68,8 @@ function Profile(props) {
             setlastName(response.LastName);
             setEmail(response.Email);
             setImgUrl(response.ProfilePictureURL);
+            setRecipeCount(response.RecipeCount);
+            setSubCount(response.SubCount);
             setSuccess(true);
         }
         else {
@@ -106,10 +110,28 @@ function Profile(props) {
                     </div>
                     </Col>
                 </Row>
+                <Row style={{textAlign:"center"}}>
+                    <Col>
+                    <h1>{firstName} {lastName}</h1>
+                    </Col>
+                </Row>
+                <Row style={{textAlign:"center"}}>
+                    <Col>
+                    <table style={{marginLeft:"auto", marginRight:"auto", borderCollapse:"separate", borderSpacing:"2em 0em"}}><tbody>
+                        <tr>
+                            <th style={{fontSize:"200%"}}> {recipeCount} </th>
+                            <th style={{fontSize:"200%"}}> {subCount} </th>
+                        </tr>
+                        <tr>
+                            <td> RECIPES </td>
+                            <td> SUBSCRIBERS </td>
+                        </tr>
+                    </tbody></table>
+                    </Col>
+                </Row>
                 <Row>
                     <Col>
                     <div style={{textAlign:"center"}}>
-                        <h1>{firstName} {lastName}</h1>
                         {buttonType == 0 ? <></> : buttonType == 1 ? <ProfileEdit firstName={firstName} setfirstName={setfirstName} lastName={lastName} setlastName={setlastName} setButtonName={props.setButtonName} email={email} imgUrl={imgUrl} setImgUrl={setImgUrl} initOpen={props.settings}/> : <SubscribeButton userid={id}/>}
                     </div>
                     </Col>

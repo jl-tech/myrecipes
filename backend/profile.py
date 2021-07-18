@@ -22,12 +22,24 @@ def profile_info(user_id):
     cur.execute(query, (user_id,))
     result = cur.fetchall()
 
-    query_lock.release()
     if len(result) == 0:
+        query_lock.release()
         return 1
     else:
         if result[0]['profile_pic_path'] is None:
             result[0]['profile_pic_path'] = DEFAULT_PIC
+
+        query = "select COUNT(*) from Recipes where created_by_user_id = %s"
+        cur.execute(query, (user_id,))
+        recipe_count = cur.fetchall()
+        result[0]['recipes'] = recipe_count[0]['COUNT(*)']
+
+        query = "select COUNT(*) from SubscribedTo where is_subscribed_to = %s"
+        cur.execute(query, (user_id,))
+        subscribe_count = cur.fetchall()
+        result[0]['subscribers'] = subscribe_count[0]['COUNT(*)']
+        
+        query_lock.release()
         return result[0]
 
 
