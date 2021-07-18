@@ -152,7 +152,7 @@ function RecipeCreate(props) {
                 <div style={{textAlign: "right"}}>
                     <Link onClick={showAll}> Show all </Link> &nbsp; &nbsp; <Link onClick={collapseAll}> Collapse all </Link>
                     </div>
-                <Link onClick={formDetailsOpen ? () => setFormDetailsOpen(false) : () => setFormDetailsOpen(true)}> <h4> {formDetailsOpen ? `Details ▼` : `Details ▶`}  </h4> </Link>
+                <Link onClick={formDetailsOpen ? () => setFormDetailsOpen(false) : () => setFormDetailsOpen(true)}> <h4> {formDetailsOpen ? `▼ Details` : `▶ Details`}  </h4> </Link>
                 <Collapse in={formDetailsOpen}>
                     <div>
                          <RecipeCreateDesc setName={setName} setType={setType} setTime={setTime} setServing={setServing} setDescription={setDescription} />
@@ -160,7 +160,7 @@ function RecipeCreate(props) {
                     </div>
                 </Collapse>
                 <br/>
-                <Link onClick={formIngredientsOpen ? () => setFormIngredientsOpen(false) : () => setFormIngredientsOpen(true)}> <h4> {formIngredientsOpen ? `Ingredients ▼` : `Ingredients ▶`}  </h4> </Link>
+                <Link onClick={formIngredientsOpen ? () => setFormIngredientsOpen(false) : () => setFormIngredientsOpen(true)}> <h4> {formIngredientsOpen ? `▼ Ingredients` : `▶ Ingredients`}  </h4> </Link>
                 <Collapse in={formIngredientsOpen}>
                     <div>
                         <RecipeCreateIngredient ingredients={ingredients} setIngredients={setIngredients} />
@@ -169,7 +169,7 @@ function RecipeCreate(props) {
                     </div>
                 </Collapse>
                 <br/>
-                <Link onClick={formDirectionsOpen ? () => setFormDirectionsOpen(false) : () => setFormDirectionsOpen(true)}> <h4> {formDirectionsOpen ? `Directions ▼` : `Directions ▶`}  </h4> </Link>
+                <Link onClick={formDirectionsOpen ? () => setFormDirectionsOpen(false) : () => setFormDirectionsOpen(true)}> <h4> {formDirectionsOpen ? `▼ Directions` : `▶ Directions`}  </h4> </Link>
                 <Collapse in={formDirectionsOpen}>
                     <div>
                         <RecipeCreateStep steps={steps} setSteps={setSteps} />
@@ -178,7 +178,7 @@ function RecipeCreate(props) {
                     </div>
                 </Collapse>
                 <br/>
-                <Link onClick={formPhotosOpen ? () => setFormPhotosOpen(false) : () => setFormPhotosOpen(true)}> <h4> {formPhotosOpen ? `Photos ▼` : `Photos ▶`}  </h4> </Link>
+                <Link onClick={formPhotosOpen ? () => setFormPhotosOpen(false) : () => setFormPhotosOpen(true)}> <h4> {formPhotosOpen ? `▼ Photos` : `▶ Photos`}  </h4> </Link>
                 <Collapse in={formPhotosOpen}>
                     <div>
                     <RecipeCreatePhoto photos={photos} setPhotos={setPhotos} />

@@ -121,9 +121,9 @@ function Home({ loggedIn, setLoggedIn, currId }) {
 
     return (
     <>
-    <Navbar bg="light" variant="light" className={"shadow-sm"}>
+    <Navbar style={{height: "6vh"}} bg="light" variant="light" className={"shadow-sm"}>
         <Link to="/home" >
-            <img src={logo} height="50" />
+            <img src={logo} height="40vh" />
         </Link>
 
         <NavLink style={{paddingLeft: '2rem', fontSize:"125%"}} to="/home" activeStyle={{ paddingLeft: '2rem', fontWeight: 'bold', fontSize:"125%"}}>
