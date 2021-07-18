@@ -241,7 +241,7 @@ function RecipeList(props) {
                 <Form.Label column sm={4}>Sort by:</Form.Label>
                 <Col sm={8}>
                 <Form.Control as="select" onChange={(e) => sortChange(e)}>
-                <option value="0"> Relevance</option>
+                { useLocation().pathname.includes('/search') ? <option value="0"> Relevance</option> : null}
                 <option value="1">Date created</option>
                 <option value="2">Date modified</option>
                 <option value="3">Likes</option>

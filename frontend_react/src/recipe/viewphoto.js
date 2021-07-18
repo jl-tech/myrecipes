@@ -254,16 +254,17 @@ function RecipeViewPhoto(props) {
         <>
             <Row style={{marginBottom:"1em"}}>
                 <Col>
-                    <Carousel >
+                    <Carousel className={"shadow"}>
                     {props.photos.length == 0
                     ? 
-                    <Carousel.Item key={0} style={{textAlign:"center", backgroundColor:"gray"}}>    
+                    <Carousel.Item key={0} style={{textAlign:"center", backgroundColor:"black"}}>
                         <img src="http://127.0.0.1:5000/img/default_recipe.png" alt="Default photo" style={{height:"20em"}}/>
                     </Carousel.Item>
                     :
                     props.photos.map(({url}, index) =>
-                        <Carousel.Item key={index} style={{textAlign:"center", backgroundColor:"gray"}}>
-                            <img src={url} className=""alt={`Photo ${index}`} style={{height:"20em"}}/>
+                        <Carousel.Item key={index} style={{textAlign:"center"}}>
+                            <img src={url} className="shadow-lg" alt={`Photo ${index}`} style={{zIndex: 1, position: 'absolute', height:"20em", width:"auto", marginLeft: "auto", marginRight: "auto", left: 0, right: 0, textAlign:"center"}}/>
+                            <img src={url} className="" alt={`Photo ${index} background`} style={{ objectFit: "cover", height:"20em", width:"100%", filter:"blur(15px) brightness(60%)"}}/>
                         </Carousel.Item>
                     )}
                     </Carousel>
