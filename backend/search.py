@@ -95,6 +95,8 @@ def do_search(name, type, serving_size, time_to_cook, ingredients, step_key_word
 
     cur.execute(query, args)
     results = cur.fetchall()
+    if isinstance(results, tuple):
+        results = []
     query_lock.release()
 
     ## Stage 2: include name matches for ingredients
@@ -114,7 +116,6 @@ def do_search(name, type, serving_size, time_to_cook, ingredients, step_key_word
         cur.execute(query, (name,))
         result2= cur.fetchall()
         query_lock.release()
-        print(result2)
         for result in result2:
             is_not_duplicate = True
             for r in results:
@@ -124,10 +125,32 @@ def do_search(name, type, serving_size, time_to_cook, ingredients, step_key_word
             if is_not_duplicate:
                 results.append(result)
 
+        ## Stage 3: include name matches for steps
+        # Sorts by number of steps which contain the name
+        if name is not None:
+            query_lock.acquire()
+            query = """
+            select count(*), R.recipe_id,  R.name, R.creation_time, R.edit_time, R.time_to_cook, R.type, R.serving_size, RP.photo_path, R.description, U.first_name, U.last_name, U.profile_pic_path, U.user_id, R.calories
+            from Recipes R
+                left outer join (select * from RecipePhotos where photo_no = 0) RP on R.recipe_id = RP.recipe_id
+                left outer join RecipeSteps S on R.recipe_id = S.recipe_id
+                join Users U on R.created_by_user_id = U.user_id 
+            where match(S.step_text) against (%s in natural language mode)
+            group by R.recipe_id
+            order by count(*) desc
+            """
+            cur.execute(query, (name,))
+            result2 = cur.fetchall()
+            query_lock.release()
+            for result in result2:
+                is_not_duplicate = True
+                for r in results:
+                    if result['recipe_id'] == r['recipe_id']:
+                        is_not_duplicate = False
+                        break
+                if is_not_duplicate:
+                    results.append(result)
 
-
-
-    print(results)
     return results
 
 
