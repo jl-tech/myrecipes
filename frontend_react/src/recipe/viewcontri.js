@@ -18,7 +18,7 @@ function RecipeViewContri(props) {
             <>
             <Row style={{marginTop:"1em"}}>
                 <Col style={{textAlign:"center"}}>
-                    <Image src={"http://127.0.0.1:5000/img/" + props.userImgURL} alt="Profile Picture" roundedCircle height="50em" style={{align:"left"}}/>
+                    <Image className={"shadow-lg"} src={"http://127.0.0.1:5000/img/" + props.userImgURL} alt="Profile Picture" roundedCircle height="50em" style={{align:"left"}}/>
                 </Col>
             </Row>
             <Row>

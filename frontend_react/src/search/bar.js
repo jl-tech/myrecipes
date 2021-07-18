@@ -113,7 +113,7 @@ function SearchBar(props) {
         <Form onSubmit={handleSubmit} onKeyDown={handleOnKeyDown}>
             <InputGroup>
                 <Typeahead id = 'typeahead' placeholder='Search Recipes' options={searchHistoryTerms}
-                            style={{width: props.nav ? "": "92%"}}
+                            style={{opacity:"90%", zIndex:1, width: props.nav ? "": "92%"}}
                             labelKey={option => `${option.search_term}`}
                             open={showSuggestions}
                             onFocus={()=> setShowSuggestions(true)}

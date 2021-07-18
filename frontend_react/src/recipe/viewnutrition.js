@@ -82,7 +82,7 @@ function RecipeViewNutri(props) {
                 <h5 style={{textAlign: "center"}}> Nutritional Info </h5>
                 <p style={{textAlign: "center"}}> per serving</p>
                 <Row className={"mx-auto align-content-center"}>
-                    <Table bordered hover size={"sm"}>
+                    <Table bordered hover size={"sm"} className={"shadow-sm"}>
                         <tr>
                             <th>Calories</th>
                             <td>{nutritionData['calories']}</td>

@@ -257,7 +257,7 @@ function RecipeViewPhoto(props) {
                     <Carousel className={"shadow"}>
                     {props.photos.length == 0
                     ? 
-                    <Carousel.Item key={0} style={{textAlign:"center", backgroundColor:"black"}}>
+                    <Carousel.Item key={0} style={{textAlign:"center", backgroundColor:"white"}}>
                         <img src="http://127.0.0.1:5000/img/default_recipe.png" alt="Default photo" style={{height:"20em"}}/>
                     </Carousel.Item>
                     :

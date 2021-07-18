@@ -151,8 +151,8 @@ export function RecipeViewDescription(props) {
         </Row>
         <Row>
             <Col>
-                <ListGroup>
-                    <ListGroup.Item style={{textAlign:"justify"}}>
+                <ListGroup className={"shadow-sm"}>
+                    <ListGroup.Item style={{textAlign:"justify"}} >
                         {props.description == null ? "No description available" : props.description}
                     </ListGroup.Item>
                 </ListGroup>

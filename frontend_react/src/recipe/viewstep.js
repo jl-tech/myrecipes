@@ -215,7 +215,7 @@ function RecipeViewStep(props) {
             </Row>
             <Row>
                 <Col>
-                <ListGroup as="ul">
+                <ListGroup as="ul" className={"shadow-sm"}>
                     {props.steps.map(({id, description}, index) =>
                         <ListGroup.Item as="li" key={index}>
                         <Row>

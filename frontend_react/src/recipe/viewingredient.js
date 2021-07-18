@@ -229,7 +229,7 @@ function RecipeViewIngredient(props) {
             </Row>
             <Row>
                 <Col>
-                <ListGroup as="ul">
+                <ListGroup as="ul" className={"shadow-sm"}>
                     {props.ingredients.map(({quantity, unit, name}, index) =>
                         <ListGroup.Item as="li" key={index}>
                         <Row>
