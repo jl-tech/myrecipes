@@ -27,6 +27,7 @@ function RecipeList(props) {
     const [activeTimeFilters, setActiveTimeFilters] = useState([Math.min(...timeFilters), Math.max(...timeFilters)]);
     const [activePage, setActivePage] = useState(0);
     const [hoveredRecipeId, setHoveredRecipeId] = useState(-1)
+    const [hoveredFooterRecipeId, setHoveredFooterRecipeId] = useState(-1)
     const recipesPerPage = 4;
 
     function generateCard(recipe, index) {
@@ -62,16 +63,18 @@ function RecipeList(props) {
                             </Card.Text>
 
                         </Card.Body>
-                    </Link>
 
-                    <Card.Footer className={"text-truncate"}>
+
+                    <Card.Footer
+                        className={"text-truncate"}>
                         <Row>
                             <Col sm={2} className={"mx-auto my-auto"}>
+                                <Link  to={"/profile/" + recipe.user_id} >
                                 <Image src={"http://127.0.0.1:5000/img/" + recipe.profile_pic_path} alt="Profile Picture" roundedCircle width="40em"/>
-
+                                </Link>
                             </Col>
                             <Col sm={10}>
-                                <Link style={{color:'black'}} to={"/profile/" + recipe.user_id} > {recipe.first_name + " " + recipe.last_name} <br/> </Link>
+                                <Link to={"/profile/" + recipe.user_id} > {recipe.first_name + " " + recipe.last_name} <br/> </Link>
                                 <small className={"text-muted"}>
 
                                     {"Created "}
@@ -84,6 +87,7 @@ function RecipeList(props) {
                             </Col>
                         </Row>
                     </Card.Footer>
+                        </Link>
                 </Card>
             </div>
         )

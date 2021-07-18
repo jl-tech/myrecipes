@@ -38,6 +38,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import ReactTimeAgo from "react-time-ago";
 import SearchBar from './search/bar';
+import Image from "react-bootstrap/Image";
 
 async function profileUser(userid) {
     let response = await fetch('http://localhost:5000/profile/view?' + new URLSearchParams({'user_id': userid}), {
@@ -94,9 +95,20 @@ function UserButton(props) {
     }
 
     return (
-    <DropdownButton menuAlign="right" title={props.firstName} >
+    <DropdownButton menuAlign="right" title={
+        <>
+         <Image src={"http://127.0.0.1:5000/img/" + imgUrl} alt="Profile Picture" roundedCircle width="25em"
+         style={{padding: 0 + '!important'}}/>
+         &nbsp; {props.firstName}
+        </>
+        }>
         <Dropdown.Item as={Link} to="/profile">Profile</Dropdown.Item>
-        <Dropdown.Item as={Link} to="/settings">Account Settings</Dropdown.Item>
+        {
+            !useLocation().pathname.includes('/profile/') ?
+            <Dropdown.Item as={Link} to="/settings">Account
+                Settings</Dropdown.Item> :
+              null
+        }
         <Dropdown.Item onClick={logout}>Log Out</Dropdown.Item>
     </DropdownButton>
     );
