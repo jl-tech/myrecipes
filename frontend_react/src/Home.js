@@ -57,6 +57,7 @@ function UserButton(props) {
     const cookie = new Cookie();
     const [imgUrl, setImgUrl] = useState(null);
     const [fetched, setFetched] = useState(false);
+    const location = useLocation();
 
     async function processId() {
         let response = await profileUser(props.currId)
@@ -90,7 +91,10 @@ function UserButton(props) {
         </>
         }>
         <Dropdown.Item as={Link} to="/profile">Profile</Dropdown.Item>
-        <Dropdown.Item as={Link} to="/settings">Account Settings</Dropdown.Item>
+        {location.pathname.includes('/profile') || location.pathname.includes('/settings') ?
+        <Dropdown.Item onClick={()=>{props.setModalToggle(true)} }>Account Settings</Dropdown.Item>:
+        <Dropdown.Item as={Link} to="/settings" >Account Settings</Dropdown.Item>
+        }
         <Dropdown.Item onClick={logout}>Log Out</Dropdown.Item>
     </DropdownButton>
     );
@@ -100,6 +104,7 @@ function Home({ loggedIn, setLoggedIn, currId }) {
 
     const [firstName, setfirstName] = useState('');
     const location = useLocation();
+    const [modalToggle, setModalToggle] = useState(false);
 
     return (
     <>
@@ -122,13 +127,13 @@ function Home({ loggedIn, setLoggedIn, currId }) {
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
             <Navbar.Text>
-                {loggedIn ? <UserButton setLoggedIn={setLoggedIn} currId={currId} firstName={firstName} setfirstName={setfirstName} /> : <LoginButton />}
+                {loggedIn ? <UserButton setLoggedIn={setLoggedIn} currId={currId} firstName={firstName} setfirstName={setfirstName} setModalToggle={setModalToggle}/> : <LoginButton />}
             </Navbar.Text>
         </Navbar.Collapse>
     </Navbar>
     <Switch>
         <Route path="/profile/:id">
-          <Profile currId={currId} loggedIn={loggedIn} settings={false} setButtonName={setfirstName}/>
+          <Profile currId={currId} loggedIn={loggedIn} settings={false} setButtonName={setfirstName} modalToggle={modalToggle} setModalToggle={setModalToggle}/>
         </Route>
         <Route path="/profile" render={() =>
             loggedIn
@@ -137,7 +142,7 @@ function Home({ loggedIn, setLoggedIn, currId }) {
         } />
         <Route path="/settings" render={() =>
             loggedIn
-            ? (<Profile currId={currId} loggedIn={loggedIn} settings={true} setButtonName={setfirstName}/>)
+            ? (<Profile currId={currId} loggedIn={loggedIn} settings={true} setButtonName={setfirstName} modalToggle={modalToggle} setModalToggle={setModalToggle}/>)
             : (<Redirect to= {{pathname: "/"}} />)
         } />
 

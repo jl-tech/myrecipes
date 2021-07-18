@@ -79,7 +79,7 @@ function Feed(props) {
         if (response != null) {
             setRecipes(response.feed);
             setPages(response.count);
-            setActivePage(page_);
+            setActivePage(parseInt(page_));
         }
 
         setFetchedFeed(true);

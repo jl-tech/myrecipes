@@ -45,7 +45,7 @@ function Profile(props) {
     const [buttonType, setButtonType] = useState(0);
     const [showSpinner, setShowSpinner] = useState(true)
     let { id } = useParams();
-    id = id == null ? props.currId : id
+    id = id == null ? props.currId : id;
     const history = useHistory();
 
 
@@ -74,10 +74,7 @@ function Profile(props) {
             setShowSpinner(false)
         }
         if (props.loggedIn) {
-            if (id_ === props.currId) {
-              setButtonType(1);
-            }
-
+            if (parseInt(id_) === props.currId) setButtonType(1);
             else setButtonType(2);
         }
 
@@ -132,7 +129,7 @@ function Profile(props) {
                 <Row>
                     <Col>
                     <div style={{textAlign:"center", marginTop:"1em"}}>
-                        {buttonType === 0 ? <></> : buttonType === 1 ? <ProfileEdit firstName={firstName} setfirstName={setfirstName} lastName={lastName} setlastName={setlastName} setButtonName={props.setButtonName} email={email} imgUrl={imgUrl} setImgUrl={setImgUrl} initOpen={props.settings}/> : <SubscribeButton userid={id}/>}
+                        {buttonType === 0 ? <></> : buttonType === 1 ? <ProfileEdit firstName={firstName} setfirstName={setfirstName} lastName={lastName} setlastName={setlastName} setButtonName={props.setButtonName} email={email} imgUrl={imgUrl} setImgUrl={setImgUrl} initOpen={props.settings} modalToggle={props.modalToggle} setModalToggle={props.setModalToggle}/> : <SubscribeButton userid={id}/>}
                     </div>
                     </Col>
                 </Row>

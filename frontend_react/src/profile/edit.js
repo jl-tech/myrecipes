@@ -14,12 +14,12 @@ function ProfileEdit(props) {
 
     const [showEdit, setShowEdit] = useState(props.initOpen);
     const editShow = () => setShowEdit(true);
-    const editClose = () => setShowEdit(false);
+    const editClose = () => {setShowEdit(false);props.setModalToggle(false);};
 
     return (
         <>
         <Button onClick={editShow}>Edit Profile & Account Details</Button>
-        <Modal show={showEdit} onHide={editClose} centered>
+        <Modal show={showEdit || props.modalToggle} onHide={editClose} centered>
             <Modal.Header closeButton>
                 <Modal.Title>
                     Edit Profile & Account Details
