@@ -536,6 +536,12 @@ def recipe_like(token, recipe_id):
     query_lock.acquire()
     cur = con.cursor()
 
+    query = "select * from Recipes where recipe_id=%s"
+    cur.execute(query, (int(recipe_id),))
+    result = cur.fetchall()
+    if len(result) == 0:
+        return -2
+
     query = "insert into Likes(recipe_id, liked_by_user_id) values (%s, %s)"
     cur.execute(query, (int(recipe_id), int(u_id),))
     con.commit()

@@ -210,6 +210,10 @@ def route_recipe_like():
         response = jsonify({'error': 'Invalid token'})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
+    elif result == -2:
+        response = jsonify({'error': 'Invalid recipe id'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
     else:
         response = jsonify({})
         response.headers.add('Access-Control-Allow-Origin', '*')
