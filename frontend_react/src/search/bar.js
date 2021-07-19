@@ -101,7 +101,7 @@ function SearchBar(props) {
             .catch(e => {
 
             });
-        return response;
+        return "";
     }
 
     useEffect(() => {
