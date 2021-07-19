@@ -12,7 +12,7 @@ import ProfileEdit from './edit.js';
 import ProfileRecipes from "./recipes";
 import {Spinner} from "react-bootstrap";
 import SubscribeButton from "../newsfeed/subscribe";
-import {Helmet} from "react-helmet-async";
+import { Helmet } from "react-helmet-async";
 import Subscribers from '../newsfeed/subscribers.js';
 
 async function profileUser(userid) {

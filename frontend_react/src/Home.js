@@ -163,13 +163,13 @@ function Home({ loggedIn, setLoggedIn, currId }) {
         </Route>
         <Route path="/newsfeed/:page" render={() => 
             loggedIn
-            ? (<Feed loggedIn={loggedIn}/>)
+            ? (<Feed loggedIn={loggedIn} currId={currId}/>)
             : (<Redirect to= {{pathname: "/"}} />)
         } />
 
         <Route path="/newsfeed" render={() => 
             loggedIn
-            ? (<Feed loggedIn={loggedIn}/>)
+            ? (<Feed loggedIn={loggedIn} currId={currId}/>)
             : (<Redirect to= {{pathname: "/"}} />)
         } />
 

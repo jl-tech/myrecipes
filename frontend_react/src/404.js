@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useHistory } from "react-router-dom";
-import {Helmet} from "react-helmet-async";
+import { Helmet } from "react-helmet-async";
 import logo from "./WIP_logo_2.png";
 import Modal from "react-bootstrap/Modal";
 import SearchBar from "./search/bar";

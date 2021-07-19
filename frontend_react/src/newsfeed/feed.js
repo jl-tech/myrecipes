@@ -13,8 +13,7 @@ import Pagination from "react-bootstrap/Pagination";
 import ListGroup from "react-bootstrap/ListGroup";
 import ReactTimeAgo from "react-time-ago";
 
-import {Helmet} from "react-helmet-async";
-import Subscribers from "./subscribers.js"
+import { Helmet } from "react-helmet-async";
 
 async function requestFeed(token, page) {
     let response = await fetch('http://localhost:5000/newsfeed/get_feed?' + new URLSearchParams({'page': page}), {
@@ -196,6 +195,7 @@ function Feed(props) {
                 <>
                 <Row>
                     <Col>
+                    <div style={{cursor:'pointer'}} role="link" onClick={()=>history.push("/profile")} >
                     <Modal.Dialog  className={'shadow-sm'}>
                     <Modal.Body>
                         <Row>
@@ -213,9 +213,7 @@ function Feed(props) {
                             <table style={{marginLeft:"auto", marginRight:"auto", borderCollapse:"separate", borderSpacing:"1em 0em"}}><tbody>
                                 <tr>
                                     <th style={{fontSize:"150%"}}> {recipeCount} </th>
-                                    <th style={{fontSize:"150%"}}>
-                                        <Subscribers subscribers={subscribers} />
-                                    </th>
+                                    <th style={{fontSize:"150%"}}> {subscribers.length} </th>
                                 </tr>
                                 <tr>
                                     <td> RECIPES </td>
@@ -226,6 +224,7 @@ function Feed(props) {
                         </Row>
                     </Modal.Body>
                     </Modal.Dialog>
+                    </div>
                     </Col>
                 </Row>
                 <Row>
