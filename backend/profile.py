@@ -194,4 +194,14 @@ def get_profile_recipe(user_id):
     return out
 
 def get_times_liked(token, user_id):
-    return
+    u_id = token_to_id(token)
+    if u_id < 0:
+        return -1
+
+    query_lock.acquire()
+    cur = con.cursor()
+    query = "select * from Likes INNER JOIN Recipes ON Recipes.recipe_id = Likes.recipe_id where Recipes.created_by_user_id=%s"
+    cur.execute(query, (int(user_id),))
+    result = cur.fetchall()
+
+    return result.len
