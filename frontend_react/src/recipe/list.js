@@ -69,12 +69,13 @@ function RecipeList(props) {
                         <Row>
                             <Col sm={2} className={"mx-auto my-auto"}>
 
-                                <a  href={"/profile/" + recipe.user_id}  onClick={(e) => e.stopPropagation()}>
-                                <Image src={"http://127.0.0.1:5000/img/" + recipe.profile_pic_path} alt="Profile Picture" roundedCircle width="40em"/>
-                                </a>
+                                <Link  href={"/profile/" + recipe.user_id} >
+                                <Image  onClick={(e) => e.stopPropagation()} src={"http://127.0.0.1:5000/img/" + recipe.profile_pic_path} alt="Profile Picture" roundedCircle width="40em"/>
+                                </Link>
                             </Col>
                             <Col sm={10}>
-                                 <a  href={"/profile/" + recipe.user_id}  onClick={(e) => e.stopPropagation()}> {recipe.first_name + " " + recipe.last_name} <br/> </a>
+                                 <Link  href={"/profile/" + recipe.user_id}>
+                                     <div   onClick={(e) => e.stopPropagation()}> {recipe.first_name + " " + recipe.last_name} <br/> </div> </Link>
                                 <small className={"text-muted"}>
 
                                     {"Created "}
