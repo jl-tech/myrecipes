@@ -32,6 +32,10 @@ def route_recipe_create():
 @RECIPE.route('/view', methods=['GET'])
 def route_recipe_view():
     data = request.args.get('recipe_id')
+    if not isinstance(data, int):
+        response = jsonify({'error': 'Bad recipe_id'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
     result = recipe.get_recipe_details(data)
     if result == -1:
         response = jsonify({'error': 'Invalid recipe id'})
