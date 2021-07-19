@@ -192,3 +192,6 @@ def get_profile_recipe(user_id):
         out.append(dic)
     query_lock.release()
     return out
+
+def get_times_liked(token, user_id):
+    return
