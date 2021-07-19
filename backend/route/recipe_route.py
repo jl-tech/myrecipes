@@ -219,3 +219,24 @@ def route_recipe_comment():
         response = jsonify({})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
+
+@RECIPE.route('/like', methods=['POST'])
+def route_recipe_like():
+    token = request.headers.get("Authorization")
+    data = request.get_json()
+    recipe_id = data['recipe_id']
+
+    result = recipe.recipe_like(token, recipe_id)
+
+    if result == -1:
+        response = jsonify({'error': 'Invalid token'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
+    elif result == -2:
+        response = jsonify({'error': 'Invalid recipe id'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
+    else:
+        response = jsonify({})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 200

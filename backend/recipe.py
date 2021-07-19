@@ -560,3 +560,33 @@ def recipe_comment(token, recipe_id, comment):
     con.commit()
     query_lock.release()
     return 0
+
+def recipe_like(token, recipe_id):
+    '''
+    :param token: The token of the user
+    :param recipe_id: The id of recipe
+    :return: 
+    0 if OK.
+    -1 if the token is invalid.
+    -2 if the recipe id is invalid.
+    '''
+    query_lock.acquire()
+    cur = con.cursor()
+    u_id = tokenise.token_to_id(token)
+
+    if u_id < 0:
+        query_lock.release()
+        return -1
+    
+    query = '''select * from Recipes where recipe_id = %s'''
+
+    if cur.execute(query, (recipe_id)) == 0:
+        query_lock.release()
+        return -2
+
+    query = "insert into Likes(recipe_id, liked_by_user_id) values (%s, %s)"
+    cur.execute(query, (int(recipe_id), int(u_id),))
+
+    con.commit()
+    query_lock.release()
+    return 0
