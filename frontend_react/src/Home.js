@@ -26,6 +26,7 @@ import SearchResults from "./search/results";
 import SearchBar from './search/bar';
 import Image from "react-bootstrap/Image";
 import Feed from './newsfeed/feed';
+import NotFound from "./404";
 
 async function profileUser(userid) {
     let response = await fetch('http://localhost:5000/profile/view?' + new URLSearchParams({'user_id': userid}), {
@@ -175,11 +176,14 @@ function Home({ loggedIn, setLoggedIn, currId }) {
         <Route path="/home">
             <HomePage loggedIn={loggedIn}/>
         </Route>
-        <Route path="/" render={() => 
+        <Route exact path="/" render={() =>
             loggedIn
             ? (<Redirect to= {{pathname: "/newsfeed"}} />)
             : (<Redirect to= {{pathname: "/home"}} />)
         } />
+        <Route>
+            <NotFound/>
+        </Route>
     </Switch>
     </>
     );

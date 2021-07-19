@@ -117,6 +117,30 @@ function Feed(props) {
                     onMouseLeave={() => setHoveredRecipeId(-1)}
                     className={hoveredRecipeId === recipe.recipe_id ? 'shadow-lg' : 'shadow-sm'}>
                     <div style={{color:'black', textDecoration: 'none', cursor:'pointer'}} role="link" onClick={()=>history.push("/recipe/" + recipe.recipe_id)} >
+                        <Card.Header
+                            className={"text-truncate"}>
+                            <Row>
+                                <Col sm={1} className={"mx-auto my-auto"}>
+                                    <Link  to={"/profile/" + recipe.user_id} >
+                                        <Image onClick={(e) => e.stopPropagation()} src={"http://127.0.0.1:5000/img/" + recipe.profile_pic_path} alt="Profile Picture" roundedCircle width="40em"/>
+                                    </Link>
+                                </Col>
+                                <Col sm={11}>
+                                    <Link to={"/profile/" + recipe.user_id} >
+                                        <div onClick={(e) => e.stopPropagation()}>
+                                            {recipe.first_name + " " + recipe.last_name} <br/>
+                                        </div>
+                                    </Link>
+
+                                        {"Created "}
+                                        <ReactTimeAgo date={new Date(recipe.creation_time)} locale="en-US"/>
+                                        {recipe.edit_time != null ? <>
+                                                {" | Modified "}
+                                                <ReactTimeAgo date={new Date(recipe.edit_time)} locale="en-US"/> </>
+                                            : ""}
+                                </Col>
+                            </Row>
+                        </Card.Header>
                         <Card.Img variant="Top" style={{width:"100%", height:"9vw", objectFit:"cover"}} alt="Recipe Image" src={recipe.photo_path == null ? "http://127.0.0.1:5000/img/default_recipe.png" : "http://127.0.0.1:5000/img/" + recipe.photo_path}/>
                         <Card.Body style={{textAlign: "center"}}>
                             <Card.Title className={"text-truncate"}>{recipe.name}</Card.Title>
@@ -143,32 +167,7 @@ function Feed(props) {
                         </Card.Body>
 
 
-                    <Card.Footer
-                        className={"text-truncate"}>
-                        <Row>
-                            <Col sm={1} className={"mx-auto my-auto"}>
-                                <Link  to={"/profile/" + recipe.user_id} >
-                                <Image onClick={(e) => e.stopPropagation()} src={"http://127.0.0.1:5000/img/" + recipe.profile_pic_path} alt="Profile Picture" roundedCircle width="40em"/>
-                                </Link>
-                            </Col>
-                            <Col sm={11}>
-                                <Link to={"/profile/" + recipe.user_id} >
-                                    <div onClick={(e) => e.stopPropagation()}>
-                                        {recipe.first_name + " " + recipe.last_name} <br/>
-                                    </div>
-                                </Link>
-                                <small className={"text-muted"}>
 
-                                    {"Created "}
-                                    <ReactTimeAgo date={new Date(recipe.creation_time)} locale="en-US"/>
-                                    {recipe.edit_time != null ? <>
-                                            {" | Modified "}
-                                            <ReactTimeAgo date={new Date(recipe.edit_time)} locale="en-US"/> </>
-                                        : ""}
-                                </small>
-                            </Col>
-                        </Row>
-                    </Card.Footer>
                         </div>
                 </Card>
             </div>
