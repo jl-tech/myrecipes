@@ -68,12 +68,13 @@ function RecipeList(props) {
                         className={"text-truncate"}>
                         <Row>
                             <Col sm={2} className={"mx-auto my-auto"}>
-                                <Link  to={"/profile/" + recipe.user_id} >
+
+                                <a  href={"/profile/" + recipe.user_id}  onClick={(e) => e.stopPropagation()}>
                                 <Image src={"http://127.0.0.1:5000/img/" + recipe.profile_pic_path} alt="Profile Picture" roundedCircle width="40em"/>
-                                </Link>
+                                </a>
                             </Col>
                             <Col sm={10}>
-                                <Link to={"/profile/" + recipe.user_id} > {recipe.first_name + " " + recipe.last_name} <br/> </Link>
+                                 <a  href={"/profile/" + recipe.user_id}  onClick={(e) => e.stopPropagation()}> {recipe.first_name + " " + recipe.last_name} <br/> </a>
                                 <small className={"text-muted"}>
 
                                     {"Created "}

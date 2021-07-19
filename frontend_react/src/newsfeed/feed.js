@@ -146,12 +146,12 @@ function Feed(props) {
                     <Card.Footer
                         className={"text-truncate"}>
                         <Row>
-                            <Col sm={2} className={"mx-auto my-auto"}>
+                            <Col sm={1} className={"mx-auto my-auto"}>
                                 <Link  to={"/profile/" + recipe.user_id} >
                                 <Image src={"http://127.0.0.1:5000/img/" + recipe.profile_pic_path} alt="Profile Picture" roundedCircle width="40em"/>
                                 </Link>
                             </Col>
-                            <Col sm={10}>
+                            <Col sm={11}>
                                 <Link to={"/profile/" + recipe.user_id} > {recipe.first_name + " " + recipe.last_name} <br/> </Link>
                                 <small className={"text-muted"}>
 

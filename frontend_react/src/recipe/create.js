@@ -69,7 +69,7 @@ function RecipeCreate(props) {
 
     async function handleSubmit(event) {
         event.preventDefault();
-
+        collapseAll()
         let ingredientsP = []
         for (let ingredient of ingredients) {
             ingredientsP.push({
