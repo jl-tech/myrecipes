@@ -52,5 +52,6 @@
 - Add description support for recipes in backend
 - Create frontend for nutritionix API on recipe list
 - Add backend and frontend capability for estimated calorie values
+- Create backend for newsfeed & subscribing
 - Frontend design polishing & minor fixes, including adding shadows on card hover, various changes to style, adding profile pic to menu etc
 
