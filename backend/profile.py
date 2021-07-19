@@ -204,4 +204,4 @@ def get_times_liked(token, user_id):
     cur.execute(query, (int(user_id),))
     result = cur.fetchall()
 
-    return result.len
+    return len(result)
