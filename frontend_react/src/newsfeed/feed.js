@@ -64,6 +64,7 @@ function Feed(props) {
     const [pages, setPages] = useState(null);
     const [hoveredRecipeId, setHoveredRecipeId] = useState(-1)
     const [activePage, setActivePage] = useState(null);
+    const [hoveredProfile, setHoveredProfile] = useState(false)
     let { page } = useParams();
     const cookie = new Cookie()
     const history = useHistory()
@@ -196,7 +197,13 @@ function Feed(props) {
                 <Row>
                     <Col>
                     <div style={{cursor:'pointer'}} role="link" onClick={()=>history.push("/profile")} >
-                    <Modal.Dialog  className={'shadow-sm'}>
+                    <Modal.Dialog
+                        onMouseEnter={()=> setHoveredProfile(true)}
+                        onMouseLeave={()=> setHoveredProfile(false)}
+                        className={hoveredProfile ? 'shadow-lg' : 'shadow-sm'}>
+                        <Modal.Header>
+                            <Col style={{textAlign: "center", fontSize:"125%"}}> Your Profile  </Col>
+                        </Modal.Header>
                     <Modal.Body>
                         <Row>
                             <Col style={{textAlign:"center"}}>
