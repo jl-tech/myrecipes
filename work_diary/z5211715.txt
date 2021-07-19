@@ -31,3 +31,13 @@ Week 6:
 - Frontend
   Recipe: Delete/View/ViewContri/ViewDesc/ViewIngredient/ViewPhoto/ViewStep
 - Integrated frontend and backend (Managing the API endpoints)
+
+Week 7:
+- Frontend
+  Recipe: List
+  Search: Results/Advanced
+  Newsfeed: Feed/SubscribeButton/Subscribers
+- Backend
+  Newsfeed: get_subscriptions
+  Updated profile_info to return recipe count and subscribers
+- Integrated frontend and backend (Managing the API endpoints)
