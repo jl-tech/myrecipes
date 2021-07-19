@@ -39,3 +39,18 @@
 - Edit/photos backend implementation
 - Refactoring backend routing to separate files, refactor profile functions into new file
 - Various bug fixes for backend
+*Week 7*
+- Create initial homepage frontend
+- Create basic frontend routing for searches 
+- Create frontend for search history
+- Upgrade backend search function to use MATCH and natural language, and sorting by relevance
+- Improve backend search function by permitting matches to ingredients etc
+- Add sample data: about 15 recipes and 5 users, stored in database dump 
+- Update schema for sprint 4
+- Change frontend to utilise consistent font across OSs
+- Create Recipe frontend upgrades to utilise collapsibles and guide step by step
+- Add description support for recipes in backend
+- Create frontend for nutritionix API on recipe list
+- Add backend and frontend capability for estimated calorie values
+- Frontend design polishing & minor fixes, including adding shadows on card hover, various changes to style, adding profile pic to menu etc
+
