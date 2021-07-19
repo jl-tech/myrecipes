@@ -231,7 +231,7 @@ function Feed(props) {
                         <ListGroup.Item variant="primary">Subscriptions</ListGroup.Item>
                         {subscriptions.map(({first_name, last_name, user_id, profile_pic_path}, index)=>
                             <ListGroup.Item key={index}>
-                            <Link to={"/profile/" + user_id}  style={{width:"100%"}}>
+                            <a  href={"/profile/" + user_id}  onClick={(e) => e.stopPropagation()}> style={{width:"100%"}}>
                                 <Row>
                                 <Col sm={3}>
                                 <Image src={"http://127.0.0.1:5000/img/" + profile_pic_path} alt="Profile Picture" roundedCircle width="40em"/>
@@ -240,7 +240,7 @@ function Feed(props) {
                                     {first_name} {last_name}
                                 </Col>
                                 </Row>
-                                </Link>
+                                </a>
                             </ListGroup.Item>
                         )}
                     </ListGroup>
