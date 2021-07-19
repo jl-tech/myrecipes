@@ -23,7 +23,7 @@ def route_subscribe():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
     else:
-        response = jsonify({})
+        response = jsonify(result)
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
 
@@ -45,7 +45,7 @@ def route_unsubscribe():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
     else:
-        response = jsonify({})
+        response = jsonify(result)
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
 

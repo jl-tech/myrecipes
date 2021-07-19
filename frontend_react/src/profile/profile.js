@@ -14,6 +14,7 @@ import {Spinner} from "react-bootstrap";
 import SubscribeButton from "../newsfeed/subscribe";
 import { Helmet } from "react-helmet-async";
 import Subscribers from '../newsfeed/subscribers.js';
+import Subscriptions from '../newsfeed/subscriptions.js';
 
 async function profileUser(userid) {
     let response = await fetch('http://localhost:5000/profile/view?' + new URLSearchParams({'user_id': userid}), {
@@ -40,6 +41,7 @@ function Profile(props) {
     const [lastName, setlastName] = useState('');
     const [recipeCount, setRecipeCount] = useState(0);
     const [subscribers, setSubscribers] = useState([]);
+    const [subscriptions, setSubscriptions] = useState([]);
     const [email, setEmail] = useState('');
     const [imgUrl, setImgUrl] = useState('');
     const [buttonType, setButtonType] = useState(0);
@@ -68,6 +70,7 @@ function Profile(props) {
             setImgUrl(response.ProfilePictureURL);
             setRecipeCount(response.RecipeCount);
             setSubscribers(response.Subscribers);
+            setSubscriptions(response.Subscriptions);
             setSuccess(true);
         }
         else {
@@ -116,12 +119,22 @@ function Profile(props) {
                         <tr>
                             <th style={{fontSize:"200%"}}> {recipeCount} </th>
                             <th style={{fontSize:"200%"}}>
+                                { buttonType === 1 ?
                                 <Subscribers subscribers={subscribers} />
+                                : subscribers.length }
                             </th>
+                            { buttonType === 1 ?
+                            <th style={{fontSize:"200%"}}>
+                                <Subscriptions subscriptions={subscriptions} />
+                            </th>
+                            : null}
                         </tr>
                         <tr>
                             <td> RECIPES </td>
                             <td> SUBSCRIBERS </td>
+                            { buttonType === 1 ?
+                            <td> SUBSCRIPTIONS </td>
+                            : null}
                         </tr>
                     </tbody></table>
                     </Col>
@@ -129,7 +142,7 @@ function Profile(props) {
                 <Row>
                     <Col>
                     <div style={{textAlign:"center", marginTop:"1em"}}>
-                        {buttonType === 0 ? <></> : buttonType === 1 ? <ProfileEdit firstName={firstName} setfirstName={setfirstName} lastName={lastName} setlastName={setlastName} setButtonName={props.setButtonName} email={email} imgUrl={imgUrl} setImgUrl={setImgUrl} initOpen={props.settings} modalToggle={props.modalToggle} setModalToggle={props.setModalToggle}/> : <SubscribeButton userid={id}/>}
+                        {buttonType === 0 ? <></> : buttonType === 1 ? <ProfileEdit firstName={firstName} setfirstName={setfirstName} lastName={lastName} setlastName={setlastName} setButtonName={props.setButtonName} email={email} imgUrl={imgUrl} setImgUrl={setImgUrl} initOpen={props.settings} modalToggle={props.modalToggle} setModalToggle={props.setModalToggle}/> : <SubscribeButton userid={id} setSubscribers={setSubscribers}/>}
                     </div>
                     </Col>
                 </Row>

@@ -45,8 +45,18 @@ def subscribe(token, user_id):
 
     cur.execute(query, (u_id, user_id))
     con.commit()
+
+    query = """
+        select U.user_id, U.first_name, U.last_name, U.profile_pic_path
+        from SubscribedTo S
+            join Users U on S.user_id = U.user_id
+        where S.is_subscribed_to = %s
+    """
+    cur.execute(query, (user_id, ))
+    result = cur.fetchall()
+    
     query_lock.release()
-    return 0
+    return result
 
 def unsubscribe(token, user_id):
     '''
@@ -86,8 +96,18 @@ def unsubscribe(token, user_id):
         """
     cur.execute(query, (u_id, user_id))
     con.commit()
+
+    query = """
+        select U.user_id, U.first_name, U.last_name, U.profile_pic_path
+        from SubscribedTo S
+            join Users U on S.is_subscribed_to = U.user_id
+        where S.user_id = %s
+    """
+    cur.execute(query, (user_id, ))
+    result = cur.fetchall()
+    
     query_lock.release()
-    return 0
+    return result
 
 def is_subscribed(token, user_id):
     query_lock.acquire()
@@ -160,7 +180,7 @@ def get_subscriptions(token):
     result[0]['recipe_count'] = recipe_count[0]['COUNT(*)']
 
     query = """
-        select S.user_id, U.first_name, U.last_name, U.profile_pic_path
+        select U.user_id, U.first_name, U.last_name, U.profile_pic_path
         from SubscribedTo S
             join Users U on S.user_id = U.user_id
         where S.is_subscribed_to = %s"""
