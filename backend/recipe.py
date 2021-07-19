@@ -528,3 +528,16 @@ def recipe_nutrition(recipe_id):
     query_lock.release()
     return nutrition
 
+def recipe_like(token, recipe_id):
+    u_id = tokenise.token_to_id(token)
+    if u_id < 0:
+        return -1
+
+    query_lock.acquire()
+    cur = con.cursor()
+
+    query = "insert into Likes(recipe_id, liked_by_user_id) values (%s, %s)"
+    cur.execute(query, (int(recipe_id), int(u_id),))
+    con.commit()
+    query_lock.release()
+    return 0
