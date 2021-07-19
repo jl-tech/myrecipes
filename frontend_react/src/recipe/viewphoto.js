@@ -262,7 +262,7 @@ function RecipeViewPhoto(props) {
                     props.photos.map(({url}, index) =>
                         <Carousel.Item key={index} style={{textAlign:"center"}}>
                             <img src={url} className="shadow-lg" alt={`Capture ${index}`} style={{zIndex: 1, position: 'absolute', height:"20em", width:"auto", marginLeft: "auto", marginRight: "auto", left: 0, right: 0, textAlign:"center"}}/>
-                            <img src={url} className="" alt={`Capture ${index} background`} style={{ objectFit: "cover", height:"20em", width:"100%", filter:"blur(15px) brightness(60%)"}}/>
+                            <img src={url} className="" alt={`Capture ${index} background`} style={{ objectFit: "cover", height:"20em", width:"100%", filter:"blur(100px) brightness(100%)"}}/>
                         </Carousel.Item>
                     )}
                     </Carousel>

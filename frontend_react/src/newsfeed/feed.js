@@ -197,7 +197,7 @@ function Feed(props) {
                 <>
                 <Row>
                     <Col>
-                    <Modal.Dialog>
+                    <Modal.Dialog  className={'shadow-sm'}>
                     <Modal.Body>
                         <Row>
                             <Col style={{textAlign:"center"}}>
@@ -231,23 +231,24 @@ function Feed(props) {
                 </Row>
                 <Row>
                     <Col>
-                    <ListGroup>
-                        <ListGroup.Item variant="primary">Subscriptions</ListGroup.Item>
-                        {subscriptions.map(({first_name, last_name, user_id, profile_pic_path}, index)=>
-                            <ListGroup.Item key={index}>
-                            <Link  to={"/profile/" + user_id} style={{width:"100%"}}>
-                                <Row>
-                                <Col sm={3}>
-                                <Image src={"http://127.0.0.1:5000/img/" + profile_pic_path} alt="Profile Picture" roundedCircle width="40em"/>
-                                </Col>
-                                <Col >
-                                    {first_name} {last_name}
-                                </Col>
-                                </Row>
-                            </Link>
-                            </ListGroup.Item>
-                        )}
-                    </ListGroup>
+                        {subscriptions.length === 0 ? null :
+                        <ListGroup className={'shadow-sm'}>
+                            <ListGroup.Item variant="primary">Subscriptions</ListGroup.Item>
+                            { subscriptions.map(({first_name, last_name, user_id, profile_pic_path}, index)=>
+                                <ListGroup.Item key={index}>
+                                <Link  to={"/profile/" + user_id} style={{width:"100%"}}>
+                                    <Row>
+                                    <Col sm={3}>
+                                    <Image src={"http://127.0.0.1:5000/img/" + profile_pic_path} alt="Profile Picture" roundedCircle width="40em"/>
+                                    </Col>
+                                    <Col >
+                                        {first_name} {last_name}
+                                    </Col>
+                                    </Row>
+                                </Link>
+                                </ListGroup.Item>
+                            )}
+                        </ListGroup> }
                     </Col>
                 </Row>
                 </>
@@ -263,7 +264,12 @@ function Feed(props) {
                 <>
                 <Row>
                     <Col>
-                    {recipes.length === 0 ? <Modal.Dialog><Modal.Body>No recipes found</Modal.Body></Modal.Dialog>: recipes.map(generateCard)}
+                        {subscriptions.length === 0 ?
+                            <Modal.Dialog style={{textAlign: "center"}}> <Modal.Title> You haven't subscribed to anyone. </Modal.Title> <Modal.Body>
+                                Visit a profile and select Subscribe, and your newsfeed will show their most recent recipes. </Modal.Body> </Modal.Dialog>
+                            : (recipes.length === 0 ?
+                                <Modal.Dialog><Modal.Body>No recipes found</Modal.Body></Modal.Dialog>:
+                                recipes.map(generateCard))}
                     </Col>
                 </Row>
                 <Row>

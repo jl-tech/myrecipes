@@ -120,10 +120,10 @@ function Home({ loggedIn, setLoggedIn, currId }) {
         <NavLink style={{paddingLeft: '2rem', fontSize:"125%"}} to="/newsfeed" activeStyle={{ paddingLeft: '2rem', fontWeight: 'bold', fontSize:"125%"}}>
             Newsfeed
         </NavLink>
-        <NavLink style={{paddingLeft: '2rem', paddingRight: '2rem', fontSize:"125%"}} to="/recipe/create" activeStyle={{ paddingLeft: '2rem', fontWeight: 'bold', fontSize:"125%"}}>
+        <NavLink style={{paddingLeft: '2rem', fontSize:"125%"}} to="/recipe/create" activeStyle={{ paddingLeft: '2rem', fontWeight: 'bold', fontSize:"125%"}}>
             Create
         </NavLink> </>:<></>}
-        {location.pathname !== "/home" && location.pathname !== "/search" ? <SearchBar nav={true} loggedIn={loggedIn} /> : <></>}
+        {location.pathname !== "/home" && location.pathname !== "/search" ? <div style={{paddingLeft: '2rem'}}>  <SearchBar nav={true} loggedIn={loggedIn} /> </div>: <></>}
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
             <Navbar.Text>
