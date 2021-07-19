@@ -71,6 +71,7 @@ function SubscribeButton(props) {
         if (response != null) {
             if (toSubscribe) setSubscribed(true);
             else setSubscribed(false);
+            props.setSubscribers(response);
         }
     }
 
