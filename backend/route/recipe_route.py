@@ -32,7 +32,7 @@ def route_recipe_create():
 @RECIPE.route('/view', methods=['GET'])
 def route_recipe_view():
     data = request.args.get('recipe_id')
-    if not isinstance(data, int):
+    if not data.isnumeric():
         response = jsonify({'error': 'Bad recipe_id'})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400

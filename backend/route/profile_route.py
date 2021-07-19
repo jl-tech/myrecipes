@@ -9,7 +9,7 @@ PROFILE = Blueprint('PROFILE', __name__, template_folder='templates')
 @PROFILE.route("/view", methods=['GET'])
 def route_profile_view():
     data = request.args.get('user_id')
-    if not isinstance(data, int):
+    if not data.isnumeric():
         response = jsonify({'error': 'Bad user_id'})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
