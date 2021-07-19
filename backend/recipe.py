@@ -527,3 +527,4 @@ def recipe_nutrition(recipe_id):
     con.commit()
     query_lock.release()
     return nutrition
+

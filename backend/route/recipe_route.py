@@ -197,3 +197,11 @@ def route_recipe_nutrition():
         response = jsonify(result)
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
+
+@RECIPE.route('/like', methods=['POST'])
+def route_recipe_like():
+    token = request.headers.get("Authorization")
+    data = request.get_json()
+    recipe_id = data['recipe_id']
+
+    result = recipe.recipe_like(token, recipe_id)
