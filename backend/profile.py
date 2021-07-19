@@ -194,8 +194,7 @@ def get_profile_recipe(user_id):
     return out
 
 def get_times_liked(token, user_id):
-    u_id = token_to_id(token)
-    if u_id < 0:
+    if token_to_id(token) < 0:
         return -1
 
     query_lock.acquire()
@@ -204,4 +203,5 @@ def get_times_liked(token, user_id):
     cur.execute(query, (int(user_id),))
     result = cur.fetchall()
 
+    query_lock.release()
     return len(result)
