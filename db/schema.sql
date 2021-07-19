@@ -80,14 +80,13 @@ create table SubscribedTo(
     primary key (user_id, is_subscribed_to)
 );
 
-create table Comments(
+create table RecipeComments(
     recipe_id integer references Recipes(recipe_id),
-    comment_no integer, -- unique number for this recipe
+    user_id integer references Users(user_id),
     time_created timestamp,
     time_edited timestamp,
-    by_user_id integer references Users(user_id),
-    comment_text text,
-    primary key (recipe_id, comment_no)
+    comment text,
+    primary key (user_id, time_created)
 );
 
 create table Likes(

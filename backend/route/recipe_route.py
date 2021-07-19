@@ -197,3 +197,25 @@ def route_recipe_nutrition():
         response = jsonify(result)
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
+
+@RECIPE.route('/comment', methods=['POST'])
+def route_recipe_comment():
+    token = request.headers.get("Authorization")
+    data = request.get_json()
+    recipe_id = data['recipe_id']
+    comment = data['comment']
+
+    result = recipe.recipe_comment(token, recipe_id, comment)
+
+    if result == -1:
+        response = jsonify({'error': 'Invalid token'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
+    elif result == -2:
+        response = jsonify({'error': 'Invalid recipe id'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
+    else:
+        response = jsonify({})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 200

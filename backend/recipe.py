@@ -527,3 +527,34 @@ def recipe_nutrition(recipe_id):
     con.commit()
     query_lock.release()
     return nutrition
+
+def recipe_comment(token, recipe_id, comment):
+    '''
+    :param token: The token of the user
+    :param recipe_id: The id of recipe
+    :param comment: The string of the comment
+    :return: 
+    0 if OK.
+    -1 if the token is invalid.
+    -2 if the recipe id is invalid.
+    '''
+    query_lock.acquire()
+    cur = con.cursor()
+    u_id = tokenise.token_to_id(token)
+
+    if u_id < 0:
+        query_lock.release()
+        return -1
+    
+    query = '''select * from Recipes where recipe_id = %s'''
+
+    if cur.execute(query, (recipe_id)) == 0:
+        query_lock.release()
+        return -2
+
+    query = '''insert into RecipeComments (recipe_id, user_id, time_created, comment) values (%s, %s, UTC_TIMESTAMP(), %s)'''
+    cur.execute(query, (recipe_id, u_id, comment))
+
+    con.commit()
+    query_lock.release()
+    return 0
