@@ -14,7 +14,7 @@ import RecipeViewStep from './viewstep.js';
 import RecipeViewPhoto from './viewphoto.js';
 import {Spinner} from "react-bootstrap";
 import RecipeViewNutri from "./viewnutrition";
-import {Helmet} from "react-helmet-async";
+import { Helmet } from "react-helmet-async";
 
 async function recipeView(recipe_id) {
     let response = await fetch('http://localhost:5000/recipe/view?' + new URLSearchParams({'recipe_id': recipe_id}), {

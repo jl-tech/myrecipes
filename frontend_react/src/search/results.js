@@ -12,7 +12,7 @@ import { useLocation } from "react-router-dom";
 import RecipeList from '../recipe/list';
 import SearchBar from './bar.js';
 import SearchAdvanced from './advanced.js';
-import {Helmet} from "react-helmet-async";
+import { Helmet } from "react-helmet-async";
 import {Collapse} from "@material-ui/core";
 
 async function requestRecipes(token, name_keywords, type, serving_size, time_to_cook, ingredients, step_keywords) {

@@ -12,7 +12,7 @@ import RecipeCreateIngredient from './createingredient.js';
 import RecipeCreateStep from './createstep.js';
 import RecipeCreatePhoto from './createphoto.js';
 import Button from 'react-bootstrap/esm/Button';
-import {Helmet} from "react-helmet-async";
+import { Helmet } from "react-helmet-async";
 import {Collapse} from "react-bootstrap";
 
 async function createRecipe(token, name, type, time, serving, description, ingredients, steps, photos, photoNames) {
