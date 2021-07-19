@@ -156,6 +156,12 @@ def get_recipe_details(recipe_id):
                      'name': row['photo_name']}
         out['photos'].append(curr_dict)
 
+    # likes
+    query = '''select * from Likes where recipe_id=%s'''
+    cur.execute(query, (int(recipe_id),))
+    result = cur.fetchall()
+    out['likes_number'] = len(result)
+
     query_lock.release()
     return out
 
