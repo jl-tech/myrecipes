@@ -24,6 +24,8 @@ function RecipeList(props) {
     const [activeServingFilters, setActiveServingFilters] = useState([Math.min(...servingFilters), Math.max(...servingFilters)]);
     const [timeFilters, setTimeFilters] = useState(initTimeFilters());
     const [activeTimeFilters, setActiveTimeFilters] = useState([Math.min(...timeFilters), Math.max(...timeFilters)]);
+    const [calorieFilters, setCalorieFilters] = useState(initCalorieFilters());
+    const [activeCalorieFilters, setActiveCalorieFilters] = useState([Math.min(...calorieFilters), Math.max(...calorieFilters)]);
     const [activePage, setActivePage] = useState(0);
     const [hoveredRecipeId, setHoveredRecipeId] = useState(-1)
     const recipesPerPage = 4;
@@ -131,6 +133,14 @@ function RecipeList(props) {
         return Array.from(tempSet).sort();
     }
 
+    function initCalorieFilters() {
+        let tempSet = new Set();
+        for (let i of props.recipeData) {
+            tempSet.add(i.calories);
+        }
+        return Array.from(tempSet).sort();
+    }
+
     function filterRecipes() {
         let tempArray = Array.from(recipeData);
         if (activeMealFilter.length !== 0) {
@@ -144,6 +154,9 @@ function RecipeList(props) {
         tempArray = tempArray.filter(function(e) {
             return e.time_to_cook >= activeTimeFilters[0] && e.time_to_cook <= activeTimeFilters[1];
         })
+        tempArray = tempArray.filter(function(e) {
+            return e.calories >= activeCalorieFilters[0] && e.calories <= activeCalorieFilters[1];
+        })
         setRecipeDataFiltered(tempArray);
         if (activePage > Math.ceil(tempArray.length/recipesPerPage) - 1) {
             setActivePage(Math.ceil(tempArray.length/recipesPerPage) - 1);
@@ -154,6 +167,7 @@ function RecipeList(props) {
         setActiveMealFilter([]);
         setActiveServingFilters([Math.min(...servingFilters), Math.max(...servingFilters)]);
         setActiveTimeFilters([Math.min(...timeFilters), Math.max(...timeFilters)]);
+        setActiveCalorieFilters([Math.min(...calorieFilters), Math.max(...calorieFilters)]);
         let checkboxes = document.getElementsByClassName("form-check-input");
         for (let checkbox of checkboxes) {  
             checkbox.checked = false;
@@ -189,14 +203,14 @@ function RecipeList(props) {
     function sortChange(e) {
         let key = "creation_time";
         switch (e.target.value) {
-            case "0":
-                setRecipeData(props.recipeData);
-                return;
+            case "1":
+                key = "creation_time";
             case "2":
                 key = "edit_time"
                 break;
             default:
-                key = "creation_time";
+                setRecipeData(props.recipeData);
+                return;
         }
         let copy = Array.from(props.recipeData);
         copy.sort(sortComparator(key));
@@ -206,7 +220,7 @@ function RecipeList(props) {
 
     useEffect(() => {
         filterRecipes();
-    }, [recipeData, activeMealFilter, activeServingFilters, activeTimeFilters])
+    }, [recipeData, activeMealFilter, activeServingFilters, activeTimeFilters, activeCalorieFilters])
 
     return (<>
         <Col sm={3}>
@@ -230,6 +244,12 @@ function RecipeList(props) {
         </Row >
         <Row style={{width: '80%', marginTop:"2em"}}>
         <Slider value={activeTimeFilters} min={Math.min(...timeFilters)} max={Math.max(...timeFilters)} valueLabelDisplay="on" onChange={(e, v) => setActiveTimeFilters(v)}/>
+        </Row>
+        <Row style={{marginTop:'1em'}}>
+        <h6>Calories</h6>
+        </Row >
+        <Row style={{width: '80%', marginTop:"2em"}}>
+        <Slider value={activeCalorieFilters} min={Math.min(...calorieFilters)} max={Math.max(...calorieFilters)} valueLabelDisplay="on" onChange={(e, v) => setActiveCalorieFilters(v)}/>
         </Row>
         <Row style={{marginTop:'1em'}}>
         <Button size="sm" variant="outline-secondary" onClick={clearFilters}>Clear all</Button>

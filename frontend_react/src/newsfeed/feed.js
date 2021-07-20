@@ -44,6 +44,7 @@ async function profileUser(token) {
     });
 
     let responseJson = await response.json();
+    console.log(responseJson)
 
     if (response.ok) return responseJson;
     else throw new Error(responseJson.error);
@@ -270,10 +271,10 @@ function Feed(props) {
                 <Row>
                     <Col>
                         {subscriptions.length === 0 ?
-                            <Modal.Dialog style={{textAlign: "center"}}> <Modal.Title> You haven't subscribed to anyone. </Modal.Title> <Modal.Body>
+                            <Modal.Dialog style={{textAlign: "center"}}> <Modal.Title style={{padding:"1em"}}> You haven't subscribed to anyone. </Modal.Title> <Modal.Body>
                                 Visit a profile and select Subscribe, and your newsfeed will show their most recent recipes. </Modal.Body> </Modal.Dialog>
                             : (recipes.length === 0 ?
-                                <Modal.Dialog><Modal.Body>No recipes found</Modal.Body></Modal.Dialog>:
+                                <Modal.Dialog><Modal.Body>Your subscriptions have not created recipes.</Modal.Body> </Modal.Dialog>:
                                 recipes.map(generateCard))}
                     </Col>
                 </Row>
