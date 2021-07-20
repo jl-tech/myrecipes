@@ -237,7 +237,7 @@ function Feed(props) {
                 <Row>
                     <Col>
                         {subscriptions.length === 0 ? null :
-                        <ListGroup className={'shadow-sm'}>
+                        <ListGroup>
                             <ListGroup.Item variant="primary">Subscriptions</ListGroup.Item>
                             { subscriptions.map(({first_name, last_name, user_id, profile_pic_path}, index)=>
                                 <ListGroup.Item key={index}>

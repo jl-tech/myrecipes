@@ -61,6 +61,7 @@ function SearchBar(props) {
     const [searchHistoryTerms, setSearchHistoryTerms] = useState([])
     const [historyFetched, setHistoryFetched] = useState(false)
     const [showSuggestions, setShowSuggestions] = useState(false)
+    const [isHovered, setIsHovered] = useState(false)
     const cookie = new Cookie()
     const searchInput = React.createRef();
 
@@ -109,12 +110,18 @@ function SearchBar(props) {
     }, []);
 
     return (
-        <Form onSubmit={handleSubmit} onKeyDown={handleOnKeyDown}>
+        <Form onSubmit={handleSubmit} onKeyDown={handleOnKeyDown}
+                onMouseEnter={() => setIsHovered(true)}
+                            onMouseLeave={()=> setIsHovered(false)}
+                            className={isHovered ? "shadow-lg" : "shadow-sm"}
+        >
             <InputGroup>
                 <Typeahead id = 'typeahead' placeholder='Search Recipes' options={searchHistoryTerms}
-                            style={{opacity:"90%", zIndex:1, width: props.nav ? "": "92%"}}
+
+                            style={{opacity:"95%", zIndex:1, width: props.nav ? "": "92%"}}
                             labelKey={option => `${option.search_term}`}
                             open={showSuggestions}
+
                             onFocus={()=> setShowSuggestions(true)}
                             onBlur={() => setShowSuggestions(false)}
                             defaultInputValue={props.init}
