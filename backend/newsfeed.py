@@ -6,6 +6,7 @@ import helpers
 import math
 import tokenise
 from constants import *
+from auth import DEFAULT_PIC
 
 def subscribe(token, user_id):
     '''
@@ -47,7 +48,8 @@ def subscribe(token, user_id):
     con.commit()
 
     query = """
-        select U.user_id, U.first_name, U.last_name, U.profile_pic_path
+        select U.user_id, U.first_name, U.last_name,
+            COALESCE(U.profile_pic_path, '""" + DEFAULT_PIC + """') as profile_pic_path
         from SubscribedTo S
             join Users U on S.user_id = U.user_id
         where S.is_subscribed_to = %s
@@ -98,7 +100,8 @@ def unsubscribe(token, user_id):
     con.commit()
 
     query = """
-        select U.user_id, U.first_name, U.last_name, U.profile_pic_path
+        select U.user_id, U.first_name, U.last_name, 
+            COALESCE(U.profile_pic_path, '""" + DEFAULT_PIC + """') as profile_pic_path
         from SubscribedTo S
             join Users U on S.is_subscribed_to = U.user_id
         where S.user_id = %s
@@ -134,7 +137,10 @@ def get_feed(token, page):
 
     cur = con.cursor()
     query = """
-        select distinct R.recipe_id,  R.name, R.creation_time, R.edit_time, R.time_to_cook, R.type, R.serving_size, RP.photo_path, R.description, U.first_name, U.last_name, U.profile_pic_path, U.user_id, R.calories
+        select distinct R.recipe_id, R.name, R.creation_time, R.edit_time,
+            R.time_to_cook, R.type, R.serving_size, RP.photo_path, R.description,
+            U.first_name, U.last_name, COALESCE(U.profile_pic_path, '""" + DEFAULT_PIC + """') as profile_pic_path,
+            U.user_id, R.calories
         from Recipes R
             left outer join (select * from RecipePhotos where photo_no = 0) RP on R.recipe_id = RP.recipe_id
             left outer join RecipeIngredients I on R.recipe_id = I.recipe_id
@@ -180,7 +186,8 @@ def get_subscriptions(token):
     result[0]['recipe_count'] = recipe_count[0]['COUNT(*)']
 
     query = """
-        select U.user_id, U.first_name, U.last_name, U.profile_pic_path
+        select U.user_id, U.first_name, U.last_name,
+            COALESCE(U.profile_pic_path, '""" + DEFAULT_PIC + """') as profile_pic_path
         from SubscribedTo S
             join Users U on S.user_id = U.user_id
         where S.is_subscribed_to = %s"""
@@ -189,7 +196,8 @@ def get_subscriptions(token):
     result[0]['subscribers'] = subscribers
 
     query = """
-        select U.user_id, U.first_name, U.last_name, U.profile_pic_path
+        select U.user_id, U.first_name, U.last_name,
+            COALESCE(U.profile_pic_path, '""" + DEFAULT_PIC + """') as profile_pic_path
         from SubscribedTo S
             join Users U on S.is_subscribed_to = U.user_id
         where S.user_id = %s

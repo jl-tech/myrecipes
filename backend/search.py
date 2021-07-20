@@ -14,6 +14,7 @@ import sys
 
 import time
 from datetime import datetime
+from auth import DEFAULT_PIC
 
 
 def do_search(name, type, serving_size, time_to_cook, ingredients, step_key_words):
@@ -21,7 +22,10 @@ def do_search(name, type, serving_size, time_to_cook, ingredients, step_key_word
     cur = con.cursor()
 
     query = """
-        select distinct R.recipe_id,  R.name, R.creation_time, R.edit_time, R.time_to_cook, R.type, R.serving_size, RP.photo_path, R.description, U.first_name, U.last_name, U.profile_pic_path, U.user_id, R.calories
+        select distinct R.recipe_id, R.name, R.creation_time, R.edit_time,
+            R.time_to_cook, R.type, R.serving_size, RP.photo_path, R.description,
+            U.first_name, U.last_name, COALESCE(U.profile_pic_path, '""" + DEFAULT_PIC + """') as profile_pic_path,
+            U.user_id, R.calories
         from Recipes R
             left outer join (select * from RecipePhotos where photo_no = 0) RP on R.recipe_id = RP.recipe_id
             left outer join RecipeIngredients I on R.recipe_id = I.recipe_id
@@ -104,7 +108,10 @@ def do_search(name, type, serving_size, time_to_cook, ingredients, step_key_word
     if name is not None:
         query_lock.acquire()
         query = """
-        select count(*), R.recipe_id,  R.name, R.creation_time, R.edit_time, R.time_to_cook, R.type, R.serving_size, RP.photo_path, R.description, U.first_name, U.last_name, U.profile_pic_path, U.user_id, R.calories
+        select count(*), R.recipe_id, R.name, R.creation_time, R.edit_time,
+            R.time_to_cook, R.type, R.serving_size, RP.photo_path, R.description,
+            U.first_name, U.last_name, COALESCE(U.profile_pic_path, '""" + DEFAULT_PIC + """') as profile_pic_path,
+            U.user_id, R.calories
         from Recipes R
             left outer join (select * from RecipePhotos where photo_no = 0) RP on R.recipe_id = RP.recipe_id
             left outer join RecipeIngredients I on R.recipe_id = I.recipe_id
@@ -130,7 +137,10 @@ def do_search(name, type, serving_size, time_to_cook, ingredients, step_key_word
         if name is not None:
             query_lock.acquire()
             query = """
-            select count(*), R.recipe_id,  R.name, R.creation_time, R.edit_time, R.time_to_cook, R.type, R.serving_size, RP.photo_path, R.description, U.first_name, U.last_name, U.profile_pic_path, U.user_id, R.calories
+            select count(*), R.recipe_id, R.name, R.creation_time, R.edit_time,
+                R.time_to_cook, R.type, R.serving_size, RP.photo_path, R.description,
+                U.first_name, U.last_name, COALESCE(U.profile_pic_path, '""" + DEFAULT_PIC + """') as profile_pic_path,
+                U.user_id, R.calories
             from Recipes R
                 left outer join (select * from RecipePhotos where photo_no = 0) RP on R.recipe_id = RP.recipe_id
                 left outer join RecipeSteps S on R.recipe_id = S.recipe_id

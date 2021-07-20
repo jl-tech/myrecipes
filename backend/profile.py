@@ -34,12 +34,12 @@ def profile_info(user_id):
         recipe_count = cur.fetchall()
         result[0]['recipe_count'] = recipe_count[0]['COUNT(*)']
 
-        query = "select U.user_id, U.first_name, U.last_name, U.profile_pic_path from SubscribedTo S join Users U on S.user_id = U.user_id where S.is_subscribed_to = %s"
+        query = "select U.user_id, U.first_name, U.last_name, COALESCE(U.profile_pic_path, '" + DEFAULT_PIC + "') as profile_pic_path from SubscribedTo S join Users U on S.user_id = U.user_id where S.is_subscribed_to = %s"
         cur.execute(query, (user_id,))
         subscribers = cur.fetchall()
         result[0]['subscribers'] = subscribers
 
-        query = "select U.user_id, U.first_name, U.last_name, U.profile_pic_path from SubscribedTo S join Users U on S.is_subscribed_to = U.user_id where S.user_id = %s"
+        query = "select U.user_id, U.first_name, U.last_name, COALESCE(U.profile_pic_path, '" + DEFAULT_PIC + "') as profile_pic_path from SubscribedTo S join Users U on S.is_subscribed_to = U.user_id where S.user_id = %s"
         cur.execute(query, (user_id,))
         subscriptions = cur.fetchall()
         result[0]['subscriptions'] = subscriptions
@@ -181,7 +181,7 @@ def remove_profile_pic(token):
 def get_profile_recipe(user_id):
     query_lock.acquire()
     cur = con.cursor()
-    query = "select R.*, U.first_name, U.last_name, U.profile_pic_path, U.user_id from Recipes R join Users U on U.user_id = R.created_by_user_id where created_by_user_id=%s order by creation_time desc"
+    query = "select R.*, U.first_name, U.last_name, COALESCE(U.profile_pic_path, '" + DEFAULT_PIC + "') as profile_pic_path, U.user_id from Recipes R join Users U on U.user_id = R.created_by_user_id where created_by_user_id=%s order by creation_time desc"
     cur.execute(query, (int(user_id)),)
     data = cur.fetchall()
     out = []
