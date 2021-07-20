@@ -451,7 +451,7 @@ def delete_recipe(token, recipe_id):
 
     query = '''delete from RecipePhotos where recipe_id = %s'''
     cur.execute(query, (recipe_id))
-    query = '''delete from RecipeComments where recipe_id = %s'''
+    query = '''delete from Comments where recipe_id = %s'''
     cur.execute(query, (recipe_id))
     query = '''delete from Likes where recipe_id=%s'''
     cur.execute(query, (recipe_id))

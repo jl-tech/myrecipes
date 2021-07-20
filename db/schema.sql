@@ -80,7 +80,7 @@ create table SubscribedTo(
     primary key (user_id, is_subscribed_to)
 );
 
-create table RecipeComments(
+create table Comments(
     recipe_id integer references Recipes(recipe_id),
     user_id integer references Users(user_id),
     time_created timestamp,

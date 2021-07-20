@@ -87,7 +87,7 @@ function RecipeViewNutri(props) {
                         </tr>
                         <tr>
                             <th> Cholesterol</th>
-                            <td>{nutritionData['cholesterol']} g</td>
+                            <td>{nutritionData['cholesterol']} mg</td>
                         </tr>
                         <tr>
                             <th> Sodium</th>
