@@ -103,8 +103,8 @@ def unsubscribe(token, user_id):
         select U.user_id, U.first_name, U.last_name, 
             COALESCE(U.profile_pic_path, '""" + DEFAULT_PIC + """') as profile_pic_path
         from SubscribedTo S
-            join Users U on S.is_subscribed_to = U.user_id
-        where S.user_id = %s
+            join Users U on S.user_id = U.user_id
+        where S.is_subscribed_to = %s
     """
     cur.execute(query, (user_id, ))
     result = cur.fetchall()
