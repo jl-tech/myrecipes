@@ -84,7 +84,7 @@ function SearchAdvanced(props) {
                 <Form.Group as={Row}>
                     <Form.Label column sm="3">Time to cook</Form.Label>
                     <Col sm="9">
-                        <Form.Control defaultValue={serving} type="number" onChange={e => setTime(e.target.value)}/>
+                        <Form.Control defaultValue={time} type="number" onChange={e => setTime(e.target.value)}/>
                     </Col>
                 </Form.Group>
                 <Form.Group as={Row}>
