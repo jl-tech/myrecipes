@@ -1,8 +1,21 @@
 import os
+#from tokenise import token_to_id
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "static\chatbot_client\comp3900-w16a-goodname-3261b83e6fa2.json"
+project_id = "comp3900-w16a-goodname"
 
-def connect_dialogflow_api(project_id, session_id, texts, language_code):
+def talk(token, messages):
+    '''
+    user_id = token_to_id(token)
+    if user_id < 0:
+        return -1
+    '''
+    user_id = token
+    react = connect_dialogflow_api("123456789"+str(user_id), messages, "en-US")
+    return react;
+
+
+def connect_dialogflow_api(session_id, texts, language_code):
     """Returns the result of detect intent with texts as inputs.
 
     Using the same `session_id` between requests allows continuation
@@ -33,4 +46,6 @@ def connect_dialogflow_api(project_id, session_id, texts, language_code):
         )
         print("Fulfillment text: {}\n".format(response.query_result.fulfillment_text))
 
-connect_dialogflow_api("comp3900-w16a-goodname", "123456789", ["your name?"], "en-US")
+    return 0
+
+talk(1, ["name?"])
