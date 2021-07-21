@@ -1,7 +1,7 @@
 import os
 
 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "D:\Desktop\comp3900-w16a-goodname-3261b83e6fa2.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "static\chatbot_client\comp3900-w16a-goodname-3261b83e6fa2.json"
 
 def detect_intent_texts(project_id, session_id, texts, language_code):
     """Returns the result of detect intent with texts as inputs.
