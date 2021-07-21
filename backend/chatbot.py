@@ -1,9 +1,8 @@
 import os
 
-
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "static\chatbot_client\comp3900-w16a-goodname-3261b83e6fa2.json"
 
-def detect_intent_texts(project_id, session_id, texts, language_code):
+def connect_dialogflow_api(project_id, session_id, texts, language_code):
     """Returns the result of detect intent with texts as inputs.
 
     Using the same `session_id` between requests allows continuation
@@ -34,4 +33,4 @@ def detect_intent_texts(project_id, session_id, texts, language_code):
         )
         print("Fulfillment text: {}\n".format(response.query_result.fulfillment_text))
 
-detect_intent_texts("comp3900-w16a-goodname", "123456789", ["your name?"], "en-US")
+connect_dialogflow_api("comp3900-w16a-goodname", "123456789", ["your name?"], "en-US")
