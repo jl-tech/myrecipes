@@ -53,6 +53,7 @@ function RecipeView(props) {
     const [calories, setCalories] = useState(0);
     const [steps, setSteps] = useState([]);
     const [ingredients, setIngredients] = useState('');
+    const [likes, setLikes] = useState(0)
 
     const [editable, setEditable] = useState(false);
 
@@ -91,6 +92,7 @@ function RecipeView(props) {
             setServing(response.serving_size);
             setDescription(response.description);
             setCalories(response.calories)
+            setLikes(response.likes_number)
 
             let stepsP = [];
             for (let step of response.steps) {
@@ -150,7 +152,7 @@ function RecipeView(props) {
                 </Helmet>
                 <Container style={{marginTop:"1em",marginBottom:"2em"}}>
                     <RecipeViewPhoto photos={photos} />
-                    <RecipeViewDesc recipeId={id} recipeName={recipeName} calories={calories} setRecipeName={setRecipeName} time={time} setTime={setTime} serving={serving} setServing={setServing} mealType={mealType} setMealType={setMealType} photos={photos} setPhotos={setPhotos} editable={editable} setDeleted={setDeleted} setEditedAt={setEditedAt} description={description} setDescription={setDescription} />
+                    <RecipeViewDesc loggedIn={props.loggedIn} recipeId={id} recipeName={recipeName} likes={likes} setLikes={setLikes} calories={calories} setRecipeName={setRecipeName} time={time} setTime={setTime} serving={serving} setServing={setServing} mealType={mealType} setMealType={setMealType} photos={photos} setPhotos={setPhotos} editable={editable} setDeleted={setDeleted} setEditedAt={setEditedAt} description={description} setDescription={setDescription} />
                     <Row style={{marginTop:"1em"}}>
                         <Col sm={3} style={{marginBottom:"1em"}}>
                             <RecipeViewContri userImgURL={userImgURL} contributorUID={contributorUID} firstName={firstName} lastName={lastName} createdAt={createdAt} editedAt={editedAt}/>

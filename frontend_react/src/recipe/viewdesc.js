@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -13,6 +13,12 @@ import Cookie from 'universal-cookie';
 import { EditPhoto } from './viewphoto.js';
 import RecipeDelete from "./delete.js";
 import Dropdown from "react-bootstrap/Dropdown";
+import NotLiked from "../iconmonstr-heart-thin.svg";
+import Liked from "../iconmonstr-favorite-3.svg";
+import Image from "react-bootstrap/Image";
+import {OverlayTrigger} from "react-bootstrap";
+import {Popover} from "@material-ui/core";
+import RecipeViewLikes from "./viewlikes";
 
 async function requestEditDesc(token, recipe_id, name, type, time, serving_size, description) {
     let response = await fetch('http://localhost:5000/recipe/editdescription', {
@@ -51,7 +57,6 @@ function EditDesc(props) {
     const [time, setTime] = useState(props.time);
     const [serving, setServing] = useState(props.serving);
     const [description, setDescription] = useState(props.description);
-
     const [errorShow, setErrorShow] = useState(false);
     const [errorText, setErrorText] = useState('');
 
@@ -160,6 +165,8 @@ export function RecipeViewDescription(props) {
     );
 }
 
+
+
 function RecipeViewDesc(props) {
 
     const [showDescEdit, setShowDescEdit] = useState(false);
@@ -171,10 +178,18 @@ function RecipeViewDesc(props) {
     const [showDelete, setShowDelete] = useState(false);
     const deleteShow = () => setShowDelete(true);
 
+
+
     return (
         <>
         <Row>
-            <Col sm={2} />
+            <Col sm={1}>
+
+            </Col>
+            <Col sm={1} className={"mx-auto my-auto"} style={{textAlign: 'center'}}>
+                <RecipeViewLikes loggedIn={props.loggedIn} recipeId={props.recipeId} likes={props.likes} setLikes={props.setLikes}/>
+
+            </Col>
             <Col sm={8}>
                 <Row>
                     <Col>
