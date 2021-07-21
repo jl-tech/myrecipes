@@ -1,8 +1,11 @@
 import os
+from google.cloud import dialogflow
 #from tokenise import token_to_id
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "static\chatbot_client\comp3900-w16a-goodname-3261b83e6fa2.json"
+
 project_id = "comp3900-w16a-goodname"
+language_code = "en-US"
 
 def talk(token, messages):
     '''
@@ -11,16 +14,16 @@ def talk(token, messages):
         return -1
     '''
     user_id = token
-    react = connect_dialogflow_api("123456789"+str(user_id), messages, "en-US")
-    return react;
+    react = connect_dialogflow_api("123456789"+str(user_id), messages)
+    return react
 
 
-def connect_dialogflow_api(session_id, texts, language_code):
+def connect_dialogflow_api(session_id, texts):
     """Returns the result of detect intent with texts as inputs.
 
     Using the same `session_id` between requests allows continuation
     of the conversation."""
-    from google.cloud import dialogflow
+
 
     session_client = dialogflow.SessionsClient()
 
@@ -48,4 +51,4 @@ def connect_dialogflow_api(session_id, texts, language_code):
 
     return 0
 
-talk(1, ["name?"])
+talk(1, ["your name?"])
