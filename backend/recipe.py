@@ -156,7 +156,27 @@ def get_recipe_details(recipe_id):
                      'name': row['photo_name']}
         out['photos'].append(curr_dict)
 
+    # contributor stats
+    query = """
+            select COUNT(*) 
+            from SubscribedTo 
+            where is_subscribed_to = %s
+        """
+    cur.execute(query, out['created_by_user_id'])
+
+    out['contributor_subscribers_count'] = cur.fetchall()[0]['COUNT(*)']
+
+    query = """
+                select COUNT(*) 
+                from Recipes 
+                where created_by_user_id = %s
+            """
+    cur.execute(query, out['created_by_user_id'])
+
+    out['contributor_recipes_count'] = cur.fetchall()[0]['COUNT(*)']
+
     con.close()
+
     return out
 
 def edit_recipe_description(token, recipe_id, name, type, time, serving_size, description):
