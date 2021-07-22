@@ -28,6 +28,8 @@ import Image from "react-bootstrap/Image";
 import Feed from './newsfeed/feed';
 import NotFound from "./404";
 
+import Chat from "./chatbot";
+
 async function profileUser(userid) {
     let response = await fetch('http://localhost:5000/profile/view?' + new URLSearchParams({'user_id': userid}), {
         method: 'GET',
@@ -160,6 +162,9 @@ function Home({ loggedIn, setLoggedIn, currId }) {
         } />
         <Route path="/search">
             <SearchResults loggedIn={loggedIn}/>
+        </Route>
+        <Route path="/chatbot">
+            <Chat/>
         </Route>
         <Route path="/newsfeed/:page" render={() => 
             loggedIn
