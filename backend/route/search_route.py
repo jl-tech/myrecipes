@@ -1,3 +1,4 @@
+import pymysql
 from flask import *
 import tokenise
 import search
@@ -19,7 +20,10 @@ def route_search():
 
     result = search.do_search(name, type, serving_size, time_to_cook, ingredients, step)
     if token is not None:
-        search.add_search_history(token, name, ingredients, step)
+        try:
+            search.add_search_history(token, name, ingredients, step)
+        except pymysql.err.IntegrityError:
+            pass
 
     response = jsonify(result)
     response.headers.add('Access-Control-Allow-Origin', '*')

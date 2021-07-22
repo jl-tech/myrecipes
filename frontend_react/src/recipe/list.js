@@ -245,19 +245,19 @@ function RecipeList(props) {
         <h6>Serving Size</h6>
         </Row >
         <Row style={{width: '80%', marginTop:"2em"}}>
-        <Slider value={activeServingFilters} min={Math.min(...servingFilters)} max={Math.max(...servingFilters)} valueLabelDisplay="on" onChange={(e, v) => setActiveServingFilters(v)}/>
+        <Slider style={{color:"tomato"}} value={activeServingFilters} min={Math.min(...servingFilters)} max={Math.max(...servingFilters)} valueLabelDisplay="on" onChange={(e, v) => setActiveServingFilters(v)}/>
         </Row>
         <Row style={{marginTop:'1em'}}>
         <h6>Time to cook</h6>
         </Row >
         <Row style={{width: '80%', marginTop:"2em"}}>
-        <Slider value={activeTimeFilters} min={Math.min(...timeFilters)} max={Math.max(...timeFilters)} valueLabelDisplay="on" onChange={(e, v) => setActiveTimeFilters(v)}/>
+        <Slider style={{color:"tomato"}}  value={activeTimeFilters} min={Math.min(...timeFilters)} max={Math.max(...timeFilters)} valueLabelDisplay="on" onChange={(e, v) => setActiveTimeFilters(v)}/>
         </Row>
         <Row style={{marginTop:'1em'}}>
         <h6>Calories</h6>
         </Row >
         <Row style={{width: '80%', marginTop:"2em"}}>
-        <Slider value={activeCalorieFilters} min={Math.min(...calorieFilters)} max={Math.max(...calorieFilters)} valueLabelDisplay="on" onChange={(e, v) => setActiveCalorieFilters(v)}/>
+        <Slider style={{color:"tomato"}}  value={activeCalorieFilters} min={Math.min(...calorieFilters)} max={Math.max(...calorieFilters)} valueLabelDisplay="on" onChange={(e, v) => setActiveCalorieFilters(v)}/>
         </Row>
         <Row style={{marginTop:'1em'}}>
         <Button size="sm" variant="outline-secondary" onClick={clearFilters}>Clear all</Button>
