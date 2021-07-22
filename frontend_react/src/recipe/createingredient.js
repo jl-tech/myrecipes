@@ -58,7 +58,7 @@ function RecipeCreateIngredient({ingredients, setIngredients}) {
                                     {(provided) => (
                                         <ListGroup.Item as="li" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
                                             <Form.Row >
-                                                <Col sm={1}>
+                                                <Col sm={1} className={"my-auto"}>
                                                     <span>{index+1}</span>
                                                 </Col>
                                                 <Form.Group as={Col} sm={2} style={{marginBottom:"0"}}>
@@ -70,7 +70,7 @@ function RecipeCreateIngredient({ingredients, setIngredients}) {
                                                 <Form.Group as={Col} sm={6} style={{marginBottom:"0"}}>
                                                     <Form.Control placeholder="Name" required onChange={e => updateIngredient(index, "name", e.target.value)}/>
                                                 </Form.Group>
-                                                <Col sm={1}>
+                                                <Col sm={1} className={"my-auto"}>
                                                     <button type="button" className="close" onClick={() => removeIngredient(index)}>
                                                         <span>×</span>
                                                     </button>

@@ -188,7 +188,7 @@ function RecipeView(props) {
             return (
                 <div style={{textAlign: "center"}}>
                     <br/>
-                    <Spinner animation={"grow"}/>
+                    <Spinner style={{color:'tomato'}} animation={"grow"}/>
                 </div>
             )
         } else {

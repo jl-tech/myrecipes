@@ -98,7 +98,7 @@ function RecipeCreatePhoto({photos, setPhotos}) {
                                     {(provided) => (
                                         <ListGroup.Item as="li" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
                                             <Row >
-                                                <Col sm={1}>
+                                                <Col sm={1} className={"my-auto"}>
                                                     {index === 0 ? "1 (Main)" : index+1}
                                                 </Col>
                                                 <Col sm={5}>
@@ -107,7 +107,7 @@ function RecipeCreatePhoto({photos, setPhotos}) {
                                                 <Col sm={5}>
                                                     <Image src={url} width="10%"/>
                                                 </Col>
-                                                <Col sm={1}>
+                                                <Col sm={1} className={"my-auto"}>
                                                     <button type="button" className="close" onClick={() => removePhoto(index)}>
                                                         <span>×</span>
                                                     </button>

@@ -198,7 +198,7 @@ function Feed(props) {
                 {!fetchedProfile ?
                 <div style={{textAlign: "center"}}>
                     <br/>
-                    <Spinner animation={"grow"}/>
+                    <Spinner style={{color:'tomato'}} animation={"grow"}/>
                 </div>
                 :
                 <>
@@ -271,7 +271,7 @@ function Feed(props) {
                 {!fetchedFeed ?
                 <div style={{textAlign: "center"}}>
                     <br/>
-                    <Spinner animation={"grow"}/>
+                    <Spinner style={{color:'tomato'}} animation={"grow"}/>
                 </div>
                 :
                 <>

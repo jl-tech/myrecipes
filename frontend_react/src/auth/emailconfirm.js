@@ -61,7 +61,7 @@ function EmailConfirm() {
                 <Helmet>
                     <title> Verifying email - MyRecipes </title>
                 </Helmet>
-                <Spinner animation={"grow"} style={{marginLeft:"auto", marginRight:"auto"}}/>
+                <Spinner style={{color:'tomato'}} animation={"grow"} style={{marginLeft:"auto", marginRight:"auto"}}/>
             </Modal.Dialog>
             </>
         );

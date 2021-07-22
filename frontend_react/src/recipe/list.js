@@ -50,8 +50,8 @@ function RecipeList(props) {
 
                             </Card.Text>
                             <Card.Text>
-                                <Image src={Like} style={{verticalAlign:"middle", width:"5%", height:"auto"}}/>
-                                <span style={{fontSize: "125%", verticalAlign: "middle"}}> {recipe.likes} </span>
+                                <Image src={Like} style={{verticalAlign:"middle", width:"4%", height:"auto"}}/>
+                                <span style={{fontSize: "110%", verticalAlign: "middle"}}> {recipe.likes} </span>
 
                             </Card.Text>
                             <div style={{textAlign: "center"}}>
