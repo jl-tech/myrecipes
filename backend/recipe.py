@@ -44,6 +44,9 @@ def add_recipe(token, name, type, time, serving_size, ingredients, steps, photos
         con.close()
         return -1
 
+    if description == '':
+        description = None
+
     # -> do query
     query = '''
             insert into Recipes(created_by_user_id, creation_time, time_to_cook, name, type, serving_size, description) 

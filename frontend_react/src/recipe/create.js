@@ -70,6 +70,16 @@ function RecipeCreate(props) {
     async function handleSubmit(event) {
         event.preventDefault();
         collapseAll()
+
+        let name_ = name.trim();
+
+        let description_ = description;
+        if (description_ != null) {
+            description_ = description_.trim();
+        } else {
+            description_ = "";
+        }
+
         let ingredientsP = []
         for (let ingredient of ingredients) {
             ingredientsP.push({
@@ -92,8 +102,7 @@ function RecipeCreate(props) {
             photosP.push(photo["image"]);
             photoNames.push(photo["name"])
         }
-
-        let response = await createRecipe(cookie.get('token'), name, type, time, serving, description === "null" || description === ""? null : description, JSON.stringify(ingredientsP), JSON.stringify(stepsP), photosP, JSON.stringify(photoNames))
+        let response = await createRecipe(cookie.get('token'), name_, type, time, serving, description_, JSON.stringify(ingredientsP), JSON.stringify(stepsP), photosP, JSON.stringify(photoNames))
             .catch(e => {
                 setErrorShow(true);
                 setErrorText(e.message);
