@@ -16,6 +16,7 @@ import {Spinner} from "react-bootstrap";
 import RecipeViewNutri from "./viewnutrition";
 import { Helmet } from "react-helmet-async";
 import RecipeViewComments from './viewcomments.js';
+import RecipeViewRecommendations from './viewrecommendations.js';
 
 async function recipeView(recipe_id) {
     let response = await fetch('http://localhost:5000/recipe/view?' + new URLSearchParams({'recipe_id': recipe_id}), {
@@ -56,6 +57,7 @@ function RecipeView(props) {
     const [ingredients, setIngredients] = useState('');
     const [likes, setLikes] = useState(0)
     const [comments, setComments] = useState([])
+    const [recommendations, setRecommendations] = useState([])
     const [contributorRecipes, setContributorRecipes] = useState(0)
     const [contributorSubscribers, setContributorSubscribers] = useState(0)
 
@@ -98,6 +100,7 @@ function RecipeView(props) {
             setCalories(response.calories);
             setLikes(response.likes);
             setComments(response.comments);
+            setRecommendations(response.recommendations);
 
             let stepsP = [];
             for (let step of response.steps) {
@@ -173,6 +176,7 @@ function RecipeView(props) {
 
                     </Row>
                     <RecipeViewComments loggedIn={props.loggedIn} currId={props.currId} recipeId={id} comments={comments} setComments={setComments} />
+                    <RecipeViewRecommendations recipeData={recommendations} />
                 </Container>
                 </>
             );
