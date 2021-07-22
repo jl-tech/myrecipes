@@ -49,20 +49,6 @@ def route_unsubscribe():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
 
-@NEWSFEED.route("/is_subscribed", methods=['GET'])
-def route_is_subscribed():
-    token = request.headers.get("Authorization")
-    data = request.args.get('user_id')
-    result = newsfeed.is_subscribed(token, data)
-    if result == -1:
-        response = jsonify({'error': 'Invalid token'})
-        response.headers.add('Access-Control-Allow-Origin', '*')
-        return response, 400
-    else:
-        response = jsonify({'is_subscribed': result})
-        response.headers.add('Access-Control-Allow-Origin', '*')
-        return response, 200
-
 @NEWSFEED.route("/get_feed", methods=['GET'])
 def route_get_feed():
     token = request.headers.get("Authorization")

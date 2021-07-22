@@ -42,13 +42,10 @@ function RecipeList(props) {
                       className={hoveredRecipeId === recipe.recipe_id ? 'shadow-lg' : 'shadow-sm'}>
                     <div style={{color:'black', textDecoration: 'none', cursor:'pointer'}} role="link" onClick={()=>history.push("/recipe/" + recipe.recipe_id)} >
                         <Card.Img variant="Top" style={{width:"100%", height:"9vw", objectFit:"cover"}} alt="Recipe Image" src={recipe.photo_path == null ? "http://127.0.0.1:5000/img/default_recipe.png" : "http://127.0.0.1:5000/img/" + recipe.photo_path}/>
-                        <Card.Body style={{textAlign: "center",paddingBottom:"0"}}>
+                        <Card.Body style={{textAlign: "center"}}>
                             <Card.Title className={"text-truncate"}>{recipe.name}</Card.Title>
-                            <Card.Text style={{height:"1.5em", textDecoration: 'none'}}>
-                                <div className="text-truncate">
+                            <Card.Text style={{height:"1.5em", textDecoration: 'none'}} className="text-truncate">
                                     {recipe.description == null ? "No description available" : recipe.description}
-                                </div>
-
                             </Card.Text>
                             <div style={{textAlign: "center"}}>
                                 <table style={{marginLeft:"auto", marginRight:"auto", borderCollapse:"separate", borderSpacing:"2em 0em"}}><tbody>

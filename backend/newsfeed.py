@@ -113,22 +113,6 @@ def unsubscribe(token, user_id):
     con.close()
     return result
 
-def is_subscribed(token, user_id):
-    con = helpers.get_db_conn()
-    u_id = tokenise.token_to_id(token)
-    if u_id < 0:
-        con.close()
-        return -1
-    cur = con.cursor()
-    query = """
-               select * from SubscribedTo where user_id = %s and 
-               is_subscribed_to = %s
-           """
-    cur.execute(query, (u_id, user_id))
-    result = cur.fetchall()
-    con.close()
-    return len(result) != 0
-
 def get_feed(token, page):
     con = helpers.get_db_conn()
     u_id = tokenise.token_to_id(token)
