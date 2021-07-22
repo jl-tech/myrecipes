@@ -137,7 +137,7 @@ def get_feed(token, page):
 
     cur = con.cursor()
     query = """
-        select distinct R.recipe_id, R.name, R.creation_time, R.edit_time,
+        select distinct R.recipe_id, R.name, R.creation_time, R.edit_time, R.likes,
             R.time_to_cook, R.type, R.serving_size, RP.photo_path, R.description,
             U.first_name, U.last_name, COALESCE(U.profile_pic_path, '""" + DEFAULT_PIC + """') as profile_pic_path,
             U.user_id, R.calories
