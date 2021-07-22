@@ -159,6 +159,19 @@ def get_recipe_details(recipe_id):
                      'name': row['photo_name']}
         out['photos'].append(curr_dict)
 
+    # comments
+    query = """
+            select C.*, U.user_id, U.first_name, U.last_name,
+                COALESCE(U.profile_pic_path, '""" + DEFAULT_PIC + """') as profile_pic_path
+            from Comments C
+                join Users U on C.by_user_id = U.user_id
+            where C.recipe_id = %s
+            order by C.time_created
+        """
+    cur.execute(query, (int(recipe_id),))
+    result = cur.fetchall()
+    out['comments'] = result
+
     # contributor stats
     query = """
             select COUNT(*) 
@@ -581,8 +594,56 @@ def recipe_comment(token, recipe_id, comment):
     cur.execute(query, (recipe_id, u_id, comment))
 
     con.commit()
+
+    query = """
+            select C.*, U.user_id, U.first_name, U.last_name,
+                COALESCE(U.profile_pic_path, '""" + DEFAULT_PIC + """') as profile_pic_path
+            from Comments C
+                join Users U on C.by_user_id = U.user_id
+            where C.recipe_id = %s
+            order by C.time_created
+        """
+    cur.execute(query, (int(recipe_id),))
+    result = cur.fetchall()
+
     con.close()
-    return 0
+    return result
+
+def recipe_comment_delete(token, comment_id):
+    con = helpers.get_db_conn()
+    cur = con.cursor()
+    u_id = tokenise.token_to_id(token)
+
+    if u_id < 0:
+        con.close()
+        return -1
+    
+    query = '''select * from Comments where comment_id = %s and by_user_id = %s'''
+
+    if cur.execute(query, (comment_id, u_id)) == 0:
+        con.close()
+        return -2
+
+    recipe_id = cur.fetchall()[0]['recipe_id']
+
+    query = 'delete from Comments where comment_id = %s'
+    cur.execute(query, (comment_id))
+
+    con.commit()
+
+    query = """
+            select C.*, U.user_id, U.first_name, U.last_name,
+                COALESCE(U.profile_pic_path, '""" + DEFAULT_PIC + """') as profile_pic_path
+            from Comments C
+                join Users U on C.by_user_id = U.user_id
+            where C.recipe_id = %s
+            order by C.time_created
+        """
+    cur.execute(query, (int(recipe_id),))
+    result = cur.fetchall()
+
+    con.close()
+    return result
 
 def recipe_like_toggle(token, recipe_id):
     '''

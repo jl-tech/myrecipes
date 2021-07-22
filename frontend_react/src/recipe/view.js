@@ -15,6 +15,7 @@ import RecipeViewPhoto from './viewphoto.js';
 import {Spinner} from "react-bootstrap";
 import RecipeViewNutri from "./viewnutrition";
 import { Helmet } from "react-helmet-async";
+import RecipeViewComments from './viewcomments.js';
 
 async function recipeView(recipe_id) {
     let response = await fetch('http://localhost:5000/recipe/view?' + new URLSearchParams({'recipe_id': recipe_id}), {
@@ -54,6 +55,7 @@ function RecipeView(props) {
     const [steps, setSteps] = useState([]);
     const [ingredients, setIngredients] = useState('');
     const [likes, setLikes] = useState(0)
+    const [comments, setComments] = useState([])
     const [contributorRecipes, setContributorRecipes] = useState(0)
     const [contributorSubscribers, setContributorSubscribers] = useState(0)
 
@@ -93,8 +95,9 @@ function RecipeView(props) {
             setMealType(response.type);
             setServing(response.serving_size);
             setDescription(response.description);
-            setCalories(response.calories)
-            setLikes(response.likes)
+            setCalories(response.calories);
+            setLikes(response.likes);
+            setComments(response.comments);
 
             let stepsP = [];
             for (let step of response.steps) {
@@ -157,7 +160,7 @@ function RecipeView(props) {
                     <RecipeViewPhoto photos={photos} />
                     <RecipeViewDesc loggedIn={props.loggedIn} recipeId={id} recipeName={recipeName} likes={likes} setLikes={setLikes} calories={calories} setRecipeName={setRecipeName} time={time} setTime={setTime} serving={serving} setServing={setServing} mealType={mealType} setMealType={setMealType} photos={photos} setPhotos={setPhotos} editable={editable} setDeleted={setDeleted} setEditedAt={setEditedAt} description={description} setDescription={setDescription} />
                     <Row style={{marginTop:"1em"}}>
-                        <Col sm={3} style={{marginBottom:"1em"}}>
+                        <Col sm={3}>
                             <RecipeViewContri userImgURL={userImgURL} contributorUID={contributorUID} firstName={firstName} lastName={lastName} createdAt={createdAt} editedAt={editedAt} contributorRecipes={contributorRecipes} contributorSubscribers={contributorSubscribers}/>
                             <br/> <br/>
                             {/* <RecipeViewNutri recipeId={id}/> */}
@@ -169,6 +172,7 @@ function RecipeView(props) {
                         </Col>
 
                     </Row>
+                    <RecipeViewComments loggedIn={props.loggedIn} currId={props.currId} recipeId={id} comments={comments} setComments={setComments} />
                 </Container>
                 </>
             );

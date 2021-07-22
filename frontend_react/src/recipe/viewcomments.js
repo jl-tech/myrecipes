@@ -1,0 +1,135 @@
+import React, { useState } from 'react';
+import Image from 'react-bootstrap/Image';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form';
+import Cookie from 'universal-cookie';
+import Button from 'react-bootstrap/esm/Button';
+import ListGroup from "react-bootstrap/ListGroup";
+import ReactTimeAgo from "react-time-ago";
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import {Link, useHistory} from "react-router-dom";
+
+async function requestComment(token, recipe_id, comment) {
+    let response = await fetch('http://localhost:5000/recipe/comment', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token
+        },
+        body: JSON.stringify({
+            comment: comment,
+            recipe_id: recipe_id
+        })
+    }).catch(e => {
+        throw new Error(e);
+    });
+
+    let responseJson = await response.json();
+    
+    if (response.ok) return responseJson;
+    else throw new Error(responseJson.error);
+}
+
+async function requestCommentDelete(token, comment_id) {
+    let response = await fetch('http://localhost:5000/recipe/comment/delete', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token
+        },
+        body: JSON.stringify({
+            comment_id: comment_id,
+        })
+    }).catch(e => {
+        throw new Error(e);
+    });
+
+    let responseJson = await response.json();
+    
+    if (response.ok) return responseJson;
+    else throw new Error(responseJson.error);
+}
+
+function RecipeViewComments(props) {
+    const [comment, setComment] = useState('');
+    const cookie = new Cookie();
+    const history = useHistory()
+
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+
+        let response = await requestComment(cookie.get('token'), props.recipeId, comment)
+            .catch(e => {
+            });
+
+        if (response != null) {
+            setComment('');
+            props.setComments(response);
+        }
+    }
+
+    async function handleDelete(commentId) {
+        let response = await requestCommentDelete(cookie.get('token'), commentId)
+            .catch(e => {
+            });
+
+        if (response != null) {
+            props.setComments(response)
+        }
+    }
+
+    return (<>
+        <Row style={{marginTop:"1em"}}>
+            <Col sm={1} />
+            <Col sm={11}>
+                <h3>Comments</h3>
+                <ListGroup>
+                    {props.comments.map(({first_name, last_name, user_id, profile_pic_path, comment_id, by_user_id, comment_text, time_created}, index)=>
+                        <ListGroup.Item key={index}>
+                            <Row>
+
+                            <Col sm={3} className={"text-truncate"}>
+                            <Link to={"/profile/" + user_id}  style={{width:"100%"}} onClick={() => {history.push("/profile/"+user_id);history.go(0);}}>
+
+                                <Image src={"http://127.0.0.1:5000/img/" + profile_pic_path} alt="Profile Picture" roundedCircle width="40em" style={{marginRight:"1em"}}/>
+                                {first_name} {last_name}
+
+                            </Link>
+                            </Col>
+                            <Col sm={6}>
+                                {comment_text}
+                            </Col>
+                            <Col sm={2}>
+                                <ReactTimeAgo date={new Date(time_created)} locale="en-US"/>
+                            </Col>
+                            <Col sm={1} style={{textAlign:"right"}}>
+                                {props.currId === by_user_id ?
+                                <DropdownButton size="sm">
+                                    <Dropdown.Item onClick={()=>handleDelete(comment_id)} >Delete</Dropdown.Item>
+                                </DropdownButton>
+                                :null}
+                            </Col>
+                            </Row>
+                        </ListGroup.Item>
+                    )}
+                </ListGroup>
+                <br />
+                <Form onSubmit={handleSubmit}>
+                    <Row>
+                        <Col sm={11} >
+                            <Form.Control placeholder="Comment here" onChange={(e) => setComment(e.target.value)} required/>
+                        </Col>
+                        <Col sm={1} style={{paddingLeft:"0"}} >
+                            <Button type="submit" variant="secondary" >Post</Button>
+                        </Col>
+                    </Row>
+                </Form>
+            </Col>
+        </Row>
+    </>);
+}
+                    
+export default RecipeViewComments;

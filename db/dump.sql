@@ -23,13 +23,12 @@ DROP TABLE IF EXISTS `Comments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `Comments` (
+  `comment_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `recipe_id` int NOT NULL,
-  `comment_no` int NOT NULL,
-  `time_created` timestamp NULL DEFAULT NULL,
-  `time_edited` timestamp NULL DEFAULT NULL,
+  `time_created` timestamp NOT NULL,
   `by_user_id` int DEFAULT NULL,
   `comment_text` text,
-  PRIMARY KEY (`recipe_id`,`comment_no`)
+  PRIMARY KEY (`comment_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

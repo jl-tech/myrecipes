@@ -82,12 +82,12 @@ create table SubscribedTo(
 );
 
 create table Comments(
+    comment_id serial,
     recipe_id integer references Recipes(recipe_id),
     by_user_id integer references Users(user_id),
     time_created timestamp,
-    time_edited timestamp,
     comment_text text,
-    primary key (by_user_id, time_created)
+    primary key (comment_id)
 );
 
 create table Likes(

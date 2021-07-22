@@ -216,7 +216,28 @@ def route_recipe_comment():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
     else:
-        response = jsonify({})
+        response = jsonify(result)
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 200
+
+@RECIPE.route('/comment/delete', methods=['POST'])
+def route_recipe_comment_delete():
+    token = request.headers.get("Authorization")
+    data = request.get_json()
+    comment_id = data['comment_id']
+
+    result = recipe.recipe_comment_delete(token, comment_id)
+
+    if result == -1:
+        response = jsonify({'error': 'Invalid token'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
+    elif result == -2:
+        response = jsonify({'error': 'Invalid comment id'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
+    else:
+        response = jsonify(result)
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
 
