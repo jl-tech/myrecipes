@@ -1,6 +1,10 @@
 import os
+
+from constants import *
+
+import helpers
 from google.cloud import dialogflow
-#from tokenise import token_to_id
+from tokenise import token_to_id
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "static\chatbot_client\comp3900-w16a-goodname-3261b83e6fa2.json"
 
@@ -15,8 +19,12 @@ def talk(token, messages):
         return -1
     '''
     user_id = token
-    react = connect_dialogflow_api("123456789"+str(user_id), messages)
-    return react
+
+    response = connect_dialogflow_api("123456789" + str(user_id), messages)
+
+    react_message = str.format(response.query_result.fulfillment_text)
+
+    return react_message
 
 
 def connect_dialogflow_api(session_id, text):
@@ -27,9 +35,12 @@ def connect_dialogflow_api(session_id, text):
 
     query_input = dialogflow.QueryInput(text=text_input)
 
-    response = session_client.detect_intent(
+    return session_client.detect_intent(
         request={"session": session, "query_input": query_input}
     )
+
+    if str.format(response.query_result.intent.display_name) == "Welcome":
+        return str.format(response.query_result.fulfillment_text)
 
     return str.format(response.query_result.fulfillment_text)
 
@@ -68,4 +79,4 @@ def test(session_id, texts):
 
     return 0
 
-print(talk(1, "nice to meet u"))
+print(talk(2, "nice to meet u"))
