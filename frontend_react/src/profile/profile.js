@@ -15,12 +15,14 @@ import SubscribeButton from "../newsfeed/subscribe";
 import { Helmet } from "react-helmet-async";
 import Subscribers from '../newsfeed/subscribers.js';
 import Subscriptions from '../newsfeed/subscriptions.js';
+import Cookie from 'universal-cookie';
 
-async function profileUser(userid) {
+async function profileUser(token, userid) {
     let response = await fetch('http://localhost:5000/profile/view?' + new URLSearchParams({'user_id': userid}), {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': token
         }
     }).catch(e => {
         throw new Error(e);
@@ -49,7 +51,7 @@ function Profile(props) {
     let { id } = useParams();
     id = id == null ? props.currId : id;
     const history = useHistory();
-
+    const cookie = new Cookie();
 
     async function processId() {
         let id_ = id;
@@ -58,7 +60,7 @@ function Profile(props) {
             if (id_ == null) history.push('/');
         }
 
-        let response = await profileUser(id_)
+        let response = await profileUser(cookie.get('token'), id_)
             .catch(e => {
 
             });
@@ -127,14 +129,17 @@ function Profile(props) {
                             <th style={{fontSize:"200%"}}>
                                 <Subscriptions subscriptions={subscriptions} />
                             </th>
-                            : null}
+                            :
+                                null
+                            }
                         </tr>
                         <tr>
                             <td> RECIPES </td>
                             <td> SUBSCRIBERS </td>
                             { buttonType === 1 ?
                             <td> SUBSCRIPTIONS </td>
-                            : null}
+                            : null
+                            }
                         </tr>
                     </tbody></table>
                     </Col>
@@ -142,7 +147,7 @@ function Profile(props) {
                 <Row>
                     <Col>
                     <div style={{textAlign:"center", marginTop:"1em"}}>
-                        {buttonType === 0 ? <></> : buttonType === 1 ? <ProfileEdit firstName={firstName} setfirstName={setfirstName} lastName={lastName} setlastName={setlastName} setButtonName={props.setButtonName} email={email} imgUrl={imgUrl} setImgUrl={setImgUrl} initOpen={props.settings} modalToggle={props.modalToggle} setModalToggle={props.setModalToggle}/> : <SubscribeButton userId={id} currId={props.currId} subscribers={subscribers} setSubscribers={setSubscribers}/>}
+                        {buttonType === 0 ? <></> : buttonType === 1 ? <ProfileEdit firstName={firstName} setfirstName={setfirstName} lastName={lastName} setlastName={setlastName} setButtonName={props.setButtonName} email={email} imgUrl={imgUrl} setImgUrl={setImgUrl} initOpen={props.settings} modalToggle={props.modalToggle} setModalToggle={props.setModalToggle}/> : <SubscribeButton userid={id} setSubscribers={setSubscribers}/>}
                     </div>
                     </Col>
                 </Row>

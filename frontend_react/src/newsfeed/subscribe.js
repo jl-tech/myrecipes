@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Cookie from 'universal-cookie';
 
@@ -23,18 +23,48 @@ async function requestSubscribe(token, userid, toSubscribe) {
     else throw new Error(responseJson.error);
 }
 
+async function isSubscribed(token, userid) {
+    let response = await fetch('http://localhost:5000/newsfeed/is_subscribed?' + new URLSearchParams({'user_id': userid}), {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token
+        }
+    }).catch(e => {
+        throw new Error(e);
+    });
+
+    let responseJson = await response.json();
+
+    if (response.ok) return responseJson;
+    else throw new Error(responseJson.error);
+}
+
 function SubscribeButton(props) {
 
-    const [subscribed, setSubscribed] = useState(checkSubscribed());
+    const [fetched, setFetched] = useState(false);
+    const [subscribed, setSubscribed] = useState(null);
     const cookie = new Cookie()
 
-    function checkSubscribed() {
-        if (props.subscribers.some((e) => e.user_id === props.currId)) return true;
-        return false;
+    async function processId() {
+        let response = await isSubscribed(cookie.get('token'), props.userid)
+            .catch(e => {
+
+            });
+
+        if (response != null) {
+            setSubscribed(response['is_subscribed']);
+        }
+
+        setFetched(true);
     }
 
+    useEffect(() => {
+        if (!fetched) processId();
+    }, []);
+
     async function handleButton(toSubscribe) {
-        let response = await requestSubscribe(cookie.get('token'), props.userId, toSubscribe)
+        let response = await requestSubscribe(cookie.get('token'), props.userid, toSubscribe)
             .catch(e => {
             });
 

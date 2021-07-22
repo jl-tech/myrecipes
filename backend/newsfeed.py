@@ -49,8 +49,7 @@ def subscribe(token, user_id):
     con.commit()
 
     query = """
-        select U.user_id, U.first_name, U.last_name,
-            COALESCE(U.profile_pic_path, '""" + DEFAULT_PIC + """') as profile_pic_path
+        select count(*) as subscriber_count
         from SubscribedTo S
             join Users U on S.user_id = U.user_id
         where S.is_subscribed_to = %s
@@ -59,7 +58,7 @@ def subscribe(token, user_id):
     result = cur.fetchall()
     
     con.close()
-    return result
+    return ['user' for i in range(result[0]['subscriber_count'])]
 
 def unsubscribe(token, user_id):
     '''
@@ -101,8 +100,7 @@ def unsubscribe(token, user_id):
     con.commit()
 
     query = """
-        select U.user_id, U.first_name, U.last_name, 
-            COALESCE(U.profile_pic_path, '""" + DEFAULT_PIC + """') as profile_pic_path
+        select count(*) as subscriber_count
         from SubscribedTo S
             join Users U on S.user_id = U.user_id
         where S.is_subscribed_to = %s
@@ -111,7 +109,23 @@ def unsubscribe(token, user_id):
     result = cur.fetchall()
     
     con.close()
-    return result
+    return ['user' for i in range(result[0]['subscriber_count'])]
+
+def is_subscribed(token, user_id):
+    con = helpers.get_db_conn()
+    u_id = tokenise.token_to_id(token)
+    if u_id < 0:
+        con.close()
+        return -1
+    cur = con.cursor()
+    query = """
+               select * from SubscribedTo where user_id = %s and 
+               is_subscribed_to = %s
+           """
+    cur.execute(query, (u_id, user_id))
+    result = cur.fetchall()
+    con.close()
+    return len(result) != 0
 
 def get_feed(token, page):
     con = helpers.get_db_conn()
@@ -138,7 +152,6 @@ def get_feed(token, page):
     """
     cur.execute(query, (u_id, int(10), int((int(page) - 1) * 10)))
     result = cur.fetchall()
-    print(result, file=sys.stderr)
 
     query = """
         select COUNT(*) 

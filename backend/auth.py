@@ -131,7 +131,6 @@ def check_password(email, password):
     query = f"select email_verified from Users where user_id = %s"
     cur.execute(query, (result[0]['user_id'],))
     is_verified = cur.fetchall()[0]['email_verified']
-    print(is_verified)
     if not is_verified:
         con.close()
         return False, -3

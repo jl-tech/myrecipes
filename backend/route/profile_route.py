@@ -13,7 +13,7 @@ def route_profile_view():
         response = jsonify({'error': 'Bad user_id'})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
-    result = profile.profile_info(data)
+    result = profile.profile_info(request.headers.get("Authorization"), data)
     if result == 1:
         response = jsonify({'error': 'User ID Invalid'})
         response.headers.add('Access-Control-Allow-Origin', '*')

@@ -46,7 +46,6 @@ async function profileUser(token) {
     });
 
     let responseJson = await response.json();
-    console.log(responseJson)
 
     if (response.ok) return responseJson;
     else throw new Error(responseJson.error);

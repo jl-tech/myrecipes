@@ -8,14 +8,18 @@ from auth import DEFAULT_PIC, hash_password, send_pwd_change_email, \
 
 from tokenise import token_to_id, token_to_email
 
+import sys
 
-def profile_info(user_id):
+
+def profile_info(token, user_id):
     '''
     Gets all info associated to a specified user.
     :param user_id: The id of the user
     :return: The tuple containing all fields associated with that user. 1 if
     the user id was not found.
     '''
+    requester = token_to_id(token)
+
     con = helpers.get_db_conn()
     cur = con.cursor()
     query = "select * from Users where user_id = %s"
@@ -34,15 +38,24 @@ def profile_info(user_id):
         recipe_count = cur.fetchall()
         result[0]['recipe_count'] = recipe_count[0]['COUNT(*)']
 
-        query = "select U.user_id, U.first_name, U.last_name, COALESCE(U.profile_pic_path, '" + DEFAULT_PIC + "') as profile_pic_path from SubscribedTo S join Users U on S.user_id = U.user_id where S.is_subscribed_to = %s"
-        cur.execute(query, (user_id,))
-        subscribers = cur.fetchall()
-        result[0]['subscribers'] = subscribers
+        if requester == user_id: 
+            query = "select U.user_id, U.first_name, U.last_name, COALESCE(U.profile_pic_path, '" + DEFAULT_PIC + "') as profile_pic_path from SubscribedTo S join Users U on S.user_id = U.user_id where S.is_subscribed_to = %s"
+            cur.execute(query, (user_id,))
+            subscribers = cur.fetchall()
+            result[0]['subscribers'] = subscribers
+        else:
+            query = "select count(*) as subscriber_count from SubscribedTo S join Users U on S.user_id = U.user_id where S.is_subscribed_to = %s"
+            cur.execute(query, (user_id,))
+            subscribers = cur.fetchall()
+            result[0]['subscribers'] = ['user' for i in range(subscribers[0]['subscriber_count'])]
 
-        query = "select U.user_id, U.first_name, U.last_name, COALESCE(U.profile_pic_path, '" + DEFAULT_PIC + "') as profile_pic_path from SubscribedTo S join Users U on S.is_subscribed_to = U.user_id where S.user_id = %s"
-        cur.execute(query, (user_id,))
-        subscriptions = cur.fetchall()
-        result[0]['subscriptions'] = subscriptions
+        if requester == user_id: 
+            query = "select U.user_id, U.first_name, U.last_name, COALESCE(U.profile_pic_path, '" + DEFAULT_PIC + "') as profile_pic_path from SubscribedTo S join Users U on S.is_subscribed_to = U.user_id where S.user_id = %s"
+            cur.execute(query, (user_id,))
+            subscriptions = cur.fetchall()
+            result[0]['subscriptions'] = subscriptions
+        else:
+            result[0]['subscriptions'] = []
         
         con.close()
         return result[0]
@@ -74,7 +87,6 @@ def change_password(token, oldpassword, newpassword):
         query = 'update Users set password_hash=%s where user_id=%s'
         cur.execute(query, (new_hash_password, user_id))
         con.commit()
-        print(email)
         send_pwd_change_email(email)
         return True, ''
     else:
