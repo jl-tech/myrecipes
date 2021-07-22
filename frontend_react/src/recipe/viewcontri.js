@@ -33,14 +33,8 @@ function RecipeViewContri(props) {
                         </Row>
                             <Row style={{textAlign:"center"}}>
                                 <table style={{marginTop:"1em", marginLeft:"auto", marginRight:"auto", borderCollapse:"separate", borderSpacing:"1em 0em"}}><tbody>
-                                <tr>
-                                    <th style={{fontSize:"100%"}}> {props.contributorRecipes} </th>
-                                    <th style={{fontSize:"100%"}}> {props.contributorSubscribers} </th>
-                                </tr>
-                                <tr>
-                                    <td style={{fontSize:"90%"}}> RECIPES </td>
-                                    <td style={{fontSize:"90%"}}> SUBSCRIBERS </td>
-                                </tr>
+                                <b>{props.contributorRecipes} </b> Recipes <br/>
+                                <b> {props.contributorSubscribers} </b> Subscribers
                             </tbody></table>
                             </Row>
                         </Modal.Body>
