@@ -2,7 +2,7 @@ import sys
 
 import jwt
 
-from constants import query_lock, con
+import helpers
 
 SECRET_PASSKEY = "9V^xohyJ9K2AFt!@T38h&ewvSw"
 
@@ -49,7 +49,7 @@ def token_to_id(token):
         return -1
     user_id = token_decoded['user_id']
 
-    cur = con.cursor()
+    cur = helpers.get_db_conn().cursor()
     # check email exists with an account
     query = "select * from Users where user_id = %s"
     cur.execute(query, (user_id,))

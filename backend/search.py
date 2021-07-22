@@ -18,7 +18,7 @@ from auth import DEFAULT_PIC
 
 
 def do_search(name, type, serving_size, time_to_cook, ingredients, step_key_words):
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     cur = con.cursor()
 
     query = """
@@ -101,12 +101,10 @@ def do_search(name, type, serving_size, time_to_cook, ingredients, step_key_word
     results = cur.fetchall()
     if isinstance(results, tuple):
         results = []
-    query_lock.release()
 
     ## Stage 2: include name matches for ingredients
     # Sorts by number of ingredients which contain the name
     if name is not None:
-        query_lock.acquire()
         query = """
         select count(*), R.recipe_id, R.name, R.creation_time, R.edit_time,
             R.time_to_cook, R.type, R.serving_size, RP.photo_path, R.description,
@@ -122,7 +120,6 @@ def do_search(name, type, serving_size, time_to_cook, ingredients, step_key_word
         """
         cur.execute(query, (name,))
         result2= cur.fetchall()
-        query_lock.release()
         for result in result2:
             is_not_duplicate = True
             for r in results:
@@ -135,7 +132,6 @@ def do_search(name, type, serving_size, time_to_cook, ingredients, step_key_word
         ## Stage 3: include name matches for steps
         # Sorts by number of steps which contain the name
         if name is not None:
-            query_lock.acquire()
             query = """
             select count(*), R.recipe_id, R.name, R.creation_time, R.edit_time,
                 R.time_to_cook, R.type, R.serving_size, RP.photo_path, R.description,
@@ -151,7 +147,6 @@ def do_search(name, type, serving_size, time_to_cook, ingredients, step_key_word
             """
             cur.execute(query, (name,))
             result2 = cur.fetchall()
-            query_lock.release()
             for result in result2:
                 is_not_duplicate = True
                 for r in results:
@@ -165,10 +160,10 @@ def do_search(name, type, serving_size, time_to_cook, ingredients, step_key_word
 
 
 def add_search_history(token, name, ingredients, step):
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     u_id = tokenise.token_to_id(token)
     if u_id < 0:
-        query_lock.release()
+        con.close()
         return -1
 
 
@@ -182,7 +177,7 @@ def add_search_history(token, name, ingredients, step):
     elif step is not None:
         term = step
     else:
-        query_lock.release()
+        con.close()
         return
 
     query = ''' select * from SearchHistory where search_term = %s and user_id = %s'''
@@ -200,14 +195,14 @@ def add_search_history(token, name, ingredients, step):
     auto_update_search_history(token)
 
     con.commit()
-    query_lock.release()
+    con.close()
 
 
 def get_search_history(token):
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     u_id = tokenise.token_to_id(token)
     if u_id < 0:
-        query_lock.release()
+        con.close()
         return []
 
     query = """
@@ -219,24 +214,24 @@ def get_search_history(token):
     cur = con.cursor()
     cur.execute(query, (u_id,))
     result = cur.fetchall()
-    query_lock.release()
+    con.close()
     return result
 
 
 def delete_search_history(token, search_term, time):
     u_id = tokenise.token_to_id(token)
     if u_id < 0:
-        query_lock.release()
+        con.close()
         return -1
 
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     cur = con.cursor()
 
     query = '''delete from SearchHistory where user_id=%s and search_term=%s and time=%s'''
     cur.execute(query, (int(u_id), search_term, time,))
 
     con.commit()
-    query_lock.release()
+    con.close()
     return 0
 
 
@@ -249,7 +244,7 @@ def auto_update_search_history(token):
         return -1
 
 
-    cur = con.cursor()
+    cur = helpers.get_db_conn().cursor()
 
     query = '''select * from SearchHistory where user_id=%s order by time'''
 

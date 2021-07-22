@@ -8,6 +8,7 @@ import smtplib
 
 import hashlib
 
+import pymysql
 from PIL import Image
 
 
@@ -49,3 +50,10 @@ def store_image(image_file):
     out_path = f'./static/server_resources/images/{file_name}'
     img.save(out_path)
     return file_name
+
+def get_db_conn():
+    return pymysql.connect(host='localhost',
+                          user='myrecipes',
+                          password='g3iCv7sr!',
+                          db='myrecipes',
+                          cursorclass=pymysql.cursors.DictCursor)

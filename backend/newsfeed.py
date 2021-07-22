@@ -16,10 +16,10 @@ def subscribe(token, user_id):
     :return: -1 invalid token. -2 user to subscribe to not found. -3 already subscribed
     0 success.
     '''
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     u_id = tokenise.token_to_id(token)
     if u_id < 0:
-        query_lock.release()
+        con.close()
         return -1
 
     cur = con.cursor()
@@ -28,7 +28,7 @@ def subscribe(token, user_id):
     """
     cur.execute(query, (user_id,))
     if len(cur.fetchall()) == 0:
-        query_lock.release()
+        con.close()
         return -2
 
     query = """
@@ -36,7 +36,7 @@ def subscribe(token, user_id):
     """
     cur.execute(query, (u_id, user_id))
     if len(cur.fetchall()) != 0:
-        query_lock.release()
+        con.close()
         return -3
 
     query = """
@@ -57,7 +57,7 @@ def subscribe(token, user_id):
     cur.execute(query, (user_id, ))
     result = cur.fetchall()
     
-    query_lock.release()
+    con.close()
     return result
 
 def unsubscribe(token, user_id):
@@ -69,10 +69,10 @@ def unsubscribe(token, user_id):
     unsubscribed
     0 success.
     '''
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     u_id = tokenise.token_to_id(token)
     if u_id < 0:
-        query_lock.release()
+        con.close()
         return -1
 
     cur = con.cursor()
@@ -81,7 +81,7 @@ def unsubscribe(token, user_id):
         """
     cur.execute(query, (user_id,))
     if len(cur.fetchall()) == 0:
-        query_lock.release()
+        con.close()
         return -2
 
     query = """
@@ -90,7 +90,7 @@ def unsubscribe(token, user_id):
         """
     cur.execute(query, (u_id, user_id))
     if len(cur.fetchall()) == 0:
-        query_lock.release()
+        con.close()
         return -3
 
     query = """
@@ -109,14 +109,14 @@ def unsubscribe(token, user_id):
     cur.execute(query, (user_id, ))
     result = cur.fetchall()
     
-    query_lock.release()
+    con.close()
     return result
 
 def is_subscribed(token, user_id):
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     u_id = tokenise.token_to_id(token)
     if u_id < 0:
-        query_lock.release()
+        con.close()
         return -1
     cur = con.cursor()
     query = """
@@ -125,14 +125,14 @@ def is_subscribed(token, user_id):
            """
     cur.execute(query, (u_id, user_id))
     result = cur.fetchall()
-    query_lock.release()
+    con.close()
     return len(result) != 0
 
 def get_feed(token, page):
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     u_id = tokenise.token_to_id(token)
     if u_id < 0:
-        query_lock.release()
+        con.close()
         return -1
 
     cur = con.cursor()
@@ -161,15 +161,15 @@ def get_feed(token, page):
     cur.execute(query, (u_id, ))
     count = cur.fetchall()
 
-    query_lock.release()
+    con.close()
     return result, math.ceil(count[0]['COUNT(*)'] / 10)
 
 def get_subscriptions(token):
     
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     u_id = tokenise.token_to_id(token)
     if u_id < 0:
-        query_lock.release()
+        con.close()
         return -1
 
     cur = con.cursor()
@@ -206,5 +206,5 @@ def get_subscriptions(token):
     subscriptions = cur.fetchall()
     result[0]['subscriptions'] = subscriptions
     
-    query_lock.release()
+    con.close()
     return result[0]
