@@ -127,7 +127,7 @@ function Feed(props) {
                                         <Image onClick={(e) => e.stopPropagation()} src={"http://127.0.0.1:5000/img/" + recipe.profile_pic_path} alt="Profile Picture" roundedCircle width="40em"/>
                                     </Link>
                                 </Col>
-                                <Col sm={11}>
+                                <Col sm={9}>
                                     <Link to={"/profile/" + recipe.user_id} >
                                         <div onClick={(e) => e.stopPropagation()}>
                                             {recipe.first_name + " " + recipe.last_name} <br/>
@@ -141,6 +141,11 @@ function Feed(props) {
                                                 <ReactTimeAgo date={new Date(recipe.edit_time)} locale="en-US"/> </>
                                             : ""}
                                 </Col>
+                                {recipe.recommended ?
+                                <Col sm={2} style={{color:"grey", textAlign:"right"}}>
+                                    Recommended
+                                </Col>
+                                :<Col sm={2} />}
                             </Row>
                         </Card.Header>
                         <Card.Img variant="Top" style={{width:"100%", height:"9vw", objectFit:"cover"}} alt="Recipe Image" src={recipe.photo_path == null ? "http://127.0.0.1:5000/img/default_recipe.png" : "http://127.0.0.1:5000/img/" + recipe.photo_path}/>
