@@ -57,7 +57,7 @@ function RecipeViewNutri(props) {
                     <h5 style={{textAlign: "center"}}> Nutritional Info </h5>
                     <p style={{textAlign: "center"}}> per serving</p>
                     <div style={{textAlign: "center"}}>
-                        <Spinner animation={"grow"} size={"sm"}/>
+                        <Spinner style={{color:'tomato'}} animation={"grow"} size={"sm"}/>
                         <br/>
                         <small> One sec... </small>
                     </div>

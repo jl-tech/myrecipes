@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/esm/Button';
 import Card from "react-bootstrap/Card";
 import Image from "react-bootstrap/Image";
 import Pagination from "react-bootstrap/Pagination";
-
+import Like from "../Like.svg"
 import ReactTimeAgo from "react-time-ago";
 
 import Slider from '@material-ui/core/Slider';
@@ -43,8 +43,16 @@ function RecipeList(props) {
                         <Card.Img variant="Top" style={{width:"100%", height:"9vw", objectFit:"cover"}} alt="Recipe Image" src={recipe.photo_path == null ? "http://127.0.0.1:5000/img/default_recipe.png" : "http://127.0.0.1:5000/img/" + recipe.photo_path}/>
                         <Card.Body style={{textAlign: "center"}}>
                             <Card.Title className={"text-truncate"}>{recipe.name}</Card.Title>
-                            <Card.Text className="text-truncate" style={{height:"1.5em", textDecoration: 'none'}}>
-                                {recipe.description == null ? "No description available" : recipe.description}
+                            <Card.Text style={{height:"1.5em", textDecoration: 'none'}}>
+                                <div className="text-truncate">
+                                    {recipe.description == null ? "No description available" : recipe.description}
+                                </div>
+
+                            </Card.Text>
+                            <Card.Text>
+                                <Image src={Like} style={{verticalAlign:"middle", width:"4%", height:"auto"}}/>
+                                <span style={{fontSize: "110%", verticalAlign: "middle"}}> {recipe.likes} </span>
+
                             </Card.Text>
                             <div style={{textAlign: "center"}}>
                                 <table style={{marginLeft:"auto", marginRight:"auto", borderCollapse:"separate", borderSpacing:"2em 0em"}}><tbody>
@@ -237,19 +245,19 @@ function RecipeList(props) {
         <h6>Serving Size</h6>
         </Row >
         <Row style={{width: '80%', marginTop:"2em"}}>
-        <Slider value={activeServingFilters} min={Math.min(...servingFilters)} max={Math.max(...servingFilters)} valueLabelDisplay="on" onChange={(e, v) => setActiveServingFilters(v)}/>
+        <Slider style={{color:"tomato"}} value={activeServingFilters} min={Math.min(...servingFilters)} max={Math.max(...servingFilters)} valueLabelDisplay="on" onChange={(e, v) => setActiveServingFilters(v)}/>
         </Row>
         <Row style={{marginTop:'1em'}}>
         <h6>Time to cook</h6>
         </Row >
         <Row style={{width: '80%', marginTop:"2em"}}>
-        <Slider value={activeTimeFilters} min={Math.min(...timeFilters)} max={Math.max(...timeFilters)} valueLabelDisplay="on" onChange={(e, v) => setActiveTimeFilters(v)}/>
+        <Slider style={{color:"tomato"}}  value={activeTimeFilters} min={Math.min(...timeFilters)} max={Math.max(...timeFilters)} valueLabelDisplay="on" onChange={(e, v) => setActiveTimeFilters(v)}/>
         </Row>
         <Row style={{marginTop:'1em'}}>
         <h6>Calories</h6>
         </Row >
         <Row style={{width: '80%', marginTop:"2em"}}>
-        <Slider value={activeCalorieFilters} min={Math.min(...calorieFilters)} max={Math.max(...calorieFilters)} valueLabelDisplay="on" onChange={(e, v) => setActiveCalorieFilters(v)}/>
+        <Slider style={{color:"tomato"}}  value={activeCalorieFilters} min={Math.min(...calorieFilters)} max={Math.max(...calorieFilters)} valueLabelDisplay="on" onChange={(e, v) => setActiveCalorieFilters(v)}/>
         </Row>
         <Row style={{marginTop:'1em'}}>
         <Button size="sm" variant="outline-secondary" onClick={clearFilters}>Clear all</Button>

@@ -14,6 +14,7 @@ import ListGroup from "react-bootstrap/ListGroup";
 import ReactTimeAgo from "react-time-ago";
 
 import { Helmet } from "react-helmet-async";
+import Like from "../Like.svg";
 
 async function requestFeed(token, page) {
     let response = await fetch('http://localhost:5000/newsfeed/get_feed?' + new URLSearchParams({'page': page}), {
@@ -144,9 +145,15 @@ function Feed(props) {
                         </Card.Header>
                         <Card.Img variant="Top" style={{width:"100%", height:"9vw", objectFit:"cover"}} alt="Recipe Image" src={recipe.photo_path == null ? "http://127.0.0.1:5000/img/default_recipe.png" : "http://127.0.0.1:5000/img/" + recipe.photo_path}/>
                         <Card.Body style={{textAlign: "center"}}>
-                            <Card.Title className={"text-truncate"}>{recipe.name}</Card.Title>
+
+                            <Card.Title className={"text-truncate"}>{recipe.name}
+                            </Card.Title>
                             <Card.Text className="text-truncate" style={{height:"1.5em", textDecoration: 'none'}}>
                                 {recipe.description == null ? "No description available" : recipe.description}
+                            </Card.Text>
+                            <Card.Text>
+                                <Image src={Like} style={{verticalAlign:"middle", width:"2.5%", height:"auto"}}/>
+                                <span style={{fontSize: "125%", verticalAlign: "middle"}}> {recipe.likes} </span>
                             </Card.Text>
                             <div style={{textAlign: "center"}}>
                                 <table style={{marginLeft:"auto", marginRight:"auto", borderCollapse:"separate", borderSpacing:"2em 0em"}}><tbody>
@@ -191,7 +198,7 @@ function Feed(props) {
                 {!fetchedProfile ?
                 <div style={{textAlign: "center"}}>
                     <br/>
-                    <Spinner animation={"grow"}/>
+                    <Spinner style={{color:'tomato'}} animation={"grow"}/>
                 </div>
                 :
                 <>
@@ -264,7 +271,7 @@ function Feed(props) {
                 {!fetchedFeed ?
                 <div style={{textAlign: "center"}}>
                     <br/>
-                    <Spinner animation={"grow"}/>
+                    <Spinner style={{color:'tomato'}} animation={"grow"}/>
                 </div>
                 :
                 <>

@@ -226,7 +226,7 @@ def route_recipe_like():
     data = request.get_json()
     recipe_id = data['recipe_id']
 
-    result = recipe.recipe_like(token, recipe_id)
+    result = recipe.recipe_like_toggle(token, recipe_id)
 
     if result == -1:
         response = jsonify({'error': 'Invalid token'})
@@ -238,5 +238,19 @@ def route_recipe_like():
         return response, 400
     else:
         response = jsonify({})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 200
+
+@RECIPE.route('/is_liked', methods=['GET'])
+def route_recipe_is_liked():
+    token = request.headers.get("Authorization")
+    data = request.args.get("recipe_id")
+    result = recipe.recipe_is_liked(token, data)
+    if result == -1:
+        response = jsonify({'error': 'Invalid token'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
+    else:
+        response = jsonify({'is_liked': result})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200

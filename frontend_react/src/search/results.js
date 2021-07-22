@@ -83,7 +83,6 @@ function SearchResults(props) {
     useEffect(() => {
         if (!fetched) processQuery();
     }, []);
-
     if (success) {
         return (
             <>
@@ -104,7 +103,7 @@ function SearchResults(props) {
                     <SearchBar loggedIn={props.loggedIn} init={query.get('name') != null ? query.get('name') : ""} disabled={advancedMode}/>
                     <div style={{marginTop:"0.5em"}}>
                         {recipeData.length} recipes found
-                        <a href="#" style={{float:"right"}} onClick={()=>{setAdvancedMode(!advancedMode)}}>Advanced options</a>
+                        <a href="#" style={{float:"right"}} onClick={()=>{setAdvancedMode(!advancedMode)}}> {advancedMode? "Hide advanced options" : "Show advanced options"}</a>
                     </div>
                     </Col>
                 </Row>
@@ -132,7 +131,7 @@ function SearchResults(props) {
     else {
         return (
             <Container style={{textAlign: "center",marginTop:"1em",marginBottom:"2em"}}>
-                    <Spinner animation={"grow"}/>
+                    <Spinner style={{color:'tomato'}} animation={"grow"}/>
             </Container>
         )
     }

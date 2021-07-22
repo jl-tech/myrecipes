@@ -5,7 +5,7 @@ import bcrypt
 import helpers
 from auth import DEFAULT_PIC, hash_password, send_pwd_change_email, \
     email_already_exists, send_confirm_email
-from constants import query_lock, con
+
 from tokenise import token_to_id, token_to_email
 
 
@@ -16,14 +16,14 @@ def profile_info(user_id):
     :return: The tuple containing all fields associated with that user. 1 if
     the user id was not found.
     '''
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     cur = con.cursor()
     query = "select * from Users where user_id = %s"
     cur.execute(query, (user_id,))
     result = cur.fetchall()
 
     if len(result) == 0:
-        query_lock.release()
+        con.close()
         return 1
     else:
         if result[0]['profile_pic_path'] is None:
@@ -44,7 +44,7 @@ def profile_info(user_id):
         subscriptions = cur.fetchall()
         result[0]['subscriptions'] = subscriptions
         
-        query_lock.release()
+        con.close()
         return result[0]
 
 
@@ -62,13 +62,13 @@ def change_password(token, oldpassword, newpassword):
     if user_id < 0:
         return False, 'Invalid token'
 
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     cur = con.cursor()
     query = f"select password_hash from Users where user_id = %s"
     cur.execute(query, (user_id,))
     result = cur.fetchall()
 
-    query_lock.release()
+    con.close()
     if bcrypt.checkpw(oldpassword.encode('utf-8'), result[0]['password_hash'].encode('utf-8')):
         new_hash_password = hash_password(newpassword)
         query = 'update Users set password_hash=%s where user_id=%s'
@@ -87,13 +87,13 @@ def editprofile(token, first_name, last_name):
     if user_id < 0:
         return False
 
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     cur = con.cursor()
     query = "update Users set first_name = %s, last_name = %s where user_id = %s"
     cur.execute(query, (first_name, last_name, user_id))
     con.commit()
 
-    query_lock.release()
+    con.close()
     return True
 
 
@@ -125,7 +125,7 @@ def change_profile_pic(image_file, token):
     if u_id < 0:
         return -1, ''
 
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     cur = con.cursor()
     query = "select profile_pic_path from Users where user_id=%s"
     cur.execute(query, (u_id,))
@@ -136,7 +136,7 @@ def change_profile_pic(image_file, token):
     query = "update Users set profile_pic_path=%s where user_id=%s"
     cur.execute(query, (file_name, u_id))
     con.commit()
-    query_lock.release()
+    con.close()
     # delete old image
     if old_path is not None:
         try:
@@ -159,7 +159,7 @@ def remove_profile_pic(token):
     if u_id < 0:
         return -1, ''
 
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     cur = con.cursor()
     query = "select profile_pic_path from Users where user_id=%s"
     cur.execute(query, (u_id,))
@@ -168,7 +168,7 @@ def remove_profile_pic(token):
     query = "update Users set profile_pic_path=%s where user_id=%s"
     cur.execute(query, (None, u_id))
     con.commit()
-    query_lock.release()
+    con.close()
     # delete old image
     if old_path is not None:
         try:
@@ -179,7 +179,7 @@ def remove_profile_pic(token):
     return 0, DEFAULT_PIC
 
 def get_profile_recipe(user_id):
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     cur = con.cursor()
     query = "select R.*, U.first_name, U.last_name, COALESCE(U.profile_pic_path, '" + DEFAULT_PIC + "') as profile_pic_path, U.user_id from Recipes R join Users U on U.user_id = R.created_by_user_id where created_by_user_id=%s order by creation_time desc"
     cur.execute(query, (int(user_id)),)
@@ -195,18 +195,18 @@ def get_profile_recipe(user_id):
         else:
             dic['photo_path'] = None
         out.append(dic)
-    query_lock.release()
+    con.close()
     return out
 
 def get_times_liked(token, user_id):
     if token_to_id(token) < 0:
         return -1
 
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     cur = con.cursor()
     query = "select * from Likes INNER JOIN Recipes ON Recipes.recipe_id = Likes.recipe_id where Recipes.created_by_user_id=%s"
     cur.execute(query, (int(user_id),))
     result = cur.fetchall()
 
-    query_lock.release()
+    con.close()
     return len(result)

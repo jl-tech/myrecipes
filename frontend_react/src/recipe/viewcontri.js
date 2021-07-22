@@ -1,25 +1,50 @@
-import React from 'react';
-import { Link } from "react-router-dom";
+import React, {useState} from 'react';
+import {Link, useHistory} from "react-router-dom";
 
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Image from "react-bootstrap/Image";
 import ReactTimeAgo from "react-time-ago";
+import Modal from "react-bootstrap/Modal";
 
 function RecipeViewContri(props) {
+    const [hoveredProfile, setHoveredProfile] = useState(false)
+    const history = useHistory()
         return (
             <>
-            <Row style={{marginTop:"1em"}}>
-                <Col style={{textAlign:"center"}}>
-                    <Image className={"shadow-lg"} src={"http://127.0.0.1:5000/img/" + props.userImgURL} alt="Profile Picture" roundedCircle height="50em" style={{align:"left"}}/>
-                </Col>
-            </Row>
             <Row>
-                <Col style={{textAlign:"center", fontSize:"140%"}}>
-                    <Link to={`/profile/${props.contributorUID}`}>
-                        {props.firstName} {props.lastName}
-                    </Link>
-                </Col>
+                <Modal.Dialog
+                        onMouseEnter={()=> setHoveredProfile(true)}
+                        onMouseLeave={()=> setHoveredProfile(false)}
+                        className={hoveredProfile ? 'shadow-lg' : 'shadow-sm'}
+                        onClick={()=>history.push('/profile/' + props.contributorUID)}
+                        style={{cursor:"pointer"}}
+                    >
+                        <Modal.Header>
+                            <Col style={{textAlign: "center", fontSize:"125%"}}> Contributor  </Col>
+                        </Modal.Header>
+                        <Modal.Body>
+                        <Row>
+                            <Col style={{textAlign:"center", fontSize:"125%"}}>
+                            <Image className={"shadow-lg"} src={"http://127.0.0.1:5000/img/" + props.userImgURL} alt="Profile Picture" roundedCircle height="55em" style={{align:"left"}}/>
+                            <br/>
+                            {props.firstName} {props.lastName}
+                            </Col>
+                        </Row>
+                            <Row style={{textAlign:"center"}}>
+                                <table style={{marginTop:"1em", marginLeft:"auto", marginRight:"auto", borderCollapse:"separate", borderSpacing:"1em 0em"}}><tbody>
+                                <tr>
+                                    <th style={{fontSize:"100%"}}> {props.contributorRecipes} </th>
+                                    <th style={{fontSize:"100%"}}> {props.contributorSubscribers} </th>
+                                </tr>
+                                <tr>
+                                    <td style={{fontSize:"90%"}}> RECIPES </td>
+                                    <td style={{fontSize:"90%"}}> SUBSCRIBERS </td>
+                                </tr>
+                            </tbody></table>
+                            </Row>
+                        </Modal.Body>
+                </Modal.Dialog>
             </Row>
             <Row style={{marginTop:"1em"}}>
                 <Col style={{textAlign:"center"}}>

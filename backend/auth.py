@@ -31,7 +31,7 @@ def add_new_user(email, first_name, last_name, password):
 
     hashed_pwd = hash_password(password)
 
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     cur = con.cursor()
     query = "insert into Users (email, first_name, last_name, password_hash, email_verified)" \
             "values (%s, %s, %s, %s, FALSE)"
@@ -42,7 +42,7 @@ def add_new_user(email, first_name, last_name, password):
     cur.execute(query, (email))
     user_id = cur.fetchone()
 
-    query_lock.release()
+    con.close()
     send_confirm_email(user_id['user_id'], email)
 
     print(f"INFO: Created new account: {email}, f: {first_name}, l: {last_name}, p: {hashed_pwd}")
@@ -61,12 +61,12 @@ def email_confirm(code):
         return 1
 
     # Verify unverified user
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     cur = con.cursor()
     query = "select * from Users where email = %s and email_verified = FALSE and user_id = %s"
     cur.execute(query, (data["email"], int(data["user_id"])))
     result = cur.fetchall()
-    query_lock.release()
+    con.close()
     if len(result) == 1:
         query = "update Users set email_verified = TRUE where user_id = %s"
         changed_rows = cur.execute(query, (int(data["user_id"])))
@@ -78,12 +78,12 @@ def email_confirm(code):
     if email_already_exists(data["email"]):
         return 1
 
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     query = "update Users set email = %s, email_verified = TRUE where user_id = %s"
     changed_rows = cur.execute(query, (data["email"], int(data["user_id"])))
     con.commit()
 
-    query_lock.release()
+    con.close()
     return 0
 
 def verify(token):
@@ -115,28 +115,28 @@ def check_password(email, password):
     (False, -1) if not. (False, -2) if the email wasn't found.
     (False, -3) if the email hasn't been verified, but the combination was correct.
     '''
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     cur = con.cursor()
     query = f"select user_id, password_hash from Users where email = %s"
     cur.execute(query, (email,))
     result = cur.fetchall()
     if len(result) == 0:
-        query_lock.release()
+        con.close()
         return False, -2
     p_hash = result[0]['password_hash']
     correct = bcrypt.checkpw(password.encode('utf-8'), p_hash.encode('utf-8'))
     if not correct:
-        query_lock.release()
+        con.close()
         return False, -1
     query = f"select email_verified from Users where user_id = %s"
     cur.execute(query, (result[0]['user_id'],))
     is_verified = cur.fetchall()[0]['email_verified']
     print(is_verified)
     if not is_verified:
-        query_lock.release()
+        con.close()
         return False, -3
 
-    query_lock.release()
+    con.close()
     return True, result[0]['user_id']
 
 
@@ -146,13 +146,13 @@ def email_already_exists(email):
     :param email: The email address to check
     :return: True if the email already exists. False otherwise.
     '''
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     cur = con.cursor()
     query = f"select * from Users where email = %s"
     cur.execute(query, (email,))
     result = cur.fetchall()
 
-    query_lock.release()
+    con.close()
     if len(result) != 0:
         return True
     else:
@@ -220,14 +220,14 @@ def send_reset(email):
     :return: 0 on success. 1 if the email is not associated with an account.
     '''
 
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     cur = con.cursor()
     query = 'select password_hash from Users where email = %s'
     cur.execute(query, (email,))
 
     result = cur.fetchall()
     if len(result) == 0:
-        query_lock.release()
+        con.close()
         return 1
     code = tokenise.encode_token({'password': result[0]['password_hash']})
 
@@ -273,7 +273,7 @@ def send_reset(email):
                                     target=helpers.send_email)
     email_thread.start()
 
-    query_lock.release()
+    con.close()
     return 0
 
 def reset_password(reset_code, password):
@@ -293,14 +293,14 @@ def reset_password(reset_code, password):
 
     password_hash = decoded['password']
 
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     cur = con.cursor()
     query = 'select email from Users where password_hash = %s'
     cur.execute(query, (password_hash,))
 
     result = cur.fetchall()
     if len(result) == 0:
-        query_lock.release()
+        con.close()
         return 1
 
     email_of_acc = result[0]['email']
@@ -310,7 +310,7 @@ def reset_password(reset_code, password):
     con.commit()
     send_pwd_change_email(email_of_acc)
 
-    query_lock.release()
+    con.close()
     return 0
 
 def verify_reset_code(reset_code):
@@ -328,17 +328,17 @@ def verify_reset_code(reset_code):
 
     password_hash = decoded['password']
 
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     cur = con.cursor()
     query = 'select email from Users where password_hash = %s'
     cur.execute(query, (password_hash,))
 
     result = cur.fetchall()
     if len(result) == 0:
-        query_lock.release()
+        con.close()
         return 1
 
-    query_lock.release()
+    con.close()
     return 0
 
 def send_pwd_change_email(email):

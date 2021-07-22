@@ -184,7 +184,7 @@ export function EditPhoto(props) {
                                         {(provided) => (
                                             <ListGroup.Item as="li" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
                                                 <Row >
-                                                    <Col sm={2}>
+                                                    <Col sm={2} className={"my-auto"}>
                                                         {index === 0 ? "1 (Main)" : index+1}
                                                     </Col>
                                                     <Col sm={4}>
@@ -193,7 +193,7 @@ export function EditPhoto(props) {
                                                     <Col sm={4}>
                                                         <Image src={url} height="100em"/>
                                                     </Col>
-                                                    <Col sm={2}>
+                                                    <Col sm={2} className={"my-auto"}>
                                                         <button type="button" className="close" onClick={() => removePhoto(index)}>
                                                             <span>×</span>
                                                         </button>

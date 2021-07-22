@@ -36,9 +36,11 @@ create table Recipes(
     serving_size int,
     description text,
     calories int, -- rounded to 100th
+    likes int default 0,
     primary key(recipe_id),
     fulltext(name)
 );
+
 
 create table RecipeIngredients(
     recipe_id integer references Recipes(recipe_id),
@@ -82,11 +84,11 @@ create table SubscribedTo(
 
 create table Comments(
     recipe_id integer references Recipes(recipe_id),
-    user_id integer references Users(user_id),
+    by_user_id integer references Users(user_id),
     time_created timestamp,
     time_edited timestamp,
-    comment text,
-    primary key (user_id, time_created)
+    comment_text text,
+    primary key (by_user_id, time_created)
 );
 
 create table Likes(
@@ -94,6 +96,14 @@ create table Likes(
     liked_by_user_id integer references Users(user_id),
     primary key (recipe_id, liked_by_user_id)
 );
+
+create trigger increase_likes before insert on Likes
+for each row
+    update Recipes set likes = likes + 1 where recipe_id=new.recipe_id;
+
+create trigger decrease_likes before delete on Likes
+for each row
+    update Recipes set likes = likes - 1 where recipe_id=old.recipe_id;
 
 -- temporary test account
 insert ignore into Users(email, first_name, last_name, password_hash)

@@ -56,13 +56,13 @@ function RecipeCreateStep({steps, setSteps}) {
                                     {(provided) => (
                                         <ListGroup.Item as="li"  ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
                                             <Form.Row >
-                                                <Col sm={1}>
+                                                <Col sm={1} className={"my-auto"}>
                                                     <span>{index+1}</span>
                                                 </Col>
                                                 <Form.Group as={Col} sm={10} style={{marginBottom:"0"}}>
                                                     <Form.Control placeholder="Details" onChange={e => updateStep(index, "description", e.target.value)} required/>
                                                 </Form.Group>
-                                                <Col sm={1}>
+                                                <Col sm={1} className={"my-auto"}>
                                                     <button type="button" className="close" onClick={() => removeStep(index)}>
                                                         <span>×</span>
                                                     </button>

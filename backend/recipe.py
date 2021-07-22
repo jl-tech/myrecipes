@@ -35,13 +35,13 @@ def add_recipe(token, name, type, time, serving_size, ingredients, steps, photos
     :return:
     '''
 
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     cur = con.cursor()
     # do Recipe table
     # -> get user id from token
     u_id = tokenise.token_to_id(token)
     if u_id < 0:
-        query_lock.release()
+        con.close()
         return -1
 
     # -> do query
@@ -90,7 +90,7 @@ def add_recipe(token, name, type, time, serving_size, ingredients, steps, photos
         cur.execute(query, (int(created_recipe_id), int(index), path, photo_names[index]))
 
     con.commit()
-    query_lock.release()
+    con.close()
 
     return created_recipe_id
 
@@ -111,13 +111,13 @@ def get_recipe_details(recipe_id):
         - photos: array of strings (corresponding to path of image)
         -1 if the recipe id was invalid
     '''
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     cur = con.cursor()
     query = ''' select * from Recipes join Users on user_id = created_by_user_id where recipe_id = %s'''
     cur.execute(query, (int(recipe_id),))
     result = cur.fetchall()
     if len(result) != 1:
-        query_lock.release()
+        con.close()
         return -1
     result = result[0]
 
@@ -156,13 +156,27 @@ def get_recipe_details(recipe_id):
                      'name': row['photo_name']}
         out['photos'].append(curr_dict)
 
-    # likes
-    query = '''select * from Likes where recipe_id=%s'''
-    cur.execute(query, (int(recipe_id),))
-    result = cur.fetchall()
-    out['likes_number'] = len(result)
+    # contributor stats
+    query = """
+            select COUNT(*) 
+            from SubscribedTo 
+            where is_subscribed_to = %s
+        """
+    cur.execute(query, out['created_by_user_id'])
 
-    query_lock.release()
+    out['contributor_subscribers_count'] = cur.fetchall()[0]['COUNT(*)']
+
+    query = """
+                select COUNT(*) 
+                from Recipes 
+                where created_by_user_id = %s
+            """
+    cur.execute(query, out['created_by_user_id'])
+
+    out['contributor_recipes_count'] = cur.fetchall()[0]['COUNT(*)']
+
+    con.close()
+
     return out
 
 def edit_recipe_description(token, recipe_id, name, type, time, serving_size, description):
@@ -181,11 +195,11 @@ def edit_recipe_description(token, recipe_id, name, type, time, serving_size, de
         -3 for inconsistent editor(token) and creator('created_by_user_id' in database)
         1 for success
         '''
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     cur = con.cursor()
     check_result = check_recipe_edit(token, recipe_id)
     if check_result != 0:
-        query_lock.release()
+        con.close()
         return check_result, None
 
 
@@ -197,7 +211,7 @@ def edit_recipe_description(token, recipe_id, name, type, time, serving_size, de
     cur.execute(query, (int(recipe_id),))
     result = cur.fetchall()
 
-    query_lock.release()
+    con.close()
     return 1, result[0]
 
 def edit_recipe_ingredients(token, recipe_id, ingredients):
@@ -212,12 +226,12 @@ def edit_recipe_ingredients(token, recipe_id, ingredients):
         -3 for inconsistent editor(token) and creator('created_by_user_id' in database)
         1 for success
         '''
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     cur = con.cursor()
 
     check_result = check_recipe_edit(token, recipe_id)
     if check_result != 0:
-        query_lock.release()
+        con.close()
         return check_result, None
 
     query_update = '''update RecipeIngredients 
@@ -270,7 +284,7 @@ def edit_recipe_ingredients(token, recipe_id, ingredients):
     cur.execute(query, (int(recipe_id),))
     result = cur.fetchall()
 
-    query_lock.release()
+    con.close()
     return 1, result[0]
 
 
@@ -286,12 +300,12 @@ def edit_recipe_steps(token, recipe_id, steps):
         -3 for inconsistent editor(token) and creator('created_by_user_id' in database)
         1 for success
         '''
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     cur = con.cursor()
 
     check_result = check_recipe_edit(token, recipe_id)
     if check_result != 0:
-        query_lock.release()
+        con.close()
         return check_result, None
 
     query_update = '''update RecipeSteps set step_text=%s where recipe_id=%s and step_no=%s'''
@@ -334,7 +348,7 @@ def edit_recipe_steps(token, recipe_id, steps):
     cur.execute(query, (int(recipe_id),))
     result = cur.fetchall()
 
-    query_lock.release()
+    con.close()
     return 1, result[0]
 
 def edit_recipe_photos(token, recipe_id, photos, photo_names):
@@ -346,13 +360,13 @@ def edit_recipe_photos(token, recipe_id, photos, photo_names):
     :return: 0 on success. -2 if the recipe id couldn't be found. -1 if the
     token was invalid.
     '''
-    query_lock.acquire()
+    con = helpers.get_db_conn()
 
     cur = con.cursor()
 
     check_result = check_recipe_edit(token, recipe_id)
     if check_result != 0:
-        query_lock.release()
+        con.close()
         return check_result, None
 
     # delete existing photos and remove from database
@@ -388,7 +402,7 @@ def edit_recipe_photos(token, recipe_id, photos, photo_names):
     cur.execute(query, (int(recipe_id),))
     result = cur.fetchall()
 
-    query_lock.release()
+    con.close()
     return 0, result[0]
 
 def check_recipe_edit(token, recipe_id):
@@ -399,7 +413,7 @@ def check_recipe_edit(token, recipe_id):
     :return: 0 if OK. -1 if the token is invalid. -2 if the recipe id is invalid.
     -3 if the user isn't authorised to edit this recipe.
     '''
-    cur = con.cursor()
+    cur = helpers.get_db_conn().cursor()
 
     # get user id from token
     u_id = tokenise.token_to_id(token)
@@ -428,12 +442,12 @@ def delete_recipe(token, recipe_id):
     -2 if the recipe id is invalid.
     -3 if the user isn't authorised to delete this recipe.
     '''
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     cur = con.cursor()
     check_result = check_recipe_edit(token, recipe_id)
 
     if check_result != 0:
-        query_lock.release()
+        con.close()
         return check_result
 
     query = '''delete from RecipeIngredients where recipe_id = %s'''
@@ -459,7 +473,7 @@ def delete_recipe(token, recipe_id):
     cur.execute(query, (recipe_id))
 
     con.commit()
-    query_lock.release()
+    con.close()
     return 0
 
 def recipe_nutrition(recipe_id):
@@ -469,14 +483,13 @@ def recipe_nutrition(recipe_id):
     nutrition dictionary
     -1 if the recipe id is invalid.
     '''
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     cur = con.cursor()
     query = '''select ingredient_name, quantity, unit, serving_size from RecipeIngredients RI join Recipes R on RI.recipe_id = R.recipe_id where RI.recipe_id = %s'''
 
     if cur.execute(query, (recipe_id)) == 0:
-        query_lock.release()
+        con.close()
         return -1
-    query_lock.release()
 
     nutrition = {
         'calories': 0,
@@ -527,7 +540,6 @@ def recipe_nutrition(recipe_id):
     for i in nutrition:
         nutrition[i] = round(nutrition[i] / result[0]['serving_size'], 1)
 
-    query_lock.acquire()
     query = """
     update Recipes
     set calories = %s
@@ -535,7 +547,7 @@ def recipe_nutrition(recipe_id):
     """
     cur.execute(query, (round(nutrition['calories'] / 100,  0) * 100, recipe_id ))
     con.commit()
-    query_lock.release()
+    con.close()
     return nutrition
 
 def recipe_comment(token, recipe_id, comment):
@@ -548,28 +560,28 @@ def recipe_comment(token, recipe_id, comment):
     -1 if the token is invalid.
     -2 if the recipe id is invalid.
     '''
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     cur = con.cursor()
     u_id = tokenise.token_to_id(token)
 
     if u_id < 0:
-        query_lock.release()
+        con.close()
         return -1
     
     query = '''select * from Recipes where recipe_id = %s'''
 
     if cur.execute(query, (recipe_id)) == 0:
-        query_lock.release()
+        con.close()
         return -2
 
-    query = '''insert into RecipeComments (recipe_id, user_id, time_created, comment) values (%s, %s, UTC_TIMESTAMP(), %s)'''
+    query = '''insert into Comments (recipe_id, by_user_id, time_created, comment_text) values (%s, %s, UTC_TIMESTAMP(), %s)'''
     cur.execute(query, (recipe_id, u_id, comment))
 
     con.commit()
-    query_lock.release()
+    con.close()
     return 0
 
-def recipe_like(token, recipe_id):
+def recipe_like_toggle(token, recipe_id):
     '''
     :param token: The token of the user
     :param recipe_id: The id of recipe
@@ -578,23 +590,46 @@ def recipe_like(token, recipe_id):
     -1 if the token is invalid.
     -2 if the recipe id is invalid.
     '''
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     cur = con.cursor()
     u_id = tokenise.token_to_id(token)
 
     if u_id < 0:
-        query_lock.release()
+        con.close()
         return -1
     
     query = '''select * from Recipes where recipe_id = %s'''
 
     if cur.execute(query, (recipe_id)) == 0:
-        query_lock.release()
+        con.close()
         return -2
 
-    query = "insert into Likes(recipe_id, liked_by_user_id) values (%s, %s)"
-    cur.execute(query, (int(recipe_id), int(u_id),))
+    query = ''' select * from Likes where liked_by_user_id = %s and recipe_id 
+    = %s'''
+    cur.execute(query, (u_id, recipe_id))
+    result = cur.fetchall()
+    if len(result) == 0:
+        query = "insert into Likes(recipe_id, liked_by_user_id) values (%s, %s)"
+        cur.execute(query, (int(recipe_id), int(u_id),))
+    else:
+        query = "delete from Likes where liked_by_user_id = %s and recipe_id = %s"
+        cur.execute(query, (int(u_id), int(recipe_id)))
 
     con.commit()
-    query_lock.release()
+    con.close()
     return 0
+
+def recipe_is_liked(token, recipe_id):
+    con = helpers.get_db_conn()
+    cur = con.cursor()
+    u_id = tokenise.token_to_id(token)
+
+    if u_id < 0:
+        con.close()
+        return -1
+
+    query = ''' select * from Likes where liked_by_user_id = %s and recipe_id = %s'''
+    cur.execute(query, (u_id, recipe_id))
+    result = cur.fetchall()
+    con.close()
+    return len(result) != 0
