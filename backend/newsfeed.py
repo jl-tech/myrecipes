@@ -7,6 +7,7 @@ import math
 import tokenise
 from constants import *
 from auth import DEFAULT_PIC
+import sys
 
 def subscribe(token, user_id):
     '''
@@ -137,10 +138,10 @@ def get_feed(token, page):
 
     cur = con.cursor()
     query = """
-        select distinct R.recipe_id, R.name, R.creation_time, R.edit_time, R.likes,
+        select distinct R.recipe_id, R.name, R.creation_time, R.edit_time,
             R.time_to_cook, R.type, R.serving_size, RP.photo_path, R.description,
             U.first_name, U.last_name, COALESCE(U.profile_pic_path, '""" + DEFAULT_PIC + """') as profile_pic_path,
-            U.user_id, R.calories
+            U.user_id, R.calories, (select count(*) from Likes L where R.recipe_id = L.recipe_id) as likes
         from Recipes R
             left outer join (select * from RecipePhotos where photo_no = 0) RP on R.recipe_id = RP.recipe_id
             left outer join RecipeIngredients I on R.recipe_id = I.recipe_id
@@ -152,6 +153,7 @@ def get_feed(token, page):
     """
     cur.execute(query, (u_id, int(10), int((int(page) - 1) * 10)))
     result = cur.fetchall()
+    print(result, file=sys.stderr)
 
     query = """
         select COUNT(*) 
