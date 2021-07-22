@@ -15,6 +15,7 @@ import ReactTimeAgo from "react-time-ago";
 
 import { Helmet } from "react-helmet-async";
 import Like from "../Like.svg";
+import Comment from "../comment_black_24dp.svg";
 
 async function requestFeed(token, page) {
     let response = await fetch('http://localhost:5000/newsfeed/get_feed?' + new URLSearchParams({'page': page}), {
@@ -152,25 +153,33 @@ function Feed(props) {
                                 {recipe.description == null ? "No description available" : recipe.description}
                             </Card.Text>
                             <Card.Text>
-                                <Image src={Like} style={{verticalAlign:"middle", width:"2.5%", height:"auto"}}/>
-                                <span style={{fontSize: "125%", verticalAlign: "middle"}}> {recipe.likes} </span>
+                                
                             </Card.Text>
-                            <div style={{textAlign: "center"}}>
-                                <table style={{marginLeft:"auto", marginRight:"auto", borderCollapse:"separate", borderSpacing:"2em 0em"}}><tbody>
-                                <tr>
-                                    <th style={{fontSize:"95%"}}> {recipe.time_to_cook} </th>
-                                    <th style={{fontSize:"95%"}}> {recipe.serving_size} </th>
-                                    <th style={{fontSize:"95%"}}> {recipe.type} </th>
-                                    <th style={{fontSize:"95%"}}> {recipe.calories == null ? "N/A" : recipe.calories }</th>
-                                </tr>
-                                <tr>
-                                    <td style={{fontSize:"80%"}}> MINS </td>
-                                    <td style={{fontSize:"80%"}}> SERVES </td>
-                                    <td style={{fontSize:"80%"}}> MEAL </td>
-                                    <td style={{fontSize:"80%"}}> CAL </td>
-                                </tr>
-                                </tbody></table>
-                            </div>
+                            <Row>
+                                <Col sm={3} />
+                                <Col sm={6} style={{textAlign: "center"}}>
+                                    <table style={{marginLeft:"auto", marginRight:"auto", borderCollapse:"separate", borderSpacing:"2em 0em"}}><tbody>
+                                    <tr>
+                                        <th style={{fontSize:"95%"}}> {recipe.time_to_cook} </th>
+                                        <th style={{fontSize:"95%"}}> {recipe.serving_size} </th>
+                                        <th style={{fontSize:"95%"}}> {recipe.type} </th>
+                                        <th style={{fontSize:"95%"}}> {recipe.calories == null ? "N/A" : recipe.calories }</th>
+                                    </tr>
+                                    <tr>
+                                        <td style={{fontSize:"80%"}}> MINS </td>
+                                        <td style={{fontSize:"80%"}}> SERVES </td>
+                                        <td style={{fontSize:"80%"}}> MEAL </td>
+                                        <td style={{fontSize:"80%"}}> CAL </td>
+                                    </tr>
+                                    </tbody></table>
+                                </Col>
+                                <Col sm={3}>
+                                    <Image src={Like} style={{height:"35%"}}/>
+                                    <span style={{fontSize: "125%", verticalAlign: "middle"}}> {recipe.likes} </span>
+                                    <Image src={Comment} style={{height:"40%"}}/>
+                                    <span style={{fontSize: "125%", verticalAlign: "middle"}}> {recipe.comments} </span>
+                                </Col>
+                            </Row>
 
                         </Card.Body>
 

@@ -8,7 +8,8 @@ import Button from 'react-bootstrap/esm/Button';
 import Card from "react-bootstrap/Card";
 import Image from "react-bootstrap/Image";
 import Pagination from "react-bootstrap/Pagination";
-import Like from "../Like.svg"
+import Like from "../Like.svg";
+import Comment from "../comment_black_24dp.svg";
 import ReactTimeAgo from "react-time-ago";
 
 import Slider from '@material-ui/core/Slider';
@@ -41,17 +42,12 @@ function RecipeList(props) {
                       className={hoveredRecipeId === recipe.recipe_id ? 'shadow-lg' : 'shadow-sm'}>
                     <div style={{color:'black', textDecoration: 'none', cursor:'pointer'}} role="link" onClick={()=>history.push("/recipe/" + recipe.recipe_id)} >
                         <Card.Img variant="Top" style={{width:"100%", height:"9vw", objectFit:"cover"}} alt="Recipe Image" src={recipe.photo_path == null ? "http://127.0.0.1:5000/img/default_recipe.png" : "http://127.0.0.1:5000/img/" + recipe.photo_path}/>
-                        <Card.Body style={{textAlign: "center"}}>
+                        <Card.Body style={{textAlign: "center",paddingBottom:"0"}}>
                             <Card.Title className={"text-truncate"}>{recipe.name}</Card.Title>
                             <Card.Text style={{height:"1.5em", textDecoration: 'none'}}>
                                 <div className="text-truncate">
                                     {recipe.description == null ? "No description available" : recipe.description}
                                 </div>
-
-                            </Card.Text>
-                            <Card.Text>
-                                <Image src={Like} style={{verticalAlign:"middle", width:"4%", height:"auto"}}/>
-                                <span style={{fontSize: "110%", verticalAlign: "middle"}}> {recipe.likes} </span>
 
                             </Card.Text>
                             <div style={{textAlign: "center"}}>
@@ -84,17 +80,29 @@ function RecipeList(props) {
                                 </Link>
                             </Col>
                             <Col sm={10}>
-                                 <Link  to={"/profile/" + recipe.user_id}>
-                                     <div onClick={(e) => e.stopPropagation()}> {recipe.first_name + " " + recipe.last_name} <br/> </div> </Link>
-                                <small className={"text-muted"}>
-
-                                    {"Created "}
-                                    <ReactTimeAgo date={new Date(recipe.creation_time)} locale="en-US"/>
-                                    {recipe.edit_time != null ? <>
-                                            {" | Modified "}
-                                            <ReactTimeAgo date={new Date(recipe.edit_time)} locale="en-US"/> </>
-                                        : ""}
-                                </small>
+                                <Row>
+                                    <Col sm={8} style={{paddingLeft:"0"}} className={"text-truncate"}>
+                                        <Link  to={"/profile/" + recipe.user_id}>
+                                            <div onClick={(e) => e.stopPropagation()}> {recipe.first_name + " " + recipe.last_name} <br/> </div>
+                                        </Link>
+                                    </Col>
+                                    <Col sm={4} style={{textAlign:"right"}}>
+                                        <Image src={Like} style={{height:"50%"}}/>
+                                        <span style={{fontSize: "110%", verticalAlign: "middle"}}> {recipe.likes} </span>
+                                        <Image src={Comment} style={{height:"60%"}} />
+                                        <span style={{fontSize: "110%", verticalAlign: "middle"}}> {recipe.comments} </span>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <small className={"text-muted"}>
+                                        {"Created "}
+                                        <ReactTimeAgo date={new Date(recipe.creation_time)} locale="en-US"/>
+                                        {recipe.edit_time != null ? <>
+                                                {" | Modified "}
+                                                <ReactTimeAgo date={new Date(recipe.edit_time)} locale="en-US"/> </>
+                                            : ""}
+                                    </small>
+                                </Row>
                             </Col>
                         </Row>
                     </Card.Footer>

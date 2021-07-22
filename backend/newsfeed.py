@@ -141,7 +141,8 @@ def get_feed(token, page):
         select distinct R.recipe_id, R.name, R.creation_time, R.edit_time,
             R.time_to_cook, R.type, R.serving_size, RP.photo_path, R.description,
             U.first_name, U.last_name, COALESCE(U.profile_pic_path, '""" + DEFAULT_PIC + """') as profile_pic_path,
-            U.user_id, R.calories, (select count(*) from Likes L where R.recipe_id = L.recipe_id) as likes
+            U.user_id, R.calories, (select count(*) from Likes L where R.recipe_id = L.recipe_id) as likes,
+            (select count(*) from Comments C where R.recipe_id = C.recipe_id) as comments
         from Recipes R
             left outer join (select * from RecipePhotos where photo_no = 0) RP on R.recipe_id = RP.recipe_id
             left outer join RecipeIngredients I on R.recipe_id = I.recipe_id
