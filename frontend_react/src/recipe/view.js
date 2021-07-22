@@ -92,7 +92,7 @@ function RecipeView(props) {
             setServing(response.serving_size);
             setDescription(response.description);
             setCalories(response.calories)
-            setLikes(response.likes_number)
+            setLikes(response.likes)
 
             let stepsP = [];
             for (let step of response.steps) {

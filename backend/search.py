@@ -23,7 +23,7 @@ def do_search(name, type, serving_size, time_to_cook, ingredients, step_key_word
 
     query = """
         select distinct R.recipe_id, R.name, R.creation_time, R.edit_time,
-            R.time_to_cook, R.type, R.serving_size, RP.photo_path, R.description,
+            R.time_to_cook, R.type, R.serving_size, RP.photo_path, R.description, R.likes,
             U.first_name, U.last_name, COALESCE(U.profile_pic_path, '""" + DEFAULT_PIC + """') as profile_pic_path,
             U.user_id, R.calories
         from Recipes R

@@ -83,7 +83,6 @@ function SearchResults(props) {
     useEffect(() => {
         if (!fetched) processQuery();
     }, []);
-
     if (success) {
         return (
             <>
