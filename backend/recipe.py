@@ -393,7 +393,7 @@ def check_recipe_edit(token, recipe_id):
     :return: 0 if OK. -1 if the token is invalid. -2 if the recipe id is invalid.
     -3 if the user isn't authorised to edit this recipe.
     '''
-    cur = con.cursor()
+    cur = helpers.get_db_conn().cursor()
 
     # get user id from token
     u_id = tokenise.token_to_id(token)
@@ -554,7 +554,7 @@ def recipe_comment(token, recipe_id, comment):
         con.close()
         return -2
 
-    query = '''insert into RecipeComments (recipe_id, user_id, time_created, comment) values (%s, %s, UTC_TIMESTAMP(), %s)'''
+    query = '''insert into Comments (recipe_id, by_user_id, time_created, comment_text) values (%s, %s, UTC_TIMESTAMP(), %s)'''
     cur.execute(query, (recipe_id, u_id, comment))
 
     con.commit()
