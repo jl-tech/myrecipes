@@ -13,8 +13,8 @@ import Cookie from 'universal-cookie';
 import { EditPhoto } from './viewphoto.js';
 import RecipeDelete from "./delete.js";
 import Dropdown from "react-bootstrap/Dropdown";
-import NotLiked from "../iconmonstr-heart-thin.svg";
-import Liked from "../iconmonstr-favorite-3.svg";
+import NotLiked from "../NotLiked.svg";
+import Liked from "../Like.svg";
 import Image from "react-bootstrap/Image";
 import {OverlayTrigger} from "react-bootstrap";
 import {Popover} from "@material-ui/core";
@@ -178,16 +178,21 @@ function RecipeViewDesc(props) {
     const [showDelete, setShowDelete] = useState(false);
     const deleteShow = () => setShowDelete(true);
 
+    const [errorShow, setErrorShow] = useState(false)
+    const [errorText, setErrorText] = useState("Unknown error")
 
 
     return (
         <>
+            <Alert show={errorShow} variant="warning" style={{marginTop:"1em"}} onClose={() => setErrorShow(false)} dismissible>
+                                   {errorText}
+            </Alert>
         <Row>
             <Col sm={1}>
 
             </Col>
             <Col sm={1} className={"mx-auto my-auto"} style={{textAlign: 'center'}}>
-                <RecipeViewLikes loggedIn={props.loggedIn} recipeId={props.recipeId} likes={props.likes} setLikes={props.setLikes}/>
+                <RecipeViewLikes setErrorShow={setErrorShow} setErrorText={setErrorText} loggedIn={props.loggedIn} recipeId={props.recipeId} likes={props.likes} setLikes={props.setLikes}/>
 
             </Col>
             <Col sm={8}>

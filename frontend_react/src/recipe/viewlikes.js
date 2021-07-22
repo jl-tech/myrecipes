@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from "react";
 import Cookie from "universal-cookie";
 import Image from "react-bootstrap/Image";
-import Liked from "../iconmonstr-favorite-3.svg";
-import NotLiked from "../iconmonstr-heart-thin.svg";
+import Liked from "../Like.png";
+import NotLiked from "../NotLiked.svg";
+
 import Col from "react-bootstrap/Col";
 import {Tooltip} from "@material-ui/core";
 import Alert from "react-bootstrap/Alert";
@@ -50,14 +51,12 @@ function RecipeViewLikes(props) {
     const [likeSuccess, setLikeSuccess] = useState(false)
     const [likeHovered, setLikeHovered] = useState(false)
     const [likeClicked, setLikeClicked] = useState(false)
-    const [errorShow, setErrorShow] = useState(false)
-    const [errorText, setErrorText] = useState("Unknown error")
 
     const cookie = new Cookie();
 
     function showError(errorText) {
-        setErrorShow(true)
-        setErrorText(errorText)
+        props.setErrorShow(true)
+        props.setErrorText(errorText)
     }
 
     async function processLiked() {
@@ -99,8 +98,9 @@ function RecipeViewLikes(props) {
     }, []);
     return (
         <>
+            <br/>
             <Image
-                    style={{cursor: "pointer", width: likeClicked ? "40%" : "50%", height:"auto"}}
+                    style={{cursor: "pointer", width: likeClicked ? "50%" : "60%", height:"auto", marginTop: likeClicked ? "0.4em": null, marginLeft: likeClicked ? "0.05em" : null}}
                     onMouseLeave={()=>setLikeClicked(false)}
                     onMouseDown={props.loggedIn ? ()=>setLikeClicked(true) : null}
                     onMouseUp={props.loggedIn ? ()=>setLikeClicked(false) : null}
@@ -108,10 +108,7 @@ function RecipeViewLikes(props) {
                     onClick={props.loggedIn ? () => handleLike() : ()=>showError("Log in to like this recipe")}
             />
 
-                    <h4> { props.likes}</h4>
-            <Alert show={errorShow} variant="danger" style={{marginTop:"1em"}} onClose={() => setErrorShow(false)} dismissible>
-                                        {errorText}
-            </Alert>
+                    <p style={{fontSize: "150%"}}> { props.likes}</p>
         </>
     )
 }
