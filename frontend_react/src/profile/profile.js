@@ -151,16 +151,8 @@ function Profile(props) {
                     </div>
                     </Col>
                 </Row>
-                <Row style={{textAlign:"center"}}>
-                    <Col>
-                        <br/>
-                        <h2> Recipes </h2>
-                        <br/>
-                    </Col>
-                </Row>
-                <Row>
-                    <ProfileRecipes userID={id}/>
-                </Row>
+                <br />
+                <ProfileRecipes userID={id} loggedIn={props.loggedIn}/>
             </Container>
             </>
         );

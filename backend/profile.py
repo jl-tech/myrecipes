@@ -197,27 +197,43 @@ def get_profile_recipe(user_id):
                 select R.*, U.first_name, U.last_name,
                     COALESCE(U.profile_pic_path, '""" + DEFAULT_PIC + """"') as profile_pic_path,
                     U.user_id, (select count(*) from Likes L where R.recipe_id = L.recipe_id) as likes,
-                    (select count(*) from Comments C where R.recipe_id = C.recipe_id) as comments
+                    (select count(*) from Comments C where R.recipe_id = C.recipe_id) as comments,
+                    RP.photo_path
                 from Recipes R
                     join Users U on U.user_id = R.created_by_user_id
+                    left outer join (select * from RecipePhotos where photo_no = 0) RP on R.recipe_id = RP.recipe_id
                 where created_by_user_id=%s
                 order by creation_time desc
             """
     cur.execute(query, (int(user_id)),)
     data = cur.fetchall()
-    out = []
-    for recipe in data:
-        dic = recipe
-        query2 = "select * from RecipePhotos where recipe_id=%s and photo_no=%s"
-        cur.execute(query2, (int(recipe['recipe_id']), 0))
-        photo = cur.fetchall()
-        if len(photo) != 0:
-            dic['photo_path'] = photo[0]['photo_path']
-        else:
-            dic['photo_path'] = None
-        out.append(dic)
     con.close()
-    return out
+    return data
+
+def get_profile_recipe_liked(token, user_id):
+    u_id = token_to_id(token)
+    if u_id < 0:
+        return -1
+
+    con = helpers.get_db_conn()
+    cur = con.cursor()
+    query = """
+                select R.*, U.first_name, U.last_name,
+                    COALESCE(U.profile_pic_path, '""" + DEFAULT_PIC + """"') as profile_pic_path,
+                    U.user_id, (select count(*) from Likes L where R.recipe_id = L.recipe_id) as likes,
+                    (select count(*) from Comments C where R.recipe_id = C.recipe_id) as comments,
+                    RP.photo_path
+                from Recipes R
+                    join Users U on U.user_id = R.created_by_user_id
+                    left outer join (select * from RecipePhotos where photo_no = 0) RP on R.recipe_id = RP.recipe_id
+                    join Likes L on R.recipe_id = L.recipe_id
+                where created_by_user_id=%s and liked_by_user_id=%s
+                order by creation_time desc
+            """
+    cur.execute(query, (int(user_id), int(u_id)),)
+    data = cur.fetchall()
+    con.close()
+    return data
 
 def get_times_liked(token, user_id):
     if token_to_id(token) < 0:

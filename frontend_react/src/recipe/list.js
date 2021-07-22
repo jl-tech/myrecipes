@@ -48,7 +48,7 @@ function RecipeList(props) {
                                     {recipe.description == null ? "No description available" : recipe.description}
                             </Card.Text>
                             <div style={{textAlign: "center"}}>
-                                <table style={{marginLeft:"auto", marginRight:"auto", borderCollapse:"separate", borderSpacing:"2em 0em"}}><tbody>
+                                <table style={{marginLeft:"auto", marginRight:"auto", borderCollapse:"separate", borderSpacing:"1em 0em"}}><tbody>
                                 <tr>
                                     <th style={{fontSize:"95%"}}> {recipe.time_to_cook} </th>
                                     <th style={{fontSize:"95%"}}> {recipe.serving_size} </th>
@@ -70,7 +70,7 @@ function RecipeList(props) {
                     <Card.Footer
                         className={"text-truncate"}>
                         <Row>
-                            <Col sm={2} className={"mx-auto my-auto"}>
+                            <Col sm={2} className={"mx-auto my-auto"} style={{paddingLeft:"0.5em"}}>
 
                                 <Link  to={"/profile/" + recipe.user_id} >
                                     <Image  onClick={(e) => e.stopPropagation()} src={"http://127.0.0.1:5000/img/" + recipe.profile_pic_path} alt="Profile Picture" roundedCircle width="40em"/>
@@ -270,8 +270,8 @@ function RecipeList(props) {
         </Col>
         <Col sm={9}>
         <Row>
-            <Col sm={8} />
-            <Col sm={4}>
+            <Col sm={7} />
+            <Col sm={5}>
             <Form.Group as={Row}>
                 <Form.Label column sm={4}>Sort by:</Form.Label>
                 <Col sm={8}>

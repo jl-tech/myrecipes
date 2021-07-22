@@ -105,6 +105,21 @@ def route_profile_recipes():
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response, 200
 
+@PROFILE.route("/recipes/liked", methods=['GET'])
+def route_profile_recipes_liked():
+    user_id = request.args.get('user_id')
+
+    result = profile.get_profile_recipe_liked(request.headers.get('Authorization'), user_id)
+
+    if result == -1:
+        response = jsonify({'error': 'Invalid token'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 400
+    else:
+        response = jsonify(result)
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 200
+
 @PROFILE.route("/times_liked", methods=['GET'])
 def route_times_liked():
     token = request.headers.get("Authorization")
