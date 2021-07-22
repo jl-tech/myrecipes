@@ -20,9 +20,20 @@ def talk(token, messages):
     '''
     user_id = token
 
+    con = helpers.get_db_conn()
+    cur = con.cursor()
+
+    query = "select * from Users where user_id=%s"
+    cur.execute(query, (user_id,))
+    result = cur.fetchall()
+    first_name = result[0]['first_name']
+
     response = connect_dialogflow_api("123456789" + str(user_id), messages)
 
     react_message = str.format(response.query_result.fulfillment_text)
+
+    if str.format(response.query_result.intent.display_name) == "Welcome":
+        react_message = react_message + ', ' + first_name + '?'
 
     return react_message
 
