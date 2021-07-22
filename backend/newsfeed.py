@@ -133,7 +133,7 @@ def get_feed(token, page):
             left outer join RecipeSteps S on I.recipe_id = S.recipe_id
             join Users U on R.created_by_user_id = U.user_id 
         where R.created_by_user_id in (select is_subscribed_to from SubscribedTo where user_id = %s)
-        order by DATE(R.creation_time) desc, TIME(R.creation_time) desc-- TODO number of times liked
+        order by DATE(R.creation_time) desc, (select count(*) from Likes L where R.recipe_id = L.recipe_id) desc, TIME(R.creation_time) desc
         limit %s offset %s
     """
     cur.execute(query, (u_id, int(10), int((int(page) - 1) * 10)))
