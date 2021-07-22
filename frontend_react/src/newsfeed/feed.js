@@ -173,7 +173,7 @@ function Feed(props) {
                                     </tr>
                                     </tbody></table>
                                 </Col>
-                                <Col sm={3}>
+                                <Col sm={3} style={{textAlign:"right"}}>
                                     <Image src={Like} style={{height:"35%"}}/>
                                     <span style={{fontSize: "125%", verticalAlign: "middle"}}> {recipe.likes} </span>
                                     <Image src={Comment} style={{height:"40%"}}/>

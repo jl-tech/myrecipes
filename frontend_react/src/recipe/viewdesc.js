@@ -188,14 +188,8 @@ function RecipeViewDesc(props) {
                                    {errorText}
             </Alert>
         <Row>
-            <Col sm={1}>
-
-            </Col>
-            <Col sm={1} className={"mx-auto my-auto"} style={{textAlign: 'center'}}>
-                <RecipeViewLikes setErrorShow={setErrorShow} setErrorText={setErrorText} loggedIn={props.loggedIn} recipeId={props.recipeId} likes={props.likes} setLikes={props.setLikes}/>
-
-            </Col>
-            <Col sm={8}>
+            <Col sm={3} />
+            <Col sm={6}>
                 <Row>
                     <Col>
                         <div style={{textAlign:"center"}}>
@@ -222,8 +216,12 @@ function RecipeViewDesc(props) {
                     </Col>
                 </Row>
             </Col>
-            <Col sm={2}>
-                {props.editable ? <>
+            
+            {props.editable ? <>
+                <Col sm={1} style={{textAlign: 'center'}}>
+                    <RecipeViewLikes setErrorShow={setErrorShow} setErrorText={setErrorText} loggedIn={props.loggedIn} recipeId={props.recipeId} likes={props.likes} setLikes={props.setLikes}/>
+                </Col>
+                <Col sm={2}>
                 <Row>
                     <Col style={{textAlign:"right"}}>
                         <Button variant="outline-secondary" onClick={photoEditShow} size="sm">Edit photos</Button>
@@ -245,9 +243,14 @@ function RecipeViewDesc(props) {
                             </Dropdown.Menu>
                         </Dropdown>
                     </Col>
-                </Row></>
-                    : <></> }
-            </Col>
+                </Row>
+                </Col></>
+                :
+                <>
+                <Col sm={3} style={{textAlign:"right"}}>
+                    <RecipeViewLikes setErrorShow={setErrorShow} setErrorText={setErrorText} loggedIn={props.loggedIn} recipeId={props.recipeId} likes={props.likes} setLikes={props.setLikes}/>
+                </Col>
+            </>}
         </Row>
         <EditDesc showDescEdit={showDescEdit} setShowDescEdit={setShowDescEdit} recipeId={props.recipeId} recipeName={props.recipeName} setRecipeName={props.setRecipeName} time={props.time} setTime={props.setTime} serving={props.serving} setServing={props.setServing} mealType={props.mealType} setMealType={props.setMealType} setEditedAt={props.setEditedAt} description={props.description} setDescription={props.setDescription} />
         <EditPhoto showPhotoEdit={showPhotoEdit} setShowPhotoEdit={setShowPhotoEdit} recipeId={props.recipeId} photos={props.photos} setPhotos={props.setPhotos} setEditedAt={props.setEditedAt}/>

@@ -98,17 +98,15 @@ function RecipeViewLikes(props) {
     }, []);
     return (
         <>
-            <br/>
             <Image
-                    style={{cursor: "pointer", width: likeClicked ? "40%" : "50%", height:"auto", marginTop: likeClicked ? "0.2em": null, marginLeft: likeClicked ? "0.05em" : null}}
+                    style={{cursor: "pointer", height: likeClicked ? "20%" : "25%", width:"auto", marginTop: likeClicked ? "0.2em": null, marginLeft: likeClicked ? "0.05em" : null}}
                     onMouseLeave={()=>setLikeClicked(false)}
                     onMouseDown={props.loggedIn ? ()=>setLikeClicked(true) : null}
                     onMouseUp={props.loggedIn ? ()=>setLikeClicked(false) : null}
                     src={liked ? Liked : NotLiked}
                     onClick={props.loggedIn ? () => handleLike() : ()=>showError("Log in to like this recipe")}
             />
-
-                    <p style={{fontSize: "150%", color: liked ? "tomato" : "black", marginTop: likeClicked ? "0.15em": null}}> { props.likes}</p>
+            <span style={{fontSize: "150%", color: liked ? "tomato" : "black", marginTop: likeClicked ? "0.15em": null, verticalAlign: "middle"}}> { props.likes}</span>
         </>
     )
 }
