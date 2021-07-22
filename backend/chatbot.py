@@ -7,6 +7,7 @@ os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "static\chatbot_client\comp3900-w
 project_id = "comp3900-w16a-goodname"
 language_code = "en-US"
 
+
 def talk(token, messages):
     '''
     user_id = token_to_id(token)
@@ -18,7 +19,23 @@ def talk(token, messages):
     return react
 
 
-def connect_dialogflow_api(session_id, texts):
+def connect_dialogflow_api(session_id, text):
+    session_client = dialogflow.SessionsClient()
+    session = session_client.session_path(project_id, session_id)
+
+    text_input = dialogflow.TextInput(text=text, language_code=language_code)
+
+    query_input = dialogflow.QueryInput(text=text_input)
+
+    response = session_client.detect_intent(
+        request={"session": session, "query_input": query_input}
+    )
+
+    return str.format(response.query_result.fulfillment_text)
+
+
+
+def test(session_id, texts):
     """Returns the result of detect intent with texts as inputs.
 
     Using the same `session_id` between requests allows continuation
@@ -51,4 +68,4 @@ def connect_dialogflow_api(session_id, texts):
 
     return 0
 
-talk(1, ["your name?"])
+print(talk(1, "nice to meet u"))

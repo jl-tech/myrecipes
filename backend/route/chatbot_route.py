@@ -9,4 +9,4 @@ def route_chatbot():
     token = request.headers.get("Authorization")
     data = request.get_json()
     result = chatbot.talk(token, data['messages'])
-    return results
+    return result
