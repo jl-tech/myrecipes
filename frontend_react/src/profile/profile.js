@@ -113,6 +113,25 @@ function Profile(props) {
                 <Row style={{textAlign:"center"}}>
                     <Col>
                     <h1>{firstName} {lastName}</h1>
+                        {Number(props.currId) === Number(id) ?
+                             <div style={{
+                                                marginLeft:"auto",
+                                                marginRight: "auto",
+                                                fontSize: "85%",
+                                                backgroundColor: "tomato",
+                                                color: "white",
+                                                borderRadius: "5px 5px 5px 5px",
+                                                height: "1.5em",
+                                                width: "5em",
+                                                marginBottom:"1em"
+
+                                            }}>
+                                 YOU
+                                  </div>
+
+                            :
+                            null
+                        }
                     </Col>
                 </Row>
                 <Row style={{textAlign:"center"}}>
@@ -152,7 +171,7 @@ function Profile(props) {
                     </Col>
                 </Row>
                 <br />
-                <ProfileRecipes userID={id} loggedIn={props.loggedIn}/>
+                <ProfileRecipes userID={id} loggedIn={props.loggedIn} loggedInUID={props.currId}/>
             </Container>
             </>
         );

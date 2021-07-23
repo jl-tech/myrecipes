@@ -76,19 +76,19 @@ function ProfileRecipes(props) {
     useEffect(() => {
         if (!fetched) processId();
     }, []);
-
+    console.log(props.loggedInUID)
     if (success) {
         return (
              <>
             <Tab.Container defaultActiveKey="all" >
                 <Row style={{borderRadius: "10px 10px 10px 10px", backgroundColor: "#F7F7F7", width: "100%"}} className={"shadow-sm justify-content-center"} >
                     <Nav variant="pills" >
-                            <Nav.Link eventKey="all">All Recipes</Nav.Link>
-                            {props.loggedIn ?
+                            <Nav.Link eventKey="all">{Number(props.loggedInUID) === Number(props.userID) ? "Your Recipes (" + recipeData.length + ")": "All Recipes (" + recipeData.length + ")" }</Nav.Link>
+                            {props.loggedIn && Number(props.loggedInUID) !== Number(props.userID) ?
                             <Nav.Link eventKey="liked">Recipes You Liked ({likedRecipeData.length})</Nav.Link>
                             :null}
-                            <Nav.Link eventKey="they_liked">Recipes They Liked (--)</Nav.Link>
-                            <Nav.Link eventKey="comments">Comments </Nav.Link>
+                            <Nav.Link eventKey="they_liked"> {Number(props.loggedInUID) === Number(props.userID) ? "Your Likes (--)" : "Recipes They Liked (--)"}</Nav.Link>
+                            <Nav.Link eventKey="comments">{Number(props.loggedInUID) === Number(props.userID) ? "Your Comments (--)" : "Comments (--)"} </Nav.Link>
                         </Nav>
                     </Row>
                 <Row style={{marginTop:"1em"}}>
