@@ -40,6 +40,7 @@ def talk(token, messages):
         react_message = react_message + ', ' + first_name + '?'
 
     elif str.format(response.query_result.intent.display_name) == "Search":
+        print(react_message)
         result = do_search(react_message, None, None, None, None, None)
         if len(result) == 0:
             return "I am sorry, " + first_name + ". No result find for given recipe."
