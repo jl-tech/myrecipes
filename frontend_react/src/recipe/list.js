@@ -29,6 +29,7 @@ function RecipeList(props) {
     const [activeCalorieFilters, setActiveCalorieFilters] = useState([Math.min(...calorieFilters), Math.max(...calorieFilters)]);
     const [activePage, setActivePage] = useState(0);
     const [hoveredRecipeId, setHoveredRecipeId] = useState(-1)
+    const isSearchPage = useLocation().pathname.includes('/search')
     const recipesPerPage = 4;
     const history = useHistory();
 
@@ -235,7 +236,9 @@ function RecipeList(props) {
         filterRecipes();
     }, [recipeData, activeMealFilter, activeServingFilters, activeTimeFilters, activeCalorieFilters])
 
-    return (<>
+    if (recipeData.length !== 0){
+    return (
+        <>
         <Col sm={3}>
         <Row>
             <h4>Filter</h4><br/>
@@ -276,7 +279,7 @@ function RecipeList(props) {
                 <Form.Label column sm={4}>Sort by:</Form.Label>
                 <Col sm={8}>
                 <Form.Control as="select" onChange={(e) => sortChange(e)}>
-                { useLocation().pathname.includes('/search') ? <option value="0"> Relevance</option> : null}
+                { isSearchPage ? <option value="0"> Relevance</option> : null}
                 <option value="1">Date created</option>
                 <option value="2">Date modified</option>
                 <option value="3">Likes</option>
@@ -299,7 +302,21 @@ function RecipeList(props) {
             </Col>
         </Row>
         </Col>
-        </>);
+            </>
+    );
+    }
+    else {
+        return (
+          <>
+              <div style={{textAlign: "center", width: "100%"}}>
+              <h4> Nothing to show</h4>
+                  </div>
+          </>
+        );
+    }
+
+
+
 }
 
 export default RecipeList;
