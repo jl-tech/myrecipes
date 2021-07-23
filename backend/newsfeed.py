@@ -128,6 +128,10 @@ def is_subscribed(token, user_id):
     return len(result) != 0
 
 def get_feed(token, page):
+
+    sub = 8
+    rec = 2
+
     con = helpers.get_db_conn()
     u_id = tokenise.token_to_id(token)
     if u_id < 0:
@@ -143,14 +147,12 @@ def get_feed(token, page):
             (select count(*) from Comments C where R.recipe_id = C.recipe_id) as comments
         from Recipes R
             left outer join (select * from RecipePhotos where photo_no = 0) RP on R.recipe_id = RP.recipe_id
-            left outer join RecipeIngredients I on R.recipe_id = I.recipe_id
-            left outer join RecipeSteps S on I.recipe_id = S.recipe_id
             join Users U on R.created_by_user_id = U.user_id 
         where R.created_by_user_id in (select is_subscribed_to from SubscribedTo where user_id = %s)
         order by DATE(R.creation_time) desc, (select count(*) from Likes L where R.recipe_id = L.recipe_id) desc, TIME(R.creation_time) desc
         limit %s offset %s
     """
-    cur.execute(query, (u_id, int(10), int((int(page) - 1) * 10)))
+    cur.execute(query, (u_id, int(sub), int((int(page) - 1) * sub)))
     result = cur.fetchall()
 
     query = """
@@ -162,7 +164,21 @@ def get_feed(token, page):
     count = cur.fetchall()
 
     con.close()
-    return result, math.ceil(count[0]['COUNT(*)'] / 10)
+
+    result2 = get_recommendations(u_id, page, rec)
+
+    h1 = result[:len(result)//2]
+    h2 = result[len(result)//2:]
+    g1 = result2[:len(result2)//2]
+    g2 = result2[len(result2)//2:]
+    result3 = []
+    for i in range(len(result2)):
+        result3 = result3 + result[len(result)//len(result2)*i:len(result)//len(result2)*(i+1)]
+        result3 = result3 + [result2[i]]
+    result3 = result3 + result[len(result)//len(result2)*len(result2):]
+
+
+    return result3, math.ceil(count[0]['COUNT(*)'] / sub)
 
 def get_subscriptions(token):
     
@@ -208,3 +224,27 @@ def get_subscriptions(token):
     
     con.close()
     return result[0]
+
+def get_recommendations(u_id, page, rec):
+    con = helpers.get_db_conn()
+    cur = con.cursor()
+    query = """
+        select distinct R.recipe_id, R.name, R.creation_time, R.edit_time,
+            R.time_to_cook, R.type, R.serving_size, RP.photo_path, R.description,
+            U.first_name, U.last_name, COALESCE(U.profile_pic_path, '""" + DEFAULT_PIC + """') as profile_pic_path,
+            U.user_id, R.calories, (select count(*) from Likes L where R.recipe_id = L.recipe_id) as likes,
+            (select count(*) from Comments C where R.recipe_id = C.recipe_id) as comments, TRUE as recommended, S.time
+        from Recipes R
+            left outer join (select * from RecipePhotos where photo_no = 0) RP on R.recipe_id = RP.recipe_id
+            join Users U on R.created_by_user_id = U.user_id 
+            right outer join SearchHistory S on R.name like concat(%s, S.search_term, %s)
+        where R.created_by_user_id not in (select is_subscribed_to from SubscribedTo where user_id = %s)
+            and R.created_by_user_id <> %s
+        order by DATE(S.time) desc, DATE(R.creation_time) desc, (select count(*) from Likes L where R.recipe_id = L.recipe_id) desc, TIME(R.creation_time) desc
+        limit %s offset %s
+    """
+    cur.execute(query, ('%', '%', u_id, u_id, int(rec), int((int(page) - 1) * rec)))
+    result = cur.fetchall()
+
+    con.close()
+    return result
