@@ -63,7 +63,7 @@ def talk(token, messages):
         result = do_search(name, meal_type, serving_size, None, ingredient, step)
         if len(result) == 0:
             return "I am sorry, " + first_name + ". No result find for given recipe."
-        return "go to http://localhost:3000/search?name=" + result[0]['name']
+        return "go to http://localhost:3000/recipe/" + str(result[0]['recipe_id'])
 
     return react_message
 
