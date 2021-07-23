@@ -23,6 +23,13 @@ Password: `myrecipes`
 1. Install pip3 with `sudo apt-get install python3-pip`
 2. `cd` to project directory, then install requirements with `pip3 install -r requirements.txt`
 
+### Dialogflow
+1. Install Google Cloud SDK with `curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-347.0.0-linux-x86_64.tar.gz`
+2. Extract the contents of the file to any location on your file system (preferably your Home directory)
+3. Add Cloud SDK tools to `PATH`, reopen Terminal
+4. Run gcloud init to initialize the SDK:`./google-cloud-sdk/bin/gcloud init`
+5. Install the Dialogflow client library with `pip install google-cloud-dialogflow`
+
 ### Frontend
 1. Install nodejs with `sudo apt-get install nodejs`
 2. Install npm with `sudo apt-get install npm`
