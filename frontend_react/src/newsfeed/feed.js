@@ -68,11 +68,13 @@ function Feed(props) {
     const [hoveredRecipeId, setHoveredRecipeId] = useState(-1)
     const [activePage, setActivePage] = useState(null);
     const [hoveredProfile, setHoveredProfile] = useState(false)
-    const [hideRecommended, setHideRecommended] = useState(false)
+
+    const [recommendedTagHovered, setRecommendedTagHovered] = useState(false)
 
     let { page } = useParams();
     const cookie = new Cookie()
     const history = useHistory()
+    const [hideRecommended, setHideRecommended] = useState(cookie.get('recommended_hidden'))
 
     async function getFeed() {
         let page_ = /^\d+$/.test(page) ? page : 1;
@@ -113,6 +115,19 @@ function Feed(props) {
         if (!fetchedProfile) getProfile();
     }, []);
 
+
+    function handleClickTag(e) {
+        e.stopPropagation()
+        doHideRecommended()
+    }
+    function doHideRecommended() {
+        setHideRecommended(true)
+        cookie.set('recommended_hidden', true)
+    }
+    function doShowRecommended() {
+        setHideRecommended(false)
+        cookie.set('recommended_hidden', false)
+    }
 
     function generateCard(recipe, index) {
         if (hideRecommended && recipe.recommended) {
@@ -170,13 +185,17 @@ function Feed(props) {
                                             <div style={{
                                                 marginLeft: "2em",
                                                 fontSize: "85%",
-                                                backgroundColor: "tomato",
+                                                backgroundColor: recommendedTagHovered ? "#ff751a" : "tomato",
                                                 color: "white",
                                                 borderRadius: "5px 5px 5px 5px",
                                                 height: "1.5em",
                                                 width: "10em"
-                                            }}>
-                                                RECOMMENDED
+                                            }}
+                                                 onMouseEnter={()=>setRecommendedTagHovered(true)}
+                                                 onMouseLeave={()=>setRecommendedTagHovered(false)}
+                                                 onClick={ recommendedTagHovered ? (e)=>handleClickTag(e) : null}
+                                            >
+                                                {recommendedTagHovered ? "Hide Recommended" : "RECOMMENDED"}
                                             </div>
                                         </Col>
                                         : <Col sm={3}/>}
@@ -315,7 +334,7 @@ function Feed(props) {
                 </Row>
                     <Row className={"mx-auto align-content-center"} style={{textAlign:"center"}}>
                         <Col>
-                            <Button onClick={()=>setHideRecommended(!hideRecommended)}> {hideRecommended ? "Show Recommended": "Hide Recommended"} </Button>
+                            <Button onClick={hideRecommended ? ()=>doShowRecommended() : ()=>doHideRecommended()}> {hideRecommended ? "Show Recommended": "Hide Recommended"} </Button>
                         </Col>
                     </Row>
                     <br/>
