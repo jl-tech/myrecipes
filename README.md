@@ -29,6 +29,7 @@ Password: `myrecipes`
 3. Add Cloud SDK tools to your `PATH`
 4. Run the script (from the root of the folder you extracted in the last step) using this command: `./google-cloud-sdk/install.sh`
 5. Run gcloud init to initialize the SDK:`./google-cloud-sdk/bin/gcloud init`
+6. Install the Dialogflow client library with `pip install google-cloud-dialogflow`
 
 ### Frontend
 1. Install nodejs with `sudo apt-get install nodejs`
