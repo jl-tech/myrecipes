@@ -120,6 +120,15 @@ def route_profile_recipes_liked():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
 
+@PROFILE.route("/recipes/profileuserliked", methods=['GET'])
+def route_profile_recipes_profileuser_liked():
+    user_id = request.args.get('user_id')
+
+    result = profile.get_profile_recipe_profileuser_liked(user_id)
+    response = jsonify(result)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response, 200
+
 @PROFILE.route("/times_liked", methods=['GET'])
 def route_times_liked():
     token = request.headers.get("Authorization")

@@ -43,10 +43,27 @@ async function requestLikedRecipes(token, user_id) {
     else throw new Error(responseJson.error);
 }
 
+async function requestProfileUserLikedRecipes(token, user_id) {
+    let response = await fetch('http://localhost:5000/profile/recipes/profileuserliked?' + new URLSearchParams({'user_id': user_id}), {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    }).catch(e => {
+        throw new Error(e);
+    });
+
+    let responseJson = await response.json();
+
+    if (response.ok) return responseJson;
+    else throw new Error(responseJson.error);
+}
+
 
 function ProfileRecipes(props) {
     const [recipeData, setRecipeData] = useState([])
     const [likedRecipeData, setLikedRecipeData] = useState([])
+    const [profileUserLikedRecipeData, setProfileUserLikedRecipeData] = useState([])
     const [fetched, setFetched] = useState(false)
     const [success, setSuccess] = useState(false)
     const cookie = new Cookie();
@@ -69,6 +86,15 @@ function ProfileRecipes(props) {
         if (response != null) {
             setLikedRecipeData(response)
         }
+
+        response = await requestProfileUserLikedRecipes(cookie.get('token'), props.userID)
+            .catch(e => {
+
+            });
+
+        if (response != null) {
+            setProfileUserLikedRecipeData(response)
+        }
         setSuccess(true);
         setFetched(true);
     }
@@ -76,7 +102,7 @@ function ProfileRecipes(props) {
     useEffect(() => {
         if (!fetched) processId();
     }, []);
-    console.log(props.loggedInUID)
+
     if (success) {
         return (
              <>
@@ -87,7 +113,7 @@ function ProfileRecipes(props) {
                             {props.loggedIn && Number(props.loggedInUID) !== Number(props.userID) ?
                             <Nav.Link eventKey="liked">Recipes You Liked ({likedRecipeData.length})</Nav.Link>
                             :null}
-                            <Nav.Link eventKey="they_liked"> {Number(props.loggedInUID) === Number(props.userID) ? "Your Likes (--)" : "Recipes They Liked (--)"}</Nav.Link>
+                            <Nav.Link eventKey="they_liked"> {Number(props.loggedInUID) === Number(props.userID) ? "Your Likes (" + profileUserLikedRecipeData.length + ")" : "Recipes They Liked (" + profileUserLikedRecipeData.length + ")"}</Nav.Link>
                             <Nav.Link eventKey="comments">{Number(props.loggedInUID) === Number(props.userID) ? "Your Comments (--)" : "Comments (--)"} </Nav.Link>
                         </Nav>
                     </Row>
@@ -106,6 +132,11 @@ function ProfileRecipes(props) {
                             </Row>
                             </Tab.Pane>
                             :null}
+                            <Tab.Pane eventKey={"they_liked"}>
+                                <Row>
+                                    <RecipeList recipeData={profileUserLikedRecipeData} setRecipeData={setProfileUserLikedRecipeData}/>
+                                </Row>
+                            </Tab.Pane>
                         </Tab.Content>
                 </Row>
             </Tab.Container>

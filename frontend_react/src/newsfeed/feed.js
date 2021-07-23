@@ -74,7 +74,8 @@ function Feed(props) {
     let { page } = useParams();
     const cookie = new Cookie()
     const history = useHistory()
-    const [hideRecommended, setHideRecommended] = useState(cookie.get('recommended_hidden'))
+    const [hideRecommended, setHideRecommended] = useState(cookie.get('recommended_hidden') === "true")
+    console.log(hideRecommended)
 
     async function getFeed() {
         let page_ = /^\d+$/.test(page) ? page : 1;
@@ -121,12 +122,14 @@ function Feed(props) {
         doHideRecommended()
     }
     function doHideRecommended() {
+        cookie.set('recommended_hidden', "true", {path:'/newsfeed',  sameSite:"strict"})
         setHideRecommended(true)
-        cookie.set('recommended_hidden', true)
+        console.log(cookie.get('recommended_hidden'))
     }
     function doShowRecommended() {
+        cookie.set('recommended_hidden', "false", {path:'/newsfeed', sameSite:"strict"})
         setHideRecommended(false)
-        cookie.set('recommended_hidden', false)
+        console.log(cookie.get('recommended_hidden'))
     }
 
     function generateCard(recipe, index) {

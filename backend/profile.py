@@ -247,3 +247,24 @@ def get_times_liked(token, user_id):
 
     con.close()
     return len(result)
+
+def get_profile_recipe_profileuser_liked(user_id):
+    con = helpers.get_db_conn()
+    cur = con.cursor()
+    query = """
+                select R.*, U.first_name, U.last_name,
+                    COALESCE(U.profile_pic_path, '""" + DEFAULT_PIC + """"') as profile_pic_path,
+                    U.user_id, (select count(*) from Likes L where R.recipe_id = L.recipe_id) as likes,
+                    (select count(*) from Comments C where R.recipe_id = C.recipe_id) as comments,
+                    RP.photo_path
+                from Recipes R
+                    join Users U on U.user_id = R.created_by_user_id
+                    left outer join (select * from RecipePhotos where photo_no = 0) RP on R.recipe_id = RP.recipe_id
+                    join Likes L on R.recipe_id = L.recipe_id
+                where liked_by_user_id=%s
+                order by creation_time desc
+            """
+    cur.execute(query, (int(user_id)),)
+    data = cur.fetchall()
+    con.close()
+    return data

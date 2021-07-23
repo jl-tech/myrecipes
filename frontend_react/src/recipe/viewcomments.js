@@ -85,7 +85,19 @@ function RecipeViewComments(props) {
         <Row style={{marginTop:"1em"}}>
             <Col sm={1} />
             <Col sm={11}>
-                <h3> {props.comments.length} Comments</h3>
+                <h3> {props.comments.length} {props.comments.length === 1 ? "Comment" : "Comments"}</h3>
+                {props.loggedIn ?
+                <Form onSubmit={handleSubmit}>
+                    <Row>
+                        <Col sm={11} >
+                            <Form.Control placeholder="Comment here" onChange={(e) => setComment(e.target.value)} required/>
+                        </Col>
+                        <Col sm={1} style={{paddingLeft:"0"}} >
+                            <Button type="submit" variant="secondary" >Post</Button>
+                        </Col>
+                    </Row>
+                </Form> : <div> Log in to leave a comment </div>}
+                <br/>
                 <ListGroup>
                     {props.comments.map(({first_name, last_name, user_id, profile_pic_path, comment_id, by_user_id, comment_text, time_created}, index)=>
                         <ListGroup.Item key={index}>
@@ -117,16 +129,7 @@ function RecipeViewComments(props) {
                     )}
                 </ListGroup>
                 <br />
-                <Form onSubmit={handleSubmit}>
-                    <Row>
-                        <Col sm={11} >
-                            <Form.Control placeholder="Comment here" onChange={(e) => setComment(e.target.value)} required/>
-                        </Col>
-                        <Col sm={1} style={{paddingLeft:"0"}} >
-                            <Button type="submit" variant="secondary" >Post</Button>
-                        </Col>
-                    </Row>
-                </Form>
+
             </Col>
         </Row>
     </>);
