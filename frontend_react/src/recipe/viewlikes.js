@@ -7,6 +7,7 @@ import NotLiked from "../NotLiked.svg";
 import Col from "react-bootstrap/Col";
 import {Tooltip} from "@material-ui/core";
 import Alert from "react-bootstrap/Alert";
+import Row from "react-bootstrap/Row";
 
 async function requestLike(recipe_id, token) {
         let response = await fetch('http://localhost:5000/recipe/like', {
@@ -96,6 +97,7 @@ function RecipeViewLikes(props) {
     useEffect(() => {
         if (!likeFetched && props.loggedIn) processLiked();
     }, []);
+
     return (
         <>
             <Image
@@ -106,7 +108,9 @@ function RecipeViewLikes(props) {
                     src={liked ? Liked : NotLiked}
                     onClick={props.loggedIn ? () => handleLike() : ()=>showError("Log in to like this recipe")}
             />
-            <span style={{fontSize: "150%", color: liked ? "tomato" : "black", marginTop: likeClicked ? "0.15em": null, verticalAlign: "middle"}}> { props.likes}</span>
+            <Row style={{textAlign: "center"}} className={"mx-auto align-content-center"}>
+                <p style={{width:"2em", fontSize: props.likes < 9999 ?  "150%" : "125%", color: liked ? "tomato" : "black", marginLeft: "auto", marginRight:"auto", marginTop: likeClicked ? "0.25em": null, verticalAlign: "middle"}}> { props.likes}</p>
+            </Row>
         </>
     )
 }

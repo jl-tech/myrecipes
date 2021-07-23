@@ -85,13 +85,13 @@ function RecipeViewComments(props) {
         <Row style={{marginTop:"1em"}}>
             <Col sm={1} />
             <Col sm={11}>
-                <h3>Comments</h3>
+                <h3> {props.comments.length} Comments</h3>
                 <ListGroup>
                     {props.comments.map(({first_name, last_name, user_id, profile_pic_path, comment_id, by_user_id, comment_text, time_created}, index)=>
                         <ListGroup.Item key={index}>
                             <Row>
 
-                            <Col sm={3} className={"text-truncate"}>
+                            <Col sm={3} className={"text-truncate my-auto"}>
                             <Link to={"/profile/" + user_id}  style={{width:"100%"}} onClick={() => {history.push("/profile/"+user_id);history.go(0);}}>
 
                                 <Image src={"http://127.0.0.1:5000/img/" + profile_pic_path} alt="Profile Picture" roundedCircle width="40em" style={{marginRight:"1em"}}/>
@@ -99,13 +99,13 @@ function RecipeViewComments(props) {
 
                             </Link>
                             </Col>
-                            <Col sm={6}>
+                            <Col sm={6} className={"my-auto"}>
                                 {comment_text}
                             </Col>
-                            <Col sm={2}>
+                            <Col sm={2} className={"my-auto"}>
                                 <ReactTimeAgo date={new Date(time_created)} locale="en-US"/>
                             </Col>
-                            <Col sm={1} style={{textAlign:"right"}}>
+                            <Col sm={1} style={{textAlign:"right"}} className={"my-auto align-content-center"}>
                                 {props.currId === by_user_id ?
                                 <DropdownButton size="sm">
                                     <Dropdown.Item onClick={()=>handleDelete(comment_id)} >Delete</Dropdown.Item>

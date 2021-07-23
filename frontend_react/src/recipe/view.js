@@ -166,7 +166,7 @@ function RecipeView(props) {
                         <Col sm={3}>
                             <RecipeViewContri userImgURL={userImgURL} contributorUID={contributorUID} firstName={firstName} lastName={lastName} createdAt={createdAt} editedAt={editedAt} contributorRecipes={contributorRecipes} contributorSubscribers={contributorSubscribers}/>
                             <br/> <br/>
-                            {/* <RecipeViewNutri recipeId={id}/> */}
+                            <RecipeViewNutri recipeId={id}/>
                         </Col>
                         <Col sm={9}>
                             <RecipeViewDescription description={description}/>

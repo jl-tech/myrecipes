@@ -84,19 +84,19 @@ function ProfileRecipes(props) {
                 <p style={{textAlign: 'center'}}> This user hasn't created any recipes. </p>
             </Col>
             : <>
-            <Tab.Container defaultActiveKey="all">
-                <Row>
-                    <Col sm={2}>
+            <Tab.Container defaultActiveKey="all" >
+                <Row style={{borderRadius: "10px 10px 10px 10px", backgroundColor: "#F7F7F7", width: "100%"}} className={"shadow-sm justify-content-center"} >
                     <Nav variant="pills" >
-                        <Nav.Item>
                             <Nav.Link eventKey="all">All Recipes</Nav.Link>
                             {props.loggedIn ?
-                            <Nav.Link eventKey="liked">Liked ({likedRecipeData.length})</Nav.Link>
+                            <Nav.Link eventKey="liked">Recipes You Liked ({likedRecipeData.length})</Nav.Link>
                             :null}
-                        </Nav.Item>
-                    </Nav>
-                    </Col>
-                    <Col sm={10}>
+                            <Nav.Link eventKey="they_liked">Recipes They Liked (--)</Nav.Link>
+                            <Nav.Link eventKey="comments">Comments </Nav.Link>
+                        </Nav>
+                    </Row>
+                <Row style={{marginTop:"1em"}}>
+
                         <Tab.Content>
                             <Tab.Pane eventKey="all">
                                 <Row>
@@ -111,7 +111,6 @@ function ProfileRecipes(props) {
                             </Tab.Pane>
                             :null}
                         </Tab.Content>
-                    </Col>
                 </Row>
             </Tab.Container>
             </>

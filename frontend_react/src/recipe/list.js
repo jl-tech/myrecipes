@@ -78,7 +78,7 @@ function RecipeList(props) {
                             </Col>
                             <Col sm={10}>
                                 <Row>
-                                    <Col sm={8} style={{paddingLeft:"0"}} className={"text-truncate"}>
+                                    <Col sm={8} style={{paddingLeft:"0em"}} className={"text-truncate"}>
                                         <Link  to={"/profile/" + recipe.user_id}>
                                             <div onClick={(e) => e.stopPropagation()}> {recipe.first_name + " " + recipe.last_name} <br/> </div>
                                         </Link>

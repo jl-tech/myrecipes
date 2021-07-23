@@ -247,7 +247,10 @@ function RecipeViewDesc(props) {
                 </Col></>
                 :
                 <>
-                <Col sm={3} style={{textAlign:"right"}}>
+                    <Col sm={2}>
+
+                    </Col>
+                <Col sm={1} style={{textAlign:"center"}}>
                     <RecipeViewLikes setErrorShow={setErrorShow} setErrorText={setErrorText} loggedIn={props.loggedIn} recipeId={props.recipeId} likes={props.likes} setLikes={props.setLikes}/>
                 </Col>
             </>}

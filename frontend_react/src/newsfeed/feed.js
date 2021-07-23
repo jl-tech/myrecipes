@@ -143,7 +143,9 @@ function Feed(props) {
                                 </Col>
                                 {recipe.recommended ?
                                 <Col sm={2} style={{color:"grey", textAlign:"right"}}>
-                                    Recommended
+                                    <div style={{fontSize:"85%"}}>
+                                    RECOMMENDED
+                                    </div>
                                 </Col>
                                 :<Col sm={2} />}
                             </Row>

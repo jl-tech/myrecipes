@@ -60,7 +60,7 @@ function RecipeViewRecommendations(props) {
                             </Col>
                             <Col sm={10}>
                                 <Row>
-                                    <Col sm={8} style={{paddingLeft:"0"}} className={"text-truncate"}>
+                                    <Col sm={8} style={{paddingLeft:"0.2em"}} className={"text-truncate"}>
                                         <Link  to={"/profile/" + recipe.user_id}>
                                             <div onClick={(e) => e.stopPropagation()}> {recipe.first_name + " " + recipe.last_name} <br/> </div>
                                         </Link>
@@ -73,7 +73,7 @@ function RecipeViewRecommendations(props) {
                                     </Col>
                                 </Row>
                                 <Row>
-                                    <small className={"text-muted"}>
+                                    <small className={"text-muted"} style={{paddingLeft:"0.2em", fontSize:"70%"}}>
                                         {"Created "}
                                         <ReactTimeAgo date={new Date(recipe.creation_time)} locale="en-US"/>
                                         {recipe.edit_time != null ? <>
