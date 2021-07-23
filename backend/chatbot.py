@@ -1,4 +1,5 @@
 import os
+import json
 
 from constants import *
 
@@ -34,17 +35,18 @@ def talk(token, messages):
 
     response = connect_dialogflow_api("123456789" + str(user_id), messages)
 
-    react_message = str.format(response.query_result.fulfillment_text)
+    react_message = response.query_result.fulfillment_text
 
     if str.format(response.query_result.intent.display_name) == "Welcome":
         react_message = react_message + ', ' + first_name + '?'
 
     elif str.format(response.query_result.intent.display_name) == "Search":
         print(react_message)
-        result = do_search(react_message, None, None, None, None, None)
+        j = json.loads(react_message)
+        result = do_search(j["name"], None, None, None, None, None)
         if len(result) == 0:
             return "I am sorry, " + first_name + ". No result find for given recipe."
-        return "go to http:/localhost:3000/" + result[0]['name']
+        return "go to http://localhost:3000/search?name=" + result[0]['name']
 
     return react_message
 
@@ -101,4 +103,4 @@ def test(session_id, texts):
 
     return 0
 
-print(talk(2, "how to cook a pasta"))
+print(talk(2, "how to cook a pizza"))
