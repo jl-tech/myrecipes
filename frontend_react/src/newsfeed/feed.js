@@ -16,6 +16,7 @@ import ReactTimeAgo from "react-time-ago";
 import { Helmet } from "react-helmet-async";
 import Like from "../Like.svg";
 import Comment from "../comment_black_24dp.svg";
+import Button from "react-bootstrap/Button";
 
 async function requestFeed(token, page) {
     let response = await fetch('http://localhost:5000/newsfeed/get_feed?' + new URLSearchParams({'page': page}), {
@@ -67,6 +68,8 @@ function Feed(props) {
     const [hoveredRecipeId, setHoveredRecipeId] = useState(-1)
     const [activePage, setActivePage] = useState(null);
     const [hoveredProfile, setHoveredProfile] = useState(false)
+    const [hideRecommended, setHideRecommended] = useState(false)
+
     let { page } = useParams();
     const cookie = new Cookie()
     const history = useHistory()
@@ -112,89 +115,142 @@ function Feed(props) {
 
 
     function generateCard(recipe, index) {
-        return(
-            <div style={{padding:"1em",width:'100%'}} key={index}>
-                <Card
-                    onMouseEnter={() => setHoveredRecipeId(recipe.recipe_id)}
-                    onMouseLeave={() => setHoveredRecipeId(-1)}
-                    className={hoveredRecipeId === recipe.recipe_id ? 'shadow-lg' : 'shadow-sm'}>
-                    <div style={{color:'black', textDecoration: 'none', cursor:'pointer'}} role="link" onClick={()=>history.push("/recipe/" + recipe.recipe_id)} >
-                        <Card.Header
-                            className={"text-truncate"}>
-                            <Row>
-                                <Col sm={1} className={"mx-auto my-auto"}>
-                                    <Link  to={"/profile/" + recipe.user_id} >
-                                        <Image onClick={(e) => e.stopPropagation()} src={"http://127.0.0.1:5000/img/" + recipe.profile_pic_path} alt="Profile Picture" roundedCircle width="40em"/>
-                                    </Link>
-                                </Col>
-                                <Col sm={9}>
-                                    <Link to={"/profile/" + recipe.user_id} >
-                                        <div onClick={(e) => e.stopPropagation()}>
-                                            {recipe.first_name + " " + recipe.last_name} <br/>
-                                        </div>
-                                    </Link>
+        if (hideRecommended && recipe.recommended) {
+            return null
+        } else {
+            return (
+                <div style={{padding: "1em", width: '100%'}} key={index}>
+                    <Card
+                        onMouseEnter={() => setHoveredRecipeId(recipe.recipe_id)}
+                        onMouseLeave={() => setHoveredRecipeId(-1)}
+                        className={hoveredRecipeId === recipe.recipe_id ? 'shadow-lg' : 'shadow-sm'}>
+                        <div style={{
+                            color: 'black',
+                            textDecoration: 'none',
+                            cursor: 'pointer'
+                        }} role="link"
+                             onClick={() => history.push("/recipe/" + recipe.recipe_id)}>
+                            <Card.Header
+                                className={"text-truncate"}>
+                                <Row>
+                                    <Col sm={1} className={"mx-auto my-auto"}>
+                                        <Link to={"/profile/" + recipe.user_id}>
+                                            <Image
+                                                onClick={(e) => e.stopPropagation()}
+                                                src={"http://127.0.0.1:5000/img/" + recipe.profile_pic_path}
+                                                alt="Profile Picture"
+                                                roundedCircle width="40em"/>
+                                        </Link>
+                                    </Col>
+                                    <Col sm={8}>
+                                        <Link to={"/profile/" + recipe.user_id}>
+                                            <div
+                                                onClick={(e) => e.stopPropagation()}>
+                                                {recipe.first_name + " " + recipe.last_name}
+                                                <br/>
+                                            </div>
+                                        </Link>
 
                                         {"Created "}
-                                        <ReactTimeAgo date={new Date(recipe.creation_time)} locale="en-US"/>
+                                        <ReactTimeAgo
+                                            date={new Date(recipe.creation_time)}
+                                            locale="en-US"/>
                                         {recipe.edit_time != null ? <>
                                                 {" | Modified "}
-                                                <ReactTimeAgo date={new Date(recipe.edit_time)} locale="en-US"/> </>
+                                                <ReactTimeAgo
+                                                    date={new Date(recipe.edit_time)}
+                                                    locale="en-US"/> </>
                                             : ""}
-                                </Col>
-                                {recipe.recommended ?
-                                <Col sm={2} style={{color:"grey", textAlign:"right"}}>
-                                    <div style={{fontSize:"85%"}}>
-                                    RECOMMENDED
-                                    </div>
-                                </Col>
-                                :<Col sm={2} />}
-                            </Row>
-                        </Card.Header>
-                        <Card.Img variant="Top" style={{width:"100%", height:"9vw", objectFit:"cover"}} alt="Recipe Image" src={recipe.photo_path == null ? "http://127.0.0.1:5000/img/default_recipe.png" : "http://127.0.0.1:5000/img/" + recipe.photo_path}/>
-                        <Card.Body style={{textAlign: "center"}}>
+                                    </Col>
+                                    {recipe.recommended ?
+                                        <Col sm={3} style={{
+                                            color: "grey",
+                                            textAlign: "center"
+                                        }} className={"align-content-end"}>
+                                            <div style={{
+                                                marginLeft: "2em",
+                                                fontSize: "85%",
+                                                backgroundColor: "tomato",
+                                                color: "white",
+                                                borderRadius: "5px 5px 5px 5px",
+                                                height: "1.5em",
+                                                width: "10em"
+                                            }}>
+                                                RECOMMENDED
+                                            </div>
+                                        </Col>
+                                        : <Col sm={3}/>}
+                                </Row>
+                            </Card.Header>
+                            <Card.Img variant="Top" style={{
+                                width: "100%",
+                                height: "9vw",
+                                objectFit: "cover"
+                            }} alt="Recipe Image"
+                                      src={recipe.photo_path == null ? "http://127.0.0.1:5000/img/default_recipe.png" : "http://127.0.0.1:5000/img/" + recipe.photo_path}/>
+                            <Card.Body style={{textAlign: "center"}}>
 
-                            <Card.Title className={"text-truncate"}>{recipe.name}
-                            </Card.Title>
-                            <Card.Text className="text-truncate" style={{height:"1.5em", textDecoration: 'none'}}>
-                                {recipe.description == null ? "No description available" : recipe.description}
-                            </Card.Text>
-                            <Card.Text>
-                                
-                            </Card.Text>
-                            <Row>
-                                <Col sm={3} />
-                                <Col sm={6} style={{textAlign: "center"}}>
-                                    <table style={{marginLeft:"auto", marginRight:"auto", borderCollapse:"separate", borderSpacing:"2em 0em"}}><tbody>
-                                    <tr>
-                                        <th style={{fontSize:"95%"}}> {recipe.time_to_cook} </th>
-                                        <th style={{fontSize:"95%"}}> {recipe.serving_size} </th>
-                                        <th style={{fontSize:"95%"}}> {recipe.type} </th>
-                                        <th style={{fontSize:"95%"}}> {recipe.calories == null ? "N/A" : recipe.calories }</th>
-                                    </tr>
-                                    <tr>
-                                        <td style={{fontSize:"80%"}}> MINS </td>
-                                        <td style={{fontSize:"80%"}}> SERVES </td>
-                                        <td style={{fontSize:"80%"}}> MEAL </td>
-                                        <td style={{fontSize:"80%"}}> CAL </td>
-                                    </tr>
-                                    </tbody></table>
-                                </Col>
-                                <Col sm={3} style={{textAlign:"right"}}>
-                                    <Image src={Like} style={{height:"35%"}}/>
-                                    <span style={{fontSize: "125%", verticalAlign: "middle"}}> {recipe.likes} </span>
-                                    <Image src={Comment} style={{height:"40%"}}/>
-                                    <span style={{fontSize: "125%", verticalAlign: "middle"}}> {recipe.comments} </span>
-                                </Col>
-                            </Row>
+                                <Card.Title
+                                    className={"text-truncate"}>{recipe.name}
+                                </Card.Title>
+                                <Card.Text className="text-truncate" style={{
+                                    height: "1.5em",
+                                    textDecoration: 'none'
+                                }}>
+                                    {recipe.description == null ? "No description available" : recipe.description}
+                                </Card.Text>
+                                <Card.Text>
 
-                        </Card.Body>
+                                </Card.Text>
+                                <Row>
+                                    <Col sm={3}/>
+                                    <Col sm={6} style={{textAlign: "center"}}>
+                                        <table style={{
+                                            marginLeft: "auto",
+                                            marginRight: "auto",
+                                            borderCollapse: "separate",
+                                            borderSpacing: "2em 0em"
+                                        }}>
+                                            <tbody>
+                                            <tr>
+                                                <th style={{fontSize: "95%"}}> {recipe.time_to_cook} </th>
+                                                <th style={{fontSize: "95%"}}> {recipe.serving_size} </th>
+                                                <th style={{fontSize: "95%"}}> {recipe.type} </th>
+                                                <th style={{fontSize: "95%"}}> {recipe.calories == null ? "N/A" : recipe.calories}</th>
+                                            </tr>
+                                            <tr>
+                                                <td style={{fontSize: "80%"}}> MINS</td>
+                                                <td style={{fontSize: "80%"}}> SERVES</td>
+                                                <td style={{fontSize: "80%"}}> MEAL</td>
+                                                <td style={{fontSize: "80%"}}> CAL</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </Col>
+                                    <Col sm={3} style={{textAlign: "right"}}>
+                                        <Image src={Like}
+                                               style={{height: "35%"}}/>
+                                        <span style={{
+                                            fontSize: "125%",
+                                            verticalAlign: "middle"
+                                        }}> {recipe.likes} </span>
+                                        <Image src={Comment}
+                                               style={{height: "40%"}}/>
+                                        <span style={{
+                                            fontSize: "125%",
+                                            verticalAlign: "middle"
+                                        }}> {recipe.comments} </span>
+                                    </Col>
+                                </Row>
 
+                            </Card.Body>
 
 
                         </div>
-                </Card>
-            </div>
-        )
+                    </Card>
+                </div>
+            )
+        }
     }
 
     function navigatePage(page_) {
@@ -257,6 +313,12 @@ function Feed(props) {
                     </div>
                     </Col>
                 </Row>
+                    <Row className={"mx-auto align-content-center"} style={{textAlign:"center"}}>
+                        <Col>
+                            <Button onClick={()=>setHideRecommended(!hideRecommended)}> {hideRecommended ? "Show Recommended": "Hide Recommended"} </Button>
+                        </Col>
+                    </Row>
+                    <br/>
                 <Row>
                     <Col>
                         {subscriptions.length === 0 ? null :

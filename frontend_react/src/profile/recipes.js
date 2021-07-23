@@ -79,11 +79,7 @@ function ProfileRecipes(props) {
 
     if (success) {
         return (
-            recipeData.length === 0
-            ? <Col>
-                <p style={{textAlign: 'center'}}> This user hasn't created any recipes. </p>
-            </Col>
-            : <>
+             <>
             <Tab.Container defaultActiveKey="all" >
                 <Row style={{borderRadius: "10px 10px 10px 10px", backgroundColor: "#F7F7F7", width: "100%"}} className={"shadow-sm justify-content-center"} >
                     <Nav variant="pills" >
