@@ -43,7 +43,24 @@ def talk(token, messages):
     elif str.format(response.query_result.intent.display_name) == "Search":
         print(react_message)
         j = json.loads(react_message)
-        result = do_search(j["name"], None, None, None, None, None)
+        name = j["name"]
+        meal_type = j["type"]
+        serving_size = j["serving_size"]
+        step = j["step"]
+        ingredient = j["ingredient"]
+
+        if name == "":
+            name = None
+        if meal_type == "":
+            meal_type = None
+        if serving_size == 0:
+            serving_size = None
+        if step == "":
+            step = None
+        if ingredient == "":
+            ingredient = None
+
+        result = do_search(name, meal_type, serving_size, None, ingredient, step)
         if len(result) == 0:
             return "I am sorry, " + first_name + ". No result find for given recipe."
         return "go to http://localhost:3000/search?name=" + result[0]['name']
