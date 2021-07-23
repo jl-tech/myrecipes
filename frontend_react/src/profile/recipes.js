@@ -97,7 +97,7 @@ function ProfileRecipes(props) {
                     </Row>
                 <Row style={{marginTop:"1em"}}>
 
-                        <Tab.Content>
+                        <Tab.Content style={{width:"100%"}}>
                             <Tab.Pane eventKey="all">
                                 <Row>
                                 <RecipeList recipeData={recipeData} setRecipeData={setRecipeData}/>
