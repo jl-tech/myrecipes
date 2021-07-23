@@ -144,3 +144,11 @@ def route_times_liked():
         response = jsonify({'times_liked': result})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
+
+@PROFILE.route("/comments", methods=['GET'])
+def route_profile_get_comments():
+    user_id = request.args.get('user_id')
+    result = profile.get_comments(user_id)
+    response = jsonify(result)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response, 200

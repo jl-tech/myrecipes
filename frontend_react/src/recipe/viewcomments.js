@@ -110,6 +110,21 @@ function RecipeViewComments(props) {
                                 {first_name} {last_name}
 
                             </Link>
+                                {props.currId == by_user_id ?
+                                <span style={{
+                                                marginLeft:"1em",
+                                                marginRight: "auto",
+                                                fontSize: "85%",
+                                                backgroundColor: "tomato",
+                                                color: "white",
+                                                borderRadius: "5px 5px 5px 5px",
+                                                height: "1.5em",
+                                                width: "10em",
+                                                marginBottom:"1em"
+
+                                            }}>
+                                 &nbsp; OP &nbsp;
+                                  </span> : null}
                             </Col>
                             <Col sm={6} className={"my-auto"}>
                                 {comment_text}

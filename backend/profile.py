@@ -268,3 +268,19 @@ def get_profile_recipe_profileuser_liked(user_id):
     data = cur.fetchall()
     con.close()
     return data
+
+def get_comments(user_id):
+    con = helpers.get_db_conn()
+    cur = con.cursor()
+    query = """
+        select * 
+        from Comments C join Recipes R on C.recipe_id = R.recipe_id 
+        join Users U on R.created_by_user_id = U.user_id
+        left outer join RecipePhotos RP on R.recipe_id = RP.recipe_id and RP.photo_no = 0
+        where C.by_user_id=%s
+        order by C.time_created desc
+    """
+    cur.execute(query, (user_id,))
+    result = cur.fetchall()
+    con.close()
+    return result
