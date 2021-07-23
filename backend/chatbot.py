@@ -3,8 +3,12 @@ import os
 from constants import *
 
 import helpers
+
 from google.cloud import dialogflow
+
 from tokenise import token_to_id
+from search import do_search
+
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "static\chatbot_client\comp3900-w16a-goodname-3261b83e6fa2.json"
 
@@ -34,6 +38,12 @@ def talk(token, messages):
 
     if str.format(response.query_result.intent.display_name) == "Welcome":
         react_message = react_message + ', ' + first_name + '?'
+
+    elif str.format(response.query_result.intent.display_name) == "Search":
+        result = do_search(react_message, None, None, None, None, None)
+        if len(result) == 0:
+            return "I am sorry, " + first_name + ". No result find for given recipe."
+        return "go to http:/localhost:3000/" + result[0]['name']
 
     return react_message
 
@@ -90,4 +100,4 @@ def test(session_id, texts):
 
     return 0
 
-print(talk(2, "nice to meet u"))
+print(talk(2, "how to cook a pasta"))
