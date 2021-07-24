@@ -246,8 +246,8 @@ def auto_update_search_history(token):
     if u_id < 0:
         return -1
 
-
-    cur = helpers.get_db_conn().cursor()
+    con = helpers.get_db_conn()
+    cur = con.cursor()
 
     query = '''select * from SearchHistory where user_id=%s order by time'''
 

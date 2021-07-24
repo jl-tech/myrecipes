@@ -47,7 +47,7 @@ async function requestCommentDelete(token, comment_id) {
     });
 
     let responseJson = await response.json();
-    
+
     if (response.ok) return responseJson;
     else throw new Error(responseJson.error);
 }
@@ -60,7 +60,7 @@ function RecipeViewComments(props) {
 
     async function handleSubmit(e) {
         e.preventDefault();
-
+        setComment("")
         let response = await requestComment(cookie.get('token'), props.recipeId, comment)
             .catch(e => {
             });
@@ -90,7 +90,7 @@ function RecipeViewComments(props) {
                 <Form onSubmit={handleSubmit}>
                     <Row>
                         <Col sm={11} >
-                            <Form.Control placeholder="Comment here" onChange={(e) => setComment(e.target.value)} required/>
+                            <Form.Control value={comment} placeholder="Leave a comment" onChange={(e) => setComment(e.target.value)} required/>
                         </Col>
                         <Col sm={1} style={{paddingLeft:"0"}} >
                             <Button type="submit" variant="secondary" >Post</Button>
@@ -100,45 +100,61 @@ function RecipeViewComments(props) {
                 <br/>
                 <ListGroup>
                     {props.comments.map(({first_name, last_name, user_id, profile_pic_path, comment_id, by_user_id, comment_text, time_created}, index)=>
-                        <ListGroup.Item key={index}>
+                        <ListGroup.Item className={"shadow-sm border-top"} key={index} style={{marginBottom:"1em", paddingLeft:"2em", paddingRight:"2em"}}>
                             <Row>
-
-                            <Col sm={3} className={"text-truncate my-auto"}>
-                            <Link to={"/profile/" + user_id}  style={{width:"100%"}} onClick={() => {history.push("/profile/"+user_id);history.go(0);}}>
+                            <Link to={"/profile/" + user_id}  onClick={() => {history.push("/profile/"+user_id);history.go(0);}}>
 
                                 <Image src={"http://127.0.0.1:5000/img/" + profile_pic_path} alt="Profile Picture" roundedCircle width="40em" style={{marginRight:"1em"}}/>
                                 {first_name} {last_name}
-
                             </Link>
-                                {user_id == props.contributorID ?
-                                <span style={{
-                                                marginLeft:"1em",
-                                                marginRight: "auto",
-                                                fontSize: "85%",
-                                                backgroundColor: "tomato",
-                                                color: "white",
-                                                borderRadius: "5px 5px 5px 5px",
-                                                height: "1.5em",
-                                                width: "10em",
-                                                marginBottom:"1em"
 
-                                            }}>
-                                 &nbsp; OP &nbsp;
+                                {user_id === props.contributorID ?
+                                <span style={{
+                                    marginTop:"0.4em",
+                                    marginLeft:"1em",
+                                    marginRight: "auto",
+                                    fontSize: "85%",
+                                    backgroundColor: "tomato",
+                                    color: "white",
+                                    borderRadius: "5px 5px 5px 5px",
+                                    height: "1.5em",
+                                    width: "6em",
+                                    marginBottom:"1em",
+                                    textAlign: "center",
+                                    verticalAlign:"middle"
+
+                                }}>
+                                 &nbsp; CREATOR &nbsp;
                                   </span> : null}
-                            </Col>
-                            <Col sm={6} className={"my-auto"}>
-                                {comment_text}
-                            </Col>
-                            <Col sm={2} className={"my-auto"}>
-                                <ReactTimeAgo date={new Date(time_created)} locale="en-US"/>
-                            </Col>
-                            <Col sm={1} style={{textAlign:"right"}} className={"my-auto align-content-center"}>
-                                {props.currId === by_user_id ?
-                                <DropdownButton size="sm">
-                                    <Dropdown.Item onClick={()=>handleDelete(comment_id)} >Delete</Dropdown.Item>
-                                </DropdownButton>
-                                :null}
-                            </Col>
+                                {props.currId === by_user_id ? ( <>
+                                    <span style={{
+                                        marginTop:"0.35em",
+                                        marginLeft:"1em",
+                                        marginRight: "auto",
+                                        fontSize: "85%",
+                                        backgroundColor: "tomato",
+                                        color: "white",
+                                        borderRadius: "5px 5px 5px 5px",
+                                        height: "1.5em",
+                                        width: "4em",
+                                        marginBottom:"1em",
+                                        textAlign: "center",
+                                        verticalAlign:"middle"
+                                    }}>
+                                        &nbsp; YOU &nbsp;
+                                  </span>
+                                    <DropdownButton size="sm">
+                                        <Dropdown.Item onClick={()=>handleDelete(comment_id)} >Delete</Dropdown.Item>
+                                    </DropdownButton></>)
+                                    :null}
+                            </Row>
+                            <Row style={{fontSize:"115%", marginBottom:"0.2em"}}>
+                            {comment_text}
+                            </Row>
+                            <Row>
+                                <small className={'text-muted'}>
+                                 <ReactTimeAgo date={new Date(time_created)} locale="en-US"/>
+                                </small>
                             </Row>
                         </ListGroup.Item>
                     )}

@@ -38,7 +38,7 @@ def profile_info(token, user_id):
         recipe_count = cur.fetchall()
         result[0]['recipe_count'] = recipe_count[0]['COUNT(*)']
 
-        if requester == user_id: 
+        if requester == int(user_id):
             query = "select U.user_id, U.first_name, U.last_name, COALESCE(U.profile_pic_path, '" + DEFAULT_PIC + "') as profile_pic_path from SubscribedTo S join Users U on S.user_id = U.user_id where S.is_subscribed_to = %s"
             cur.execute(query, (user_id,))
             subscribers = cur.fetchall()
@@ -49,11 +49,13 @@ def profile_info(token, user_id):
             subscribers = cur.fetchall()
             result[0]['subscribers'] = ['user' for i in range(subscribers[0]['subscriber_count'])]
 
-        if requester == user_id: 
+        if requester == int(user_id):
             query = "select U.user_id, U.first_name, U.last_name, COALESCE(U.profile_pic_path, '" + DEFAULT_PIC + "') as profile_pic_path from SubscribedTo S join Users U on S.is_subscribed_to = U.user_id where S.user_id = %s"
             cur.execute(query, (user_id,))
             subscriptions = cur.fetchall()
             result[0]['subscriptions'] = subscriptions
+            print(subscriptions)
+
         else:
             result[0]['subscriptions'] = []
         
@@ -289,12 +291,16 @@ def find_user(inp) :
     con = helpers.get_db_conn()
     cur = con.cursor()
     query = """
-            select user_id, first_name, last_name, profile_pic_path
+            select user_id, first_name, last_name, profile_pic_path,
+                match(first_name) against (%s in natural language mode) as F_relevance,
+                match(last_name) against (%s in natural language mode) as L_relevance
             from Users
             where match(first_name) against (%s in natural language mode) 
-                or match(last_name) against (%s in natural language mode) 
+                or match(last_name) against (%s in natural language mode)
+            order by F_relevance + L_relevance  desc
+            limit 50
         """
-    cur.execute(query, (inp, inp))
+    cur.execute(query, (inp, inp, inp, inp))
     result = cur.fetchall()
     con.close()
     return result
