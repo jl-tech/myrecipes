@@ -19,6 +19,7 @@ import Image from "react-bootstrap/Image";
 import ReactTimeAgo from "react-time-ago";
 import {Typeahead} from "react-bootstrap-typeahead";
 import Card from "react-bootstrap/Card";
+import Spinner from "react-bootstrap/Spinner";
 
 async function requestUsers(input) {
     let response = await fetch('http://localhost:5000/profile/finduser', {
@@ -48,11 +49,13 @@ function Users(props) {
     const [errorText, setErrorText] = useState("")
     const [searchHover, setSearchHovered] = useState(false)
     const [searched, setSearched] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
     const history = useHistory()
 
     async function handleSubmit(e) {
         e.preventDefault()
-        setSearched(true)
+        setSearchHovered(false)
+        setIsLoading(true)
         let response = await requestUsers(input)
             .catch(e => {
                 setErrorShow(true);
@@ -61,9 +64,23 @@ function Users(props) {
 
         if (response != null) {
             setUserData(response)
+            setIsLoading(false)
+            setSearched(true)
         }
+
     }
-    return (
+    if (isLoading) return (
+        <>
+        <Helmet>
+                <title> Find Users </title>
+         </Helmet>
+        <div style={{textAlign: "center", width: "100%"}}>
+            <br/>
+                            <Spinner animation={"grow"} style={{color:"tomato"}}/>
+        </div>
+            </>
+    )
+    else return (
         <>
         <Helmet>
                 <title> Find Users </title>
@@ -87,7 +104,8 @@ function Users(props) {
                         <InputGroup>
                             <Form.Control
                                 placeholder={"Search users by name"}
-                                onChange={e => setInput(e.target.value)} required />
+                                onChange={e => setInput(e.target.value)}
+                                defaultValue={searched ? input : null} required />
                             <InputGroup.Append>
                                 <Button type="submit" size="sm" variant="primary" disabled={props.disabled}>
                                     <img src={props.nav ? SearchIconSmall : SearchIconBig} alt=""/>

@@ -126,7 +126,7 @@ function Home({ loggedIn, setLoggedIn, currId }) {
             Create
         </NavLink> </>:<></>}
         <NavLink style={{paddingLeft: '2rem', fontSize:"125%"}} to="/users" activeStyle={{ paddingLeft: '2rem', fontWeight: 'bold', fontSize:"125%"}}>
-            Users
+            Find Users
         </NavLink>
         {location.pathname !== "/home" && location.pathname !== "/search" ? <div style={{paddingLeft: '2rem'}}>  <SearchBar nav={true} loggedIn={loggedIn} /> </div>: <></>}
         <Navbar.Toggle />

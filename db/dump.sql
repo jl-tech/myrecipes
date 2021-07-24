@@ -24,12 +24,13 @@ DROP TABLE IF EXISTS `Comments`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `Comments` (
   `comment_id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `recipe_id` int NOT NULL,
-  `time_created` timestamp NOT NULL,
+  `recipe_id` int DEFAULT NULL,
   `by_user_id` int DEFAULT NULL,
+  `time_created` timestamp NULL DEFAULT NULL,
   `comment_text` text,
-  PRIMARY KEY (`comment_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`comment_id`),
+  UNIQUE KEY `comment_id` (`comment_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,6 +39,7 @@ CREATE TABLE `Comments` (
 
 LOCK TABLES `Comments` WRITE;
 /*!40000 ALTER TABLE `Comments` DISABLE KEYS */;
+INSERT INTO `Comments` VALUES (7,1,2,'2021-07-22 16:28:39','yes!'),(8,4,2,'2021-07-22 16:32:33','Delicious and easy!'),(9,13,2,'2021-07-22 21:05:00','yea'),(13,3,2,'2021-07-22 22:56:27','I\'ll upload images soon!'),(15,1,6,'2021-07-22 23:11:31','Great recipe, thanks Jonathan!!'),(16,8,6,'2021-07-23 02:39:08','A bit too garlicky for me!');
 /*!40000 ALTER TABLE `Comments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -61,7 +63,7 @@ CREATE TABLE `Likes` (
 
 LOCK TABLES `Likes` WRITE;
 /*!40000 ALTER TABLE `Likes` DISABLE KEYS */;
-INSERT INTO `Likes` VALUES (1,3),(2,3),(3,2),(3,3),(10,3),(13,2),(13,3);
+INSERT INTO `Likes` VALUES (1,2),(1,6),(3,2),(4,2),(4,3),(9,2),(10,3),(12,2),(13,2);
 /*!40000 ALTER TABLE `Likes` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -198,7 +200,7 @@ CREATE TABLE `Recipes` (
   PRIMARY KEY (`recipe_id`),
   UNIQUE KEY `recipe_id` (`recipe_id`),
   FULLTEXT KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -207,7 +209,7 @@ CREATE TABLE `Recipes` (
 
 LOCK TABLES `Recipes` WRITE;
 /*!40000 ALTER TABLE `Recipes` DISABLE KEYS */;
-INSERT INTO `Recipes` VALUES (1,2,'2021-07-13 16:48:19','2021-07-16 17:48:29',120,'Spaghetti Bolognese','Dinner',6,'Super easy and a true Italian classic with a meaty, chilli sauce. This recipe comes courtesy of BBC Good Food user Andrew Balmer',600,1),(2,2,'2021-07-13 16:52:52','2021-07-16 16:56:11',30,'The Classic Burger','Lunch',4,'Delicious restaurant-style, hamburger recipe',600,1),(3,2,'2021-07-13 16:56:56','2021-07-17 00:18:52',30,'Sweet and Sour Pork','Dinner',4,'Loaded with tricks the Chinese have been using for centuries',1600,2),(4,4,'2021-07-13 17:06:46','2021-07-13 17:10:03',10,'Gruyère, Bacon, and Spinach Scrambled Eggs','Breakfast',4,'A great way to start the day',300,0),(5,4,'2021-07-13 17:11:24',NULL,5,'Super Simple Summer Smoothie','Snack',2,'Refreshing summer drink',100,0),(6,4,'2021-07-13 17:14:54',NULL,45,'Air Fryer Steak','Dinner',2,'Hearty meal for 2',300,0),(7,2,'2021-07-14 21:44:06','2021-07-16 16:31:02',30,'Margherita Pizza','Lunch',2,'Classic pizza',400,0),(8,5,'2021-07-14 21:48:49',NULL,15,' Garlicky fried rice with crisp pork','Dinner',4,'Fried rice with innovative ingredients',600,0),(9,5,'2021-07-14 21:53:40',NULL,45,'BEST fried potatoes','Lunch',4,'The BEST fried potatoes',300,0),(10,2,'2021-07-16 04:14:34','2021-07-16 16:31:10',75,'Pizza Supreme','Lunch',4,'Easy to work with and the crust is so good',900,1),(12,2,'2021-07-17 01:23:18','2021-07-17 02:12:29',200,'Easy steak pie','Lunch',6,'Homemade steak pie, complete with golden-brown flaky pastry and a rich filling. ',900,0),(13,2,'2021-07-17 01:33:41',NULL,60,'Apple Pie','Snack',8,NULL,500,2),(14,6,'2021-07-17 02:08:54','2021-07-17 02:14:03',105,'Creamy Chicken Pot Pie','Lunch',6,'This Creamy Chicken pot pie with puff pastry and vegetables is comfort food bliss! ',900,0),(16,6,'2021-07-17 22:03:43','2021-07-17 22:06:09',70,'Beef pho','Lunch',2,'Full of classic Asian flavours along with sirloin steak and noodles',500,0);
+INSERT INTO `Recipes` VALUES (1,2,'2021-07-13 16:48:19','2021-07-16 17:48:29',120,'Spaghetti Bolognese','Dinner',6,'Super easy and a true Italian classic with a meaty, chilli sauce. This recipe comes courtesy of BBC Good Food user Andrew Balmer',600,2),(2,2,'2021-07-13 16:52:52','2021-07-16 16:56:11',30,'The Classic Burger','Lunch',4,'Delicious restaurant-style, hamburger recipe',600,0),(3,2,'2021-07-13 16:56:56','2021-07-17 00:18:52',30,'Sweet and Sour Pork','Dinner',4,'Loaded with tricks the Chinese have been using for centuries',1600,1),(4,4,'2021-07-13 17:06:46','2021-07-13 17:10:03',10,'Gruyère, Bacon, and Spinach Scrambled Eggs','Breakfast',4,'A great way to start the day',300,2),(5,4,'2021-07-13 17:11:24',NULL,5,'Super Simple Summer Smoothie','Snack',2,'Refreshing summer drink',100,0),(6,4,'2021-07-13 17:14:54',NULL,45,'Air Fryer Steak','Dinner',2,'Hearty meal for 2',300,0),(7,2,'2021-07-14 21:44:06','2021-07-16 16:31:02',30,'Margherita Pizza','Lunch',2,'Classic pizza',400,0),(8,5,'2021-07-14 21:48:49',NULL,15,' Garlicky fried rice with crisp pork','Dinner',4,'Fried rice with innovative ingredients',600,0),(9,5,'2021-07-14 21:53:40',NULL,45,'BEST fried potatoes','Lunch',4,'The BEST fried potatoes',300,1),(10,2,'2021-07-16 04:14:34','2021-07-16 16:31:10',75,'Pizza Supreme','Lunch',4,'Easy to work with and the crust is so good',900,1),(12,2,'2021-07-17 01:23:18','2021-07-17 02:12:29',200,'Easy steak pie','Lunch',6,'Homemade steak pie, complete with golden-brown flaky pastry and a rich filling. ',900,1),(13,2,'2021-07-17 01:33:41',NULL,60,'Apple Pie','Snack',8,NULL,500,1),(14,6,'2021-07-17 02:08:54','2021-07-17 02:14:03',105,'Creamy Chicken Pot Pie','Lunch',6,'This Creamy Chicken pot pie with puff pastry and vegetables is comfort food bliss! ',900,0),(16,6,'2021-07-17 22:03:43','2021-07-17 22:06:09',70,'Beef pho','Lunch',2,'Full of classic Asian flavours along with sirloin steak and noodles',500,0);
 /*!40000 ALTER TABLE `Recipes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -232,7 +234,7 @@ CREATE TABLE `SearchHistory` (
 
 LOCK TABLES `SearchHistory` WRITE;
 /*!40000 ALTER TABLE `SearchHistory` DISABLE KEYS */;
-INSERT INTO `SearchHistory` VALUES (2,'yes','2021-07-18 22:43:27'),(2,'fry','2021-07-18 22:44:09'),(2,'spaghetti','2021-07-18 23:02:18'),(2,'cook','2021-07-18 23:02:32'),(2,'a','2021-07-19 22:13:25'),(2,'pizza','2021-07-20 01:00:59'),(2,'oil','2021-07-20 01:03:22'),(2,'pie','2021-07-20 01:03:53'),(2,'beef','2021-07-20 01:04:16'),(3,'pie','2021-07-20 20:10:30'),(3,'beef','2021-07-20 20:11:38'),(3,'steak pie','2021-07-20 20:12:01'),(4,'Smoothie','2021-07-16 21:10:35'),(4,'spaghetti','2021-07-16 22:36:57'),(6,'chicken pot pie','2021-07-17 22:30:18'),(6,'chicken','2021-07-17 22:42:06'),(6,'oil','2021-07-17 22:45:14'),(6,'cow','2021-07-17 22:45:52'),(6,'spaghetti','2021-07-17 22:47:04'),(6,'fry','2021-07-17 22:47:40'),(6,'bake','2021-07-17 22:47:51'),(6,'pie','2021-07-17 22:49:32'),(6,'creamy chicken pie','2021-07-17 22:49:41'),(6,'beef','2021-07-20 20:41:49');
+INSERT INTO `SearchHistory` VALUES (2,'yes','2021-07-18 22:43:27'),(2,'fry','2021-07-18 22:44:09'),(2,'spaghetti','2021-07-18 23:02:18'),(2,'cook','2021-07-18 23:02:32'),(2,'a','2021-07-19 22:13:25'),(2,'pizza','2021-07-20 01:00:59'),(2,'oil','2021-07-20 01:03:22'),(2,'pie','2021-07-20 01:03:53'),(2,'beef','2021-07-20 01:04:16'),(2,'steak pie','2021-07-21 22:13:15'),(3,'beef','2021-07-20 20:11:38'),(3,'yeds','2021-07-21 19:52:33'),(3,'pie','2021-07-21 19:52:42'),(3,'steak pie','2021-07-21 19:52:43'),(3,'eargeagrearg','2021-07-22 17:19:30'),(4,'Smoothie','2021-07-16 21:10:35'),(4,'spaghetti','2021-07-16 22:36:57'),(6,'chicken pot pie','2021-07-17 22:30:18'),(6,'chicken','2021-07-17 22:42:06'),(6,'oil','2021-07-17 22:45:14'),(6,'cow','2021-07-17 22:45:52'),(6,'spaghetti','2021-07-17 22:47:04'),(6,'fry','2021-07-17 22:47:40'),(6,'bake','2021-07-17 22:47:51'),(6,'pie','2021-07-17 22:49:32'),(6,'creamy chicken pie','2021-07-17 22:49:41'),(6,'beef','2021-07-20 20:41:49'),(6,'soup','2021-07-23 02:38:54');
 /*!40000 ALTER TABLE `SearchHistory` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -256,7 +258,7 @@ CREATE TABLE `SubscribedTo` (
 
 LOCK TABLES `SubscribedTo` WRITE;
 /*!40000 ALTER TABLE `SubscribedTo` DISABLE KEYS */;
-INSERT INTO `SubscribedTo` VALUES (2,5),(3,2),(4,2),(4,5),(4,6),(6,2);
+INSERT INTO `SubscribedTo` VALUES (2,5),(3,2),(3,4),(4,2),(4,5),(4,6),(6,2);
 /*!40000 ALTER TABLE `SubscribedTo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -277,7 +279,9 @@ CREATE TABLE `Users` (
   `password_reset_code_hash` int DEFAULT NULL,
   `email_verified` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`user_id`),
-  UNIQUE KEY `user_id` (`user_id`)
+  UNIQUE KEY `user_id` (`user_id`),
+  FULLTEXT KEY `first_name` (`first_name`),
+  FULLTEXT KEY `last_name` (`last_name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -287,7 +291,7 @@ CREATE TABLE `Users` (
 
 LOCK TABLES `Users` WRITE;
 /*!40000 ALTER TABLE `Users` DISABLE KEYS */;
-INSERT INTO `Users` VALUES (1,'test@test.com','Test','Account','testing',NULL,NULL,NULL),(2,'jonathan.liu2000@gmail.com','Jonathan','Liu','$2b$12$5Gk5XDy6zCt.xMlTKiWsKubTrc.Qv25ux8Ds.oSHPZPVTKB5GdzYi','36c70c4eb49a33110b9fe413caa05b29741f9001.png',NULL,1),(3,'jliu2212@hotmail.com','Bob','Smith','$2b$12$9/7DefxGpHGsuGGUJ1nHRe5IWEY4oE7NmGJ6nHBwR8le5afilyA1K','47773ea7962b30d37bf2a402d35d0821adeef10e.png',NULL,1),(4,'jonathan.liu1@student.unsw.edu.au','Alice','Smith','$2b$12$4aKV2/pHKWSlo6qr.nTeL.mXywxwbZXd9XGMWq4T4emtF//kVa1yi','a9a6bc1ba3c758ab09d3ea3bd53451911e3f4dc5.png',NULL,1),(5,'myrecipes.supp@gmail.com','Charlie','Fitzgerald','$2b$12$XlIpbcpztNjLuIsxbgK9guMix7RWJWl5NHJRnFnAHGWt2sAVBbbFy','1f6c8976541b06d36e5390411c3b385894140547.png',NULL,1),(6,'jltech2212@yahoo.com.au','Dean','Xue','$2b$12$tfqVYQmprKJv7dg5Di8B2OdYUfg6UYFUTdUNBf8wlNu5Q7cH9Z/u6','d897889df9d162b2b79109bb5c583918b7c2c65b.png',NULL,1);
+INSERT INTO `Users` VALUES (1,'test@test.com','Test','Account','testing',NULL,NULL,NULL),(2,'jonathan.liu2000@gmail.com','Jonathan','Liu','$2b$12$5Gk5XDy6zCt.xMlTKiWsKubTrc.Qv25ux8Ds.oSHPZPVTKB5GdzYi','01e901d04035a619aa4d09a5691fd6f369f0865c.png',NULL,1),(3,'jliu2212@hotmail.com','Bob','Smith','$2b$12$9/7DefxGpHGsuGGUJ1nHRe5IWEY4oE7NmGJ6nHBwR8le5afilyA1K','47773ea7962b30d37bf2a402d35d0821adeef10e.png',NULL,1),(4,'jonathan.liu1@student.unsw.edu.au','Alice','Smith','$2b$12$4aKV2/pHKWSlo6qr.nTeL.mXywxwbZXd9XGMWq4T4emtF//kVa1yi','a9a6bc1ba3c758ab09d3ea3bd53451911e3f4dc5.png',NULL,1),(5,'myrecipes.supp@gmail.com','Charlie','Fitzgerald','$2b$12$XlIpbcpztNjLuIsxbgK9guMix7RWJWl5NHJRnFnAHGWt2sAVBbbFy','1f6c8976541b06d36e5390411c3b385894140547.png',NULL,1),(6,'jltech2212@yahoo.com.au','Dean','Xue','$2b$12$tfqVYQmprKJv7dg5Di8B2OdYUfg6UYFUTdUNBf8wlNu5Q7cH9Z/u6','d897889df9d162b2b79109bb5c583918b7c2c65b.png',NULL,1);
 /*!40000 ALTER TABLE `Users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -300,4 +304,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-07-22 15:27:56
+-- Dump completed on 2021-07-24 21:18:22
