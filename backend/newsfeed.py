@@ -162,10 +162,12 @@ def get_feed(token, page):
     """
     cur.execute(query, (u_id, ))
     count = cur.fetchall()
-
+    total_pages = math.ceil(count[0]['COUNT(*)'] / sub)
     con.close()
 
     result2 = get_recommendations(u_id, page, rec)
+    if (len(result2) == 0):
+        return result, total_pages
 
     h1 = result[:len(result)//2]
     h2 = result[len(result)//2:]
@@ -178,7 +180,7 @@ def get_feed(token, page):
     result3 = result3 + result[len(result)//len(result2)*len(result2):]
 
 
-    return result3, math.ceil(count[0]['COUNT(*)'] / sub)
+    return result3, total_pages
 
 def get_subscriptions(token):
     
