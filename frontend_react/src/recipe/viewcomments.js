@@ -54,6 +54,7 @@ async function requestCommentDelete(token, comment_id) {
 
 function RecipeViewComments(props) {
     const [comment, setComment] = useState('');
+    const [loadCommentsTo, setLoadCommentsTo] = useState(5)
     const cookie = new Cookie();
     const history = useHistory()
 
@@ -99,7 +100,7 @@ function RecipeViewComments(props) {
                 </Form> : <div> Log in to leave a comment </div>}
                 <br/>
                 <ListGroup>
-                    {props.comments.map(({first_name, last_name, user_id, profile_pic_path, comment_id, by_user_id, comment_text, time_created}, index)=>
+                    {props.comments.slice(0,loadCommentsTo).map(({first_name, last_name, user_id, profile_pic_path, comment_id, by_user_id, comment_text, time_created}, index)=>
                         <ListGroup.Item className={"shadow-sm border-top"} key={index} style={{marginBottom:"1em", paddingLeft:"2em", paddingRight:"2em"}}>
                             <Row>
                             <Link to={"/profile/" + user_id}  onClick={() => {history.push("/profile/"+user_id);history.go(0);}}>
@@ -159,6 +160,10 @@ function RecipeViewComments(props) {
                         </ListGroup.Item>
                     )}
                 </ListGroup>
+                {loadCommentsTo < props.comments.length ?
+                    <Button variant={"outline-secondary"} onClick={()=>setLoadCommentsTo(loadCommentsTo + 5)}> Show more... </Button> :
+                    null
+                }
                 <br />
 
             </Col>
