@@ -27,6 +27,7 @@ import SearchBar from './search/bar';
 import Image from "react-bootstrap/Image";
 import Feed from './newsfeed/feed';
 import NotFound from "./404";
+import Users from "./users";
 
 async function profileUser(userid) {
     let response = await fetch('http://localhost:5000/profile/view?' + new URLSearchParams({'user_id': userid}), {
@@ -124,6 +125,9 @@ function Home({ loggedIn, setLoggedIn, currId }) {
         <NavLink style={{paddingLeft: '2rem', fontSize:"125%"}} to="/recipe/create" activeStyle={{ paddingLeft: '2rem', fontWeight: 'bold', fontSize:"125%"}}>
             Create
         </NavLink> </>:<></>}
+        <NavLink style={{paddingLeft: '2rem', fontSize:"125%"}} to="/users" activeStyle={{ paddingLeft: '2rem', fontWeight: 'bold', fontSize:"125%"}}>
+            Users
+        </NavLink>
         {location.pathname !== "/home" && location.pathname !== "/search" ? <div style={{paddingLeft: '2rem'}}>  <SearchBar nav={true} loggedIn={loggedIn} /> </div>: <></>}
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
@@ -158,6 +162,9 @@ function Home({ loggedIn, setLoggedIn, currId }) {
         <Route path="/recipe" render={() => 
             (<Redirect to= {{pathname: "/"}} />)
         } />
+        <Route path="/users">
+          <Users/>
+        </Route>
         <Route path="/search">
             <SearchResults loggedIn={loggedIn}/>
         </Route>

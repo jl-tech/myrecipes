@@ -175,7 +175,7 @@ function RecipeView(props) {
                         </Col>
 
                     </Row>
-                    <RecipeViewComments loggedIn={props.loggedIn} currId={props.currId} recipeId={id} comments={comments} setComments={setComments} />
+                    <RecipeViewComments loggedIn={props.loggedIn} contributorID={contributorUID} currId={props.currId} recipeId={id} comments={comments} setComments={setComments} />
                     <RecipeViewRecommendations recipeData={recommendations} />
                 </Container>
                 </>

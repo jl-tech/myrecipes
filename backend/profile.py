@@ -284,3 +284,17 @@ def get_comments(user_id):
     result = cur.fetchall()
     con.close()
     return result
+
+def find_user(inp) :
+    con = helpers.get_db_conn()
+    cur = con.cursor()
+    query = """
+            select user_id, first_name, last_name, profile_pic_path
+            from Users
+            where match(first_name) against (%s in natural language mode) 
+                or match(last_name) against (%s in natural language mode) 
+        """
+    cur.execute(query, (inp, inp))
+    result = cur.fetchall()
+    con.close()
+    return result

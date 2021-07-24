@@ -110,7 +110,7 @@ function RecipeViewComments(props) {
                                 {first_name} {last_name}
 
                             </Link>
-                                {props.currId == by_user_id ?
+                                {user_id == props.contributorID ?
                                 <span style={{
                                                 marginLeft:"1em",
                                                 marginRight: "auto",

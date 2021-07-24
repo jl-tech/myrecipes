@@ -22,7 +22,9 @@ create table Users (
     profile_pic_path text, -- path in flask backend to the profile pic file, NULL if no pic
     password_reset_code_hash integer, -- password reset code if user requests password, NULL if not
     email_verified boolean,
-    primary key (user_id)
+    primary key (user_id),
+    fulltext (first_name),
+    fulltext (last_name)
 );
 
 create table Recipes(

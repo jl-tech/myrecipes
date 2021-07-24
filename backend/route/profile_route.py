@@ -152,3 +152,11 @@ def route_profile_get_comments():
     response = jsonify(result)
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response, 200
+
+@PROFILE.route("/finduser", methods=['POST'])
+def route_profile_finduser():
+    data = request.get_json()
+    result = profile.find_user(data['input'])
+    response = jsonify(result)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response, 200
