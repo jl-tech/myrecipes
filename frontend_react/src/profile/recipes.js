@@ -216,7 +216,7 @@ function ProfileRecipes(props) {
                                             <ListGroup.Item key={index}
                                                 onMouseEnter={()=>setCommentIndexHovered(index)}
                                                 onMouseLeave={()=>setCommentIndexHovered(-1)}
-                                                className={commentIndexHovered === index ? "shadow-lg" : "shadow-sm"}
+                                                className={commentIndexHovered === index ? "shadow-lg border-top" : "shadow-sm border-top"}
                                                 role={"link"} onClick={() => history.push("/recipe/" + recipe_id)}
                                                 style={{marginBottom: "1em", cursor:"pointer"}}>
                                                 <Row>

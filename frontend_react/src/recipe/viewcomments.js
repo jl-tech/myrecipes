@@ -142,7 +142,6 @@ function RecipeViewComments(props) {
                                 <span style={{
                                     marginTop:"0.4em",
                                     marginLeft:"1em",
-                                    marginRight: "auto",
                                     fontSize: "85%",
                                     backgroundColor: "tomato",
                                     color: "white",
@@ -160,7 +159,6 @@ function RecipeViewComments(props) {
                                     <span style={{
                                         marginTop:"0.35em",
                                         marginLeft:"1em",
-                                        marginRight: "auto",
                                         fontSize: "85%",
                                         backgroundColor: "tomato",
                                         color: "white",
@@ -173,7 +171,7 @@ function RecipeViewComments(props) {
                                     }}>
                                         &nbsp; YOU &nbsp;
                                   </span>
-                                    <DropdownButton size="sm">
+                                    <DropdownButton size="sm" style={{marginLeft:"auto"}}>
                                         <Dropdown.Item onClick={()=>handleDelete(comment_id)} >Delete</Dropdown.Item>
                                     </DropdownButton></>)
                                     :null}
