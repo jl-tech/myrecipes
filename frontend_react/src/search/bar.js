@@ -152,7 +152,7 @@ function SearchBar(props) {
                                     </Row>
                                 </React.Fragment>)
                             }}
-                            emptyLabel= {props.loggedIn ? "No related history": "Log in to view your search history"}/>
+                            emptyLabel= {props.loggedIn ? "No related history": "Log in to view search history"}/>
                 <InputGroup.Append>
                     <Button type="submit" size="sm" variant="primary" disabled={props.disabled}>
                         <img src={props.nav ? SearchIconSmall : SearchIconBig} alt=""/>

@@ -14,6 +14,8 @@ import Image from "react-bootstrap/Image";
 import ReactTimeAgo from "react-time-ago";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Dropdown from "react-bootstrap/Dropdown";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
 
 
 async function requestRecipes(user_id) {
@@ -90,6 +92,8 @@ function ProfileRecipes(props) {
     const [success, setSuccess] = useState(false)
     const [comments, setComments] = useState([])
     const [commentIndexHovered, setCommentIndexHovered] = useState(-1)
+    const [loadCommentsTo, setLoadCommentsTo] = useState(5)
+    const [currCommentSort, setCurrCommentSort] = useState("newest")
     const history = useHistory()
     const cookie = new Cookie();
 
@@ -131,6 +135,25 @@ function ProfileRecipes(props) {
         }
         setSuccess(true);
         setFetched(true);
+    }
+
+    function sortCommentsChange(e) {
+        switch (e.target.value) {
+            case "1":
+                if (currCommentSort === "newest") {
+                    setCurrCommentSort("oldest")
+                    setLoadCommentsTo(5)
+                    setComments(comments.reverse())
+                }
+                break
+            case "0":
+                if (currCommentSort === "oldest") {
+                    setCurrCommentSort("newest")
+                    setLoadCommentsTo(5)
+                    setComments(comments.reverse())
+                }
+                break
+        }
     }
 
     useEffect(() => {
@@ -177,8 +200,19 @@ function ProfileRecipes(props) {
                                         <h4> Nothing to show</h4>
                                     </div>
                                     :
+                                    <div>
+                                        <Form>
+                                            Sort by:
+                                            <Form.Control as="select" style={{width:"30%"}} onChange={(e) => sortCommentsChange(e)}>
+                                                <option value="0">Newest</option>
+                                                <option value="1">Oldest</option>
+
+
+                                            </Form.Control>
+                                            <br/>
+                                        </Form>
                                     <ListGroup>
-                                        {comments.map(({comment_text, time_created, name, recipe_id, first_name, last_name, photo_path}, index)=>
+                                        {comments.slice(0,loadCommentsTo).map(({comment_text, time_created, name, recipe_id, first_name, last_name, photo_path}, index)=>
                                             <ListGroup.Item key={index}
                                                 onMouseEnter={()=>setCommentIndexHovered(index)}
                                                 onMouseLeave={()=>setCommentIndexHovered(-1)}
@@ -208,7 +242,13 @@ function ProfileRecipes(props) {
                                             </ListGroup.Item>
                                         )}
                                     </ListGroup>
+                                        {loadCommentsTo < comments.length ?
+                                            <Button variant={"outline-secondary"} onClick={()=>setLoadCommentsTo(loadCommentsTo + 5)}> Show more... </Button> :
+                                            null
+                                        }
+                                    </div>
                                 }
+
                             </Tab.Pane>
                         </Tab.Content>
                 </Row>

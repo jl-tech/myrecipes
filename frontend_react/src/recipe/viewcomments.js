@@ -55,6 +55,7 @@ async function requestCommentDelete(token, comment_id) {
 function RecipeViewComments(props) {
     const [comment, setComment] = useState('');
     const [loadCommentsTo, setLoadCommentsTo] = useState(5)
+    const [currSort, setCurrSort] = useState("oldest")
     const cookie = new Cookie();
     const history = useHistory()
 
@@ -82,11 +83,38 @@ function RecipeViewComments(props) {
         }
     }
 
+    function sortChange(e) {
+        switch (e.target.value) {
+            case "0":
+                if (currSort === "newest") {
+                    setCurrSort("oldest")
+                    setLoadCommentsTo(5)
+                    props.setComments(props.comments.reverse())
+                }
+                break
+            case "1":
+                if (currSort === "oldest") {
+                    setCurrSort("newest")
+                    setLoadCommentsTo(5)
+                    props.setComments(props.comments.reverse())
+                }
+                break
+        }
+    }
     return (<>
         <Row style={{marginTop:"1em"}}>
             <Col sm={1} />
             <Col sm={11}>
                 <h3> {props.comments.length} {props.comments.length === 1 ? "Comment" : "Comments"}</h3>
+                <Form>
+                    Sort by:
+                    <Form.Control as="select" style={{width:"30%"}} onChange={(e) => sortChange(e)}>
+                        <option value="0">Oldest</option>
+                        <option value="1">Newest</option>
+
+                </Form.Control>
+                    <br/>
+                </Form>
                 {props.loggedIn ?
                 <Form onSubmit={handleSubmit}>
                     <Row>
@@ -97,8 +125,9 @@ function RecipeViewComments(props) {
                             <Button type="submit" variant="secondary" >Post</Button>
                         </Col>
                     </Row>
-                </Form> : <div> Log in to leave a comment </div>}
+                </Form> : <div> <Link to={"/login"}> Log in</Link> to leave a comment </div>}
                 <br/>
+
                 <ListGroup>
                     {props.comments.slice(0,loadCommentsTo).map(({first_name, last_name, user_id, profile_pic_path, comment_id, by_user_id, comment_text, time_created}, index)=>
                         <ListGroup.Item className={"shadow-sm border-top"} key={index} style={{marginBottom:"1em", paddingLeft:"2em", paddingRight:"2em"}}>
