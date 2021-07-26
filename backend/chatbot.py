@@ -18,12 +18,9 @@ language_code = "en-US"
 
 
 def talk(token, messages):
-    '''
     user_id = token_to_id(token)
     if user_id < 0:
         return -1
-    '''
-    user_id = token
 
     con = helpers.get_db_conn()
     cur = con.cursor()
