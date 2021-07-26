@@ -43,3 +43,19 @@ Week 6:
 Week 7:
 - updated the behaviour of search and fixed several bug
 - discussed with team for future work
+- solved the issues related to JWT version
+
+Week 8:
+- did the backend for Like
+- finished the backend for delete Like and Like in recipe view
+- did the second Demo with group
+- started the backend for chatbot
+- implemented the Dialogflow API into our project
+- solved the authorize issue of API
+- added intents and entities for recipe, ingredient... in Dialogflow cloud console
+- added instructions for installing chatbot
+- created a simple frontend for chatbot, deleted and decided using an existed template instead
+
+Week 9:
+- varied the behaviour of chatbot
+- loaded the chatbot into project's google account
