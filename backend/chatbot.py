@@ -41,7 +41,6 @@ def talk(token, messages):
         react_message = react_message + ', ' + first_name + '?'
 
     elif str.format(response.query_result.intent.display_name) == "Search":
-        print(react_message)
         j = json.loads(react_message)
         name = j["name"]
         meal_type = j["type"]
@@ -63,7 +62,13 @@ def talk(token, messages):
         result = do_search(name, meal_type, serving_size, None, ingredient, step)
         if len(result) == 0:
             return "I am sorry, " + first_name + ". No result find for given recipe."
-        return "go to http://localhost:3000/recipe/" + str(result[0]['recipe_id'])
+        else:
+            message = "I have found some results for you:\n"
+            i = 0
+            while i < len(result) and i < 3:
+                message = message + result[i]['name'] + ": go to http://localhost:3000/recipe/" + str(result[i]['recipe_id']) + "\n"
+                i = i + 1
+            return message
 
     return react_message
 
@@ -120,4 +125,4 @@ def test(session_id, texts):
 
     return 0
 
-print(talk(2, "how to cook a pizza"))
+print(talk(2, "how to change my password?"))
