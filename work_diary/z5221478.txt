@@ -31,3 +31,15 @@ Week 5:
 - discussed with group about the behaviour of create a recipe
 - set up software working environment
 - finished the backend of edit recipe's ingredients and steps
+
+Week 6:
+- did the backend for profile/recipe
+- finished first Retrospective with team
+- did the backend for search recipe
+- did the backend for search history add/delete
+- tried to solve the challenge of transferring multiple images from frontend to backend for recipe steps
+  got the program partially work but finally abandoned
+  
+Week 7:
+- updated the behaviour of search and fixed several bug
+- discussed with team for future work
