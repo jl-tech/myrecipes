@@ -39,6 +39,8 @@
 - Edit/photos backend implementation
 - Refactoring backend routing to separate files, refactor profile functions into new file
 - Various bug fixes for backend
+- Write portions of the retrospective report and compile work into final document
+
 *Week 7*
 - Create initial homepage frontend
 - Create basic frontend routing for searches 
@@ -55,3 +57,19 @@
 - Create backend for newsfeed & subscribing
 - Frontend design polishing & minor fixes, including adding shadows on card hover, various changes to style, adding profile pic to menu etc
 
+*Week 8*
+- Create like frontend
+- Added like count to search results and newsfeed - frontend
+- Minor frontend style changes
+- Redesign contributor block on recipes - frontend
+- Redesign comments section on recipes - frontend
+- Add 'YOU', 'OP' tags to comments - frontend
+- Add 'YOU' tag to own profile - frontend
+- Add 'Hide Recommended' feature - frontend
+- Redesign profile tabs - frontend
+- Add a list of recipe a user has liked to profile - frontend & backend
+- Add a list of user's comments to profile - frontend & backend
+- Implement 'Load more...' function where comments number is too high - frontend
+- Added comments data to dump 
+- Add ability to search for users - frontend & backend
+- Write portions of the retrospective report and compile work into final document
