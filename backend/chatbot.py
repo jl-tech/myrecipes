@@ -18,13 +18,13 @@ language_code = "en-US"
 
 
 
-def talk(messages):
+def talk(messages, session):
 
     con = helpers.get_db_conn()
     cur = con.cursor()
 
-
-    response = connect_dialogflow_api("1234567819", messages) # todo session id
+    print(session)
+    response = connect_dialogflow_api(session, messages) # todo session id
 
     react_message = response.query_result.fulfillment_text
 
