@@ -17,6 +17,7 @@ project_id = "myrecipe-v9yo"
 language_code = "en-US"
 
 
+
 def talk(messages):
 
     con = helpers.get_db_conn()
@@ -53,14 +54,28 @@ def talk(messages):
         if len(result) == 0:
             return "Sorry, I couldn't find any recipes."
         else:
-            message = "I have found some results for you:\n"
+            message = "Here are the recipes I found:\n"
             i = 0
             links = []
             while i < len(result) and i < 3:
                 links.append({'name': result[i]['name'], 'link': "http://localhost:3000/recipe/" + str(result[i]['recipe_id'])})
                 i = i + 1
             return message, links
-
+    elif str.format(response.query_result.intent.display_name) == "Account_Settings":
+        return react_message, [{'name': 'Account Settings', 'link': 'http://localhost:3000/settings'}],
+    elif str.format(response.query_result.intent.display_name) == "direct_to_search":
+        return react_message, [{'name': 'Search', 'link': 'http://localhost:3000/search'}],
+    elif str.format(response.query_result.intent.display_name) == "Find_User":
+        return react_message, [{'name': 'Find User', 'link': 'http://localhost:3000/users'}],
+    elif str.format(response.query_result.intent.display_name) == "Create":
+        return react_message, [
+            {'name': 'Create a Recipe', 'link': 'http://localhost:3000/recipe/create'}],
+    elif str.format(response.query_result.intent.display_name) == "Newsfeed":
+        return react_message, [
+            {'name': 'Newsfeed', 'link': 'http://localhost:3000/newsfeed'}],
+    elif str.format(response.query_result.intent.display_name) == "My_Profile":
+        return react_message, [
+            {'name': 'My Profile', 'link': 'http://localhost:3000/profile'}],
     return react_message
 
 

@@ -1,6 +1,6 @@
 import ChatBox, {ChatFrame} from 'react-chat-plugin'
 import Cookie from 'universal-cookie';
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import CloseButton from "react-bootstrap/CloseButton";
 import Image from "react-bootstrap/Image";
 async function requestSend(message) {
@@ -30,9 +30,22 @@ function ChatBot(props) {
     const [attr, setAttr] = useState({
         showChatbox: false,
         showIcon: true,
-        messages: [{
+    });
+
+    const [typing, setTyping] = useState(false)
+
+  function handleClickIcon() {
+        if (localStorage.getItem('chatlog_expires') !== null && localStorage.getItem('chatlog_expires') < new Date()) {
+            localStorage.clear()
+        }
+    setAttr({
+      ...attr,
+      showChatbox: !attr.showChatbox,
+      showIcon: !attr.showIcon,
+        messages: localStorage.getItem('chatlog') !== null ? JSON.parse(localStorage.getItem('chatlog')) :
+             [{
                       author: {
-                          username: 'MyRecipes Bot',
+                          username: 'Malvina, the MyRecipes Bot',
                           id: 2,
                           avatarUrl: botAvatarURL
                       },
@@ -41,50 +54,45 @@ function ChatBot(props) {
                       timestamp: +new Date(),
                   }],
     });
-    const [typing, setTyping] = useState(false)
 
-
-  function handleClickIcon() {
-    // toggle showChatbox and showIcon
-    setAttr({
-      ...attr,
-      showChatbox: !attr.showChatbox,
-      showIcon: !attr.showIcon,
-    });
   }
 
   async function handleOnSendMessage (message) {
+      let next_msg = {author: {
+              username: 'You',
+              id: 1,
+              avatarUrl: userAvatarURL
+          },
+          text: message,
+          type: 'text',
+          timestamp: +new Date()}
+
       setAttr({
           ...attr,
-          messages: attr.messages.concat({
-              author: {
-                  username: 'You',
-                  id: 1,
-                  avatarUrl: userAvatarURL
-              },
-              text: message,
-              type: 'text',
-              timestamp: +new Date(),
-          }),
+          messages: attr.messages.concat(next_msg),
       });
+
       setTyping(true)
+
       let response = await requestSend(message)
           .catch(e => {
+              next_msg = {
+                  author: {
+                      username: 'You',
+                      id: 1,
+                      avatarUrl: userAvatarURL
+                  },
+                  text: message,
+                  type: 'text',
+                  timestamp: +new Date(),
+                  hasError: true,
+              }
               setAttr({
                   ...attr,
-                  messages: attr.messages.concat({
-                      author: {
-                          username: 'You',
-                          id: 1,
-                          avatarUrl: userAvatarURL
-                      },
-                      text: message,
-                      type: 'text',
-                      timestamp: +new Date(),
-                      hasError: true,
-                  }),
+                  messages: attr.messages.concat(),
               });
           });
+
       if (response != null) {
           let buttons = []
 
@@ -97,11 +105,7 @@ function ChatBot(props) {
                   });
               })
           }
-          console.log(buttons)
-          setAttr({
-              ...attr,
-              messages: attr.messages.concat({
-                      author: {
+          next_msg = [{author: {
                           username: 'You',
                           id: 1,
                           avatarUrl: userAvatarURL
@@ -112,7 +116,7 @@ function ChatBot(props) {
                   },
                   {
                       author: {
-                          username: 'MyRecipes Bot',
+                          username: 'Malvina, the MyRecipes Bot',
                           id: 2,
                           avatarUrl: botAvatarURL
                       },
@@ -120,13 +124,17 @@ function ChatBot(props) {
                       type: 'text',
                       timestamp: +new Date(),
                       buttons: buttons
-                  }
-              )
+                  }]
+          setAttr({
+              ...attr,
+              messages: attr.messages.concat(next_msg)
           })
           setTyping(false)
-      }
-  }
 
+          localStorage.setItem('chatlog', JSON.stringify(attr['messages'].concat(next_msg)))
+          localStorage.setItem('chatlog_expires', new Date().setHours(new Date().getHours() + 1))
+      }
+    }
 
 
     return (
@@ -138,7 +146,7 @@ function ChatBot(props) {
           messages={attr.messages}
           width={'400px'}
           showTypingIndicator={typing}
-          activeAuthor={{ username: 'MyRecipes Bot', id: 2, avatarUrl: botAvatarURL }}
+          activeAuthor={{ username: 'Malvina, the MyRecipes Bot', id: 2, avatarUrl: botAvatarURL }}
         />
       }
       icon={<Image src={"http://127.0.0.1:5000/img/speech.png"} style={{marginLeft:"auto", marginRight:"auto", width:"2em"}}/>}
@@ -157,7 +165,7 @@ function ChatBot(props) {
           borderRadius: "15px 15px 15px 15px",
           display: showTip ? "": "none",
       }}>
-          👋 Need help? Ask MyRecipes Bot!<CloseButton onClick={()=>setShowTip(false)}/>
+          👋 Need help? Ask Malvina, our bot!<CloseButton onClick={()=>setShowTip(false)}/>
       </div>
     </ChatFrame>);
 }

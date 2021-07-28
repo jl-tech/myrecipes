@@ -112,6 +112,7 @@ function Home({ loggedIn, setLoggedIn, currId }) {
     const location = useLocation();
     const [modalToggle, setModalToggle] = useState(false);
 
+
     return (
     <>
     <Navbar style={{height: "4em"}} bg="light" variant="light" className={"shadow-sm"}>
