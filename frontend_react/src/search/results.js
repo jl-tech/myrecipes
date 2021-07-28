@@ -100,7 +100,7 @@ function SearchResults(props) {
                 <Row style={{marginTop:"1em"}}>
                     <Col sm={3} />
                     <Col sm={6}>
-                    <SearchBar loggedIn={props.loggedIn} init={query.get('name') != null ? query.get('name') : ""} disabled={advancedMode}/>
+                    <SearchBar loggedIn={props.loggedIn} isHome={false} init={query.get('name') != null ? query.get('name') : ""} disabled={advancedMode}/>
                     <div style={{marginTop:"0.5em"}}>
                         {recipeData.length} recipes found
                         <a href="#" style={{float:"right"}} onClick={()=>{setAdvancedMode(!advancedMode)}}> {advancedMode? "Hide advanced options" : "Show advanced options"}</a>

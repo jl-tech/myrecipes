@@ -30,6 +30,8 @@ import Feed from './newsfeed/feed';
 import NotFound from "./404";
 import Users from "./users";
 import ChatBot from "./chatbot/chatbot";
+import ChatBox from "react-chat-plugin";
+import Container from "react-bootstrap/Container";
 
 async function profileUser(userid) {
     let response = await fetch('http://localhost:5000/profile/view?' + new URLSearchParams({'user_id': userid}), {
@@ -130,14 +132,14 @@ function Home({ loggedIn, setLoggedIn, currId }) {
         <NavLink style={{paddingLeft: '2rem', fontSize:"125%"}} to="/users" activeStyle={{ paddingLeft: '2rem', fontWeight: 'bold', fontSize:"125%"}}>
             Find Users
         </NavLink>
-        {location.pathname !== "/home" && location.pathname !== "/search" ? <div style={{paddingLeft: '2rem'}}>  <SearchBar nav={true} loggedIn={loggedIn} /> </div>: <></>}
+        {location.pathname !== "/home" && location.pathname !== "/search" ? <div style={{paddingLeft: '2rem'}}>  <SearchBar isHome={false} nav={true} loggedIn={loggedIn} /> </div>: <></>}
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
             <Navbar.Text>
                 {loggedIn ? <UserButton setLoggedIn={setLoggedIn} currId={currId} firstName={firstName} setfirstName={setfirstName} setModalToggle={setModalToggle}/> : <LoginButton />}
             </Navbar.Text>
         </Navbar.Collapse>
-        <ChatBot firstName={loggedIn ? firstName : ""}/>
+        <ChatBot firstName={loggedIn ? " " + firstName : ""} style={{borderRadius: "15px 15px 15px 15px"}}/>
     </Navbar>
 
     <Switch>

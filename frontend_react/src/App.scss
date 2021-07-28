@@ -6,9 +6,10 @@ $theme-colors: (
 );
 @import "~bootstrap/scss/bootstrap";
 
-
-
-
+.react-chat-viewerBox {
+  @extend .shadow;
+  border-radius: 10px 10px 10px 10px !important;
+}
 
 
 body {

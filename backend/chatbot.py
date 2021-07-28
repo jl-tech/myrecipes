@@ -23,12 +23,12 @@ def talk(messages):
     cur = con.cursor()
 
 
-    response = connect_dialogflow_api("123456789", messages) # todo session id
+    response = connect_dialogflow_api("1234567819", messages) # todo session id
 
     react_message = response.query_result.fulfillment_text
 
     if str.format(response.query_result.intent.display_name) == "Welcome":
-        react_message = react_message + ' ##NAME##'
+        react_message = react_message + '##NAME##?'
 
     elif str.format(response.query_result.intent.display_name) == "Search":
         j = json.loads(react_message)
@@ -51,7 +51,7 @@ def talk(messages):
 
         result = do_search(name, meal_type, serving_size, None, ingredient, step)
         if len(result) == 0:
-            return "Sorry, " + first_name + " I couldn't find any recipes."
+            return "Sorry, I couldn't find any recipes."
         else:
             message = "I have found some results for you:\n"
             i = 0

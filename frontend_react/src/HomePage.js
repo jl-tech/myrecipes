@@ -24,7 +24,7 @@ function HomePage(props) {
                 <Row>
                     <Col sm={3} />
                     <Col sm={6}>
-                    <SearchBar loggedIn={props.loggedIn} />
+                    <SearchBar loggedIn={props.loggedIn} isHome={true} />
                     </Col>
                 </Row>
                 
