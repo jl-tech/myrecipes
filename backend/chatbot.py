@@ -11,9 +11,9 @@ from tokenise import token_to_id
 from search import do_search
 
 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./static/chatbot_client/comp3900-w16a-goodname-3261b83e6fa2.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./static/chatbot_client/myrecipe-v9yo-da19f36bed8b.json"
 
-project_id = "comp3900-w16a-goodname"
+project_id = "myrecipe-v9yo"
 language_code = "en-US"
 
 
