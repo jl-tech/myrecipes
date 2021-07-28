@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
+
 import {
     Link,
     Switch,
@@ -28,6 +29,7 @@ import Image from "react-bootstrap/Image";
 import Feed from './newsfeed/feed';
 import NotFound from "./404";
 import Users from "./users";
+import ChatBot from "./chatbot/chatbot";
 
 async function profileUser(userid) {
     let response = await fetch('http://localhost:5000/profile/view?' + new URLSearchParams({'user_id': userid}), {
@@ -135,7 +137,9 @@ function Home({ loggedIn, setLoggedIn, currId }) {
                 {loggedIn ? <UserButton setLoggedIn={setLoggedIn} currId={currId} firstName={firstName} setfirstName={setfirstName} setModalToggle={setModalToggle}/> : <LoginButton />}
             </Navbar.Text>
         </Navbar.Collapse>
+        <ChatBot firstName={loggedIn ? firstName : ""}/>
     </Navbar>
+
     <Switch>
         <Route path="/profile/:id">
           <Profile currId={currId} loggedIn={loggedIn} settings={false} setButtonName={setfirstName} modalToggle={modalToggle} setModalToggle={setModalToggle}/>
@@ -192,7 +196,10 @@ function Home({ loggedIn, setLoggedIn, currId }) {
             <NotFound/>
         </Route>
     </Switch>
+
+
     </>
+
     );
 }
 

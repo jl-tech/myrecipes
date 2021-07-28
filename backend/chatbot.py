@@ -11,31 +11,24 @@ from tokenise import token_to_id
 from search import do_search
 
 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "static\chatbot_client\comp3900-w16a-goodname-3261b83e6fa2.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./static/chatbot_client/comp3900-w16a-goodname-3261b83e6fa2.json"
 
 project_id = "comp3900-w16a-goodname"
 language_code = "en-US"
 
 
-def talk(token, messages):
-    user_id = token_to_id(token)
-    if user_id < 0:
-        return -1
+def talk(messages):
 
     con = helpers.get_db_conn()
     cur = con.cursor()
 
-    query = "select * from Users where user_id=%s"
-    cur.execute(query, (user_id,))
-    result = cur.fetchall()
-    first_name = result[0]['first_name']
 
-    response = connect_dialogflow_api("123456789" + str(user_id), messages)
+    response = connect_dialogflow_api("123456789", messages) # todo session id
 
     react_message = response.query_result.fulfillment_text
 
     if str.format(response.query_result.intent.display_name) == "Welcome":
-        react_message = react_message + ', ' + first_name + '?'
+        react_message = react_message + ' ##NAME##'
 
     elif str.format(response.query_result.intent.display_name) == "Search":
         j = json.loads(react_message)
@@ -58,14 +51,15 @@ def talk(token, messages):
 
         result = do_search(name, meal_type, serving_size, None, ingredient, step)
         if len(result) == 0:
-            return "I am sorry, " + first_name + ". No result find for given recipe."
+            return "Sorry, " + first_name + " I couldn't find any recipes."
         else:
             message = "I have found some results for you:\n"
             i = 0
+            links = []
             while i < len(result) and i < 3:
-                message = message + result[i]['name'] + ": go to http://localhost:3000/recipe/" + str(result[i]['recipe_id']) + "\n"
+                links.append({'name': result[i]['name'], 'link': "http://localhost:3000/recipe/" + str(result[i]['recipe_id'])})
                 i = i + 1
-            return message
+            return message, links
 
     return react_message
 

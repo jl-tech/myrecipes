@@ -9,6 +9,7 @@ import auth
 import threading
 
 from route.auth_route import AUTH
+from route.chatbot_route import CHATBOT
 from route.newsfeed_route import NEWSFEED
 from route.profile_route import PROFILE
 from route.recipe_route import RECIPE
@@ -22,6 +23,7 @@ APP.register_blueprint(PROFILE, url_prefix='/profile')
 APP.register_blueprint(RECIPE, url_prefix='/recipe')
 APP.register_blueprint(SEARCH, url_prefix='/search')
 APP.register_blueprint(NEWSFEED, url_prefix='/newsfeed')
+APP.register_blueprint(CHATBOT, url_prefix='/chatbot')
 
 CORS(APP)
 
