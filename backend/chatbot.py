@@ -79,6 +79,7 @@ def talk(messages, session):
         return react_message, [
             {'name': 'My Profile', 'link': 'http://localhost:3000/profile'}],
     elif str.format(response.query_result.intent.display_name) == "Consumer_Service_Email":
+        send_support_email(messages)
         return "I have send the email to our service email!"
     return react_message
 
@@ -120,5 +121,3 @@ def send_support_email(request):
                                           None),
                                     target=helpers.send_email)
     email_thread.start()
-
-send_support_email("hi, can u help me with ...")
