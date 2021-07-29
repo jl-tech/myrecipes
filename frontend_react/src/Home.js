@@ -98,7 +98,7 @@ function UserButton(props) {
         }>
             <Dropdown.Item as={Link} to="/profile">Profile</Dropdown.Item>
             {location.pathname.includes('/profile') || location.pathname.includes('/settings') ?
-                <Dropdown.Item onClick={()=>{props.setModalToggle(true)} }>Account Settings</Dropdown.Item>:
+                <Dropdown.Item onClick={()=>window.location.href="/settings"} >Account Settings</Dropdown.Item>:
                 <Dropdown.Item as={Link} to="/settings" >Account Settings</Dropdown.Item>
             }
             <Dropdown.Item onClick={logout}>Log Out</Dropdown.Item>
