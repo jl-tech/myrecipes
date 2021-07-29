@@ -27,13 +27,13 @@ def talk(messages, session):
 
     response = connect_dialogflow_api(session, messages)
 
-
     react_message = response.query_result.fulfillment_text
+    intent_name = str.format(response.query_result.intent.display_name)
 
-    if str.format(response.query_result.intent.display_name) == "Welcome":
+    if intent_name == "Welcome":
         react_message = react_message + '##NAME##?'
 
-    elif str.format(response.query_result.intent.display_name) == "Search":
+    elif intent_name == "Search":
         j = json.loads(react_message)
         name = j["name"]
         meal_type = j["type"]
@@ -63,22 +63,22 @@ def talk(messages, session):
                 links.append({'name': result[i]['name'], 'link': "http://localhost:3000/recipe/" + str(result[i]['recipe_id'])})
                 i = i + 1
             return message, links
-    elif str.format(response.query_result.intent.display_name) == "Account_Settings":
+    elif intent_name == "Account_Settings":
         return react_message, [{'name': 'Account Settings', 'link': 'http://localhost:3000/settings'}],
-    elif str.format(response.query_result.intent.display_name) == "direct_to_search":
+    elif intent_name == "direct_to_search":
         return react_message, [{'name': 'Search', 'link': 'http://localhost:3000/search'}],
-    elif str.format(response.query_result.intent.display_name) == "Find_User":
+    elif intent_name == "Find_User":
         return react_message, [{'name': 'Find User', 'link': 'http://localhost:3000/users'}],
-    elif str.format(response.query_result.intent.display_name) == "Create":
+    elif intent_name == "Create":
         return react_message, [
             {'name': 'Create a Recipe', 'link': 'http://localhost:3000/recipe/create'}],
-    elif str.format(response.query_result.intent.display_name) == "Newsfeed":
+    elif intent_name == "Newsfeed":
         return react_message, [
             {'name': 'Newsfeed', 'link': 'http://localhost:3000/newsfeed'}],
-    elif str.format(response.query_result.intent.display_name) == "My_Profile":
+    elif intent_name == "My_Profile":
         return react_message, [
             {'name': 'My Profile', 'link': 'http://localhost:3000/profile'}],
-    elif str.format(response.query_result.intent.display_name) == "Consumer_Service_Email":
+    elif intent_name == "Consumer_Service_Email":
         send_support_email(messages)
         return "I have send the email to our service email!"
     return react_message
