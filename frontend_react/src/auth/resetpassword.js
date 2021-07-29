@@ -23,7 +23,7 @@ async function verifyResetCode(reset_code) {
     });
 
     let responseJson = await response.json();
-    
+
     if (response.ok) return responseJson;
     else throw new Error(responseJson.error);
 }
@@ -43,7 +43,7 @@ async function requestResetPassword(reset_code, password) {
     });
 
     let responseJson = await response.json();
-    
+
     if (response.ok) return responseJson;
     else throw new Error(responseJson.error);
 }
@@ -82,61 +82,61 @@ function ResetPasswordBody(props) {
     if (success) {
         return (
             <>
-            <Helmet>
-                <title> Reset Password - MyRecipes </title>
-            </Helmet>
-            <div style={{textAlign:"center",marginTop:"1em"}}>
-                <img src={logo} alt="Logo" style={{maxWidth:"500px"}}/>
-            </div>
-            <Modal.Dialog>
-            <Modal.Header>
-                <Modal.Title>
-                Reset Password
-                </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <div style={{textAlign:"center"}}>
-                    Successfully changed password <br />
-                    <Link to="/login" component={Button} style={{marginTop:"1em"}}>
-                        Return
-                    </Link>
+                <Helmet>
+                    <title> Reset Password - MyRecipes </title>
+                </Helmet>
+                <div style={{textAlign:"center",marginTop:"1em"}}>
+                    <img src={logo} alt="Logo" style={{maxWidth:"500px"}}/>
                 </div>
-            </Modal.Body>
-            </Modal.Dialog >
+                <Modal.Dialog>
+                    <Modal.Header>
+                        <Modal.Title>
+                            Reset Password
+                        </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <div style={{textAlign:"center"}}>
+                            Successfully changed password <br />
+                            <Link to="/login" component={Button} style={{marginTop:"1em"}}>
+                                Return
+                            </Link>
+                        </div>
+                    </Modal.Body>
+                </Modal.Dialog >
             </>
         );
     } else {
         return (
             <>
-            <Helmet>
-                <title> Reset Password - MyRecipes </title>
-            </Helmet>
-            <div style={{textAlign:"center"}}>
-                <img src={logo} alt="Logo" style={{maxWidth:"500px"}}/>
-            </div>
-            <Modal.Dialog>
-            <Modal.Header>
-                <Modal.Title>
-                Reset Password
-                </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-            <Form onSubmit={handleSubmit}>
-                <Form.Group controlId="password">
-                    <Form.Control type="password" placeholder="Password" required onChange={e => setPassword(e.target.value)}/>
-                </Form.Group>
-                <Form.Group controlId="password">
-                    <Form.Control type="password" placeholder="Retype Password" required onChange={e => setPassword2(e.target.value)}/>
-                </Form.Group>
-                <Alert show={alertShow} variant="danger" onClose={() => setAlertShow(false)} dismissible>
-                    {alertText}
-                </Alert>
-                <Button type="submit" block>
-                    Submit
-                </Button>
-            </Form>
-            </Modal.Body>
-            </Modal.Dialog >
+                <Helmet>
+                    <title> Reset Password - MyRecipes </title>
+                </Helmet>
+                <div style={{textAlign:"center"}}>
+                    <img src={logo} alt="Logo" style={{maxWidth:"500px"}}/>
+                </div>
+                <Modal.Dialog>
+                    <Modal.Header>
+                        <Modal.Title>
+                            Reset Password
+                        </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Form onSubmit={handleSubmit}>
+                            <Form.Group controlId="password">
+                                <Form.Control type="password" placeholder="Password" required onChange={e => setPassword(e.target.value)}/>
+                            </Form.Group>
+                            <Form.Group controlId="password">
+                                <Form.Control type="password" placeholder="Retype Password" required onChange={e => setPassword2(e.target.value)}/>
+                            </Form.Group>
+                            <Alert show={alertShow} variant="danger" onClose={() => setAlertShow(false)} dismissible>
+                                {alertText}
+                            </Alert>
+                            <Button type="submit" block>
+                                Submit
+                            </Button>
+                        </Form>
+                    </Modal.Body>
+                </Modal.Dialog >
             </>
         );
     }
@@ -186,7 +186,7 @@ function ResetPassword() {
 
     if (fetched) {
         if (valid) return (<ResetPasswordBody code={code} />);
-        else return (<ResetPasswordError message={message} />); 
+        else return (<ResetPasswordError message={message} />);
     } else {
         return (<Modal.Dialog></Modal.Dialog>);
     }

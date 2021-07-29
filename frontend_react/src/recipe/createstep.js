@@ -45,43 +45,43 @@ function RecipeCreateStep({steps, setSteps}) {
 
     return (
         <>
-        <Form.Label>Directions</Form.Label>
-        <DragDropContext onDragEnd={handleOnDragEnd}>
-            <Droppable droppableId="steps">
-                {(provided) => (
-                    <ListGroup as="ul" {...provided.droppableProps} ref={provided.innerRef}>
-                        {steps.map(({id, description}, index) => {
-                            return (
-                                <Draggable key={id} draggableId={id} index={index}>
-                                    {(provided) => (
-                                        <ListGroup.Item as="li"  ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
-                                            <Form.Row >
-                                                <Col sm={1} className={"my-auto"}>
-                                                    <span>{index+1}</span>
-                                                </Col>
-                                                <Form.Group as={Col} sm={10} style={{marginBottom:"0"}}>
-                                                    <Form.Control placeholder="Details" onChange={e => updateStep(index, "description", e.target.value)} required/>
-                                                </Form.Group>
-                                                <Col sm={1} className={"my-auto"}>
-                                                    <button type="button" className="close" onClick={() => removeStep(index)}>
-                                                        <span>×</span>
-                                                    </button>
-                                                    <img src={Reorder} alt=""/>
-                                                </Col>
-                                            </Form.Row>
-                                        </ListGroup.Item>
-                                    )}
-                                </Draggable>
-                            );
-                        })}
-                        {provided.placeholder}
-                        <ListGroup.Item as="li">
-                            <Button variant="outline-secondary" style={{float:"right"}} onClick={addRow}>Add</Button>
-                        </ListGroup.Item>
-                    </ListGroup>
-                )}
-            </Droppable>
-        </DragDropContext>
+            <Form.Label>Directions</Form.Label>
+            <DragDropContext onDragEnd={handleOnDragEnd}>
+                <Droppable droppableId="steps">
+                    {(provided) => (
+                        <ListGroup as="ul" {...provided.droppableProps} ref={provided.innerRef}>
+                            {steps.map(({id, description}, index) => {
+                                return (
+                                    <Draggable key={id} draggableId={id} index={index}>
+                                        {(provided) => (
+                                            <ListGroup.Item as="li"  ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
+                                                <Form.Row >
+                                                    <Col sm={1} className={"my-auto"}>
+                                                        <span>{index+1}</span>
+                                                    </Col>
+                                                    <Form.Group as={Col} sm={10} style={{marginBottom:"0"}}>
+                                                        <Form.Control placeholder="Details" onChange={e => updateStep(index, "description", e.target.value)} required/>
+                                                    </Form.Group>
+                                                    <Col sm={1} className={"my-auto"}>
+                                                        <button type="button" className="close" onClick={() => removeStep(index)}>
+                                                            <span>×</span>
+                                                        </button>
+                                                        <img src={Reorder} alt=""/>
+                                                    </Col>
+                                                </Form.Row>
+                                            </ListGroup.Item>
+                                        )}
+                                    </Draggable>
+                                );
+                            })}
+                            {provided.placeholder}
+                            <ListGroup.Item as="li">
+                                <Button variant="outline-secondary" style={{float:"right"}} onClick={addRow}>Add</Button>
+                            </ListGroup.Item>
+                        </ListGroup>
+                    )}
+                </Droppable>
+            </DragDropContext>
         </>
     );
 }

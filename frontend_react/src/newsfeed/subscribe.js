@@ -18,7 +18,7 @@ async function requestSubscribe(token, userid, toSubscribe) {
     });
 
     let responseJson = await response.json();
-    
+
     if (response.ok) return responseJson;
     else throw new Error(responseJson.error);
 }
@@ -77,12 +77,12 @@ function SubscribeButton(props) {
 
     return (
         <>
-        {subscribed
-            ? 
-            <Button variant="secondary" onClick={()=>handleButton(false)}>Unsubscribe</Button>
-            :
-            <Button onClick={()=>handleButton(true)}>Subscribe</Button>
-        }
+            {subscribed
+                ?
+                <Button variant="secondary" onClick={()=>handleButton(false)}>Unsubscribe</Button>
+                :
+                <Button onClick={()=>handleButton(true)}>Subscribe</Button>
+            }
         </>
     );
 }

@@ -47,49 +47,49 @@ function RecipeCreateIngredient({ingredients, setIngredients}) {
 
     return (
         <>
-        <Form.Label>Ingredients</Form.Label>
-        <DragDropContext onDragEnd={handleOnDragEnd}>
-            <Droppable droppableId="ingredients">
-                {(provided) => (
-                    <ListGroup as="ul" {...provided.droppableProps} ref={provided.innerRef}>
-                        {ingredients.map(({id, quantity, unit, name}, index) => {
-                            return (
-                                <Draggable key={id} draggableId={id} index={index}>
-                                    {(provided) => (
-                                        <ListGroup.Item as="li" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
-                                            <Form.Row >
-                                                <Col sm={1} className={"my-auto"}>
-                                                    <span>{index+1}</span>
-                                                </Col>
-                                                <Form.Group as={Col} sm={2} style={{marginBottom:"0"}}>
-                                                    <Form.Control placeholder="Quantity (if any)" type="number" step="any" onChange={e => updateIngredient(index, "quantity", e.target.value)}/>
-                                                </Form.Group>
-                                                <Form.Group as={Col} sm={2} style={{marginBottom:"0"}} >
-                                                    <Form.Control placeholder="Unit (if any)" onChange={e => updateIngredient(index, "unit", e.target.value)}/>
-                                                </Form.Group>
-                                                <Form.Group as={Col} sm={6} style={{marginBottom:"0"}}>
-                                                    <Form.Control placeholder="Name" required onChange={e => updateIngredient(index, "name", e.target.value)}/>
-                                                </Form.Group>
-                                                <Col sm={1} className={"my-auto"}>
-                                                    <button type="button" className="close" onClick={() => removeIngredient(index)}>
-                                                        <span>×</span>
-                                                    </button>
-                                                    <img src={Reorder} alt=""/>
-                                                </Col>
-                                            </Form.Row>
-                                        </ListGroup.Item>
-                                    )}
-                                </Draggable>
-                            );
-                        })}
-                        {provided.placeholder}
-                        <ListGroup.Item as="li">
-                            <Button variant="outline-secondary" style={{float:"right"}} onClick={addRow}>Add</Button>
-                        </ListGroup.Item>
-                    </ListGroup>
-                )}
-            </Droppable>
-        </DragDropContext>
+            <Form.Label>Ingredients</Form.Label>
+            <DragDropContext onDragEnd={handleOnDragEnd}>
+                <Droppable droppableId="ingredients">
+                    {(provided) => (
+                        <ListGroup as="ul" {...provided.droppableProps} ref={provided.innerRef}>
+                            {ingredients.map(({id, quantity, unit, name}, index) => {
+                                return (
+                                    <Draggable key={id} draggableId={id} index={index}>
+                                        {(provided) => (
+                                            <ListGroup.Item as="li" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
+                                                <Form.Row >
+                                                    <Col sm={1} className={"my-auto"}>
+                                                        <span>{index+1}</span>
+                                                    </Col>
+                                                    <Form.Group as={Col} sm={2} style={{marginBottom:"0"}}>
+                                                        <Form.Control placeholder="Quantity (if any)" type="number" step="any" onChange={e => updateIngredient(index, "quantity", e.target.value)}/>
+                                                    </Form.Group>
+                                                    <Form.Group as={Col} sm={2} style={{marginBottom:"0"}} >
+                                                        <Form.Control placeholder="Unit (if any)" onChange={e => updateIngredient(index, "unit", e.target.value)}/>
+                                                    </Form.Group>
+                                                    <Form.Group as={Col} sm={6} style={{marginBottom:"0"}}>
+                                                        <Form.Control placeholder="Name" required onChange={e => updateIngredient(index, "name", e.target.value)}/>
+                                                    </Form.Group>
+                                                    <Col sm={1} className={"my-auto"}>
+                                                        <button type="button" className="close" onClick={() => removeIngredient(index)}>
+                                                            <span>×</span>
+                                                        </button>
+                                                        <img src={Reorder} alt=""/>
+                                                    </Col>
+                                                </Form.Row>
+                                            </ListGroup.Item>
+                                        )}
+                                    </Draggable>
+                                );
+                            })}
+                            {provided.placeholder}
+                            <ListGroup.Item as="li">
+                                <Button variant="outline-secondary" style={{float:"right"}} onClick={addRow}>Add</Button>
+                            </ListGroup.Item>
+                        </ListGroup>
+                    )}
+                </Droppable>
+            </DragDropContext>
         </>
     );
 }

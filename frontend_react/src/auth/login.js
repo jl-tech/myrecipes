@@ -29,7 +29,7 @@ async function loginUser(email, password) {
     });
 
     let responseJson = await response.json();
-    
+
     if (response.ok) return responseJson;
     else throw new Error(responseJson.error);
 }
@@ -57,36 +57,36 @@ function LoginBody() {
             history.go(0);
         }
     }
-    
+
     return (
         <>
             <Helmet>
                 <title> Log In - MyRecipes </title>
             </Helmet>
-        <Modal.Body>
-            <Form onSubmit={handleSubmit}>
-                <Form.Group controlId="email">
-                    <Form.Control type="email" placeholder="Email address" required onChange={e => setEmail(e.target.value)}/>
-                </Form.Group>
-                <Form.Group controlId="password">
-                    <Form.Control type="password" placeholder="Password" required onChange={e => setPassword(e.target.value)}/>
-                </Form.Group>
-                <Alert show={alertShow} variant="danger" onClose={() => setAlertShow(false)} dismissible>
-                    {alertText}
-                </Alert>
-                <Button type="submit" block>
-                    Log In
-                </Button>
-            </Form>
-            <div style={{textAlign:"center",marginTop:"1em"}}>
-                <Link to="/login/forgetpassword" >Forgotten password?</Link>
-            </div>
-        </Modal.Body>
-        <Modal.Footer style={{display:"block"}}>
-            <div style={{textAlign:"center"}}>
-                <Register />
-            </div>
-        </Modal.Footer>
+            <Modal.Body>
+                <Form onSubmit={handleSubmit}>
+                    <Form.Group controlId="email">
+                        <Form.Control type="email" placeholder="Email address" required onChange={e => setEmail(e.target.value)}/>
+                    </Form.Group>
+                    <Form.Group controlId="password">
+                        <Form.Control type="password" placeholder="Password" required onChange={e => setPassword(e.target.value)}/>
+                    </Form.Group>
+                    <Alert show={alertShow} variant="danger" onClose={() => setAlertShow(false)} dismissible>
+                        {alertText}
+                    </Alert>
+                    <Button type="submit" block>
+                        Log In
+                    </Button>
+                </Form>
+                <div style={{textAlign:"center",marginTop:"1em"}}>
+                    <Link to="/login/forgetpassword" >Forgotten password?</Link>
+                </div>
+            </Modal.Body>
+            <Modal.Footer style={{display:"block"}}>
+                <div style={{textAlign:"center"}}>
+                    <Register />
+                </div>
+            </Modal.Footer>
         </>
     );
 }
@@ -98,14 +98,14 @@ function Login() {
             <img src={logo} alt="Logo" style={{maxWidth:"500px"}}/>
         </div>
         <Modal.Dialog>
-        <Switch>
-            <Route path="/login/forgetpassword">
-                <ForgetPassword />
-            </Route>
-            <Route path="/login">
-                <LoginBody />
-            </Route>
-        </Switch>
+            <Switch>
+                <Route path="/login/forgetpassword">
+                    <ForgetPassword />
+                </Route>
+                <Route path="/login">
+                    <LoginBody />
+                </Route>
+            </Switch>
         </Modal.Dialog>
     </>);
 }

@@ -27,8 +27,8 @@ function NotFound(props) {
                     <Button onClick={()=>history.push('/home')}> Go home </Button>
                 </Modal.Body>
             </Modal.Dialog>
-            </>
-            );
-            }
+        </>
+    );
+}
 
 export default NotFound;

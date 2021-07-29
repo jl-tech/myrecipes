@@ -82,69 +82,69 @@ function RecipeCreatePhoto({photos, setPhotos}) {
             setUrl('');
             setUploaded(false);
             setErrorShow(false);
-        });   
+        });
     }
 
     return (
         <>
-        <Form.Label>Photos</Form.Label>
-        <DragDropContext onDragEnd={handleOnDragEnd}>
-            <Droppable droppableId="photos">
-                {(provided) => (
-                    <ListGroup as="ul" {...provided.droppableProps} ref={provided.innerRef}>
-                        {photos.map(({id, url, image, name}, index) => {
-                            return (
-                                <Draggable key={id} draggableId={id} index={index}>
-                                    {(provided) => (
-                                        <ListGroup.Item as="li" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
-                                            <Row >
-                                                <Col sm={1} className={"my-auto"}>
-                                                    {index === 0 ? "1 (Main)" : index+1}
-                                                </Col>
-                                                <Col sm={5}>
-                                                    <span>{name}</span>
-                                                </Col>
-                                                <Col sm={5}>
-                                                    <Image src={url} width="10%"/>
-                                                </Col>
-                                                <Col sm={1} className={"my-auto"}>
-                                                    <button type="button" className="close" onClick={() => removePhoto(index)}>
-                                                        <span>×</span>
-                                                    </button>
-                                                    <img src={Reorder} alt=""/>
-                                                </Col>
-                                            </Row>
-                                        </ListGroup.Item>
-                                    )}
-                                </Draggable>
-                            );
-                        })}
-                        {provided.placeholder}
-                        <ListGroup.Item as="li">
-                            {uploaded ?
-                            <Row>
-                                <Col style={{textAlign:"center"}}>
-                                    <Image src={url} width="10%"/>
-                                </Col>
-                            </Row>
-                            :<></>}
-                            <Row>
-                                <Col sm={11}>
-                                    <Form.File onChange={e => handleImageUpload(e)} id="file-upload"/>
+            <Form.Label>Photos</Form.Label>
+            <DragDropContext onDragEnd={handleOnDragEnd}>
+                <Droppable droppableId="photos">
+                    {(provided) => (
+                        <ListGroup as="ul" {...provided.droppableProps} ref={provided.innerRef}>
+                            {photos.map(({id, url, image, name}, index) => {
+                                return (
+                                    <Draggable key={id} draggableId={id} index={index}>
+                                        {(provided) => (
+                                            <ListGroup.Item as="li" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
+                                                <Row >
+                                                    <Col sm={1} className={"my-auto"}>
+                                                        {index === 0 ? "1 (Main)" : index+1}
+                                                    </Col>
+                                                    <Col sm={5}>
+                                                        <span>{name}</span>
+                                                    </Col>
+                                                    <Col sm={5}>
+                                                        <Image src={url} width="10%"/>
+                                                    </Col>
+                                                    <Col sm={1} className={"my-auto"}>
+                                                        <button type="button" className="close" onClick={() => removePhoto(index)}>
+                                                            <span>×</span>
+                                                        </button>
+                                                        <img src={Reorder} alt=""/>
+                                                    </Col>
+                                                </Row>
+                                            </ListGroup.Item>
+                                        )}
+                                    </Draggable>
+                                );
+                            })}
+                            {provided.placeholder}
+                            <ListGroup.Item as="li">
+                                {uploaded ?
+                                    <Row>
+                                        <Col style={{textAlign:"center"}}>
+                                            <Image src={url} width="10%"/>
+                                        </Col>
+                                    </Row>
+                                    :<></>}
+                                <Row>
+                                    <Col sm={11}>
+                                        <Form.File onChange={e => handleImageUpload(e)} id="file-upload"/>
 
-                                    <Alert show={errorShow} variant="danger" style={{marginTop:"1em"}} onClose={() => setErrorShow(false)} dismissible>
-                                        {errorText}
-                                    </Alert>
-                                </Col>
-                                <Col sm={1}>
-                                    <Button variant="outline-secondary" style={{float:"right"}} onClick={addRow}>Add</Button>
-                                </Col>
-                            </Row>
-                        </ListGroup.Item>
-                    </ListGroup>
-                )}
-            </Droppable>
-        </DragDropContext>
+                                        <Alert show={errorShow} variant="danger" style={{marginTop:"1em"}} onClose={() => setErrorShow(false)} dismissible>
+                                            {errorText}
+                                        </Alert>
+                                    </Col>
+                                    <Col sm={1}>
+                                        <Button variant="outline-secondary" style={{float:"right"}} onClick={addRow}>Add</Button>
+                                    </Col>
+                                </Row>
+                            </ListGroup.Item>
+                        </ListGroup>
+                    )}
+                </Droppable>
+            </DragDropContext>
         </>
     );
 }

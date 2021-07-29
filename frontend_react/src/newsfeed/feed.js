@@ -107,7 +107,7 @@ function Feed(props) {
             setSubscribers(response.Subscribers);
             setSubscriptions(response.Subscriptions);
         }
-        
+
         setFetchedProfile(true);
     }
 
@@ -282,122 +282,122 @@ function Feed(props) {
 
     return (
         <>
-        <Helmet>
-            <title> Newsfeed - MyRecipes </title>
-        </Helmet>
-        <Container  style={{marginTop:'1em', marginBottom:"2em"}}>
-            <Row>
-            <Col sm={3}>
-                {!fetchedProfile ?
-                <div style={{textAlign: "center"}}>
-                    <br/>
-                    <Spinner style={{color:'tomato'}} animation={"grow"}/>
-                </div>
-                :
-                <>
+            <Helmet>
+                <title> Newsfeed - MyRecipes </title>
+            </Helmet>
+            <Container  style={{marginTop:'1em', marginBottom:"2em"}}>
                 <Row>
-                    <Col>
-                    <div style={{cursor:'pointer'}} role="link" onClick={()=>history.push("/profile")} >
-                    <Modal.Dialog
-                        onMouseEnter={()=> setHoveredProfile(true)}
-                        onMouseLeave={()=> setHoveredProfile(false)}
-                        className={hoveredProfile ? 'shadow-lg' : 'shadow-sm'}>
-                        <Modal.Header>
-                            <Col style={{textAlign: "center", fontSize:"125%"}}> Your Profile  </Col>
-                        </Modal.Header>
-                    <Modal.Body>
-                        <Row>
-                            <Col style={{textAlign:"center"}}>
-                                <Image src={"http://127.0.0.1:5000/img/" + imgUrl} alt="Profile Picture" roundedCircle width="70em"/>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col style={{textAlign:"center"}}>
-                                <h4>{firstName} {lastName}</h4>
-                            </Col>
-                        </Row>
-                        <Row style={{textAlign:"center"}}>
-                            <Col>
-                            <table style={{marginLeft:"auto", marginRight:"auto", borderCollapse:"separate", borderSpacing:"1em 0em"}}><tbody>
-                                <tr>
-                                    <th style={{fontSize:"150%"}}> {recipeCount} </th>
-                                    <th style={{fontSize:"150%"}}> {subscribers.length} </th>
-                                </tr>
-                                <tr>
-                                    <td> RECIPES </td>
-                                    <td> SUBSCRIBERS </td>
-                                </tr>
-                            </tbody></table>
-                            </Col>
-                        </Row>
-                    </Modal.Body>
-                    </Modal.Dialog>
-                    </div>
-                    </Col>
-                </Row>
-                    <Row className={"mx-auto align-content-center"} style={{textAlign:"center"}}>
-                        <Col>
-                            <Button onClick={hideRecommended ? ()=>doShowRecommended() : ()=>doHideRecommended()}> {hideRecommended ? "Show Recommended": "Hide Recommended"} </Button>
-                        </Col>
-                    </Row>
-                    <br/>
-                <Row>
-                    <Col>
-                        {subscriptions.length === 0 ? null :
-                        <ListGroup>
-                            <ListGroup.Item variant="primary">Subscriptions</ListGroup.Item>
-                            { subscriptions.map(({first_name, last_name, user_id, profile_pic_path}, index)=>
-                                <ListGroup.Item key={index}>
-                                <Link  to={"/profile/" + user_id} style={{width:"100%"}}>
-                                    <Row>
-                                    <Col sm={3}>
-                                    <Image src={"http://127.0.0.1:5000/img/" + profile_pic_path} alt="Profile Picture" roundedCircle width="40em"/>
+                    <Col sm={3}>
+                        {!fetchedProfile ?
+                            <div style={{textAlign: "center"}}>
+                                <br/>
+                                <Spinner style={{color:'tomato'}} animation={"grow"}/>
+                            </div>
+                            :
+                            <>
+                                <Row>
+                                    <Col>
+                                        <div style={{cursor:'pointer'}} role="link" onClick={()=>history.push("/profile")} >
+                                            <Modal.Dialog
+                                                onMouseEnter={()=> setHoveredProfile(true)}
+                                                onMouseLeave={()=> setHoveredProfile(false)}
+                                                className={hoveredProfile ? 'shadow-lg' : 'shadow-sm'}>
+                                                <Modal.Header>
+                                                    <Col style={{textAlign: "center", fontSize:"125%"}}> Your Profile  </Col>
+                                                </Modal.Header>
+                                                <Modal.Body>
+                                                    <Row>
+                                                        <Col style={{textAlign:"center"}}>
+                                                            <Image src={"http://127.0.0.1:5000/img/" + imgUrl} alt="Profile Picture" roundedCircle width="70em"/>
+                                                        </Col>
+                                                    </Row>
+                                                    <Row>
+                                                        <Col style={{textAlign:"center"}}>
+                                                            <h4>{firstName} {lastName}</h4>
+                                                        </Col>
+                                                    </Row>
+                                                    <Row style={{textAlign:"center"}}>
+                                                        <Col>
+                                                            <table style={{marginLeft:"auto", marginRight:"auto", borderCollapse:"separate", borderSpacing:"1em 0em"}}><tbody>
+                                                            <tr>
+                                                                <th style={{fontSize:"150%"}}> {recipeCount} </th>
+                                                                <th style={{fontSize:"150%"}}> {subscribers.length} </th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td> RECIPES </td>
+                                                                <td> SUBSCRIBERS </td>
+                                                            </tr>
+                                                            </tbody></table>
+                                                        </Col>
+                                                    </Row>
+                                                </Modal.Body>
+                                            </Modal.Dialog>
+                                        </div>
                                     </Col>
-                                    <Col >
-                                        {first_name} {last_name}
+                                </Row>
+                                <Row className={"mx-auto align-content-center"} style={{textAlign:"center"}}>
+                                    <Col>
+                                        <Button onClick={hideRecommended ? ()=>doShowRecommended() : ()=>doHideRecommended()}> {hideRecommended ? "Show Recommended": "Hide Recommended"} </Button>
                                     </Col>
-                                    </Row>
-                                </Link>
-                                </ListGroup.Item>
-                            )}
-                        </ListGroup> }
+                                </Row>
+                                <br/>
+                                <Row>
+                                    <Col>
+                                        {subscriptions.length === 0 ? null :
+                                            <ListGroup>
+                                                <ListGroup.Item variant="primary">Subscriptions</ListGroup.Item>
+                                                { subscriptions.map(({first_name, last_name, user_id, profile_pic_path}, index)=>
+                                                    <ListGroup.Item key={index}>
+                                                        <Link  to={"/profile/" + user_id} style={{width:"100%"}}>
+                                                            <Row>
+                                                                <Col sm={3}>
+                                                                    <Image src={"http://127.0.0.1:5000/img/" + profile_pic_path} alt="Profile Picture" roundedCircle width="40em"/>
+                                                                </Col>
+                                                                <Col >
+                                                                    {first_name} {last_name}
+                                                                </Col>
+                                                            </Row>
+                                                        </Link>
+                                                    </ListGroup.Item>
+                                                )}
+                                            </ListGroup> }
+                                    </Col>
+                                </Row>
+                            </>
+                        }
+                    </Col>
+                    <Col sm={9}>
+                        {!fetchedFeed ?
+                            <div style={{textAlign: "center"}}>
+                                <br/>
+                                <Spinner style={{color:'tomato'}} animation={"grow"}/>
+                            </div>
+                            :
+                            <>
+                                <Row>
+                                    <Col>
+                                        {subscriptions.length === 0 ?
+                                            <Modal.Dialog style={{textAlign: "center"}}> <Modal.Title style={{padding:"1em"}}> You haven't subscribed to anyone. </Modal.Title> <Modal.Body>
+                                                Visit a profile and select Subscribe, and your newsfeed will show their most recent recipes. </Modal.Body> </Modal.Dialog>
+                                            : (recipes.length === 0 ?
+                                                <Modal.Dialog><Modal.Body>Your subscriptions have not created recipes.</Modal.Body> </Modal.Dialog>:
+                                                recipes.map(generateCard))}
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col>
+                                        <Pagination style={{padding:"1em"}}>
+                                            {[...Array(pages).keys()].map(i =>
+                                                <Pagination.Item key={i} active={i+1 === activePage} onClick={()=>navigatePage(i+1)}>{i+1}</Pagination.Item>
+                                            )}
+                                        </Pagination>
+                                    </Col>
+                                </Row>
+                            </>
+                        }
                     </Col>
                 </Row>
-                </>
-                }
-            </Col>
-            <Col sm={9}>
-                {!fetchedFeed ?
-                <div style={{textAlign: "center"}}>
-                    <br/>
-                    <Spinner style={{color:'tomato'}} animation={"grow"}/>
-                </div>
-                :
-                <>
-                <Row>
-                    <Col>
-                        {subscriptions.length === 0 ?
-                            <Modal.Dialog style={{textAlign: "center"}}> <Modal.Title style={{padding:"1em"}}> You haven't subscribed to anyone. </Modal.Title> <Modal.Body>
-                                Visit a profile and select Subscribe, and your newsfeed will show their most recent recipes. </Modal.Body> </Modal.Dialog>
-                            : (recipes.length === 0 ?
-                                <Modal.Dialog><Modal.Body>Your subscriptions have not created recipes.</Modal.Body> </Modal.Dialog>:
-                                recipes.map(generateCard))}
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                    <Pagination style={{padding:"1em"}}>
-                        {[...Array(pages).keys()].map(i => 
-                            <Pagination.Item key={i} active={i+1 === activePage} onClick={()=>navigatePage(i+1)}>{i+1}</Pagination.Item>
-                        )}
-                    </Pagination>
-                    </Col>
-                </Row>
-                </>
-                }
-            </Col>
-            </Row>
-        </Container>
+            </Container>
         </>
     );
 }

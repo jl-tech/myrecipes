@@ -23,13 +23,13 @@ async function editPassword(token, oldPass, newPass) {
     });
 
     let responseJson = await response.json();
-    
+
     if (response.ok) return responseJson;
     else throw new Error(responseJson.error);
 }
 
 function ProfileEditPassword(props) {
-    
+
 
     const [editMode, setEditMode] = useState(false);
 
@@ -63,7 +63,7 @@ function ProfileEditPassword(props) {
             setSuccessShow(true);
         }
     }
-    
+
     if (!editMode) {
         return (
             <>

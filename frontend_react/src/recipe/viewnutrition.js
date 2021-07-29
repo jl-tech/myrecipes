@@ -4,19 +4,19 @@ import Image from "react-bootstrap/Image";
 import {Spinner, Table} from "react-bootstrap";
 
 async function requestNutrition(recipeId) {
-        let response = await fetch("http://localhost:5000/recipe/nutrition?" + new URLSearchParams({'recipe_id': recipeId}), {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        }).catch(e => {
-            throw new Error(e);
-        });
+    let response = await fetch("http://localhost:5000/recipe/nutrition?" + new URLSearchParams({'recipe_id': recipeId}), {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    }).catch(e => {
+        throw new Error(e);
+    });
 
-        let responseJson = await response.json();
+    let responseJson = await response.json();
 
-        if (response.ok) return responseJson;
-        else throw new Error(responseJson.error);
+    if (response.ok) return responseJson;
+    else throw new Error(responseJson.error);
 }
 function RecipeViewNutri(props) {
     const [nutritionData, setNutritionData] = useState({})

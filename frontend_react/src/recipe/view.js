@@ -91,7 +91,7 @@ function RecipeView(props) {
                 });
             }
             setPhotos(photosP);
-            
+
             setRecipeName(response.name);
             setTime(response.time_to_cook);
             setMealType(response.type);
@@ -127,7 +127,7 @@ function RecipeView(props) {
             setContributorRecipes(response.contributor_recipes_count)
             setContributorSubscribers(response.contributor_subscribers_count)
             setCreatedAt(response.creation_time);
-            
+
             if (response.edit_time != null) {
                 setEditedAt(response.edit_time);
             }
@@ -156,40 +156,40 @@ function RecipeView(props) {
         if (!deleted) {
             return (
                 <>
-                <Helmet>
-                <title> {recipeName} by {firstName} {lastName} - MyRecipes </title>
-                </Helmet>
-                <Container style={{marginTop:"1em",marginBottom:"2em"}}>
-                    <RecipeViewPhoto photos={photos} />
-                    <RecipeViewDesc loggedIn={props.loggedIn} recipeId={id} recipeName={recipeName} likes={likes} setLikes={setLikes} calories={calories} setRecipeName={setRecipeName} time={time} setTime={setTime} serving={serving} setServing={setServing} mealType={mealType} setMealType={setMealType} photos={photos} setPhotos={setPhotos} editable={editable} setDeleted={setDeleted} setEditedAt={setEditedAt} description={description} setDescription={setDescription} />
-                    <Row style={{marginTop:"1em"}}>
-                        <Col sm={3}>
-                            <RecipeViewContri userImgURL={userImgURL} contributorUID={contributorUID} firstName={firstName} lastName={lastName} createdAt={createdAt} editedAt={editedAt} contributorRecipes={contributorRecipes} contributorSubscribers={contributorSubscribers}/>
-                            <br/> <br/>
-                            <RecipeViewNutri recipeId={id}/>
-                        </Col>
-                        <Col sm={9}>
-                            <RecipeViewDescription description={description}/>
-                            <RecipeViewIngredient recipeId={id} ingredients={ingredients} setIngredients={setIngredients} editable={editable} setEditedAt={setEditedAt}/>
-                            <RecipeViewStep recipeId={id} steps={steps} setSteps={setSteps} editable={editable} setEditedAt={setEditedAt}/>
-                        </Col>
+                    <Helmet>
+                        <title> {recipeName} by {firstName} {lastName} - MyRecipes </title>
+                    </Helmet>
+                    <Container style={{marginTop:"1em",marginBottom:"2em"}}>
+                        <RecipeViewPhoto photos={photos} />
+                        <RecipeViewDesc loggedIn={props.loggedIn} recipeId={id} recipeName={recipeName} likes={likes} setLikes={setLikes} calories={calories} setRecipeName={setRecipeName} time={time} setTime={setTime} serving={serving} setServing={setServing} mealType={mealType} setMealType={setMealType} photos={photos} setPhotos={setPhotos} editable={editable} setDeleted={setDeleted} setEditedAt={setEditedAt} description={description} setDescription={setDescription} />
+                        <Row style={{marginTop:"1em"}}>
+                            <Col sm={3}>
+                                <RecipeViewContri userImgURL={userImgURL} contributorUID={contributorUID} firstName={firstName} lastName={lastName} createdAt={createdAt} editedAt={editedAt} contributorRecipes={contributorRecipes} contributorSubscribers={contributorSubscribers}/>
+                                <br/> <br/>
+                                <RecipeViewNutri recipeId={id}/>
+                            </Col>
+                            <Col sm={9}>
+                                <RecipeViewDescription description={description}/>
+                                <RecipeViewIngredient recipeId={id} ingredients={ingredients} setIngredients={setIngredients} editable={editable} setEditedAt={setEditedAt}/>
+                                <RecipeViewStep recipeId={id} steps={steps} setSteps={setSteps} editable={editable} setEditedAt={setEditedAt}/>
+                            </Col>
 
-                    </Row>
-                    <RecipeViewComments loggedIn={props.loggedIn} contributorID={contributorUID} currId={props.currId} recipeId={id} comments={comments} setComments={setComments} />
-                    <RecipeViewRecommendations recipeData={recommendations} />
-                </Container>
+                        </Row>
+                        <RecipeViewComments loggedIn={props.loggedIn} contributorID={contributorUID} currId={props.currId} recipeId={id} comments={comments} setComments={setComments} />
+                        <RecipeViewRecommendations recipeData={recommendations} />
+                    </Container>
                 </>
             );
         } else {
             return (
                 <Modal.Dialog>
                     <Modal.Body>
-                    <div style={{textAlign:"center"}}>
-                        Recipe deleted successfully <br />
-                        <Link to="/profile" component={Button} style={{marginTop:"1em"}}>
-                            Return to profile
-                        </Link>
-                    </div>
+                        <div style={{textAlign:"center"}}>
+                            Recipe deleted successfully <br />
+                            <Link to="/profile" component={Button} style={{marginTop:"1em"}}>
+                                Return to profile
+                            </Link>
+                        </div>
                     </Modal.Body>
                 </Modal.Dialog>
             );

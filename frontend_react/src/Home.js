@@ -81,28 +81,28 @@ function UserButton(props) {
     useEffect(() => {
         if (!fetched) processId();
     }, []);
-    
+
     function logout() {
         cookie.remove('token', {path: '/'});
         props.setLoggedIn(false);
     }
 
     return (
-    <DropdownButton menuAlign="right" title={
-        imgUrl == null ? <></> :
-        <>
-         <Image src={"http://127.0.0.1:5000/img/" + imgUrl} alt="Profile Picture" roundedCircle width="25em"
-         style={{padding: 0 + '!important'}}/>
-         &nbsp; {props.firstName}
-        </>
+        <DropdownButton menuAlign="right" title={
+            imgUrl == null ? <></> :
+                <>
+                    <Image src={"http://127.0.0.1:5000/img/" + imgUrl} alt="Profile Picture" roundedCircle width="25em"
+                           style={{padding: 0 + '!important'}}/>
+                    &nbsp; {props.firstName}
+                </>
         }>
-        <Dropdown.Item as={Link} to="/profile">Profile</Dropdown.Item>
-        {location.pathname.includes('/profile') || location.pathname.includes('/settings') ?
-        <Dropdown.Item onClick={()=>{props.setModalToggle(true)} }>Account Settings</Dropdown.Item>:
-        <Dropdown.Item as={Link} to="/settings" >Account Settings</Dropdown.Item>
-        }
-        <Dropdown.Item onClick={logout}>Log Out</Dropdown.Item>
-    </DropdownButton>
+            <Dropdown.Item as={Link} to="/profile">Profile</Dropdown.Item>
+            {location.pathname.includes('/profile') || location.pathname.includes('/settings') ?
+                <Dropdown.Item onClick={()=>{props.setModalToggle(true)} }>Account Settings</Dropdown.Item>:
+                <Dropdown.Item as={Link} to="/settings" >Account Settings</Dropdown.Item>
+            }
+            <Dropdown.Item onClick={logout}>Log Out</Dropdown.Item>
+        </DropdownButton>
     );
 }
 
@@ -114,94 +114,94 @@ function Home({ loggedIn, setLoggedIn, currId }) {
 
 
     return (
-    <>
-    <Navbar style={{height: "4em"}} bg="light" variant="light" className={"shadow-sm"}>
-        <Link to="/" >
-            <img src={logo} height="40vh" alt="" />
-        </Link>
+        <>
+            <Navbar style={{height: "4em"}} bg="light" variant="light" className={"shadow-sm"}>
+                <Link to="/" >
+                    <img src={logo} height="40vh" alt="" />
+                </Link>
 
-        <NavLink style={{paddingLeft: '2rem', fontSize:"125%"}} to="/home" activeStyle={{ paddingLeft: '2rem', fontWeight: 'bold', fontSize:"125%"}}>
-            Home
-        </NavLink>
-        {loggedIn ?<>
-        <NavLink style={{paddingLeft: '2rem', fontSize:"125%"}} to="/newsfeed" activeStyle={{ paddingLeft: '2rem', fontWeight: 'bold', fontSize:"125%"}}>
-            Newsfeed
-        </NavLink>
-        <NavLink style={{paddingLeft: '2rem', fontSize:"125%"}} to="/recipe/create" activeStyle={{ paddingLeft: '2rem', fontWeight: 'bold', fontSize:"125%"}}>
-            Create
-        </NavLink> </>:<></>}
-        <NavLink style={{paddingLeft: '2rem', fontSize:"125%"}} to="/users" activeStyle={{ paddingLeft: '2rem', fontWeight: 'bold', fontSize:"125%"}}>
-            Find Users
-        </NavLink>
-        {location.pathname !== "/home" && location.pathname !== "/search" ? <div style={{paddingLeft: '2rem'}}>  <SearchBar isHome={false} nav={true} loggedIn={loggedIn} /> </div>: <></>}
-        <Navbar.Toggle />
-        <Navbar.Collapse className="justify-content-end">
-            <Navbar.Text>
-                {loggedIn ? <UserButton setLoggedIn={setLoggedIn} currId={currId} firstName={firstName} setfirstName={setfirstName} setModalToggle={setModalToggle}/> : <LoginButton />}
-            </Navbar.Text>
-        </Navbar.Collapse>
-        <ChatBot firstName={loggedIn ? " " + firstName : ""} style={{borderRadius: "15px 15px 15px 15px"}}/>
-    </Navbar>
+                <NavLink style={{paddingLeft: '2rem', fontSize:"125%"}} to="/home" activeStyle={{ paddingLeft: '2rem', fontWeight: 'bold', fontSize:"125%"}}>
+                    Home
+                </NavLink>
+                {loggedIn ?<>
+                    <NavLink style={{paddingLeft: '2rem', fontSize:"125%"}} to="/newsfeed" activeStyle={{ paddingLeft: '2rem', fontWeight: 'bold', fontSize:"125%"}}>
+                        Newsfeed
+                    </NavLink>
+                    <NavLink style={{paddingLeft: '2rem', fontSize:"125%"}} to="/recipe/create" activeStyle={{ paddingLeft: '2rem', fontWeight: 'bold', fontSize:"125%"}}>
+                        Create
+                    </NavLink> </>:<></>}
+                <NavLink style={{paddingLeft: '2rem', fontSize:"125%"}} to="/users" activeStyle={{ paddingLeft: '2rem', fontWeight: 'bold', fontSize:"125%"}}>
+                    Find Users
+                </NavLink>
+                {location.pathname !== "/home" && location.pathname !== "/search" ? <div style={{paddingLeft: '2rem'}}>  <SearchBar isHome={false} nav={true} loggedIn={loggedIn} /> </div>: <></>}
+                <Navbar.Toggle />
+                <Navbar.Collapse className="justify-content-end">
+                    <Navbar.Text>
+                        {loggedIn ? <UserButton setLoggedIn={setLoggedIn} currId={currId} firstName={firstName} setfirstName={setfirstName} setModalToggle={setModalToggle}/> : <LoginButton />}
+                    </Navbar.Text>
+                </Navbar.Collapse>
+                <ChatBot firstName={loggedIn ? " " + firstName : ""} style={{borderRadius: "15px 15px 15px 15px"}}/>
+            </Navbar>
 
-    <Switch>
-        <Route path="/profile/:id">
-          <Profile currId={currId} loggedIn={loggedIn} settings={false} setButtonName={setfirstName} modalToggle={modalToggle} setModalToggle={setModalToggle}/>
-        </Route>
-        <Route path="/profile" render={() =>
-            loggedIn
-            ? (<Redirect to={{pathname: "/profile/" + currId}} />)
-            : (<Redirect to= {{pathname: "/"}} />)
-        } />
-        <Route path="/settings" render={() =>
-            loggedIn
-            ? (<Profile currId={currId} loggedIn={loggedIn} settings={true} setButtonName={setfirstName} modalToggle={modalToggle} setModalToggle={setModalToggle}/>)
-            : (<Redirect to= {{pathname: "/"}} />)
-        } />
+            <Switch>
+                <Route path="/profile/:id">
+                    <Profile currId={currId} loggedIn={loggedIn} settings={false} setButtonName={setfirstName} modalToggle={modalToggle} setModalToggle={setModalToggle}/>
+                </Route>
+                <Route path="/profile" render={() =>
+                    loggedIn
+                        ? (<Redirect to={{pathname: "/profile/" + currId}} />)
+                        : (<Redirect to= {{pathname: "/"}} />)
+                } />
+                <Route path="/settings" render={() =>
+                    loggedIn
+                        ? (<Profile currId={currId} loggedIn={loggedIn} settings={true} setButtonName={setfirstName} modalToggle={modalToggle} setModalToggle={setModalToggle}/>)
+                        : (<Redirect to= {{pathname: "/"}} />)
+                } />
 
-        <Route path="/recipe/create" render={() => 
-            loggedIn
-            ? (<RecipeCreate />)
-            : (<Redirect to= {{pathname: "/"}} />)
-        } />
-        <Route path="/recipe/:id">
-          <RecipeView currId={currId} loggedIn={loggedIn} />
-        </Route>
-        <Route path="/recipe" render={() => 
-            (<Redirect to= {{pathname: "/"}} />)
-        } />
-        <Route path="/users">
-          <Users/>
-        </Route>
-        <Route path="/search">
-            <SearchResults loggedIn={loggedIn}/>
-        </Route>
-        <Route path="/newsfeed/:page" render={() => 
-            loggedIn
-            ? (<Feed loggedIn={loggedIn} currId={currId}/>)
-            : (<Redirect to= {{pathname: "/"}} />)
-        } />
+                <Route path="/recipe/create" render={() =>
+                    loggedIn
+                        ? (<RecipeCreate />)
+                        : (<Redirect to= {{pathname: "/"}} />)
+                } />
+                <Route path="/recipe/:id">
+                    <RecipeView currId={currId} loggedIn={loggedIn} />
+                </Route>
+                <Route path="/recipe" render={() =>
+                    (<Redirect to= {{pathname: "/"}} />)
+                } />
+                <Route path="/users">
+                    <Users/>
+                </Route>
+                <Route path="/search">
+                    <SearchResults loggedIn={loggedIn}/>
+                </Route>
+                <Route path="/newsfeed/:page" render={() =>
+                    loggedIn
+                        ? (<Feed loggedIn={loggedIn} currId={currId}/>)
+                        : (<Redirect to= {{pathname: "/"}} />)
+                } />
 
-        <Route path="/newsfeed" render={() => 
-            loggedIn
-            ? (<Feed loggedIn={loggedIn} currId={currId}/>)
-            : (<Redirect to= {{pathname: "/"}} />)
-        } />
+                <Route path="/newsfeed" render={() =>
+                    loggedIn
+                        ? (<Feed loggedIn={loggedIn} currId={currId}/>)
+                        : (<Redirect to= {{pathname: "/"}} />)
+                } />
 
-        <Route path="/home">
-            <HomePage loggedIn={loggedIn}/>
-        </Route>
-        <Route exact path="/" render={() =>
-            loggedIn
-            ? (<Redirect to= {{pathname: "/newsfeed"}} />)
-            : (<Redirect to= {{pathname: "/home"}} />)
-        } />
-        <Route>
-            <NotFound/>
-        </Route>
-    </Switch>
+                <Route path="/home">
+                    <HomePage loggedIn={loggedIn}/>
+                </Route>
+                <Route exact path="/" render={() =>
+                    loggedIn
+                        ? (<Redirect to= {{pathname: "/newsfeed"}} />)
+                        : (<Redirect to= {{pathname: "/home"}} />)
+                } />
+                <Route>
+                    <NotFound/>
+                </Route>
+            </Switch>
 
 
-    </>
+        </>
 
     );
 }

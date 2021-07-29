@@ -40,7 +40,7 @@ async function requestEditDesc(token, recipe_id, name, type, time, serving_size,
     });
 
     let responseJson = await response.json();
-    
+
     if (response.ok) return responseJson;
     else throw new Error(responseJson.error);
 }
@@ -147,20 +147,20 @@ function EditDesc(props) {
 export function RecipeViewDescription(props) {
     return (
         <>
-        <Row style={{marginTop:"1em"}}>
-            <Col>
-                <h3> Description </h3>
-            </Col>
-        </Row>
-        <Row>
-            <Col>
-                <ListGroup className={"shadow-sm"}>
-                    <ListGroup.Item style={{textAlign:"justify"}} >
-                        {props.description == null ? "No description available" : props.description}
-                    </ListGroup.Item>
-                </ListGroup>
-            </Col>
-        </Row>
+            <Row style={{marginTop:"1em"}}>
+                <Col>
+                    <h3> Description </h3>
+                </Col>
+            </Row>
+            <Row>
+                <Col>
+                    <ListGroup className={"shadow-sm"}>
+                        <ListGroup.Item style={{textAlign:"justify"}} >
+                            {props.description == null ? "No description available" : props.description}
+                        </ListGroup.Item>
+                    </ListGroup>
+                </Col>
+            </Row>
         </>
     );
 }
@@ -185,79 +185,79 @@ function RecipeViewDesc(props) {
     return (
         <>
             <Alert show={errorShow} variant="warning" style={{marginTop:"1em"}} onClose={() => setErrorShow(false)} dismissible>
-                                   {errorText}
+                {errorText}
             </Alert>
-        <Row>
-            <Col sm={3} />
-            <Col sm={6}>
-                <Row>
-                    <Col>
-                        <div style={{textAlign:"center"}}>
-                            <h1>{props.recipeName}</h1>
-                        </div>
-                    </Col>
-                </Row>
-                <Row style={{textAlign:"center"}}>
-                    <Col>
-                    <table style={{marginLeft:"auto", marginRight:"auto", borderCollapse:"separate", borderSpacing:"2em 0em"}}><tbody>
-                        <tr>
-                            <th style={{fontSize:"200%"}}> {props.time} </th>
-                            <th style={{fontSize:"200%"}}> {props.serving} </th>
-                            <th style={{fontSize:"200%"}}> {props.mealType} </th>
-                            <th style={{fontSize: "200%"}}> {props.calories == null ? "N/A" : props.calories} </th>
-                        </tr>
-                        <tr>
-                            <td> MINS </td>
-                            <td> SERVES </td>
-                            <td> MEAL </td>
-                            <td> APPROX CAL </td>
-                        </tr>
-                    </tbody></table>
-                    </Col>
-                </Row>
-            </Col>
-            
-            {props.editable ? <>
-                <Col sm={1} style={{textAlign: 'center'}}>
-                    <RecipeViewLikes setErrorShow={setErrorShow} setErrorText={setErrorText} loggedIn={props.loggedIn} recipeId={props.recipeId} likes={props.likes} setLikes={props.setLikes}/>
+            <Row>
+                <Col sm={3} />
+                <Col sm={6}>
+                    <Row>
+                        <Col>
+                            <div style={{textAlign:"center"}}>
+                                <h1>{props.recipeName}</h1>
+                            </div>
+                        </Col>
+                    </Row>
+                    <Row style={{textAlign:"center"}}>
+                        <Col>
+                            <table style={{marginLeft:"auto", marginRight:"auto", borderCollapse:"separate", borderSpacing:"2em 0em"}}><tbody>
+                            <tr>
+                                <th style={{fontSize:"200%"}}> {props.time} </th>
+                                <th style={{fontSize:"200%"}}> {props.serving} </th>
+                                <th style={{fontSize:"200%"}}> {props.mealType} </th>
+                                <th style={{fontSize: "200%"}}> {props.calories == null ? "N/A" : props.calories} </th>
+                            </tr>
+                            <tr>
+                                <td> MINS </td>
+                                <td> SERVES </td>
+                                <td> MEAL </td>
+                                <td> APPROX CAL </td>
+                            </tr>
+                            </tbody></table>
+                        </Col>
+                    </Row>
                 </Col>
-                <Col sm={2}>
-                <Row>
-                    <Col style={{textAlign:"right"}}>
-                        <Button variant="outline-secondary" onClick={photoEditShow} size="sm">Edit photos</Button>
-                    </Col>
-                </Row>
-                <Row style={{marginTop:"1em",textAlign:"right"}}>
-                    <Col>
-                        <Button variant="outline-secondary" onClick={descEditShow} size="sm">Edit details</Button>
-                    </Col>
-                </Row>
-                <Row style={{marginTop:"1em",textAlign:"right"}}>
-                    <Col>
-                        <Dropdown>
-                            <Dropdown.Toggle  size="sm" variant="outline-secondary" id="dropdown-basic">
-                                More options
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu>
-                                <Dropdown.Item onClick={deleteShow} style={{color:"red"}} size="sm"> Delete recipe </Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-                    </Col>
-                </Row>
-                </Col></>
-                :
-                <>
-                    <Col sm={2}>
 
-                    </Col>
-                <Col sm={1} style={{textAlign:"center"}}>
-                    <RecipeViewLikes setErrorShow={setErrorShow} setErrorText={setErrorText} loggedIn={props.loggedIn} recipeId={props.recipeId} likes={props.likes} setLikes={props.setLikes}/>
-                </Col>
-            </>}
-        </Row>
-        <EditDesc showDescEdit={showDescEdit} setShowDescEdit={setShowDescEdit} recipeId={props.recipeId} recipeName={props.recipeName} setRecipeName={props.setRecipeName} time={props.time} setTime={props.setTime} serving={props.serving} setServing={props.setServing} mealType={props.mealType} setMealType={props.setMealType} setEditedAt={props.setEditedAt} description={props.description} setDescription={props.setDescription} />
-        <EditPhoto showPhotoEdit={showPhotoEdit} setShowPhotoEdit={setShowPhotoEdit} recipeId={props.recipeId} photos={props.photos} setPhotos={props.setPhotos} setEditedAt={props.setEditedAt}/>
-        <RecipeDelete showDelete={showDelete} setShowDelete={setShowDelete} recipeId={props.recipeId} setDeleted={props.setDeleted} />
+                {props.editable ? <>
+                        <Col sm={1} style={{textAlign: 'center'}}>
+                            <RecipeViewLikes setErrorShow={setErrorShow} setErrorText={setErrorText} loggedIn={props.loggedIn} recipeId={props.recipeId} likes={props.likes} setLikes={props.setLikes}/>
+                        </Col>
+                        <Col sm={2}>
+                            <Row>
+                                <Col style={{textAlign:"right"}}>
+                                    <Button variant="outline-secondary" onClick={photoEditShow} size="sm">Edit photos</Button>
+                                </Col>
+                            </Row>
+                            <Row style={{marginTop:"1em",textAlign:"right"}}>
+                                <Col>
+                                    <Button variant="outline-secondary" onClick={descEditShow} size="sm">Edit details</Button>
+                                </Col>
+                            </Row>
+                            <Row style={{marginTop:"1em",textAlign:"right"}}>
+                                <Col>
+                                    <Dropdown>
+                                        <Dropdown.Toggle  size="sm" variant="outline-secondary" id="dropdown-basic">
+                                            More options
+                                        </Dropdown.Toggle>
+                                        <Dropdown.Menu>
+                                            <Dropdown.Item onClick={deleteShow} style={{color:"red"}} size="sm"> Delete recipe </Dropdown.Item>
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+                                </Col>
+                            </Row>
+                        </Col></>
+                    :
+                    <>
+                        <Col sm={2}>
+
+                        </Col>
+                        <Col sm={1} style={{textAlign:"center"}}>
+                            <RecipeViewLikes setErrorShow={setErrorShow} setErrorText={setErrorText} loggedIn={props.loggedIn} recipeId={props.recipeId} likes={props.likes} setLikes={props.setLikes}/>
+                        </Col>
+                    </>}
+            </Row>
+            <EditDesc showDescEdit={showDescEdit} setShowDescEdit={setShowDescEdit} recipeId={props.recipeId} recipeName={props.recipeName} setRecipeName={props.setRecipeName} time={props.time} setTime={props.setTime} serving={props.serving} setServing={props.setServing} mealType={props.mealType} setMealType={props.setMealType} setEditedAt={props.setEditedAt} description={props.description} setDescription={props.setDescription} />
+            <EditPhoto showPhotoEdit={showPhotoEdit} setShowPhotoEdit={setShowPhotoEdit} recipeId={props.recipeId} photos={props.photos} setPhotos={props.setPhotos} setEditedAt={props.setEditedAt}/>
+            <RecipeDelete showDelete={showDelete} setShowDelete={setShowDelete} recipeId={props.recipeId} setDeleted={props.setDeleted} />
         </>
     );
 }

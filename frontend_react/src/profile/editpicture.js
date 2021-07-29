@@ -21,7 +21,7 @@ async function removePicture(token) {
     });
 
     let responseJson = await response.json();
-    
+
     if (response.ok) return responseJson;
     else throw new Error(responseJson.error);
 }
@@ -40,13 +40,13 @@ async function editPicture(token, image) {
     });
 
     let responseJson = await response.json();
-    
+
     if (response.ok) return responseJson;
     else throw new Error(responseJson.error);
 }
 
 function ProfileEditPicture(props) {
-    
+
 
     const [editMode, setEditMode] = useState(false);
 
@@ -99,7 +99,7 @@ function ProfileEditPicture(props) {
             setNewUrl('');
             setUploaded(false);
             setErrorShow(false);
-        });   
+        });
     }
 
     async function handleSubmit() {
@@ -127,7 +127,7 @@ function ProfileEditPicture(props) {
         setNewUrl('');
         setUploaded(false);
     }
-    
+
     if (!editMode) {
         return (
             <>
@@ -163,17 +163,17 @@ function ProfileEditPicture(props) {
                     </Col>
                 </Row>
                 <Row style={{marginTop:"1em"}}>
-                <Col sm="8" style={{textAlign:"center"}}>
-                    <Form>
-                        <Form.File onChange={e => handleImageUpload(e)} />
-                    </Form>
-                </Col>
-                <Col sm="2" style={{textAlign:"center"}}>
-                    {uploaded
-                    ? <Button variant="primary" size="sm" onClick={handleSubmit}>Confirm</Button>
-                    : <></>
-                    }
-                </Col>
+                    <Col sm="8" style={{textAlign:"center"}}>
+                        <Form>
+                            <Form.File onChange={e => handleImageUpload(e)} />
+                        </Form>
+                    </Col>
+                    <Col sm="2" style={{textAlign:"center"}}>
+                        {uploaded
+                            ? <Button variant="primary" size="sm" onClick={handleSubmit}>Confirm</Button>
+                            : <></>
+                        }
+                    </Col>
                 </Row>
                 <Alert show={errorShow} variant="danger" style={{marginTop:"1em"}} onClose={() => setErrorShow(false)} dismissible>
                     {errorText}

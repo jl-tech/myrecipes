@@ -23,13 +23,13 @@ async function editName(token, firstname, lastname) {
     });
 
     let responseJson = await response.json();
-    
+
     if (response.ok) return responseJson;
     else throw new Error(responseJson.error);
 }
 
 function ProfileEditName(props) {
-    
+
 
     const [editMode, setEditMode] = useState(false);
 
@@ -59,7 +59,7 @@ function ProfileEditName(props) {
             setSuccessShow(true);
         }
     }
-    
+
     if (!editMode) {
         return (
             <>

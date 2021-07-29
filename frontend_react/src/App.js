@@ -4,10 +4,10 @@ import React, { useState, useEffect } from 'react';
 import './App.scss';
 
 import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    Redirect
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect
 } from "react-router-dom";
 
 import Cookie from 'universal-cookie';
@@ -19,30 +19,30 @@ import Home from './Home.js';
 
 async function tokenVerify(token) {
   let response = await fetch('http://localhost:5000/auth/verify', {
-      method: 'GET',
-      headers: {
-          'Authorization': token
-      }
+    method: 'GET',
+    headers: {
+      'Authorization': token
+    }
   }).catch(e => {
     return {'user_id': -1, 'status': 2};
   });
 
   let responseJson = await response.json();
-    
+
   return responseJson;
 }
 
 function VisitorRoute(props) {
   return (
-    <Route
-      render={({ location }) =>
-        props.loggedIn ? (
-          <Redirect to="/home" />
-        ) : (
-          props.children
-        )
-      }
-    />
+      <Route
+          render={({ location }) =>
+              props.loggedIn ? (
+                  <Redirect to="/home" />
+              ) : (
+                  props.children
+              )
+          }
+      />
   );
 }
 
@@ -57,10 +57,10 @@ function App() {
     let token = cookie.get('token');
     if (token != null) {
       let response = await tokenVerify(token)
-        .catch(() => {
+          .catch(() => {
 
-        });
-      
+          });
+
       if (response != null) {
         if (response.status === 0) {
           setCurrId(response.user_id);
@@ -79,26 +79,26 @@ function App() {
   useEffect(() => {
     if (!fetched) checkToken();
   }, []);
-  
+
   if (!fetched) return (<></>)
 
   return (
-    <Router>
-      <Switch>
-        <VisitorRoute path="/login" loggedIn={loggedIn}>
-          <Login />
-        </VisitorRoute>
-        <Route path="/emailconfirm">
-          <EmailConfirm />
-        </Route>
-        <Route path="/resetpassword">
-          <ResetPassword />
-        </Route>
-        <Route path="/">
-          <Home loggedIn={loggedIn} setLoggedIn={setLoggedIn} currId={currId} />
-        </Route>
+      <Router>
+        <Switch>
+          <VisitorRoute path="/login" loggedIn={loggedIn}>
+            <Login />
+          </VisitorRoute>
+          <Route path="/emailconfirm">
+            <EmailConfirm />
+          </Route>
+          <Route path="/resetpassword">
+            <ResetPassword />
+          </Route>
+          <Route path="/">
+            <Home loggedIn={loggedIn} setLoggedIn={setLoggedIn} currId={currId} />
+          </Route>
         </Switch>
-    </Router>
+      </Router>
   )
 }
 

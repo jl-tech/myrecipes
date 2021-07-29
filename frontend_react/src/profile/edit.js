@@ -10,7 +10,7 @@ import ProfileEditPassword from './editpassword.js';
 import ProfileEditPicture from './editpicture.js';
 
 function ProfileEdit(props) {
-    
+
 
     const [showEdit, setShowEdit] = useState(props.initOpen);
     const editShow = () => setShowEdit(true);
@@ -18,22 +18,22 @@ function ProfileEdit(props) {
 
     return (
         <>
-        <Button onClick={editShow}>Edit Profile & Account Details</Button>
-        <Modal show={showEdit || props.modalToggle} onHide={editClose} centered>
-            <Modal.Header closeButton>
-                <Modal.Title>
-                    Edit Profile & Account Details
-                </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <Container>
-                    <ProfileEditName firstName={props.firstName} setfirstName={props.setfirstName} lastName={props.lastName} setlastName={props.setlastName} setButtonName={props.setButtonName}/>
-                    <ProfileEditEmail email={props.email} />
-                    <ProfileEditPassword />
-                    <ProfileEditPicture imgUrl={props.imgUrl} setImgUrl={props.setImgUrl} />
-                </Container>
-            </Modal.Body>
-        </Modal>
+            <Button onClick={editShow}>Edit Profile & Account Details</Button>
+            <Modal show={showEdit || props.modalToggle} onHide={editClose} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>
+                        Edit Profile & Account Details
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Container>
+                        <ProfileEditName firstName={props.firstName} setfirstName={props.setfirstName} lastName={props.lastName} setlastName={props.setlastName} setButtonName={props.setButtonName}/>
+                        <ProfileEditEmail email={props.email} />
+                        <ProfileEditPassword />
+                        <ProfileEditPicture imgUrl={props.imgUrl} setImgUrl={props.setImgUrl} />
+                    </Container>
+                </Modal.Body>
+            </Modal>
         </>
     );
 }

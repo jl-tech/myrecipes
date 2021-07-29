@@ -38,15 +38,15 @@ function RecipeList(props) {
             <div style={{padding:"1em"}}  key={index}>
 
                 <Card
-                      onMouseEnter={() => setHoveredRecipeId(recipe.recipe_id)}
-                      onMouseLeave={() => setHoveredRecipeId(-1)}
-                      className={hoveredRecipeId === recipe.recipe_id ? 'shadow-lg' : 'shadow-sm'}>
+                    onMouseEnter={() => setHoveredRecipeId(recipe.recipe_id)}
+                    onMouseLeave={() => setHoveredRecipeId(-1)}
+                    className={hoveredRecipeId === recipe.recipe_id ? 'shadow-lg' : 'shadow-sm'}>
                     <div style={{color:'black', textDecoration: 'none', cursor:'pointer'}} role="link" onClick={()=>history.push("/recipe/" + recipe.recipe_id)} >
                         <Card.Img variant="Top" style={{width:"100%", height:"9vw", objectFit:"cover"}} alt="Recipe Image" src={recipe.photo_path == null ? "http://127.0.0.1:5000/img/default_recipe.png" : "http://127.0.0.1:5000/img/" + recipe.photo_path}/>
                         <Card.Body style={{textAlign: "center"}}>
                             <Card.Title className={"text-truncate"}>{recipe.name}</Card.Title>
                             <Card.Text style={{height:"1.5em", textDecoration: 'none'}} className="text-truncate">
-                                    {recipe.description == null ? "No description available" : recipe.description}
+                                {recipe.description == null ? "No description available" : recipe.description}
                             </Card.Text>
                             <div style={{textAlign: "center"}}>
                                 <table style={{marginLeft:"auto", marginRight:"auto", borderCollapse:"separate", borderSpacing:"1em 0em"}}><tbody>
@@ -68,43 +68,43 @@ function RecipeList(props) {
                         </Card.Body>
 
 
-                    <Card.Footer
-                        className={"text-truncate"}>
-                        <Row>
-                            <Col sm={2} className={"mx-auto my-auto"} style={{paddingLeft:"0.5em"}}>
+                        <Card.Footer
+                            className={"text-truncate"}>
+                            <Row>
+                                <Col sm={2} className={"mx-auto my-auto"} style={{paddingLeft:"0.5em"}}>
 
-                                <Link  to={"/profile/" + recipe.user_id} >
-                                    <Image  onClick={(e) => e.stopPropagation()} src={"http://127.0.0.1:5000/img/" + recipe.profile_pic_path} alt="Profile Picture" roundedCircle width="40em"/>
-                                </Link>
-                            </Col>
-                            <Col sm={10}>
-                                <Row>
-                                    <Col sm={8} style={{paddingLeft:"0em"}} className={"text-truncate"}>
-                                        <Link  to={"/profile/" + recipe.user_id}>
-                                            <div onClick={(e) => e.stopPropagation()}> {recipe.first_name + " " + recipe.last_name} <br/> </div>
-                                        </Link>
-                                    </Col>
-                                    <Col sm={4} style={{textAlign:"right"}}>
-                                        <Image src={Like} style={{height:"50%"}}/>
-                                        <span style={{fontSize: "110%", verticalAlign: "middle"}}> {recipe.likes} </span>
-                                        <Image src={Comment} style={{height:"60%"}} />
-                                        <span style={{fontSize: "110%", verticalAlign: "middle"}}> {recipe.comments} </span>
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <small className={"text-muted"}>
-                                        {"Created "}
-                                        <ReactTimeAgo date={new Date(recipe.creation_time)} locale="en-US"/>
-                                        {recipe.edit_time != null ? <>
-                                                {" | Modified "}
-                                                <ReactTimeAgo date={new Date(recipe.edit_time)} locale="en-US"/> </>
-                                            : ""}
-                                    </small>
-                                </Row>
-                            </Col>
-                        </Row>
-                    </Card.Footer>
-                        </div>
+                                    <Link  to={"/profile/" + recipe.user_id} >
+                                        <Image  onClick={(e) => e.stopPropagation()} src={"http://127.0.0.1:5000/img/" + recipe.profile_pic_path} alt="Profile Picture" roundedCircle width="40em"/>
+                                    </Link>
+                                </Col>
+                                <Col sm={10}>
+                                    <Row>
+                                        <Col sm={8} style={{paddingLeft:"0em"}} className={"text-truncate"}>
+                                            <Link  to={"/profile/" + recipe.user_id}>
+                                                <div onClick={(e) => e.stopPropagation()}> {recipe.first_name + " " + recipe.last_name} <br/> </div>
+                                            </Link>
+                                        </Col>
+                                        <Col sm={4} style={{textAlign:"right"}}>
+                                            <Image src={Like} style={{height:"50%"}}/>
+                                            <span style={{fontSize: "110%", verticalAlign: "middle"}}> {recipe.likes} </span>
+                                            <Image src={Comment} style={{height:"60%"}} />
+                                            <span style={{fontSize: "110%", verticalAlign: "middle"}}> {recipe.comments} </span>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <small className={"text-muted"}>
+                                            {"Created "}
+                                            <ReactTimeAgo date={new Date(recipe.creation_time)} locale="en-US"/>
+                                            {recipe.edit_time != null ? <>
+                                                    {" | Modified "}
+                                                    <ReactTimeAgo date={new Date(recipe.edit_time)} locale="en-US"/> </>
+                                                : ""}
+                                        </small>
+                                    </Row>
+                                </Col>
+                            </Row>
+                        </Card.Footer>
+                    </div>
                 </Card>
             </div>
         )
@@ -120,7 +120,7 @@ function RecipeList(props) {
             return mealTypes.indexOf(a) - mealTypes.indexOf(b);
         });
     }
-    
+
     function toggleMealFilter(type, checked) {
         let tempArray = Array.from(activeMealFilter);
         if (checked) {
@@ -183,7 +183,7 @@ function RecipeList(props) {
         setActiveTimeFilters([Math.min(...timeFilters), Math.max(...timeFilters)]);
         setActiveCalorieFilters([Math.min(...calorieFilters), Math.max(...calorieFilters)]);
         let checkboxes = document.getElementsByClassName("form-check-input");
-        for (let checkbox of checkboxes) {  
+        for (let checkbox of checkboxes) {
             checkbox.checked = false;
         }
     }
@@ -237,81 +237,81 @@ function RecipeList(props) {
     }, [recipeData, activeMealFilter, activeServingFilters, activeTimeFilters, activeCalorieFilters])
 
     if (recipeData.length !== 0){
-    return (
-        <>
-        <Col sm={3}>
-        <Row>
-            <h4>Filter</h4><br/>
-        </Row>
-        <Row style={{marginTop:'1em'}}>
-        <h6>Meal type</h6>
-        </Row>
-        {mealFilters.map((t, index) => 
-            <Row key={index}><Form.Check type='checkbox' label={t} onChange={e => toggleMealFilter(t, e.target.checked)}/></Row>
-        )}
-        <Row style={{marginTop:'1em'}}>
-        <h6>Serving Size</h6>
-        </Row >
-        <Row style={{width: '80%', marginTop:"2em"}}>
-        <Slider style={{color:"tomato"}} value={activeServingFilters} min={Math.min(...servingFilters)} max={Math.max(...servingFilters)} valueLabelDisplay="on" onChange={(e, v) => setActiveServingFilters(v)}/>
-        </Row>
-        <Row style={{marginTop:'1em'}}>
-        <h6>Time to cook</h6>
-        </Row >
-        <Row style={{width: '80%', marginTop:"2em"}}>
-        <Slider style={{color:"tomato"}}  value={activeTimeFilters} min={Math.min(...timeFilters)} max={Math.max(...timeFilters)} valueLabelDisplay="on" onChange={(e, v) => setActiveTimeFilters(v)}/>
-        </Row>
-        <Row style={{marginTop:'1em'}}>
-        <h6>Calories</h6>
-        </Row >
-        <Row style={{width: '80%', marginTop:"2em"}}>
-        <Slider style={{color:"tomato"}}  value={activeCalorieFilters} min={Math.min(...calorieFilters)} max={Math.max(...calorieFilters)} valueLabelDisplay="on" onChange={(e, v) => setActiveCalorieFilters(v)}/>
-        </Row>
-        <Row style={{marginTop:'1em'}}>
-        <Button size="sm" variant="outline-secondary" onClick={clearFilters}>Clear all</Button>
-        </Row>
-        </Col>
-        <Col sm={9}>
-        <Row>
-            <Col sm={7} />
-            <Col sm={5}>
-            <Form.Group as={Row}>
-                <Form.Label column sm={4}>Sort by:</Form.Label>
-                <Col sm={8}>
-                <Form.Control as="select" onChange={(e) => sortChange(e)}>
-                { isSearchPage ? <option value="0"> Relevance</option> : null}
-                <option value="1">Date created</option>
-                <option value="2">Date modified</option>
-                <option value="3">Likes</option>
-                <option value="4">Comments</option>
-                </Form.Control>
+        return (
+            <>
+                <Col sm={3}>
+                    <Row>
+                        <h4>Filter</h4><br/>
+                    </Row>
+                    <Row style={{marginTop:'1em'}}>
+                        <h6>Meal type</h6>
+                    </Row>
+                    {mealFilters.map((t, index) =>
+                        <Row key={index}><Form.Check type='checkbox' label={t} onChange={e => toggleMealFilter(t, e.target.checked)}/></Row>
+                    )}
+                    <Row style={{marginTop:'1em'}}>
+                        <h6>Serving Size</h6>
+                    </Row >
+                    <Row style={{width: '80%', marginTop:"2em"}}>
+                        <Slider style={{color:"tomato"}} value={activeServingFilters} min={Math.min(...servingFilters)} max={Math.max(...servingFilters)} valueLabelDisplay="on" onChange={(e, v) => setActiveServingFilters(v)}/>
+                    </Row>
+                    <Row style={{marginTop:'1em'}}>
+                        <h6>Time to cook</h6>
+                    </Row >
+                    <Row style={{width: '80%', marginTop:"2em"}}>
+                        <Slider style={{color:"tomato"}}  value={activeTimeFilters} min={Math.min(...timeFilters)} max={Math.max(...timeFilters)} valueLabelDisplay="on" onChange={(e, v) => setActiveTimeFilters(v)}/>
+                    </Row>
+                    <Row style={{marginTop:'1em'}}>
+                        <h6>Calories</h6>
+                    </Row >
+                    <Row style={{width: '80%', marginTop:"2em"}}>
+                        <Slider style={{color:"tomato"}}  value={activeCalorieFilters} min={Math.min(...calorieFilters)} max={Math.max(...calorieFilters)} valueLabelDisplay="on" onChange={(e, v) => setActiveCalorieFilters(v)}/>
+                    </Row>
+                    <Row style={{marginTop:'1em'}}>
+                        <Button size="sm" variant="outline-secondary" onClick={clearFilters}>Clear all</Button>
+                    </Row>
                 </Col>
-            </Form.Group>
-            </Col>
-        </Row>
-        <Row sm={2}>
-            {recipeDataFiltered.slice(activePage*recipesPerPage, activePage*recipesPerPage+recipesPerPage).map(generateCard)}
-        </Row>
-        <Row>
-            <Col>
-            <Pagination>
-                {[...Array(Math.ceil(recipeDataFiltered.length / recipesPerPage)).keys()].map(i => 
-                    <Pagination.Item key={i} active={i === activePage} onClick={()=>setActivePage(i)}>{i+1}</Pagination.Item>
-                )}
-            </Pagination>
-            </Col>
-        </Row>
-        </Col>
+                <Col sm={9}>
+                    <Row>
+                        <Col sm={7} />
+                        <Col sm={5}>
+                            <Form.Group as={Row}>
+                                <Form.Label column sm={4}>Sort by:</Form.Label>
+                                <Col sm={8}>
+                                    <Form.Control as="select" onChange={(e) => sortChange(e)}>
+                                        { isSearchPage ? <option value="0"> Relevance</option> : null}
+                                        <option value="1">Date created</option>
+                                        <option value="2">Date modified</option>
+                                        <option value="3">Likes</option>
+                                        <option value="4">Comments</option>
+                                    </Form.Control>
+                                </Col>
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <Row sm={2}>
+                        {recipeDataFiltered.slice(activePage*recipesPerPage, activePage*recipesPerPage+recipesPerPage).map(generateCard)}
+                    </Row>
+                    <Row>
+                        <Col>
+                            <Pagination>
+                                {[...Array(Math.ceil(recipeDataFiltered.length / recipesPerPage)).keys()].map(i =>
+                                    <Pagination.Item key={i} active={i === activePage} onClick={()=>setActivePage(i)}>{i+1}</Pagination.Item>
+                                )}
+                            </Pagination>
+                        </Col>
+                    </Row>
+                </Col>
             </>
-    );
+        );
     }
     else {
         return (
-          <>
-              <div style={{textAlign: "center", width: "100%"}}>
-              <h4> Nothing to show</h4>
-                  </div>
-          </>
+            <>
+                <div style={{textAlign: "center", width: "100%"}}>
+                    <h4> Nothing to show</h4>
+                </div>
+            </>
         );
     }
 

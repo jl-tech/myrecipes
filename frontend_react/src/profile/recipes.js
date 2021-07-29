@@ -162,33 +162,33 @@ function ProfileRecipes(props) {
 
     if (success) {
         return (
-             <>
-            <Tab.Container defaultActiveKey="all" >
-                <Row style={{borderRadius: "10px 10px 10px 10px", backgroundColor: "#F7F7F7", width: "100%"}} className={"shadow-sm justify-content-center"} >
-                    <Nav variant="pills" >
+            <>
+                <Tab.Container defaultActiveKey="all" >
+                    <Row style={{borderRadius: "10px 10px 10px 10px", backgroundColor: "#F7F7F7", width: "100%"}} className={"shadow-sm justify-content-center"} >
+                        <Nav variant="pills" >
                             <Nav.Link eventKey="all">{Number(props.loggedInUID) === Number(props.userID) ? "Your Recipes (" + recipeData.length + ")": "All Recipes (" + recipeData.length + ")" }</Nav.Link>
                             {props.loggedIn && Number(props.loggedInUID) !== Number(props.userID) ?
-                            <Nav.Link eventKey="liked">Recipes You Liked ({likedRecipeData.length})</Nav.Link>
-                            :null}
+                                <Nav.Link eventKey="liked">Recipes You Liked ({likedRecipeData.length})</Nav.Link>
+                                :null}
                             <Nav.Link eventKey="they_liked"> {Number(props.loggedInUID) === Number(props.userID) ? "Your Likes (" + profileUserLikedRecipeData.length + ")" : "Recipes They Liked (" + profileUserLikedRecipeData.length + ")"}</Nav.Link>
                             <Nav.Link eventKey="comments">{Number(props.loggedInUID) === Number(props.userID) ? "Your Comments (" + comments.length + ")" : "Comments (" + comments.length + ")" } </Nav.Link>
                         </Nav>
                     </Row>
-                <Row style={{marginTop:"1em"}}>
+                    <Row style={{marginTop:"1em"}}>
 
                         <Tab.Content style={{width:"100%"}}>
                             <Tab.Pane eventKey="all">
                                 <Row>
-                                <RecipeList recipeData={recipeData} setRecipeData={setRecipeData}/>
+                                    <RecipeList recipeData={recipeData} setRecipeData={setRecipeData}/>
                                 </Row>
                             </Tab.Pane>
                             {props.loggedIn ?
-                            <Tab.Pane eventKey="liked">
-                            <Row>
-                                <RecipeList recipeData={likedRecipeData} setRecipeData={setLikedRecipeData}/> 
-                            </Row>
-                            </Tab.Pane>
-                            :null}
+                                <Tab.Pane eventKey="liked">
+                                    <Row>
+                                        <RecipeList recipeData={likedRecipeData} setRecipeData={setLikedRecipeData}/>
+                                    </Row>
+                                </Tab.Pane>
+                                :null}
                             <Tab.Pane eventKey={"they_liked"}>
                                 <Row>
                                     <RecipeList recipeData={profileUserLikedRecipeData} setRecipeData={setProfileUserLikedRecipeData}/>
@@ -211,37 +211,37 @@ function ProfileRecipes(props) {
                                             </Form.Control>
                                             <br/>
                                         </Form>
-                                    <ListGroup>
-                                        {comments.slice(0,loadCommentsTo).map(({comment_text, time_created, name, recipe_id, first_name, last_name, photo_path}, index)=>
-                                            <ListGroup.Item key={index}
-                                                onMouseEnter={()=>setCommentIndexHovered(index)}
-                                                onMouseLeave={()=>setCommentIndexHovered(-1)}
-                                                className={commentIndexHovered === index ? "shadow-lg border-top" : "shadow-sm border-top"}
-                                                role={"link"} onClick={() => history.push("/recipe/" + recipe_id)}
-                                                style={{marginBottom: "1em", cursor:"pointer"}}>
-                                                <Row>
-                                                    <Col sm={2}  className={"mx-auto align-content-center"}>
+                                        <ListGroup>
+                                            {comments.slice(0,loadCommentsTo).map(({comment_text, time_created, name, recipe_id, first_name, last_name, photo_path}, index)=>
+                                                <ListGroup.Item key={index}
+                                                                onMouseEnter={()=>setCommentIndexHovered(index)}
+                                                                onMouseLeave={()=>setCommentIndexHovered(-1)}
+                                                                className={commentIndexHovered === index ? "shadow-lg border-top" : "shadow-sm border-top"}
+                                                                role={"link"} onClick={() => history.push("/recipe/" + recipe_id)}
+                                                                style={{marginBottom: "1em", cursor:"pointer"}}>
+                                                    <Row>
+                                                        <Col sm={2}  className={"mx-auto align-content-center"}>
 
-                                                    <Image src={photo_path==null ?  "http://127.0.0.1:5000/img/default_recipe.png" : "http://127.0.0.1:5000/img/" + photo_path} alt="Profile Picture" style={{objectFit:"cover", height:"5em", width:"9em"}} />
-                                                    </Col>
-                                                    <Col sm={10}>
-                                                        <Row>
-                                                            <b> {name} </b> &nbsp; {first_name} {last_name}
-                                                        </Row>
-                                                        <Row>
-                                                            <small><ReactTimeAgo date={new Date(time_created)} locale="en-US"/></small>
-                                                        </Row>
-                                                        <Row>
-                                                            <div style={{fontSize:"115%"}}> {comment_text} </div>
-                                                </Row>
-                                                    </Col>
-                                                </Row>
+                                                            <Image src={photo_path==null ?  "http://127.0.0.1:5000/img/default_recipe.png" : "http://127.0.0.1:5000/img/" + photo_path} alt="Profile Picture" style={{objectFit:"cover", height:"5em", width:"9em"}} />
+                                                        </Col>
+                                                        <Col sm={10}>
+                                                            <Row>
+                                                                <b> {name} </b> &nbsp; {first_name} {last_name}
+                                                            </Row>
+                                                            <Row>
+                                                                <small><ReactTimeAgo date={new Date(time_created)} locale="en-US"/></small>
+                                                            </Row>
+                                                            <Row>
+                                                                <div style={{fontSize:"115%"}}> {comment_text} </div>
+                                                            </Row>
+                                                        </Col>
+                                                    </Row>
 
 
 
-                                            </ListGroup.Item>
-                                        )}
-                                    </ListGroup>
+                                                </ListGroup.Item>
+                                            )}
+                                        </ListGroup>
                                         {loadCommentsTo < comments.length ?
                                             <Button variant={"outline-secondary"} onClick={()=>setLoadCommentsTo(loadCommentsTo + 5)}> Show more... </Button> :
                                             null
@@ -251,8 +251,8 @@ function ProfileRecipes(props) {
 
                             </Tab.Pane>
                         </Tab.Content>
-                </Row>
-            </Tab.Container>
+                    </Row>
+                </Tab.Container>
             </>
         );
     } else {

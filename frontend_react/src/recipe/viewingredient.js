@@ -25,7 +25,7 @@ async function requestEditIngredients(token, recipe_id, ingredients) {
     });
 
     let responseJson = await response.json();
-    
+
     if (response.ok) return responseJson;
     else throw new Error(responseJson.error);
 }
@@ -138,107 +138,107 @@ function RecipeViewIngredient(props) {
 
     if (editMode && props.editable) {
         return (
-        <>
-            <Row style={{marginTop:"1em"}}>
-                <Col sm={9}>
-                    <h3> Ingredients </h3>
-                </Col>
-                <Col sm={3} style={{textAlign:"right"}}>
-                    <Button variant="primary" size="sm" style={{marginRight:"1em"}} onClick={handleSubmit}>Confirm</Button>
-                    <Button variant="outline-secondary" size="sm" onClick={hideEditMode}>Cancel</Button>
-                </Col>
-                <Col sm={6} />
-                <Col sm={6}>
-                    <Alert show={errorShow} variant="danger" onClose={() => setErrorShow(false)} dismissible>
-                        {errorText}
-                    </Alert>
-                </Col>
-            </Row>
-            <Row>
-                <Col>
-                <DragDropContext onDragEnd={handleOnDragEnd}>
-                    <Droppable droppableId="ingredients">
-                        {(provided) => (
-                            <ListGroup as="ul" {...provided.droppableProps} ref={provided.innerRef}>
-                                {ingredients.map(({id, quantity, unit, name}, index) => {
-                                    return (
-                                        <Draggable key={id} draggableId={id} index={index}>
-                                            {(provided) => (
-                                                <ListGroup.Item as="li" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
-                                                    <Form.Row >
-                                                        <Col sm={1} className={"my-auto"}>
-                                                            <span>{index+1}</span>
-                                                        </Col>
-                                                        <Form.Group as={Col} sm={3} style={{marginBottom:"0"}}>
-                                                            <Form.Control placeholder="Quantity (if any)" type="number" step="any" onChange={e => updateIngredient(index, "quantity", e.target.value)} defaultValue={quantity} />
-                                                        </Form.Group>
-                                                        <Form.Group as={Col} sm={2} style={{marginBottom:"0"}}>
-                                                            <Form.Control placeholder="Unit (if any)" onChange={e => updateIngredient(index, "unit", e.target.value)} defaultValue={unit}/>
-                                                        </Form.Group>
-                                                        <Form.Group as={Col} sm={5} style={{marginBottom:"0"}}>
-                                                            <Form.Control placeholder="Name" required onChange={e => updateIngredient(index, "name", e.target.value)} defaultValue={name}/>
-                                                        </Form.Group>
-                                                        <Col sm={1} className={"my-auto"}>
-                                                            <button type="button" className="close" onClick={() => removeIngredient(index)}>
-                                                                <span>×</span>
-                                                            </button>
-                                                            <img src={Reorder} alt=""/>
-                                                        </Col>
-                                                    </Form.Row>
-                                                </ListGroup.Item>
-                                            )}
-                                        </Draggable>
-                                    );
-                                })}
-                                {provided.placeholder}
-                                <ListGroup.Item as="li">
-                                    <Button variant="outline-secondary" style={{float:"right"}} onClick={addRow} size="sm">Add</Button>
-                                </ListGroup.Item>
-                            </ListGroup>
-                        )}
-                    </Droppable>
-                </DragDropContext>
-                </Col>
-            </Row>
-        </>
+            <>
+                <Row style={{marginTop:"1em"}}>
+                    <Col sm={9}>
+                        <h3> Ingredients </h3>
+                    </Col>
+                    <Col sm={3} style={{textAlign:"right"}}>
+                        <Button variant="primary" size="sm" style={{marginRight:"1em"}} onClick={handleSubmit}>Confirm</Button>
+                        <Button variant="outline-secondary" size="sm" onClick={hideEditMode}>Cancel</Button>
+                    </Col>
+                    <Col sm={6} />
+                    <Col sm={6}>
+                        <Alert show={errorShow} variant="danger" onClose={() => setErrorShow(false)} dismissible>
+                            {errorText}
+                        </Alert>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <DragDropContext onDragEnd={handleOnDragEnd}>
+                            <Droppable droppableId="ingredients">
+                                {(provided) => (
+                                    <ListGroup as="ul" {...provided.droppableProps} ref={provided.innerRef}>
+                                        {ingredients.map(({id, quantity, unit, name}, index) => {
+                                            return (
+                                                <Draggable key={id} draggableId={id} index={index}>
+                                                    {(provided) => (
+                                                        <ListGroup.Item as="li" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
+                                                            <Form.Row >
+                                                                <Col sm={1} className={"my-auto"}>
+                                                                    <span>{index+1}</span>
+                                                                </Col>
+                                                                <Form.Group as={Col} sm={3} style={{marginBottom:"0"}}>
+                                                                    <Form.Control placeholder="Quantity (if any)" type="number" step="any" onChange={e => updateIngredient(index, "quantity", e.target.value)} defaultValue={quantity} />
+                                                                </Form.Group>
+                                                                <Form.Group as={Col} sm={2} style={{marginBottom:"0"}}>
+                                                                    <Form.Control placeholder="Unit (if any)" onChange={e => updateIngredient(index, "unit", e.target.value)} defaultValue={unit}/>
+                                                                </Form.Group>
+                                                                <Form.Group as={Col} sm={5} style={{marginBottom:"0"}}>
+                                                                    <Form.Control placeholder="Name" required onChange={e => updateIngredient(index, "name", e.target.value)} defaultValue={name}/>
+                                                                </Form.Group>
+                                                                <Col sm={1} className={"my-auto"}>
+                                                                    <button type="button" className="close" onClick={() => removeIngredient(index)}>
+                                                                        <span>×</span>
+                                                                    </button>
+                                                                    <img src={Reorder} alt=""/>
+                                                                </Col>
+                                                            </Form.Row>
+                                                        </ListGroup.Item>
+                                                    )}
+                                                </Draggable>
+                                            );
+                                        })}
+                                        {provided.placeholder}
+                                        <ListGroup.Item as="li">
+                                            <Button variant="outline-secondary" style={{float:"right"}} onClick={addRow} size="sm">Add</Button>
+                                        </ListGroup.Item>
+                                    </ListGroup>
+                                )}
+                            </Droppable>
+                        </DragDropContext>
+                    </Col>
+                </Row>
+            </>
         );
     } else {
         return (
             <>
 
-            <Row style={{marginTop:"1em"}}>
-                <Col sm={11}>
-                    <h3> Ingredients </h3>
-                </Col>
-                {props.editable ?
-                <>
-                <Col sm={1} style={{textAlign:"right"}}>
-                    <Button variant="outline-secondary" size="sm" onClick={showEditMode}>Edit</Button>
-                </Col>
-                <Col sm={6} />
-                <Col sm={6}>
-                    <Alert show={successShow} variant="success" onClose={() => setSuccessShow(false)} dismissible>
-                        Successfully updated recipe steps
-                    </Alert>
-                </Col></>:<></>}
-            </Row>
-            <Row>
-                <Col>
-                <ListGroup as="ul" className={"shadow-sm"}>
-                    {props.ingredients.map(({quantity, unit, name}, index) =>
-                        <ListGroup.Item as="li" key={index}>
-                        <Row>
-                            <Col sm={1}><Form.Check type="checkbox" /></Col>
-                            <Col sm={11}>{quantity != null ? quantity : ''} {unit != null ? unit : ''} {name}</Col>
-                        </Row>
-                        </ListGroup.Item>
-                    )}
-                </ListGroup>
-                </Col>
-            </Row>
+                <Row style={{marginTop:"1em"}}>
+                    <Col sm={11}>
+                        <h3> Ingredients </h3>
+                    </Col>
+                    {props.editable ?
+                        <>
+                            <Col sm={1} style={{textAlign:"right"}}>
+                                <Button variant="outline-secondary" size="sm" onClick={showEditMode}>Edit</Button>
+                            </Col>
+                            <Col sm={6} />
+                            <Col sm={6}>
+                                <Alert show={successShow} variant="success" onClose={() => setSuccessShow(false)} dismissible>
+                                    Successfully updated recipe steps
+                                </Alert>
+                            </Col></>:<></>}
+                </Row>
+                <Row>
+                    <Col>
+                        <ListGroup as="ul" className={"shadow-sm"}>
+                            {props.ingredients.map(({quantity, unit, name}, index) =>
+                                <ListGroup.Item as="li" key={index}>
+                                    <Row>
+                                        <Col sm={1}><Form.Check type="checkbox" /></Col>
+                                        <Col sm={11}>{quantity != null ? quantity : ''} {unit != null ? unit : ''} {name}</Col>
+                                    </Row>
+                                </ListGroup.Item>
+                            )}
+                        </ListGroup>
+                    </Col>
+                </Row>
             </>
         );
     }
 }
-                    
+
 export default RecipeViewIngredient;

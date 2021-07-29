@@ -22,13 +22,13 @@ async function editEmail(token, email) {
     });
 
     let responseJson = await response.json();
-    
+
     if (response.ok) return responseJson;
     else throw new Error(responseJson.error);
 }
 
 function ProfileEditEmail(props) {
-    
+
 
     const [editMode, setEditMode] = useState(false);
 
@@ -54,7 +54,7 @@ function ProfileEditEmail(props) {
             setSuccessShow(true);
         }
     }
-    
+
     if (!editMode) {
         return (
             <>

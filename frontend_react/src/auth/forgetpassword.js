@@ -21,7 +21,7 @@ async function requestForgetPassword(email) {
     });
 
     let responseJson = await response.json();
-    
+
     if (response.ok) return responseJson;
     else throw new Error(responseJson.error);
 }
@@ -52,35 +52,35 @@ function ForgetPassword() {
                 <Helmet>
                     <title> Forgot Password - MyRecipes </title>
                 </Helmet>
-            <Modal.Header>
-                <Modal.Title>
-                Forget Password
-                </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-            <Form onSubmit={handleSubmit}>
-                <Form.Group controlId="email">
-                    <Form.Control type="email" placeholder="Email address" required onChange={e => setEmail(e.target.value)}/>
-                </Form.Group>
-                <Alert show={alertShow} variant="danger" onClose={() => setAlertShow(false)} dismissible>
-                    {alertText}
-                </Alert>
-                <Button type="submit" block>
-                    Submit
-                </Button>
-            </Form>
-            </Modal.Body>
+                <Modal.Header>
+                    <Modal.Title>
+                        Forget Password
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form onSubmit={handleSubmit}>
+                        <Form.Group controlId="email">
+                            <Form.Control type="email" placeholder="Email address" required onChange={e => setEmail(e.target.value)}/>
+                        </Form.Group>
+                        <Alert show={alertShow} variant="danger" onClose={() => setAlertShow(false)} dismissible>
+                            {alertText}
+                        </Alert>
+                        <Button type="submit" block>
+                            Submit
+                        </Button>
+                    </Form>
+                </Modal.Body>
             </>
         );
     } else {
         return (
             <Modal.Body>
-            <div style={{textAlign:"center"}}>
-                We have sent an email with a link to reset your password.
-                <Link to="/login" component={Button} style={{marginTop:"1em"}}>
-                    Return
-                </Link>
-            </div>
+                <div style={{textAlign:"center"}}>
+                    We have sent an email with a link to reset your password.
+                    <Link to="/login" component={Button} style={{marginTop:"1em"}}>
+                        Return
+                    </Link>
+                </div>
             </Modal.Body>
         )
     }

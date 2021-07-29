@@ -10,40 +10,40 @@ import Alert from "react-bootstrap/Alert";
 import Row from "react-bootstrap/Row";
 
 async function requestLike(recipe_id, token) {
-        let response = await fetch('http://localhost:5000/recipe/like', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-            },
-            body: JSON.stringify({
-                recipe_id: recipe_id,
-            })
-        }).catch(e => {
-            throw new Error(e);
-        });
+    let response = await fetch('http://localhost:5000/recipe/like', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token
+        },
+        body: JSON.stringify({
+            recipe_id: recipe_id,
+        })
+    }).catch(e => {
+        throw new Error(e);
+    });
 
-        let responseJson = await response.json();
+    let responseJson = await response.json();
 
-        if (response.ok) return responseJson;
-        else throw new Error(responseJson.error);
+    if (response.ok) return responseJson;
+    else throw new Error(responseJson.error);
 }
 
 async function getLikedStatus(recipe_id, token) {
-        let response = await fetch('http://localhost:5000/recipe/is_liked?' + new URLSearchParams({'recipe_id': recipe_id}), {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-            }
-        }).catch(e => {
-            throw new Error(e);
-        });
+    let response = await fetch('http://localhost:5000/recipe/is_liked?' + new URLSearchParams({'recipe_id': recipe_id}), {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token
+        }
+    }).catch(e => {
+        throw new Error(e);
+    });
 
-        let responseJson = await response.json();
+    let responseJson = await response.json();
 
-        if (response.ok) return responseJson;
-        else throw new Error(responseJson.error);
+    if (response.ok) return responseJson;
+    else throw new Error(responseJson.error);
 }
 
 function RecipeViewLikes(props) {
@@ -101,14 +101,14 @@ function RecipeViewLikes(props) {
     return (
         <>
             <Row style={{textAlign: "center", justifyContent: "center"}} className={"mx-auto align-content-center"}>
-            <Image
+                <Image
                     style={{cursor: "pointer", height: likeClicked ? "2em" : "2.5em", width:"auto", marginTop: likeClicked ? "0.2em": null, marginLeft: likeClicked ? "0.05em" : null}}
                     onMouseLeave={props.loggedIn ? ()=>setLikeClicked(false) : null}
                     onMouseDown={props.loggedIn ? ()=>setLikeClicked(true) : null}
                     onMouseUp={props.loggedIn ? ()=>setLikeClicked(false) : null}
                     src={liked ? Liked : NotLiked}
                     onClick={props.loggedIn ? () => handleLike() : ()=>showError("Log in to like this recipe")}
-            />
+                />
             </Row>
             <Row style={{textAlign: "center",  justifyContent: "center"}} className={"mx-auto align-content-center"}>
                 <p style={{width:"2em", textAlign:"center", fontSize: props.likes < 9999 ?  "150%" : "100%", color: liked ? "tomato" : "black",  marginTop: likeClicked ? "0.2em": null, verticalAlign: "middle"}}> { props.likes}</p>

@@ -25,7 +25,7 @@ async function requestEditSteps(token, recipe_id, steps) {
     });
 
     let responseJson = await response.json();
-    
+
     if (response.ok) return responseJson;
     else throw new Error(responseJson.error);
 }
@@ -130,101 +130,101 @@ function RecipeViewStep(props) {
 
     if (editMode && props.editable) {
         return (
-        <>
-            <Row style={{marginTop:"1em"}}>
-                <Col sm={9}>
-                    <h3> Steps </h3>
-                </Col>
-                <Col sm={3} style={{textAlign:"right"}}>
-                    <Button variant="primary" size="sm" style={{marginRight:"1em"}} onClick={handleSubmit}>Confirm</Button>
-                    <Button variant="outline-secondary" size="sm" onClick={hideEditMode}>Cancel</Button>
-                </Col>
-                <Col sm={6} />
-                <Col sm={6}>
-                    <Alert show={errorShow} variant="danger" onClose={() => setErrorShow(false)} dismissible>
-                        {errorText}
-                    </Alert>
-                </Col>
-            </Row>
-            <Row>
-                <Col>
-                <DragDropContext onDragEnd={handleOnDragEnd}>
-                    <Droppable droppableId="steps">
-                        {(provided) => (
-                            <ListGroup as="ul" {...provided.droppableProps} ref={provided.innerRef}>
-                                {steps.map(({id, description}, index) => {
-                                    return (
-                                        <Draggable key={id} draggableId={id} index={index}>
-                                            {(provided) => (
-                                                <ListGroup.Item as="li" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
-                                                    <Form.Row >
-                                                        <Col sm={1} className={"my-auto"}>
-                                                            <span>{index+1}</span>
-                                                        </Col>
-                                                        <Form.Group as={Col} sm={10} style={{marginBottom:"0"}}>
-                                                            <Form.Control placeholder="Details" onChange={e => updateStep(index, "description", e.target.value)} required defaultValue={description}/>
-                                                        </Form.Group>
-                                                        <Col sm={1} className={"my-auto"}>
-                                                            <button type="button" className="close" onClick={() => removeStep(index)}>
-                                                                <span>×</span>
-                                                            </button>
-                                                            <img src={Reorder} alt=""/>
-                                                        </Col>
-                                                    </Form.Row>
-                                                </ListGroup.Item>
-                                            )}
-                                        </Draggable>
-                                    );
-                                })}
-                                {provided.placeholder}
-                                <ListGroup.Item as="li">
-                                    <Button variant="outline-secondary" style={{float:"right"}} onClick={addRow} size="sm">Add</Button>
-                                </ListGroup.Item>
-                            </ListGroup>
-                        )}
-                    </Droppable>
-                </DragDropContext>
-                </Col>
-            </Row>
-        </>
+            <>
+                <Row style={{marginTop:"1em"}}>
+                    <Col sm={9}>
+                        <h3> Steps </h3>
+                    </Col>
+                    <Col sm={3} style={{textAlign:"right"}}>
+                        <Button variant="primary" size="sm" style={{marginRight:"1em"}} onClick={handleSubmit}>Confirm</Button>
+                        <Button variant="outline-secondary" size="sm" onClick={hideEditMode}>Cancel</Button>
+                    </Col>
+                    <Col sm={6} />
+                    <Col sm={6}>
+                        <Alert show={errorShow} variant="danger" onClose={() => setErrorShow(false)} dismissible>
+                            {errorText}
+                        </Alert>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <DragDropContext onDragEnd={handleOnDragEnd}>
+                            <Droppable droppableId="steps">
+                                {(provided) => (
+                                    <ListGroup as="ul" {...provided.droppableProps} ref={provided.innerRef}>
+                                        {steps.map(({id, description}, index) => {
+                                            return (
+                                                <Draggable key={id} draggableId={id} index={index}>
+                                                    {(provided) => (
+                                                        <ListGroup.Item as="li" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
+                                                            <Form.Row >
+                                                                <Col sm={1} className={"my-auto"}>
+                                                                    <span>{index+1}</span>
+                                                                </Col>
+                                                                <Form.Group as={Col} sm={10} style={{marginBottom:"0"}}>
+                                                                    <Form.Control placeholder="Details" onChange={e => updateStep(index, "description", e.target.value)} required defaultValue={description}/>
+                                                                </Form.Group>
+                                                                <Col sm={1} className={"my-auto"}>
+                                                                    <button type="button" className="close" onClick={() => removeStep(index)}>
+                                                                        <span>×</span>
+                                                                    </button>
+                                                                    <img src={Reorder} alt=""/>
+                                                                </Col>
+                                                            </Form.Row>
+                                                        </ListGroup.Item>
+                                                    )}
+                                                </Draggable>
+                                            );
+                                        })}
+                                        {provided.placeholder}
+                                        <ListGroup.Item as="li">
+                                            <Button variant="outline-secondary" style={{float:"right"}} onClick={addRow} size="sm">Add</Button>
+                                        </ListGroup.Item>
+                                    </ListGroup>
+                                )}
+                            </Droppable>
+                        </DragDropContext>
+                    </Col>
+                </Row>
+            </>
         );
     } else {
         return (
             <>
 
-            <Row style={{marginTop:"1em"}}>
-                <Col sm={11}>
-                    <h3> Steps </h3>
-                </Col>
-                {props.editable ?
-                <>
-                <Col sm={1} style={{textAlign:"right"}}>
-                    <Button variant="outline-secondary" size="sm" onClick={showEditMode}>Edit</Button>
-                </Col>
-                <Col sm={6} />
-                <Col sm={6}>
-                    <Alert show={successShow} variant="success" onClose={() => setSuccessShow(false)} dismissible>
-                        Successfully updated recipe steps
-                    </Alert>
-                </Col></>:<></>}
-            </Row>
-            <Row>
-                <Col>
-                <ListGroup as="ul" className={"shadow-sm"}>
-                    {props.steps.map(({id, description}, index) =>
-                        <ListGroup.Item as="li" key={index}>
-                        <Row>
-                            <Col sm={1}>{index+1}.</Col>
-                            <Col sm={11}>{description}</Col>
-                        </Row>
-                        </ListGroup.Item>
-                    )}
-                </ListGroup>
-                </Col>
-            </Row>
+                <Row style={{marginTop:"1em"}}>
+                    <Col sm={11}>
+                        <h3> Steps </h3>
+                    </Col>
+                    {props.editable ?
+                        <>
+                            <Col sm={1} style={{textAlign:"right"}}>
+                                <Button variant="outline-secondary" size="sm" onClick={showEditMode}>Edit</Button>
+                            </Col>
+                            <Col sm={6} />
+                            <Col sm={6}>
+                                <Alert show={successShow} variant="success" onClose={() => setSuccessShow(false)} dismissible>
+                                    Successfully updated recipe steps
+                                </Alert>
+                            </Col></>:<></>}
+                </Row>
+                <Row>
+                    <Col>
+                        <ListGroup as="ul" className={"shadow-sm"}>
+                            {props.steps.map(({id, description}, index) =>
+                                <ListGroup.Item as="li" key={index}>
+                                    <Row>
+                                        <Col sm={1}>{index+1}.</Col>
+                                        <Col sm={11}>{description}</Col>
+                                    </Row>
+                                </ListGroup.Item>
+                            )}
+                        </ListGroup>
+                    </Col>
+                </Row>
             </>
         );
     }
 }
-                    
+
 export default RecipeViewStep;

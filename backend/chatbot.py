@@ -78,6 +78,12 @@ def talk(messages, session):
     elif intent_name == "My_Profile":
         return react_message, [
             {'name': 'My Profile', 'link': 'http://localhost:3000/profile'}],
+    elif intent_name == "Log_In":
+        return react_message, [
+            {'name': 'Log In', 'link': 'http://localhost:3000/login'}],
+    elif intent_name == "Register":
+        return react_message, [
+            {'name': 'Log In', 'link': 'http://localhost:3000/login'}],
     elif intent_name == "Customer_Service_Email":
         send_support_email(messages)
         return "I've sent your message to our support team. Please expect a response within 24 hours."

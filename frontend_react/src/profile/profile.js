@@ -99,80 +99,80 @@ function Profile(props) {
     if (success) {
         return (
             <>
-            <Helmet>
-                <title> {firstName} {lastName}'s Profile - MyRecipes </title>
-            </Helmet>
-            <Container style={{marginTop:"1em", marginBottom:"2em"}}>
-                <Row>
-                    <Col>
-                    <div style={{textAlign:"center"}}>
-                        <Image src={"http://127.0.0.1:5000/img/" + imgUrl} className="shadow" alt="Profile Picture" roundedCircle height="150em"/>
-                    </div>
-                    </Col>
-                </Row>
-                <Row style={{textAlign:"center"}}>
-                    <Col>
-                    <h1>{firstName} {lastName}</h1>
-                        {Number(props.currId) === Number(id) ?
-                             <div style={{
-                                                marginLeft:"auto",
-                                                marginRight: "auto",
-                                                fontSize: "85%",
-                                                backgroundColor: "tomato",
-                                                color: "white",
-                                                borderRadius: "5px 5px 5px 5px",
-                                                height: "1.5em",
-                                                width: "5em",
-                                                marginBottom:"1em"
+                <Helmet>
+                    <title> {firstName} {lastName}'s Profile - MyRecipes </title>
+                </Helmet>
+                <Container style={{marginTop:"1em", marginBottom:"2em"}}>
+                    <Row>
+                        <Col>
+                            <div style={{textAlign:"center"}}>
+                                <Image src={"http://127.0.0.1:5000/img/" + imgUrl} className="shadow" alt="Profile Picture" roundedCircle height="150em"/>
+                            </div>
+                        </Col>
+                    </Row>
+                    <Row style={{textAlign:"center"}}>
+                        <Col>
+                            <h1>{firstName} {lastName}</h1>
+                            {Number(props.currId) === Number(id) ?
+                                <div style={{
+                                    marginLeft:"auto",
+                                    marginRight: "auto",
+                                    fontSize: "85%",
+                                    backgroundColor: "tomato",
+                                    color: "white",
+                                    borderRadius: "5px 5px 5px 5px",
+                                    height: "1.5em",
+                                    width: "5em",
+                                    marginBottom:"1em"
 
-                                            }}>
-                                 YOU
-                                  </div>
+                                }}>
+                                    YOU
+                                </div>
 
-                            :
-                            null
-                        }
-                    </Col>
-                </Row>
-                <Row style={{textAlign:"center"}}>
-                    <Col>
-                    <table style={{marginLeft:"auto", marginRight:"auto", borderCollapse:"separate", borderSpacing:"2em 0em"}}><tbody>
-                        <tr>
-                            <th style={{fontSize:"200%"}}> {recipeCount} </th>
-                            <th style={{fontSize:"200%"}}>
-                                { buttonType === 1 ?
-                                <Subscribers subscribers={subscribers} />
-                                : subscribers.length }
-                            </th>
-                            { buttonType === 1 ?
-                            <th style={{fontSize:"200%"}}>
-                                <Subscriptions subscriptions={subscriptions} />
-                            </th>
-                            :
+                                :
                                 null
                             }
-                        </tr>
-                        <tr>
-                            <td> RECIPES </td>
-                            <td> SUBSCRIBERS </td>
-                            { buttonType === 1 ?
-                            <td> SUBSCRIPTIONS </td>
-                            : null
-                            }
-                        </tr>
-                    </tbody></table>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                    <div style={{textAlign:"center", marginTop:"1em"}}>
-                        {buttonType === 0 ? <></> : buttonType === 1 ? <ProfileEdit firstName={firstName} setfirstName={setfirstName} lastName={lastName} setlastName={setlastName} setButtonName={props.setButtonName} email={email} imgUrl={imgUrl} setImgUrl={setImgUrl} initOpen={props.settings} modalToggle={props.modalToggle} setModalToggle={props.setModalToggle}/> : <SubscribeButton userid={id} setSubscribers={setSubscribers}/>}
-                    </div>
-                    </Col>
-                </Row>
-                <br />
-                <ProfileRecipes userID={id} loggedIn={props.loggedIn} loggedInUID={props.currId}/>
-            </Container>
+                        </Col>
+                    </Row>
+                    <Row style={{textAlign:"center"}}>
+                        <Col>
+                            <table style={{marginLeft:"auto", marginRight:"auto", borderCollapse:"separate", borderSpacing:"2em 0em"}}><tbody>
+                            <tr>
+                                <th style={{fontSize:"200%"}}> {recipeCount} </th>
+                                <th style={{fontSize:"200%"}}>
+                                    { buttonType === 1 ?
+                                        <Subscribers subscribers={subscribers} />
+                                        : subscribers.length }
+                                </th>
+                                { buttonType === 1 ?
+                                    <th style={{fontSize:"200%"}}>
+                                        <Subscriptions subscriptions={subscriptions} />
+                                    </th>
+                                    :
+                                    null
+                                }
+                            </tr>
+                            <tr>
+                                <td> RECIPES </td>
+                                <td> SUBSCRIBERS </td>
+                                { buttonType === 1 ?
+                                    <td> SUBSCRIPTIONS </td>
+                                    : null
+                                }
+                            </tr>
+                            </tbody></table>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <div style={{textAlign:"center", marginTop:"1em"}}>
+                                {buttonType === 0 ? <></> : buttonType === 1 ? <ProfileEdit firstName={firstName} setfirstName={setfirstName} lastName={lastName} setlastName={setlastName} setButtonName={props.setButtonName} email={email} imgUrl={imgUrl} setImgUrl={setImgUrl} initOpen={props.settings} modalToggle={props.modalToggle} setModalToggle={props.setModalToggle}/> : <SubscribeButton userid={id} setSubscribers={setSubscribers}/>}
+                            </div>
+                        </Col>
+                    </Row>
+                    <br />
+                    <ProfileRecipes userID={id} loggedIn={props.loggedIn} loggedInUID={props.currId}/>
+                </Container>
             </>
         );
     } else {
