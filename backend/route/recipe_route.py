@@ -6,6 +6,7 @@ import sys
 
 RECIPE = Blueprint('RECIPE', __name__, template_folder='templates')
 
+
 @RECIPE.route("/create", methods=['POST'])
 def route_recipe_create():
 
@@ -29,6 +30,7 @@ def route_recipe_create():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
 
+
 @RECIPE.route('/view', methods=['GET'])
 def route_recipe_view():
     data = request.args.get('recipe_id')
@@ -45,6 +47,7 @@ def route_recipe_view():
         response = jsonify(result)
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
+
 
 @RECIPE.route('/editdescription', methods=['POST'])
 def route_recipe_edit_description():
@@ -76,6 +79,7 @@ def route_recipe_edit_description():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
 
+
 @RECIPE.route('/editingredients', methods=['POST'])
 def route_recipe_edit_ingredients():
     data = request.get_json()
@@ -101,6 +105,7 @@ def route_recipe_edit_ingredients():
         response = jsonify(ret)
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
+
 
 @RECIPE.route('/editsteps', methods=['POST'])
 def route_recipe_edit_steps():
@@ -155,6 +160,7 @@ def route_recipe_edit_photos():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
 
+
 @RECIPE.route('/delete', methods=['DELETE'])
 def route_recipe_delete():
     token = request.headers.get("Authorization")
@@ -180,6 +186,7 @@ def route_recipe_delete():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
 
+
 @RECIPE.route('/nutrition', methods=['GET'])
 def route_recipe_nutrition():
     recipe_id = request.args.get('recipe_id')
@@ -197,6 +204,7 @@ def route_recipe_nutrition():
         response = jsonify(result)
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
+
 
 @RECIPE.route('/comment', methods=['POST'])
 def route_recipe_comment():
@@ -220,6 +228,7 @@ def route_recipe_comment():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
 
+
 @RECIPE.route('/comment/delete', methods=['POST'])
 def route_recipe_comment_delete():
     token = request.headers.get("Authorization")
@@ -241,6 +250,7 @@ def route_recipe_comment_delete():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
 
+
 @RECIPE.route('/like', methods=['POST'])
 def route_recipe_like():
     token = request.headers.get("Authorization")
@@ -261,6 +271,7 @@ def route_recipe_like():
         response = jsonify({})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
+
 
 @RECIPE.route('/is_liked', methods=['GET'])
 def route_recipe_is_liked():

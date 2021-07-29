@@ -42,6 +42,7 @@ def send_email(subject, message_html, message_plain, dest_addr, banner_image_pat
         return 1
     return 0
 
+
 def store_image(image_file):
     file_name = hashlib.sha1(image_file.read()).hexdigest()
     extension = mimetypes.guess_extension(image_file.mimetype) or ''
@@ -50,6 +51,7 @@ def store_image(image_file):
     out_path = f'./static/server_resources/images/{file_name}'
     img.save(out_path)
     return file_name
+
 
 def get_db_conn():
     return pymysql.connect(host='localhost',

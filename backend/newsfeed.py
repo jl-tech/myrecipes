@@ -9,6 +9,7 @@ from constants import *
 from auth import DEFAULT_PIC
 import sys
 
+
 def subscribe(token, user_id):
     '''
 
@@ -59,6 +60,7 @@ def subscribe(token, user_id):
     
     con.close()
     return ['user' for i in range(result[0]['subscriber_count'])]
+
 
 def unsubscribe(token, user_id):
     '''
@@ -111,6 +113,7 @@ def unsubscribe(token, user_id):
     con.close()
     return ['user' for i in range(result[0]['subscriber_count'])]
 
+
 def is_subscribed(token, user_id):
     con = helpers.get_db_conn()
     u_id = tokenise.token_to_id(token)
@@ -126,6 +129,7 @@ def is_subscribed(token, user_id):
     result = cur.fetchall()
     con.close()
     return len(result) != 0
+
 
 def get_feed(token, page):
 
@@ -182,6 +186,7 @@ def get_feed(token, page):
 
     return result3, total_pages
 
+
 def get_subscriptions(token):
     
     con = helpers.get_db_conn()
@@ -226,6 +231,7 @@ def get_subscriptions(token):
     
     con.close()
     return result[0]
+
 
 def get_recommendations(u_id, page, rec):
     con = helpers.get_db_conn()

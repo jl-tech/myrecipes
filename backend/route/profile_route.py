@@ -6,6 +6,7 @@ import auth
 
 PROFILE = Blueprint('PROFILE', __name__, template_folder='templates')
 
+
 @PROFILE.route("/view", methods=['GET'])
 def route_profile_view():
     data = request.args.get('user_id')
@@ -26,6 +27,7 @@ def route_profile_view():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
 
+
 @PROFILE.route("/changepassword", methods=['POST'])
 def route_profile_changepassword():
     data = request.get_json()
@@ -39,6 +41,7 @@ def route_profile_changepassword():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
 
+
 @PROFILE.route("/edit", methods=['POST'])
 def route_profile_editprofile():
     data = request.get_json()
@@ -50,6 +53,7 @@ def route_profile_editprofile():
         response = jsonify({'error': 'Invalid token'})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
+
 
 @PROFILE.route("/changeemail", methods=['POST'])
 def route_profile_changeemail():
@@ -63,6 +67,7 @@ def route_profile_changeemail():
         response = jsonify({'error': message})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
+
 
 @PROFILE.route("/changepicture", methods=['POST'])
 def route_profile_changepicture():
@@ -83,6 +88,7 @@ def route_profile_changepicture():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
 
+
 @PROFILE.route("/removepicture", methods=['GET'])
 def route_profile_removepicture():
     result, file_name = profile.remove_profile_pic(request.headers.get('Authorization'))
@@ -95,6 +101,7 @@ def route_profile_removepicture():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
 
+
 @PROFILE.route("/recipes", methods=['GET'])
 def route_profile_recipes():
     user_id = request.args.get('user_id')
@@ -104,6 +111,7 @@ def route_profile_recipes():
     response = jsonify(result)
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response, 200
+
 
 @PROFILE.route("/recipes/liked", methods=['GET'])
 def route_profile_recipes_liked():
@@ -120,6 +128,7 @@ def route_profile_recipes_liked():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
 
+
 @PROFILE.route("/recipes/profileuserliked", methods=['GET'])
 def route_profile_recipes_profileuser_liked():
     user_id = request.args.get('user_id')
@@ -128,6 +137,7 @@ def route_profile_recipes_profileuser_liked():
     response = jsonify(result)
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response, 200
+
 
 @PROFILE.route("/times_liked", methods=['GET'])
 def route_times_liked():
@@ -145,6 +155,7 @@ def route_times_liked():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
 
+
 @PROFILE.route("/comments", methods=['GET'])
 def route_profile_get_comments():
     user_id = request.args.get('user_id')
@@ -152,6 +163,7 @@ def route_profile_get_comments():
     response = jsonify(result)
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response, 200
+
 
 @PROFILE.route("/finduser", methods=['POST'])
 def route_profile_finduser():
