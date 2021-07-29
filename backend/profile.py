@@ -1,20 +1,18 @@
 import os
-
 import bcrypt
-
 import helpers
+
 from auth import DEFAULT_PIC, hash_password, send_pwd_change_email, \
     email_already_exists, send_confirm_email
 
 from tokenise import token_to_id, token_to_email
 
-import sys
-
 
 def profile_info(token, user_id):
     '''
     Gets all info associated to a specified user.
-    :param user_id: The id of the user
+    :param token: token of the user doing this operation
+    :param user_id: The id of the specified user
     :return: The tuple containing all fields associated with that user. 1 if
     the user id was not found.
     '''
@@ -65,8 +63,8 @@ def profile_info(token, user_id):
 
 def change_password(token, oldpassword, newpassword):
     '''
-    Changes the password for the account with the specified email.
-    :param email: The email address of the account
+    Changes the password for the account with given token.
+    :param token: token of the user doing this operation
     :param oldpassword: The old password
     :param newpassword: The password to change to
     :return: . True on success. False if the old password was incorrect
@@ -96,8 +94,14 @@ def change_password(token, oldpassword, newpassword):
 
 
 def editprofile(token, first_name, last_name):
+    '''
+    Change the first name and last name for the account with given token
+    :param token: token of the user doing this operation
+    :param first_name: new first name
+    :param last_name: new last name
+    :return: True for success, False for invalid token
+    '''
     user_id = token_to_id(token)
-
     if user_id < 0:
         return False
 
@@ -112,6 +116,12 @@ def editprofile(token, first_name, last_name):
 
 
 def changeemail(token, email):
+    '''
+    Change the email address for the account with given token
+    :param token: token of the user doing this operation
+    :param email: new email adress
+    :return: True if success, False if token is invalid or email address is already used by other user
+    '''
     user_id = token_to_id(token)
 
     if user_id < 0:
@@ -192,7 +202,13 @@ def remove_profile_pic(token):
 
     return 0, DEFAULT_PIC
 
+
 def get_profile_recipe(user_id):
+    '''
+    Gets all recipes created by given user_id
+    :param user_id: the user id of specified user
+    :return: details of all recipes created by given user_id
+    '''
     con = helpers.get_db_conn()
     cur = con.cursor()
     query = """
@@ -211,6 +227,7 @@ def get_profile_recipe(user_id):
     data = cur.fetchall()
     con.close()
     return data
+
 
 def get_profile_recipe_liked(token, user_id):
     u_id = token_to_id(token)
@@ -237,7 +254,14 @@ def get_profile_recipe_liked(token, user_id):
     con.close()
     return data
 
+
 def get_times_liked(token, user_id):
+    '''
+    Gets number of likes for all recipes created by specified user
+    :param token: token of the user doing this operation
+    :param user_id: user id of specified user
+    :return: number of likes for all recipes created by specified user
+    '''
     if token_to_id(token) < 0:
         return -1
 
@@ -249,6 +273,7 @@ def get_times_liked(token, user_id):
 
     con.close()
     return len(result)
+
 
 def get_profile_recipe_profileuser_liked(user_id):
     con = helpers.get_db_conn()
@@ -271,7 +296,13 @@ def get_profile_recipe_profileuser_liked(user_id):
     con.close()
     return data
 
+
 def get_comments(user_id):
+    '''
+    Gets all comments posted by specified user
+    :param user_id: user id of specified user
+    :return: all comments posted by specified user
+    '''
     con = helpers.get_db_conn()
     cur = con.cursor()
     query = """
@@ -286,6 +317,7 @@ def get_comments(user_id):
     result = cur.fetchall()
     con.close()
     return result
+
 
 def find_user(inp) :
     con = helpers.get_db_conn()
