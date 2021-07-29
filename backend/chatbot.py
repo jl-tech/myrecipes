@@ -108,16 +108,16 @@ def connect_dialogflow_api(session_id, text):
     return str.format(response.query_result.fulfillment_text)
 
 
-def send_support_email(request):
-    subject = "Request email from user xxx"
+def send_support_email(messages):
+    subject = "Customer request email"
     message_plain = f"""\
-           {request}
+           {messages}
            """
 
     message_html = f"""\
                <html>
                    <body>
-                       <p style="font-size:150%;text-align: center"> {request} </p>
+                       <p style="font-size:150%;text-align: center"> {messages} </p>
                    </body>
                </html>
                """
