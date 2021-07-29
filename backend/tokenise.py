@@ -10,7 +10,7 @@ def encode_token(data):
     '''
     Encodes a dictionary into a jwt token.
     :param data: The dictionary to encode
-    :return: The jwt token
+    :returns: The jwt token
     '''
     return jwt.encode(data, SECRET_PASSKEY, algorithm='HS256')
 
@@ -19,7 +19,7 @@ def decode_token(token):
     '''
     Decodes a jwt token into a dictionary
     :param token: The token to decode
-    :return: The dictionary
+    :returns: The dictionary
     '''
     try:
         return jwt.decode(token.encode('utf-8'),
@@ -33,7 +33,7 @@ def token_to_id(token):
     Given a jwt token, decodes that token into the user id corresponding
     to the token's account
     :param token: The token to decode
-    :return: The id of the account on success.
+    :returns: The id of the account on success.
     -1 if the token couldn't be decoded
     -2 if the id decoded is not associated with an account
     -3 if the email of the account decoded hasn't been verified
@@ -70,7 +70,7 @@ def token_to_email(token):
     Given a jwt token, decodes that token into the user id corresponding
     to the token's account, and then gets the email associated with that account.
     :param token: The token to decode
-    :return: The email address of the account on success.
+    :returns: The email address of the account on success.
     -1 if the token couldn't be decoded
     -2 if the id decoded is not associated with an account
     -3 if the email decoded hasn't been verified

@@ -13,7 +13,7 @@ def profile_info(token, user_id):
     Gets all info associated to a specified user.
     :param token: token of the user doing this operation
     :param user_id: The id of the specified user
-    :return: The tuple containing all fields associated with that user. 1 if
+    :returns: The tuple containing all fields associated with that user. 1 if
     the user id was not found.
     '''
     requester = token_to_id(token)
@@ -67,7 +67,7 @@ def change_password(token, oldpassword, newpassword):
     :param token: token of the user doing this operation
     :param oldpassword: The old password
     :param newpassword: The password to change to
-    :return: . True on success. False if the old password was incorrect
+    :returns: . True on success. False if the old password was incorrect
     '''
 
     user_id = token_to_id(token)
@@ -99,7 +99,7 @@ def editprofile(token, first_name, last_name):
     :param token: token of the user doing this operation
     :param first_name: new first name
     :param last_name: new last name
-    :return: True for success, False for invalid token
+    :returns: True for success, False for invalid token
     '''
     user_id = token_to_id(token)
     if user_id < 0:
@@ -120,7 +120,7 @@ def changeemail(token, email):
     Change the email address for the account with given token
     :param token: token of the user doing this operation
     :param email: new email adress
-    :return: True if success, False if token is invalid or email address is already used by other user
+    :returns: True if success, False if token is invalid or email address is already used by other user
     '''
     user_id = token_to_id(token)
 
@@ -143,7 +143,7 @@ def change_profile_pic(image_file, token):
     the profile_pictures folder.
     :param image_file: The image file of the profile picture
     :param token: The token for the user doing this operation
-    :return: 0 on success. -1 if the token was not valid. -2 on any other error.
+    :returns: 0 on success. -1 if the token was not valid. -2 on any other error.
     '''
     u_id = token_to_id(token)
     if u_id < 0:
@@ -177,7 +177,7 @@ def remove_profile_pic(token):
     If a profile picture was previously set, that file will be deleted from
     the profile_pictures folder.
     :param token: The token for the user doing this operation
-    :return: 0 on success. -1 if the token was not valid. -2 on any other error.
+    :returns: 0 on success. -1 if the token was not valid. -2 on any other error.
     '''
     u_id = token_to_id(token)
     if u_id < 0:
@@ -207,7 +207,7 @@ def get_profile_recipe(user_id):
     '''
     Gets all recipes created by given user_id
     :param user_id: the user id of specified user
-    :return: details of all recipes created by given user_id
+    :returns: details of all recipes created by given user_id
     '''
     con = helpers.get_db_conn()
     cur = con.cursor()
@@ -234,7 +234,7 @@ def get_profile_recipe_liked(token, user_id):
     Gets details of recipes liked by user with given token and created by specified user with given user_id
     :param token: The token for the user doing this operation
     :param user_id: user id for specified user
-    :return: -1 for invalid token, otherwise details of recipes
+    :returns: -1 for invalid token, otherwise details of recipes
     '''
     u_id = token_to_id(token)
     if u_id < 0:
@@ -266,7 +266,7 @@ def get_times_liked(token, user_id):
     Gets number of likes for all recipes created by specified user
     :param token: token of the user doing this operation
     :param user_id: user id of specified user
-    :return: -1 for invalid token, otherwise number of likes for all recipes created by specified user
+    :returns: -1 for invalid token, otherwise number of likes for all recipes created by specified user
     '''
     if token_to_id(token) < 0:
         return -1
@@ -285,7 +285,7 @@ def get_profile_recipe_profileuser_liked(user_id):
     '''
     Gets details of recipes like by user with given user id
     :param user_id: user id of specified user
-    :return: details of recipes
+    :returns: details of recipes
     '''
     con = helpers.get_db_conn()
     cur = con.cursor()
@@ -312,7 +312,7 @@ def get_comments(user_id):
     '''
     Gets all comments posted by specified user
     :param user_id: user id of specified user
-    :return: all comments posted by specified user
+    :returns: all comments posted by specified user
     '''
     con = helpers.get_db_conn()
     cur = con.cursor()
@@ -334,7 +334,7 @@ def find_user(name):
     '''
     Finds all users with given 'name' parameter as their first or last name
     :param name: first or last name for search
-    :return: details of all found users
+    :returns: details of all found users
     '''
     con = helpers.get_db_conn()
     cur = con.cursor()

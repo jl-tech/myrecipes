@@ -32,7 +32,7 @@ def add_recipe(token, name, type, time, serving_size, ingredients, steps, photos
     :param steps: Array of text
     :param photos: Array of files
     :param description: recipe description
-    :return:
+    :returns:
     '''
 
     con = helpers.get_db_conn()
@@ -101,7 +101,7 @@ def get_recipe_details(recipe_id):
     '''
     Gets details of a recipe.
     :param recipe_id: the recipe id to get details of
-    :return: Dictionary with fields:
+    :returns: Dictionary with fields:
         - name: string
         - creation_time: string
         - edit_time: string, null if not edited
@@ -207,7 +207,7 @@ def edit_recipe_description(token, recipe_id, name, type, time, serving_size, de
         :param time: new recipe's cooking time
         :param serving_size: new recipe's serving size
         :param description: new description
-        :return:
+        :returns:
         -1 for invalid token
         -2 for invalid recipe id
         -3 for inconsistent editor(token) and creator('created_by_user_id' in database)
@@ -238,7 +238,7 @@ def edit_recipe_ingredients(token, recipe_id, ingredients):
         :param token:
         :param recipe_id: recipe's id in database
         :param ingredients: new ingredients of the recipe
-        :return:
+        :returns:
         -1 for invalid token
         -2 for invalid recipe id
         -3 for inconsistent editor(token) and creator('created_by_user_id' in database)
@@ -312,7 +312,7 @@ def edit_recipe_steps(token, recipe_id, steps):
         :param token:
         :param recipe_id: recipe's id in database
         :param steps: new cooking steps of the recipe
-        :return:
+        :returns:
         -1 for invalid token
         -2 for invalid recipe id
         -3 for inconsistent editor(token) and creator('created_by_user_id' in database)
@@ -375,7 +375,7 @@ def edit_recipe_photos(token, recipe_id, photos, photo_names):
     :recipe_id: the recipe id to change
     :param photos: The new photos array
     :param photo_names: The new photo_names array
-    :return: 0 on success. -2 if the recipe id couldn't be found. -1 if the
+    :returns: 0 on success. -2 if the recipe id couldn't be found. -1 if the
     token was invalid.
     '''
     con = helpers.get_db_conn()
@@ -428,7 +428,7 @@ def check_recipe_edit(token, recipe_id):
     Performs the auth and db checks necessary for a edit operation.
     :param token: The token of the user
     :param recipe_id: The recipe_id attempting to edit
-    :return: 0 if OK. -1 if the token is invalid. -2 if the recipe id is invalid.
+    :returns: 0 if OK. -1 if the token is invalid. -2 if the recipe id is invalid.
     -3 if the user isn't authorised to edit this recipe.
     '''
     cur = helpers.get_db_conn().cursor()
@@ -454,7 +454,7 @@ def delete_recipe(token, recipe_id):
     '''
     :param token: The token of the user
     :param recipe_id: The id of recipe attempting to delete
-    :return: 
+    :returns: 
     0 if OK.
     -1 if the token is invalid.
     -2 if the recipe id is invalid.
@@ -497,7 +497,7 @@ def delete_recipe(token, recipe_id):
 def recipe_nutrition(recipe_id):
     '''
     :param recipe_id: The id of recipe
-    :return:
+    :returns:
     nutrition dictionary
     -1 if the recipe id is invalid.
     '''
@@ -573,7 +573,7 @@ def recipe_comment(token, recipe_id, comment):
     :param token: The token of the user
     :param recipe_id: The id of recipe
     :param comment: The string of the comment
-    :return: 
+    :returns: 
     0 if OK.
     -1 if the token is invalid.
     -2 if the recipe id is invalid.
@@ -651,7 +651,7 @@ def recipe_like_toggle(token, recipe_id):
     '''
     :param token: The token of the user
     :param recipe_id: The id of recipe
-    :return: 
+    :returns: 
     0 if OK.
     -1 if the token is invalid.
     -2 if the recipe id is invalid.

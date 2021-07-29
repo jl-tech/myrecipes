@@ -17,7 +17,7 @@ def add_new_user(email, first_name, last_name, password):
     :param first_name:
     :param last_name:
     :param password:
-    :return: 0 success, the confirmation code for email verification.
+    :returns: 0 success, the confirmation code for email verification.
     -1 if the email already exists.
     -2 if the password didn't meet the password requirements.
     -3 for any other error.
@@ -52,7 +52,7 @@ def email_confirm(code):
     Given an email verification token, updates the user email associated with user_id
     an unverified account, and verifies that account if so.
     :param code: The email verification token
-    :return: 0 on success. 1 if token is unsecure
+    :returns: 0 on success. 1 if token is unsecure
     '''
 
     data = tokenise.decode_token(code)
@@ -88,6 +88,12 @@ def email_confirm(code):
 
 
 def verify(token):
+    '''
+    Decrypts and verifies a token.
+    :param token:
+    :returns: user_id associated with the token.
+    None if token is invalid.
+    '''
     user_id = token_to_id(token)
     
     if user_id < 0:
@@ -101,7 +107,7 @@ def hash_password(password):
     Hashes a password so it can be stored in the database securely.
     This function will use a salt which is randomly generated.
     :param password: The password to hash
-    :return: The hashed password which can be stored safely in the database
+    :returns: The hashed password which can be stored safely in the database
     '''
     pword_bytes = password.encode('utf-8')
     return bcrypt.hashpw(pword_bytes, bcrypt.gensalt()).decode('utf-8')
@@ -113,7 +119,7 @@ def check_password(email, password):
     account with the specified email.
     :param email: The email address of the account
     :param password: The password to check
-    :return: (True, user_id) if the password was correct.
+    :returns: (True, user_id) if the password was correct.
     (False, -1) if not. (False, -2) if the email wasn't found.
     (False, -3) if the email hasn't been verified, but the combination was correct.
     '''
@@ -151,7 +157,7 @@ def email_already_exists(email):
     '''
     Checks whether a user with this email already exists in the database.
     :param email: The email address to check
-    :return: True if the email already exists. False otherwise.
+    :returns: True if the email already exists. False otherwise.
     '''
     con = helpers.get_db_conn()
     cur = con.cursor()
@@ -171,10 +177,10 @@ def email_already_exists(email):
 def send_confirm_email(user_id, email):
     '''
     Sends the email requesting the user to confirm their email to the
-    specified email address
+    specified email address.
     :param user_id: The id associated with the user
     :param email: The email address to send to
-    :return: 0 on success. 1 on any error.
+    :returns: 0 on success. 1 on any error.
     '''
 
     # Variables setup
@@ -227,7 +233,7 @@ def send_reset(email):
     Sends the email containing the link and code to reset password.
     The
     :param email: The email address to send to
-    :return: 0 on success. 1 if the email is not associated with an account.
+    :returns: 0 on success. 1 if the email is not associated with an account.
     '''
 
     con = helpers.get_db_conn()
@@ -293,7 +299,7 @@ def reset_password(reset_code, password):
     password for the user account associated with that user code.
     :param reset_code: The reset code
     :param password: The new password
-    :return: 0 on success. 1 if the token is not valid in any way.
+    :returns: 0 on success. 1 if the token is not valid in any way.
     '''
 
     decoded = tokenise.decode_token(reset_code)
@@ -329,7 +335,7 @@ def verify_reset_code(reset_code):
     '''
     Given a reset code, checks that code is valid
     :param reset_code: The reset code
-    :return: 0 on success. 1 if the token is not valid in any way.
+    :returns: 0 on success. 1 if the token is not valid in any way.
     '''
     decoded = tokenise.decode_token(reset_code)
     if decoded is None:
@@ -355,9 +361,11 @@ def verify_reset_code(reset_code):
 
 
 def send_pwd_change_email(email):
-    # Send email to notify user
-    # Variables setup
-
+    '''
+    Sends an email to the given email address detailing a successful password change.
+    :param email:
+    :returns: None
+    '''
     subject = "Your password was changed for MyRecipes"
     message_plain = f"""\
         Hi,

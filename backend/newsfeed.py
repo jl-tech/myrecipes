@@ -11,11 +11,11 @@ import sys
 
 def subscribe(token, user_id):
     '''
-
+    Subscribes a user given by token to the user given by user_id.
     :param token:
     :param user_id:
-    :return: -1 invalid token. -2 user to subscribe to not found. -3 already subscribed
-    0 success.
+    :returns: -1 invalid token. -2 user to subscribe to not found. -3 already subscribed.
+    0  on success.
     '''
     con = helpers.get_db_conn()
     u_id = tokenise.token_to_id(token)
@@ -62,12 +62,12 @@ def subscribe(token, user_id):
 
 def unsubscribe(token, user_id):
     '''
-
+    Unsubscribes a user given by token from the user given by user_id.
     :param token:
     :param user_id:
-    :return: -1 invalid token. -2 user to unsubscribe to not found. -3 already
-    unsubscribed
-    0 success.
+    :returns: -1 invalid token. -2 user to unsubscribe to not found. -3 already unsubscribed.
+    0 on success.
+    # TODO fix return value on success.
     '''
     con = helpers.get_db_conn()
     u_id = tokenise.token_to_id(token)
@@ -112,6 +112,12 @@ def unsubscribe(token, user_id):
     return ['user' for i in range(result[0]['subscriber_count'])]
 
 def is_subscribed(token, user_id):
+    '''
+    Checks if a user given by token is subscribed to the user given by user_id.
+    :param token:
+    :param user_id:
+    :returns: -1 invalid token. Boolean on success.
+    '''
     con = helpers.get_db_conn()
     u_id = tokenise.token_to_id(token)
     if u_id < 0:
@@ -128,7 +134,13 @@ def is_subscribed(token, user_id):
     return len(result) != 0
 
 def get_feed(token, page):
-
+    '''
+    Attains the user's feed.
+    :param token:
+    :param page:
+    :returns: -1 invalid token. List of recipe recommendations on success and the number of pages?
+    # TODO Clarify this documentation.
+    '''
     sub = 8
     rec = 2
 
@@ -183,7 +195,11 @@ def get_feed(token, page):
     return result3, total_pages
 
 def get_subscriptions(token):
-    
+    '''
+    :param token:
+    :returns: -1 invalid token.
+    # TODO Clarify this documentation.
+    '''
     con = helpers.get_db_conn()
     u_id = tokenise.token_to_id(token)
     if u_id < 0:
@@ -228,6 +244,14 @@ def get_subscriptions(token):
     return result[0]
 
 def get_recommendations(u_id, page, rec):
+    '''
+    Finds recipe recommendations for the user given by u_id.
+    :param u_id:
+    :param page:
+    :param rec:
+    :returns: List of recipes.
+    # TODO Clarify this documentation.
+    '''
     con = helpers.get_db_conn()
     cur = con.cursor()
     query = """

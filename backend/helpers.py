@@ -13,6 +13,15 @@ from PIL import Image
 
 
 def send_email(subject, message_html, message_plain, dest_addr, banner_image_path):
+    '''
+    Sends an email to dest_addr with contents specified by subject, message_html, message_plain, banner_image_path.
+    :param subject:
+    :param message_html:
+    :param message_plain:
+    :param dest_addr:
+    :param banner_image_path:
+    :returns: 0 on success. 1 on failure.
+    '''
     # Variables setup
     message = MIMEMultipart("alternative")
     message["Subject"] = subject
@@ -43,6 +52,11 @@ def send_email(subject, message_html, message_plain, dest_addr, banner_image_pat
     return 0
 
 def store_image(image_file):
+    '''
+    Stores the image given by image_file.
+    :param image_file:
+    :returns: file name of the image stored.
+    '''
     file_name = hashlib.sha1(image_file.read()).hexdigest()
     extension = mimetypes.guess_extension(image_file.mimetype) or ''
     file_name = file_name + extension
@@ -52,6 +66,9 @@ def store_image(image_file):
     return file_name
 
 def get_db_conn():
+    '''
+    :returns: A connection to the database.
+    '''
     return pymysql.connect(host='localhost',
                           user='myrecipes',
                           password='g3iCv7sr!',

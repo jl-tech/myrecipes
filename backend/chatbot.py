@@ -21,7 +21,14 @@ language_code = "en-US"
 
 
 def talk(messages, session):
-
+    '''
+    Processes messages associated with session and sends a response to the messages.
+    Will also send an email to the support staff if the messages are unclear.
+    :param messages:
+    :param session:
+    :returns: 1. A tuple containing a response message and a URL.
+              2. A response message.
+    '''
     con = helpers.get_db_conn()
     cur = con.cursor()
 
@@ -91,6 +98,12 @@ def talk(messages, session):
 
 
 def connect_dialogflow_api(session_id, text):
+    '''
+    Processes the text given by session_id and finds the intent of the text
+    :param session_id:
+    :param text:
+    :returns: An object representing the intent of the text
+    '''
     session_client = dialogflow.SessionsClient()
     session = session_client.session_path(project_id, session_id)
 
@@ -102,13 +115,12 @@ def connect_dialogflow_api(session_id, text):
         request={"session": session, "query_input": query_input}
     )
 
-    if str.format(response.query_result.intent.display_name) == "Welcome":
-        return str.format(response.query_result.fulfillment_text)
-
-    return str.format(response.query_result.fulfillment_text)
-
-
 def send_support_email(messages):
+    '''
+    Sends an email to the myrecipes support email address detailing a message from a user.
+    :param messages:
+    :returns: None
+    '''
     subject = "Customer request email"
     message_plain = f"""\
            {messages}
