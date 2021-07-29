@@ -230,6 +230,12 @@ def get_profile_recipe(user_id):
 
 
 def get_profile_recipe_liked(token, user_id):
+    '''
+    Gets details of recipes liked by user with given token and created by specified user with given user_id
+    :param token: The token for the user doing this operation
+    :param user_id: user id for specified user
+    :return: -1 for invalid token, otherwise details of recipes
+    '''
     u_id = token_to_id(token)
     if u_id < 0:
         return -1
@@ -260,7 +266,7 @@ def get_times_liked(token, user_id):
     Gets number of likes for all recipes created by specified user
     :param token: token of the user doing this operation
     :param user_id: user id of specified user
-    :return: number of likes for all recipes created by specified user
+    :return: -1 for invalid token, otherwise number of likes for all recipes created by specified user
     '''
     if token_to_id(token) < 0:
         return -1
@@ -276,6 +282,11 @@ def get_times_liked(token, user_id):
 
 
 def get_profile_recipe_profileuser_liked(user_id):
+    '''
+    Gets details of recipes like by user with given user id
+    :param user_id: user id of specified user
+    :return: details of recipes
+    '''
     con = helpers.get_db_conn()
     cur = con.cursor()
     query = """
@@ -319,7 +330,12 @@ def get_comments(user_id):
     return result
 
 
-def find_user(inp) :
+def find_user(name):
+    '''
+    Finds all users with given 'name' parameter as their first or last name
+    :param name: first or last name for search
+    :return: details of all found users
+    '''
     con = helpers.get_db_conn()
     cur = con.cursor()
     query = """
@@ -332,7 +348,7 @@ def find_user(inp) :
             order by F_relevance + L_relevance  desc
             limit 50
         """
-    cur.execute(query, (inp, inp, inp, inp))
+    cur.execute(query, (name, name, name, name))
     result = cur.fetchall()
     con.close()
     return result
