@@ -30,6 +30,10 @@ def talk(messages, session):
     react_message = response.query_result.fulfillment_text
     intent_name = str.format(response.query_result.intent.display_name)
 
+    if messages.startswith('customer support:'):
+        send_support_email(messages)
+        return "I've sent your message to our support team. Please expect a response within 24 hours."
+
     if intent_name == "Welcome":
         react_message = react_message + '##NAME##?'
 
@@ -84,9 +88,7 @@ def talk(messages, session):
     elif intent_name == "Register":
         return react_message, [
             {'name': 'Log In', 'link': 'http://localhost:3000/login'}],
-    elif intent_name == "Customer_Service_Email":
-        send_support_email(messages)
-        return "I've sent your message to our support team. Please expect a response within 24 hours."
+
     return react_message
 
 

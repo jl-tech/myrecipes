@@ -302,7 +302,7 @@ function Feed(props) {
                                                 onMouseEnter={()=> setHoveredProfile(true)}
                                                 onMouseLeave={()=> setHoveredProfile(false)}
                                                 className={hoveredProfile ? 'shadow-lg' : 'shadow-sm'}>
-                                                <Modal.Header>
+                                                <Modal.Header style={{paddingTop:"0.5em", paddingBottom:"0.5em"}}>
                                                     <Col style={{textAlign: "center", fontSize:"125%"}}> Your Profile  </Col>
                                                 </Modal.Header>
                                                 <Modal.Body>
