@@ -3,6 +3,8 @@ import json
 
 from constants import *
 
+import threading
+
 import helpers
 
 from google.cloud import dialogflow
@@ -23,8 +25,8 @@ def talk(messages, session):
     con = helpers.get_db_conn()
     cur = con.cursor()
 
-    print(session)
-    response = connect_dialogflow_api(session, messages) # todo session id
+    response = connect_dialogflow_api(session, messages)
+
 
     react_message = response.query_result.fulfillment_text
 
@@ -76,6 +78,8 @@ def talk(messages, session):
     elif str.format(response.query_result.intent.display_name) == "My_Profile":
         return react_message, [
             {'name': 'My Profile', 'link': 'http://localhost:3000/profile'}],
+    elif str.format(response.query_result.intent.display_name) == "Consumer_Service_Email":
+        return "I have send the email to our service email!"
     return react_message
 
 
@@ -95,3 +99,37 @@ def connect_dialogflow_api(session_id, text):
         return str.format(response.query_result.fulfillment_text)
 
     return str.format(response.query_result.fulfillment_text)
+
+
+def send_request_email(request):
+    subject = "Request email from user xxx"
+    message_plain = f"""\
+           {request}
+           """
+
+    message_html = f"""\
+               <html>
+                   <body>
+                       <p style="font-size:150%;text-align: center"> Hi! </p>
+
+                       <b> <a href=http://localhost:3000/emailconfirm?code={request}>
+                       <p style="font-size:150%;text-align: center"> Please click HERE to confirm your email.</p> </b> </a>
+
+                        <p style="font-size:100%;text-align: center"> If the link doesnt work, copy and paste the following into your browser: </p>
+                        <p style="font-size:100%;text-align: center"> http://localhost:3000/emailconfirm?code={request}</p> </b>
+
+                        <p style="font-size:150%;text-align: center"> If you did not sign up, you do not need to do anything. </p>
+
+                        <p style="font-size:150%;text-align: center"> Regards, </p>
+                        <p style="font-size:150%;text-align: center"> MyRecipes </p>
+                   </body>
+               </html>
+               """
+
+    email_thread = threading.Thread(name="email_thread",
+                                    args=(subject, message_html, message_plain, "ktmmtkmkt@163.com",
+                                          'https://i.imgur.com/j2apOOM.png'),
+                                    target=helpers.send_email)
+    email_thread.start()
+
+send_request_email("hi, can u help me with ...")
