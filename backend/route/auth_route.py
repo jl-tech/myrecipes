@@ -5,6 +5,7 @@ import auth
 
 AUTH = Blueprint('AUTH', __name__, template_folder='templates')
 
+
 @AUTH.route("/register", methods=['POST'])
 def route_auth_register():
     data = request.get_json()
@@ -22,6 +23,7 @@ def route_auth_register():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
 
+
 @AUTH.route("/emailconfirm", methods=['POST'])
 def route_auth_emailconfirm():
     data = request.get_json()
@@ -35,6 +37,7 @@ def route_auth_emailconfirm():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
 
+
 @AUTH.route("/verify", methods=['GET'])
 def route_auth_verify():
     token = request.headers.get("Authorization")
@@ -47,6 +50,7 @@ def route_auth_verify():
         response = jsonify({'user_id': -1, 'status': 1})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
+
 
 @AUTH.route("/login", methods=['POST'])
 def route_auth_login():
@@ -65,6 +69,7 @@ def route_auth_login():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
 
+
 @AUTH.route("/forgetpassword", methods=['POST'])
 def route_auth_forgetpassword():
     data = request.get_json()
@@ -78,6 +83,7 @@ def route_auth_forgetpassword():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
 
+
 @AUTH.route("/resetpassword", methods=['POST'])
 def route_auth_resetpassword():
     data = request.get_json()
@@ -90,6 +96,7 @@ def route_auth_resetpassword():
         response = jsonify({})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
+
 
 @AUTH.route("/verifyresetcode", methods=['POST'])
 def route_auth_verifyresetcode():
