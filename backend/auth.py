@@ -1,15 +1,13 @@
 import helpers
-from constants import *
-
 import bcrypt
-
 import tokenise
-
 import threading
 
 from tokenise import token_to_id
+from constants import *
 
 DEFAULT_PIC = 'default.png'
+
 
 def add_new_user(email, first_name, last_name, password):
     '''
@@ -39,7 +37,7 @@ def add_new_user(email, first_name, last_name, password):
     con.commit()
 
     query = "select user_id from Users where email = %s"
-    cur.execute(query, (email))
+    cur.execute(query, (email,))
     user_id = cur.fetchone()
 
     con.close()
@@ -47,6 +45,7 @@ def add_new_user(email, first_name, last_name, password):
 
     print(f"INFO: Created new account: {email}, f: {first_name}, l: {last_name}, p: {hashed_pwd}")
     return 0
+
 
 def email_confirm(code):
     '''
@@ -67,6 +66,7 @@ def email_confirm(code):
     cur.execute(query, (data["email"], int(data["user_id"])))
     result = cur.fetchall()
     con.close()
+
     if len(result) == 1:
         query = "update Users set email_verified = TRUE where user_id = %s"
         changed_rows = cur.execute(query, (int(data["user_id"])))
@@ -85,6 +85,7 @@ def email_confirm(code):
 
     con.close()
     return 0
+
 
 def verify(token):
     user_id = token_to_id(token)
@@ -105,6 +106,7 @@ def hash_password(password):
     pword_bytes = password.encode('utf-8')
     return bcrypt.hashpw(pword_bytes, bcrypt.gensalt()).decode('utf-8')
 
+
 def check_password(email, password):
     '''
     Checks whether the provided password is the correct password for the
@@ -117,20 +119,26 @@ def check_password(email, password):
     '''
     con = helpers.get_db_conn()
     cur = con.cursor()
+
     query = f"select user_id, password_hash from Users where email = %s"
     cur.execute(query, (email,))
     result = cur.fetchall()
+
     if len(result) == 0:
         con.close()
         return False, -2
+
     p_hash = result[0]['password_hash']
     correct = bcrypt.checkpw(password.encode('utf-8'), p_hash.encode('utf-8'))
+
     if not correct:
         con.close()
         return False, -1
+
     query = f"select email_verified from Users where user_id = %s"
     cur.execute(query, (result[0]['user_id'],))
     is_verified = cur.fetchall()[0]['email_verified']
+
     if not is_verified:
         con.close()
         return False, -3
@@ -147,15 +155,18 @@ def email_already_exists(email):
     '''
     con = helpers.get_db_conn()
     cur = con.cursor()
+
     query = f"select * from Users where email = %s"
     cur.execute(query, (email,))
     result = cur.fetchall()
 
     con.close()
+
     if len(result) != 0:
         return True
     else:
         return False
+
 
 def send_confirm_email(user_id, email):
     '''
@@ -275,6 +286,7 @@ def send_reset(email):
     con.close()
     return 0
 
+
 def reset_password(reset_code, password):
     '''
     Given a reset code, checks that code is valid, and then changes the
@@ -312,6 +324,7 @@ def reset_password(reset_code, password):
     con.close()
     return 0
 
+
 def verify_reset_code(reset_code):
     '''
     Given a reset code, checks that code is valid
@@ -339,6 +352,7 @@ def verify_reset_code(reset_code):
 
     con.close()
     return 0
+
 
 def send_pwd_change_email(email):
     # Send email to notify user
