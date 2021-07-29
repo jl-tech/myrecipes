@@ -140,9 +140,9 @@ function Home({ loggedIn, setLoggedIn, currId }) {
                         {loggedIn ? <UserButton setLoggedIn={setLoggedIn} currId={currId} firstName={firstName} setfirstName={setfirstName} setModalToggle={setModalToggle}/> : <LoginButton />}
                     </Navbar.Text>
                 </Navbar.Collapse>
-                <ChatBot firstName={loggedIn ? " " + firstName : ""} style={{borderRadius: "15px 15px 15px 15px"}}/>
-            </Navbar>
 
+            </Navbar>
+            <ChatBot firstName={loggedIn ? " " + firstName : ""} style={{borderRadius: "15px 15px 15px 15px"}}/>
             <Switch>
                 <Route path="/profile/:id">
                     <Profile currId={currId} loggedIn={loggedIn} settings={false} setButtonName={setfirstName} modalToggle={modalToggle} setModalToggle={setModalToggle}/>

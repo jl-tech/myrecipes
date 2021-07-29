@@ -96,7 +96,7 @@ function RecipeViewRecommendations(props) {
             <Row style={{marginTop:"2em"}}>
                 <Col sm={1} />
                 <Col>
-                    <h3>Recommendations</h3>
+                    <h3>Recommendations similar to this recipe</h3>
                     <Row sm={3}>
                         {props.recipeData.map(generateCard)}
                     </Row>

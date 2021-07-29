@@ -52,8 +52,6 @@ if __name__ == "__main__":
     # print(auth.reset_password('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwYXNzd29yZCI6IiQyYiQxMiRRMThSR1JhL0wwM3RXVHdWWkpNbS9PbEpvcC9WUmwuZkhOMGtqZk53MkVlR0ZjT0V3Z2VweSJ9._yDmsNIp1YmVztrmnuRWUQZ80W7-RCmcCAAxP1XXaPM', 'newpwd'))
     # End testing code
 
-    if len(sys.argv) != 2:
-        print("Usage: backend.py [port]")
-    APP.run(port=(int(sys.argv[1])))
+    APP.run(port=5000)
 
 
