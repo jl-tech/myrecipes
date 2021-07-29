@@ -20,7 +20,7 @@ function RecipeViewContri(props) {
                     onClick={()=>history.push('/profile/' + props.contributorUID)}
                     style={{cursor:"pointer"}}
                 >
-                    <Modal.Header>
+                    <Modal.Header style={{paddingTop:"0.5em", paddingBottom:"0.5em"}}>
                         <Col style={{textAlign: "center", fontSize:"125%"}}> Contributor  </Col>
                     </Modal.Header>
                     <Modal.Body>

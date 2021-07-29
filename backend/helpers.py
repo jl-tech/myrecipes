@@ -51,6 +51,7 @@ def send_email(subject, message_html, message_plain, dest_addr, banner_image_pat
         return 1
     return 0
 
+
 def store_image(image_file):
     '''
     Stores the image given by image_file.
@@ -64,6 +65,7 @@ def store_image(image_file):
     out_path = f'./static/server_resources/images/{file_name}'
     img.save(out_path)
     return file_name
+
 
 def get_db_conn():
     '''

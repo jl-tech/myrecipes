@@ -69,7 +69,7 @@ function RecipeViewComments(props) {
 
         if (response != null) {
             setComment('');
-            props.setComments(response);
+            props.setComments(currSort === "oldest" ? response : response.reverse());
         }
     }
 

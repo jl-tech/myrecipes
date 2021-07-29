@@ -5,6 +5,7 @@ import newsfeed
 
 NEWSFEED= Blueprint('NEWSFEED', __name__, template_folder='templates')
 
+
 @NEWSFEED.route("/subscribe", methods=['POST'])
 def route_subscribe():
     token = request.headers.get("Authorization")
@@ -26,6 +27,7 @@ def route_subscribe():
         response = jsonify(result)
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
+
 
 @NEWSFEED.route("/unsubscribe", methods=['POST'])
 def route_unsubscribe():
@@ -49,6 +51,7 @@ def route_unsubscribe():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
 
+
 @NEWSFEED.route("/is_subscribed", methods=['GET'])
 def route_is_subscribed():
     token = request.headers.get("Authorization")
@@ -63,6 +66,7 @@ def route_is_subscribed():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
 
+
 @NEWSFEED.route("/get_feed", methods=['GET'])
 def route_get_feed():
     token = request.headers.get("Authorization")
@@ -76,6 +80,7 @@ def route_get_feed():
         response = jsonify({'feed': result, 'count': count})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
+
 
 @NEWSFEED.route("/get_subscriptions", methods=['GET'])
 def route_get_subscriptions():

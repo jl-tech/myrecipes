@@ -22,20 +22,21 @@ language_code = "en-US"
 
 def talk(messages, session):
     '''
-    Processes messages associated with session and sends a response to the messages.
+    Talks to Dialogflow API with given messages from user and given session id then sends a response to the messages.
     Will also send an email to the support staff if the messages are unclear.
-    :param messages:
-    :param session:
+    :param messages: messages entered by user
+    :param session: a unique session id
     :returns: 1. A tuple containing a response message and a URL.
               2. A response message.
     '''
-    con = helpers.get_db_conn()
-    cur = con.cursor()
-
     response = connect_dialogflow_api(session, messages)
 
     react_message = response.query_result.fulfillment_text
     intent_name = str.format(response.query_result.intent.display_name)
+
+    if messages.startswith('customer support:'):
+        send_support_email(messages)
+        return "I've sent your message to our support team. Please expect a response within 24 hours."
 
     if intent_name == "Welcome":
         react_message = react_message + '##NAME##?'
@@ -91,24 +92,20 @@ def talk(messages, session):
     elif intent_name == "Register":
         return react_message, [
             {'name': 'Log In', 'link': 'http://localhost:3000/login'}],
-    elif intent_name == "Customer_Service_Email":
-        send_support_email(messages)
-        return "I've sent your message to our support team. Please expect a response within 24 hours."
+
     return react_message
-
-
+    
 def connect_dialogflow_api(session_id, text):
     '''
-    Processes the text given by session_id and finds the intent of the text
-    :param session_id:
-    :param text:
-    :returns: An object representing the intent of the text
+    Connects to Dialogflow API
+    :param session_id: a unique session id
+    :param text: user input
+    :returns: responsive texts from DialogFlow API
     '''
     session_client = dialogflow.SessionsClient()
     session = session_client.session_path(project_id, session_id)
 
     text_input = dialogflow.TextInput(text=text, language_code=language_code)
-
     query_input = dialogflow.QueryInput(text=text_input)
 
     return session_client.detect_intent(
@@ -117,8 +114,8 @@ def connect_dialogflow_api(session_id, text):
 
 def send_support_email(messages):
     '''
-    Sends an email to the myrecipes support email address detailing a message from a user.
-    :param messages:
+    Sends an email to the myrecipes support email address detailing a request from a user.
+    :param messages: user's request
     :returns: None
     '''
     subject = "Customer request email"
