@@ -24,7 +24,7 @@ async function requestSend(message) {
 
 // This code is based in part on the example code for the react-chat-plugin
 function ChatBot(props) {
-    const [showTip, setShowTip] = useState(true)
+    const [showTip, setShowTip] = useState(localStorage.getItem('show_tip') !== null ? localStorage.getItem('show_tip') !== "0" : true)
     const botAvatarURL = "http://127.0.0.1:5000/img/robot.png"
     const userAvatarURL = "http://127.0.0.1:5000/img/default.png"
     const [attr, setAttr] = useState({
@@ -56,7 +56,6 @@ function ChatBot(props) {
         });
 
     }
-
     async function handleOnSendMessage (message) {
         let next_msg = {author: {
                 username: 'You',
@@ -136,7 +135,15 @@ function ChatBot(props) {
         }
     }
 
+    function setHideTip() {
+        setShowTip(false)
+        localStorage.setItem('show_tip', '0')
+    }
 
+    useEffect( () => {
+        window.remove_target_blank()
+        }
+    )
     return (
         <ChatFrame
             chatbox={
@@ -165,7 +172,7 @@ function ChatBot(props) {
                 borderRadius: "15px 15px 15px 15px",
                 display: showTip ? "": "none",
             }}>
-                👋 Need help? Ask Malvina, our bot!<CloseButton onClick={()=>setShowTip(false)}/>
+                👋 Need help? Ask Malvina, our bot!<CloseButton onClick={()=>setHideTip()}/>
             </div>
         </ChatFrame>);
 }
