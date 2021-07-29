@@ -21,9 +21,12 @@ language_code = "en-US"
 
 
 def talk(messages, session):
-
-    con = helpers.get_db_conn()
-    cur = con.cursor()
+    '''
+    Talks to Dialogflow API with given messages from user and given session id
+    :param messages: messages entered by user
+    :param session: a unique session id
+    :return: modified response to user
+    '''
 
     response = connect_dialogflow_api(session, messages)
 
@@ -91,6 +94,12 @@ def talk(messages, session):
 
 
 def connect_dialogflow_api(session_id, text):
+    '''
+    Connects to Dialogflow API
+    :param session_id: a unique session id
+    :param text: user input
+    :return: responsive texts from DialogFlow API
+    '''
     session_client = dialogflow.SessionsClient()
     session = session_client.session_path(project_id, session_id)
 
@@ -109,6 +118,10 @@ def connect_dialogflow_api(session_id, text):
 
 
 def send_support_email(messages):
+    '''
+    Sends user's request as email to MyRecipe's support email account
+    :param messages: user's request
+    '''
     subject = "Customer request email"
     message_plain = f"""\
            {messages}
