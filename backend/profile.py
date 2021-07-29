@@ -52,7 +52,6 @@ def profile_info(token, user_id):
             cur.execute(query, (user_id,))
             subscriptions = cur.fetchall()
             result[0]['subscriptions'] = subscriptions
-            print(subscriptions)
 
         else:
             result[0]['subscriptions'] = []

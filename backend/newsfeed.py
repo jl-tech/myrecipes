@@ -12,9 +12,9 @@ import sys
 
 def subscribe(token, user_id):
     '''
-
-    :param token:
-    :param user_id:
+    Subscribes the user with given user_id
+    :param token: The token for the user doing this operation
+    :param user_id: user id of specified user
     :return: -1 invalid token. -2 user to subscribe to not found. -3 already subscribed
     0 success.
     '''
@@ -64,9 +64,9 @@ def subscribe(token, user_id):
 
 def unsubscribe(token, user_id):
     '''
-
-    :param token:
-    :param user_id:
+    Unsubscribes the user with given user_id
+    :param token: The token for the user doing this operation
+    :param user_id: user id of specified user
     :return: -1 invalid token. -2 user to unsubscribe to not found. -3 already
     unsubscribed
     0 success.
@@ -115,6 +115,12 @@ def unsubscribe(token, user_id):
 
 
 def is_subscribed(token, user_id):
+    '''
+    Checks whether user with given token subscribes specified user with given user_id
+    :param token: The token for the user doing this operation
+    :param user_id: user id of specified user
+    :return:
+    '''
     con = helpers.get_db_conn()
     u_id = tokenise.token_to_id(token)
     if u_id < 0:
@@ -132,7 +138,12 @@ def is_subscribed(token, user_id):
 
 
 def get_feed(token, page):
-
+    '''
+    Get news feed of user with given token
+    :param token: The token for the user doing this operation
+    :param page: amount of pages
+    :return: -1 if invalid token, otherwise news feed and total pages
+    '''
     sub = 8
     rec = 2
 
@@ -188,13 +199,17 @@ def get_feed(token, page):
 
 
 def get_subscriptions(token):
-    
-    con = helpers.get_db_conn()
+    '''
+    Gets subscriptions of user with given token
+    :param token: The token for the user doing this operation
+    :return: -1 if invalid token, otherwise subscriptions
+    '''
+
     u_id = tokenise.token_to_id(token)
     if u_id < 0:
-        con.close()
         return -1
 
+    con = helpers.get_db_conn()
     cur = con.cursor()
     query = "select * from Users where user_id = %s"
     cur.execute(query, (u_id,))
@@ -234,6 +249,13 @@ def get_subscriptions(token):
 
 
 def get_recommendations(u_id, page, rec):
+    '''
+    Gets all recommendations
+    :param u_id:
+    :param page:
+    :param rec:
+    :return: recommendations
+    '''
     con = helpers.get_db_conn()
     cur = con.cursor()
     query = """
