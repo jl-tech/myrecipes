@@ -720,12 +720,12 @@ def get_recipe_recommendations(recipe_id):
         from Recipes R
             left outer join (select * from RecipePhotos where photo_no = 0) RP on R.recipe_id = RP.recipe_id
             join Users U on R.created_by_user_id = U.user_id 
-        where match(R.name) against (%s in natural language mode)
+        where match(R.name) against (%s in natural language mode) and R.recipe_id != %s
         order by relevance desc, likes desc
-        limit 3
+        limit 2
     """
 
-    cur.execute(query, (name,name))
+    cur.execute(query, (name,name, int(recipe_id)))
     result = cur.fetchall()
     print(len(result))
 
