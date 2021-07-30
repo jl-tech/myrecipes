@@ -703,24 +703,64 @@ def recipe_is_liked(token, recipe_id):
 def get_recipe_recommendations(recipe_id):
     con = helpers.get_db_conn()
     cur = con.cursor()
+
+
+    # First get recipes with mtaching keywords in name
+    query = """select name from Recipes where recipe_id = %s"""
+    cur.execute(query, (recipe_id,))
+    name = cur.fetchall()[0]['name']
+
     query = """
-                select t.recipe_id, count(*), R.name, R.creation_time, R.edit_time,
-                    R.time_to_cook, R.type, R.serving_size, RP.photo_path, R.description,
-                    U.first_name, U.last_name, COALESCE(U.profile_pic_path, '""" + DEFAULT_PIC + """') as profile_pic_path,
-                    U.user_id, R.calories, (select count(*) from Likes L where R.recipe_id = L.recipe_id) as likes,
-                    (select count(*) from Comments C where R.recipe_id = C.recipe_id) as comments
-                from (select I.ingredient_name as i1, J.ingredient_name as i2, J.recipe_id from RecipeIngredients I left outer join RecipeIngredients J on J.ingredient_name like concat(%s, I.ingredient_name, %s) where I.recipe_id = %s and I.recipe_id <> J.recipe_id
-                    union
-                    select I.ingredient_name as i1, J.ingredient_name as i2, J.recipe_id from RecipeIngredients I left outer join RecipeIngredients J on I.ingredient_name like concat(%s, J.ingredient_name, %s) where I.recipe_id = %s and I.recipe_id <> J.recipe_id) as t
-                    join Recipes R on R.recipe_id = t.recipe_id
-                    left outer join (select * from RecipePhotos where photo_no = 0) RP on R.recipe_id = RP.recipe_id
-                    join Users U on R.created_by_user_id = U.user_id 
-                group by t.recipe_id
-                order by count(*) desc
-                limit 3
-            """
-    cur.execute(query, ('%','%',int(recipe_id), '%','%',int(recipe_id)),)
+    select distinct R.recipe_id, R.name, R.creation_time, R.edit_time,
+            R.time_to_cook, R.type, R.serving_size, RP.photo_path, R.description,
+            U.first_name, U.last_name, COALESCE(U.profile_pic_path, '""" + DEFAULT_PIC + """') as profile_pic_path,
+            U.user_id, R.calories, (select count(*) from Likes L where R.recipe_id = L.recipe_id) as likes,
+            (select count(*) from Comments C where R.recipe_id = C.recipe_id) as comments, TRUE as recommended,
+            match(R.name) against (%s in natural language mode) as relevance
+        from Recipes R
+            left outer join (select * from RecipePhotos where photo_no = 0) RP on R.recipe_id = RP.recipe_id
+            join Users U on R.created_by_user_id = U.user_id 
+        where match(R.name) against (%s in natural language mode)
+        order by relevance desc, likes desc
+        limit 3
+    """
+
+    cur.execute(query, (name,name))
     result = cur.fetchall()
+    print(len(result))
+
+    if len(result) < 3:
+        query = """
+                    select t.recipe_id, count(*), R.name, R.creation_time, R.edit_time,
+                        R.time_to_cook, R.type, R.serving_size, RP.photo_path, R.description,
+                        U.first_name, U.last_name, COALESCE(U.profile_pic_path, '""" + DEFAULT_PIC + """') as profile_pic_path,
+                        U.user_id, R.calories, (select count(*) from Likes L where R.recipe_id = L.recipe_id) as likes,
+                        (select count(*) from Comments C where R.recipe_id = C.recipe_id) as comments
+                    from (select I.ingredient_name as i1, J.ingredient_name as i2, J.recipe_id from RecipeIngredients I left outer join RecipeIngredients J on J.ingredient_name like concat(%s, I.ingredient_name, %s) where I.recipe_id = %s and I.recipe_id <> J.recipe_id
+                        union
+                        select I.ingredient_name as i1, J.ingredient_name as i2, J.recipe_id from RecipeIngredients I left outer join RecipeIngredients J on I.ingredient_name like concat(%s, J.ingredient_name, %s) where I.recipe_id = %s and I.recipe_id <> J.recipe_id) as t
+                        join Recipes R on R.recipe_id = t.recipe_id
+                        left outer join (select * from RecipePhotos where photo_no = 0) RP on R.recipe_id = RP.recipe_id
+                        join Users U on R.created_by_user_id = U.user_id 
+                    group by t.recipe_id
+                    order by count(*) desc
+                    limit 3
+                """
+        cur.execute(query, ('%','%',int(recipe_id), '%','%',int(recipe_id)))
+        prev_result = result
+        currlen = len(prev_result)
+        for item in cur.fetchall():
+            if currlen > 2:
+                break
+            is_not_duplicate = True
+            for r in prev_result:
+                if item['recipe_id'] == r['recipe_id']:
+                    is_not_duplicate = False
+                    break
+            if is_not_duplicate:
+                result.append(item)
+                currlen += 1
+
     con.close()
 
     return result
