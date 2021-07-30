@@ -18,6 +18,16 @@ from auth import DEFAULT_PIC
 
 
 def do_search(name, type, serving_size, time_to_cook, ingredients, step_key_words):
+    '''
+    Search all recipes with given property
+    :param name: recipe name
+    :param type: recipe type(e.g. lunch)
+    :param serving_size: number of people serving
+    :param time_to_cook: cooking time
+    :param ingredients: ingredients
+    :param step_key_words: words in recipe's steps(e.g. baking)
+    :return: search result
+    '''
     con = helpers.get_db_conn()
     cur = con.cursor()
 
@@ -121,7 +131,7 @@ def do_search(name, type, serving_size, time_to_cook, ingredients, step_key_word
         order by count(*) desc
         """
         cur.execute(query, (name,))
-        result2= cur.fetchall()
+        result2 = cur.fetchall()
         for result in result2:
             is_not_duplicate = True
             for r in results:
@@ -163,15 +173,21 @@ def do_search(name, type, serving_size, time_to_cook, ingredients, step_key_word
 
 
 def add_search_history(token, name, ingredients, step):
+    '''
+    Add one search record to search_history database
+    :param token: token of user does the action
+    :param name: recipe name
+    :param ingredients: recipe ingredients
+    :param step: recipe step
+    :return: -1 for invalid token
+    '''
     con = helpers.get_db_conn()
     u_id = tokenise.token_to_id(token)
     if u_id < 0:
         con.close()
         return -1
 
-
     cur = con.cursor()
-
 
     if name is not None:
         term = name
@@ -202,6 +218,11 @@ def add_search_history(token, name, ingredients, step):
 
 
 def get_search_history(token):
+    '''
+    Get all search history of user with given token
+    :param token: user's token
+    :return: search history
+    '''
     con = helpers.get_db_conn()
     u_id = tokenise.token_to_id(token)
     if u_id < 0:
@@ -221,27 +242,36 @@ def get_search_history(token):
     return result
 
 
-def delete_search_history(token, search_term, time):
+def delete_search_history(token, search_term, search_time):
+    '''
+    Delete given user's search history with given search term and time
+    :param token: given user's token
+    :param search_term: search term
+    :param search_time: time did this search
+    :return:
+    '''
     u_id = tokenise.token_to_id(token)
     if u_id < 0:
-        con.close()
         return -1
 
     con = helpers.get_db_conn()
     cur = con.cursor()
 
     query = '''delete from SearchHistory where user_id=%s and search_term=%s and time=%s'''
-    cur.execute(query, (int(u_id), search_term, time,))
+    cur.execute(query, (int(u_id), search_term, search_time,))
 
     con.commit()
     con.close()
     return 0
 
 
-'''
-update the search history table to ensure only 10 history records
-'''
+
 def auto_update_search_history(token):
+    '''
+    update the search history table to ensure only 10 history records
+    :param token: token of user
+    :return: -1 for invalid token, otherwise 0
+    '''
     u_id = tokenise.token_to_id(token)
     if u_id < 0:
         return -1
@@ -258,10 +288,10 @@ def auto_update_search_history(token):
         return 0
 
     search_term = result[0]['search_term']
-    time = result[0]['time']
+    search_time = result[0]['time']
 
     query = '''delete from SearchHistory where user_id=%s and search_term=%s and time=%s'''
-    cur.execute(query, (int(u_id), search_term, time,))
+    cur.execute(query, (int(u_id), search_term, search_time,))
 
     con.commit()
     return 0
