@@ -50,6 +50,7 @@ function EditDesc(props) {
         setSuccessShow(false);
         setErrorShow(false);
         props.setShowDescEdit(false);
+        props.setChatbotVisible(true)
     }
 
     const [name, setName] = useState(props.recipeName);
@@ -170,13 +171,22 @@ export function RecipeViewDescription(props) {
 function RecipeViewDesc(props) {
 
     const [showDescEdit, setShowDescEdit] = useState(false);
-    const descEditShow = () => setShowDescEdit(true);
+    const descEditShow = () => {
+        setShowDescEdit(true);
+        props.setChatbotVisible(false)
+    }
 
     const [showPhotoEdit, setShowPhotoEdit] = useState(false);
-    const photoEditShow = () => setShowPhotoEdit(true);
+    const photoEditShow = () => {
+        setShowPhotoEdit(true);
+        props.setChatbotVisible(false)
+    }
 
     const [showDelete, setShowDelete] = useState(false);
-    const deleteShow = () => setShowDelete(true);
+    const deleteShow = () => {
+        setShowDelete(true);
+        props.setChatbotVisible(false)
+    }
 
     const [errorShow, setErrorShow] = useState(false)
     const [errorText, setErrorText] = useState("Unknown error")
@@ -255,9 +265,9 @@ function RecipeViewDesc(props) {
                         </Col>
                     </>}
             </Row>
-            <EditDesc showDescEdit={showDescEdit} setShowDescEdit={setShowDescEdit} recipeId={props.recipeId} recipeName={props.recipeName} setRecipeName={props.setRecipeName} time={props.time} setTime={props.setTime} serving={props.serving} setServing={props.setServing} mealType={props.mealType} setMealType={props.setMealType} setEditedAt={props.setEditedAt} description={props.description} setDescription={props.setDescription} />
-            <EditPhoto showPhotoEdit={showPhotoEdit} setShowPhotoEdit={setShowPhotoEdit} recipeId={props.recipeId} photos={props.photos} setPhotos={props.setPhotos} setEditedAt={props.setEditedAt}/>
-            <RecipeDelete showDelete={showDelete} setShowDelete={setShowDelete} recipeId={props.recipeId} setDeleted={props.setDeleted} />
+            <EditDesc showDescEdit={showDescEdit} setShowDescEdit={setShowDescEdit} recipeId={props.recipeId} recipeName={props.recipeName} setRecipeName={props.setRecipeName} time={props.time} setTime={props.setTime} serving={props.serving} setServing={props.setServing} mealType={props.mealType} setMealType={props.setMealType} setEditedAt={props.setEditedAt} description={props.description} setDescription={props.setDescription} setChatbotVisible={props.setChatbotVisible}/>
+            <EditPhoto showPhotoEdit={showPhotoEdit} setShowPhotoEdit={setShowPhotoEdit} recipeId={props.recipeId} photos={props.photos} setPhotos={props.setPhotos} setEditedAt={props.setEditedAt} setChatbotVisible={props.setChatbotVisible}/>
+            <RecipeDelete showDelete={showDelete} setShowDelete={setShowDelete} recipeId={props.recipeId} setDeleted={props.setDeleted} setChatbotVisible={props.setChatbotVisible}/>
         </>
     );
 }

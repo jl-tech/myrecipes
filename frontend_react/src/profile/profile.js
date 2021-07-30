@@ -166,7 +166,7 @@ function Profile(props) {
                     <Row>
                         <Col>
                             <div style={{textAlign:"center", marginTop:"1em"}}>
-                                {buttonType === 0 ? <></> : buttonType === 1 ? <ProfileEdit firstName={firstName} setfirstName={setfirstName} lastName={lastName} setlastName={setlastName} setButtonName={props.setButtonName} email={email} imgUrl={imgUrl} setImgUrl={setImgUrl} initOpen={props.settings} modalToggle={props.modalToggle} setModalToggle={props.setModalToggle}/> : <SubscribeButton userid={id} setSubscribers={setSubscribers}/>}
+                                {buttonType === 0 ? <></> : buttonType === 1 ? <ProfileEdit setChatbotVisible={props.setChatbotVisible} firstName={firstName} setfirstName={setfirstName} lastName={lastName} setlastName={setlastName} setButtonName={props.setButtonName} email={email} imgUrl={imgUrl} setImgUrl={setImgUrl} initOpen={props.settings} modalToggle={props.modalToggle} setModalToggle={props.setModalToggle}/> : <SubscribeButton userid={id} setSubscribers={setSubscribers}/>}
                             </div>
                         </Col>
                     </Row>

@@ -160,8 +160,8 @@ function RecipeView(props) {
                         <title> {recipeName} by {firstName} {lastName} - MyRecipes </title>
                     </Helmet>
                     <Container style={{marginTop:"1em",marginBottom:"2em"}}>
-                        <RecipeViewPhoto photos={photos} />
-                        <RecipeViewDesc loggedIn={props.loggedIn} recipeId={id} recipeName={recipeName} likes={likes} setLikes={setLikes} calories={calories} setRecipeName={setRecipeName} time={time} setTime={setTime} serving={serving} setServing={setServing} mealType={mealType} setMealType={setMealType} photos={photos} setPhotos={setPhotos} editable={editable} setDeleted={setDeleted} setEditedAt={setEditedAt} description={description} setDescription={setDescription} />
+                        <RecipeViewPhoto photos={photos}  setChatbotVisible={props.setChatbotVisible}/>
+                        <RecipeViewDesc loggedIn={props.loggedIn} recipeId={id} recipeName={recipeName} likes={likes} setLikes={setLikes} calories={calories} setRecipeName={setRecipeName} time={time} setTime={setTime} serving={serving} setServing={setServing} mealType={mealType} setMealType={setMealType} photos={photos} setPhotos={setPhotos} editable={editable} setDeleted={setDeleted} setEditedAt={setEditedAt} description={description} setDescription={setDescription} setChatbotVisible={props.setChatbotVisible}/>
                         <Row style={{marginTop:"1em"}}>
                             <Col sm={3}>
                                 <RecipeViewContri userImgURL={userImgURL} contributorUID={contributorUID} firstName={firstName} lastName={lastName} createdAt={createdAt} editedAt={editedAt} contributorRecipes={contributorRecipes} contributorSubscribers={contributorSubscribers}/>

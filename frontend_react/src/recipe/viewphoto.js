@@ -41,6 +41,7 @@ async function requestEditPhotos(token, recipe_id, photos, names) {
 export function EditPhoto(props) {
     const editClose = () => {
         props.setShowPhotoEdit(false);
+        props.setChatbotVisible(true)
         setUrl('');
         setUploaded(false);
         setImage(null);

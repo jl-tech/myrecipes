@@ -65,6 +65,7 @@ function UserButton(props) {
     const [fetched, setFetched] = useState(false);
     const location = useLocation();
 
+
     async function processId() {
         let response = await profileUser(props.currId)
             .catch(e => {
@@ -85,6 +86,7 @@ function UserButton(props) {
     function logout() {
         cookie.remove('token', {path: '/'});
         props.setLoggedIn(false);
+        window.location.reload();
     }
 
     return (
@@ -111,7 +113,7 @@ function Home({ loggedIn, setLoggedIn, currId }) {
     const [firstName, setfirstName] = useState('');
     const location = useLocation();
     const [modalToggle, setModalToggle] = useState(false);
-
+    const [chatbotVisible, setChatbotVisible] = useState(true)
 
     return (
         <>
@@ -142,20 +144,22 @@ function Home({ loggedIn, setLoggedIn, currId }) {
                 </Navbar.Collapse>
 
             </Navbar>
-            <ChatBot firstName={loggedIn ? " " + firstName : ""} style={{borderRadius: "15px 15px 15px 15px"}}/>
+            {chatbotVisible ?
+                <ChatBot firstName={loggedIn ? " " + firstName : ""} style={{display: "none", borderRadius: "15px 15px 15px 15px"}}/>:
+                null}
             <Switch>
                 <Route path="/profile/:id">
-                    <Profile currId={currId} loggedIn={loggedIn} settings={false} setButtonName={setfirstName} modalToggle={modalToggle} setModalToggle={setModalToggle}/>
+                    <Profile currId={currId} loggedIn={loggedIn} settings={false} setButtonName={setfirstName} modalToggle={modalToggle} setModalToggle={setModalToggle}  setChatbotVisible={setChatbotVisible}/>
                 </Route>
                 <Route path="/profile" render={() =>
                     loggedIn
                         ? (<Redirect to={{pathname: "/profile/" + currId}} />)
-                        : (<Redirect to= {{pathname: "/"}} />)
+                        : (<Redirect to= {{pathname: "/login"}} />)
                 } />
                 <Route path="/settings" render={() =>
                     loggedIn
-                        ? (<Profile currId={currId} loggedIn={loggedIn} settings={true} setButtonName={setfirstName} modalToggle={modalToggle} setModalToggle={setModalToggle}/>)
-                        : (<Redirect to= {{pathname: "/"}} />)
+                        ? (<Profile currId={currId} loggedIn={loggedIn} settings={true} setButtonName={setfirstName} modalToggle={modalToggle} setModalToggle={setModalToggle}  setChatbotVisible={setChatbotVisible}/>)
+                        : (<Redirect to= {{pathname: "/login"}} />)
                 } />
 
                 <Route path="/recipe/create" render={() =>
@@ -164,7 +168,7 @@ function Home({ loggedIn, setLoggedIn, currId }) {
                         : (<Redirect to= {{pathname: "/"}} />)
                 } />
                 <Route path="/recipe/:id">
-                    <RecipeView currId={currId} loggedIn={loggedIn} />
+                    <RecipeView currId={currId} loggedIn={loggedIn} setChatbotVisible={setChatbotVisible}/>
                 </Route>
                 <Route path="/recipe" render={() =>
                     (<Redirect to= {{pathname: "/"}} />)
@@ -178,13 +182,13 @@ function Home({ loggedIn, setLoggedIn, currId }) {
                 <Route path="/newsfeed/:page" render={() =>
                     loggedIn
                         ? (<Feed loggedIn={loggedIn} currId={currId}/>)
-                        : (<Redirect to= {{pathname: "/"}} />)
+                        : (<Redirect to= {{pathname: "/login"}} />)
                 } />
 
                 <Route path="/newsfeed" render={() =>
                     loggedIn
                         ? (<Feed loggedIn={loggedIn} currId={currId}/>)
-                        : (<Redirect to= {{pathname: "/"}} />)
+                        : (<Redirect to= {{pathname: "/login"}} />)
                 } />
 
                 <Route path="/home">

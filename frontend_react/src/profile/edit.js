@@ -13,8 +13,15 @@ function ProfileEdit(props) {
 
 
     const [showEdit, setShowEdit] = useState(props.initOpen);
-    const editShow = () => setShowEdit(true);
-    const editClose = () => {setShowEdit(false);props.setModalToggle(false);};
+    const editShow = () => {
+        setShowEdit(true);
+        props.setChatbotVisible(false)
+    }
+    const editClose = () => {
+        setShowEdit(false);
+        props.setModalToggle(false);
+        props.setChatbotVisible(true)
+    };
 
     return (
         <>

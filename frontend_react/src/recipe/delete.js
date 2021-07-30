@@ -28,7 +28,10 @@ async function requestDelete(token, recipe_id) {
 
 function RecipeDelete(props) {
 
-    const hideDelete = () => props.setShowDelete(false);
+    const hideDelete = () => {
+        props.setShowDelete(false);
+        props.setChatbotVisible(true)
+    }
 
     const [errorShow, setErrorShow] = useState(false);
     const [errorText, setErrorText] = useState('');
