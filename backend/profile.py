@@ -66,7 +66,7 @@ def change_password(token, oldpassword, newpassword):
     :param token: token of the user doing this operation
     :param oldpassword: The old password
     :param newpassword: The password to change to
-    :returns: . True on success. False if the old password was incorrect
+    :returns: True on success. False if the old password was incorrect
     '''
 
     user_id = token_to_id(token)

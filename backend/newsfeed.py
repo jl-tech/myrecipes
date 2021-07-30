@@ -254,7 +254,7 @@ def get_recommendations(u_id, page, rec):
     :param u_id:
     :param page:
     :param rec:
-    :returns: List of recipes.
+    :returns: Array of recipes.
     # TODO Clarify this documentation.
     '''
     con = helpers.get_db_conn()
