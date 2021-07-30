@@ -15,7 +15,7 @@ sleep 3
 apt-get -y install mysql-server
 service mysql start
 mysql < ./db/schema.sql
-mysql < ./db/dump.sql
+mysql -p myrecipes < dump.sql
 printf "[1/3] Installing database completed.\n\n\n"
 
 printf "[2/3] Installing MyRecipes backend...\n"
