@@ -720,16 +720,14 @@ def recipe_is_liked(token, recipe_id):
 
 def get_recipe_recommendations(recipe_id):
     '''
-    # TODO
+    Finds recipe recommendations based on the current recipe.
     :param recipe_id: The id of recipe.
-    :returns:
-    -1 if recipe_id is invalid.
+    :returns: Array of recipes.
     '''
     con = helpers.get_db_conn()
     cur = con.cursor()
 
-
-    # First get recipes with mtaching keywords in name
+    # First get recipes with matching keywords in name
     query = """select name from Recipes where recipe_id = %s"""
     cur.execute(query, (recipe_id,))
     name = cur.fetchall()[0]['name']
