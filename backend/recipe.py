@@ -819,7 +819,7 @@ def get_recipe_recommendations(recipe_id):
             U.user_id, R.calories, (select count(*) from Likes L where 
             R.recipe_id = L.recipe_id) as likes,
             (select count(*) from Comments C where R.recipe_id = C.recipe_id) 
-            as comments, TRUE as recommended,
+            as comments,
             match(R.name) against (%s in natural language mode) as relevance
         from Recipes R
             left outer join (select * from RecipePhotos where photo_no = 0) 
@@ -836,7 +836,7 @@ def get_recipe_recommendations(recipe_id):
 
     if len(result) < 3:
         query = """
-                    select t.recipe_id, count(*), R.name, R.creation_time, 
+                    select t.recipe_id, R.name, R.creation_time, 
                     R.edit_time,
                         R.time_to_cook, R.type, R.serving_size, 
                         RP.photo_path, R.description,
@@ -846,26 +846,30 @@ def get_recipe_recommendations(recipe_id):
                         U.user_id, R.calories, (select count(*) from Likes L 
                         where R.recipe_id = L.recipe_id) as likes,
                         (select count(*) from Comments C where R.recipe_id = 
-                        C.recipe_id) as comments
+                        C.recipe_id) as comments,
+                        count(*) /
+                        ((select count(*) from RecipeIngredients P where P.recipe_id = %s) +
+                        (select count(*) from RecipeIngredients Q where Q.recipe_id = t.recipe_id) - count(*))
+                        as jaccard
                     from (select I.ingredient_name as i1, J.ingredient_name 
-                    as i2, J.recipe_id from RecipeIngredients I left outer 
-                    join RecipeIngredients J on J.ingredient_name like 
-                    concat(%s, I.ingredient_name, %s) where I.recipe_id = %s 
-                    and I.recipe_id <> J.recipe_id
-                        union
-                        select I.ingredient_name as i1, J.ingredient_name as 
-                        i2, J.recipe_id from RecipeIngredients I left outer 
-                        join RecipeIngredients J on I.ingredient_name like 
-                        concat(%s, J.ingredient_name, %s) where I.recipe_id = 
-                        %s and I.recipe_id <> J.recipe_id) as t
+                            as i2, J.recipe_id from RecipeIngredients I left outer 
+                            join RecipeIngredients J on J.ingredient_name like 
+                            concat(%s, I.ingredient_name, %s) where I.recipe_id = %s 
+                            and I.recipe_id <> J.recipe_id
+                            union
+                            select I.ingredient_name as i1, J.ingredient_name as 
+                            i2, J.recipe_id from RecipeIngredients I left outer 
+                            join RecipeIngredients J on I.ingredient_name like 
+                            concat(%s, J.ingredient_name, %s) where I.recipe_id = 
+                            %s and I.recipe_id <> J.recipe_id) as t
                         join Recipes R on R.recipe_id = t.recipe_id
                         left outer join (select * from RecipePhotos where photo_no = 0) RP on R.recipe_id = RP.recipe_id
                         join Users U on R.created_by_user_id = U.user_id 
                     group by t.recipe_id
-                    order by count(*) desc
+                    order by jaccard desc
                     limit 3
                 """
-        cur.execute(query, ('%', '%', int(recipe_id), '%', '%', int(recipe_id)))
+        cur.execute(query, (int(recipe_id), '%', '%', int(recipe_id), '%', '%', int(recipe_id)))
         if isinstance(result, tuple):
             result = []
 
@@ -880,6 +884,7 @@ def get_recipe_recommendations(recipe_id):
                     is_not_duplicate = False
                     break
             if is_not_duplicate:
+                del item['jaccard']
                 result.append(item)
                 currlen += 1
 
