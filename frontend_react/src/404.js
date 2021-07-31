@@ -1,7 +1,7 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import logo from "./WIP_logo_2.png";
+import logo from "./images/WIP_logo_2.png";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 

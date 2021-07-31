@@ -15,19 +15,19 @@ import Button from "react-bootstrap/Button";
 
 import DropdownButton from "react-bootstrap/DropdownButton";
 
-import logo from "./WIP_logo_2.png";
+import logo from "./images/WIP_logo_2.png";
 
 import Cookie from "universal-cookie";
 import Profile from "./profile/profile.js";
-import RecipeCreate from "./recipe/create";
-import RecipeView from "./recipe/view";
+import RecipeCreate from "./recipe/create/create";
+import RecipeView from "./recipe/view/view";
 import HomePage from "./HomePage";
 import SearchResults from "./search/results";
 import SearchBar from "./search/bar";
 import Image from "react-bootstrap/Image";
 import Feed from "./newsfeed/feed";
 import NotFound from "./404";
-import Users from "./users";
+import ProfileList from "./profile/list.js";
 import ChatBot from "./chatbot/chatbot";
 
 async function profileUser(userid) {
@@ -299,7 +299,7 @@ function Home({ loggedIn, setLoggedIn, currId }) {
                     render={() => <Redirect to={{ pathname: "/" }} />}
                 />
                 <Route path="/users">
-                    <Users />
+                    <ProfileList />
                 </Route>
                 <Route path="/search">
                     <SearchResults loggedIn={loggedIn} />

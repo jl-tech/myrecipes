@@ -16,7 +16,7 @@ import Image from "react-bootstrap/Image";
 /**
  * Component providing the user count and user list on click
  */
-function UserList(props) {
+function ProfileListModal(props) {
     const history = useHistory();
     // Whether the modal containing the user list is shown
     const [showModal, setShowModal] = useState(false);
@@ -85,4 +85,4 @@ function UserList(props) {
     );
 }
 
-export default UserList;
+export default ProfileListModal;

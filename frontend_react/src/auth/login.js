@@ -11,7 +11,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
 
-import logo from "../WIP_logo_2.png";
+import logo from "../images/WIP_logo_2.png";
 
 import Cookie from "universal-cookie";
 

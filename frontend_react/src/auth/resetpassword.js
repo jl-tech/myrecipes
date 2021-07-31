@@ -10,7 +10,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Alert from "react-bootstrap/Alert";
 
-import logo from "../WIP_logo_2.png";
+import logo from "../images/WIP_logo_2.png";
 import { Helmet } from "react-helmet-async";
 
 /**

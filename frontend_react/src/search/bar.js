@@ -17,8 +17,8 @@ import ReactTimeAgo from "react-time-ago";
 import InputGroup from "react-bootstrap/InputGroup";
 import { Highlighter, Typeahead } from "react-bootstrap-typeahead";
 import CloseButton from "react-bootstrap/CloseButton";
-import SearchIconBig from "../search_white_24dp.svg";
-import SearchIconSmall from "../search_white_18dp.svg";
+import SearchIconBig from "../images/search_white_24dp.svg";
+import SearchIconSmall from "../images/search_white_18dp.svg";
 
 /**
  * Performs the API request for /search/history and returns the result.

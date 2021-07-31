@@ -9,7 +9,7 @@ import Col from "react-bootstrap/Col";
 
 import ListGroup from "react-bootstrap/ListGroup";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import Reorder from "./reorder_black_24dp.svg";
+import Reorder from "../../images/reorder_black_24dp.svg";
 
 function RecipeCreateStep({ steps, setSteps }) {
     // The number of steps in the list

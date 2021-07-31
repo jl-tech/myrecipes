@@ -40,9 +40,10 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
     <script type="text/javascript">
-      function remove_target_blank (){
-        Array.from(document.querySelectorAll('a[target="_blank"]'))
-                .forEach(link => link.removeAttribute('target'));
+      function remove_target_blank() {
+        Array.from(document.querySelectorAll('a[target="_blank"]')).forEach(
+          (link) => link.removeAttribute("target")
+        );
       }
     </script>
   </body>

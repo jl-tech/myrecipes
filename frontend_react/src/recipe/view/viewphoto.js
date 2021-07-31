@@ -19,7 +19,7 @@ import Image from "react-bootstrap/Image";
 
 import ListGroup from "react-bootstrap/ListGroup";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import Reorder from "./reorder_black_24dp.svg";
+import Reorder from "../../images/reorder_black_24dp.svg";
 
 /**
  * Performs the API request for /recipe/editphotos and returns the result

@@ -9,8 +9,8 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/esm/Button";
 import { Helmet } from "react-helmet-async";
 import { CardDeck } from "react-bootstrap";
-import SearchIconSmall from "./search_white_18dp.svg";
-import SearchIconBig from "./search_white_24dp.svg";
+import SearchIconSmall from "../images/search_white_18dp.svg";
+import SearchIconBig from "../images/search_white_24dp.svg";
 import InputGroup from "react-bootstrap/InputGroup";
 import Image from "react-bootstrap/Image";
 import Card from "react-bootstrap/Card";
@@ -35,7 +35,7 @@ async function requestUsers(input) {
     else throw new Error(responseJson.error);
 }
 
-function Users(props) {
+function ProfileList(props) {
     const [input, setInput] = useState("");
     const [userData, setUserData] = useState([]);
     const [userIndexHovered, setUserIndexHovered] = useState(-1);
@@ -227,4 +227,4 @@ function Users(props) {
         );
 }
 
-export default Users;
+export default ProfileList;

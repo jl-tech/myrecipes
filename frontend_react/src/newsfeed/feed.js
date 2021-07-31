@@ -18,8 +18,8 @@ import ListGroup from "react-bootstrap/ListGroup";
 import ReactTimeAgo from "react-time-ago";
 
 import { Helmet } from "react-helmet-async";
-import Like from "../Like.svg";
-import Comment from "../comment_black_24dp.svg";
+import Like from "../images/Like.svg";
+import Comment from "../images/comment_black_24dp.svg";
 import Button from "react-bootstrap/Button";
 
 /**

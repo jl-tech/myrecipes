@@ -12,12 +12,12 @@ import Row from "react-bootstrap/Row";
 import Modal from "react-bootstrap/Modal";
 
 import Col from "react-bootstrap/Col";
-import ProfileEdit from "./edit.js";
+import ProfileEdit from "./edit/edit.js";
 import ProfileRecipes from "./recipes";
 import { Spinner } from "react-bootstrap";
 import SubscribeButton from "../newsfeed/subscribe";
 import { Helmet } from "react-helmet-async";
-import UserList from "../utility/userlist";
+import ProfileListModal from "./listmodal";
 import Cookie from "universal-cookie";
 
 /**
@@ -182,7 +182,7 @@ function Profile(props) {
                                         </th>
                                         <th style={{ fontSize: "200%" }}>
                                             {buttonType === 1 ? (
-                                                <UserList
+                                                <ProfileListModal
                                                     title="Subscribers"
                                                     data={subscribers}
                                                     style={{ color: "black" }}
@@ -193,7 +193,7 @@ function Profile(props) {
                                         </th>
                                         {buttonType === 1 ? (
                                             <th style={{ fontSize: "200%" }}>
-                                                <UserList
+                                                <ProfileListModal
                                                     title="Subscriptions"
                                                     data={subscriptions}
                                                     style={{ color: "black" }}

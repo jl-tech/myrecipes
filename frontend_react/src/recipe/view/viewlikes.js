@@ -5,10 +5,10 @@
 import React, { useEffect, useState } from "react";
 import Cookie from "universal-cookie";
 import Image from "react-bootstrap/Image";
-import Liked from "../Like.png";
-import NotLiked from "../NotLiked.svg";
+import Liked from "../../images/Like.png";
+import NotLiked from "../../images/NotLiked.svg";
 import Row from "react-bootstrap/Row";
-import UserList from "../utility/userlist.js";
+import ProfileListModal from "../../profile/listmodal.js";
 
 /**
  * Performs the API request for /recipe/like and returns the result
@@ -158,7 +158,7 @@ function RecipeViewLikes(props) {
                 style={{ textAlign: "center", justifyContent: "center" }}
                 className={"mx-auto align-content-center"}
             >
-                <UserList
+                <ProfileListModal
                     title="Liked by"
                     data={props.likes}
                     style={{

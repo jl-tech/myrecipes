@@ -11,8 +11,8 @@ import Button from "react-bootstrap/esm/Button";
 import Card from "react-bootstrap/Card";
 import Image from "react-bootstrap/Image";
 import Pagination from "react-bootstrap/Pagination";
-import Like from "../Like.svg";
-import Comment from "../comment_black_24dp.svg";
+import Like from "../images/Like.svg";
+import Comment from "../images/comment_black_24dp.svg";
 import ReactTimeAgo from "react-time-ago";
 
 import Slider from "@material-ui/core/Slider";

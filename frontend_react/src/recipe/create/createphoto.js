@@ -15,7 +15,7 @@ import Image from "react-bootstrap/Image";
 
 import ListGroup from "react-bootstrap/ListGroup";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import Reorder from "./reorder_black_24dp.svg";
+import Reorder from "../../images/reorder_black_24dp.svg";
 
 function RecipeCreatePhoto({ photos, setPhotos }) {
     // The number of photos in the list

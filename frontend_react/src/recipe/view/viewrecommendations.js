@@ -8,9 +8,9 @@ import Col from "react-bootstrap/Col";
 import Cookie from "universal-cookie";
 import ReactTimeAgo from "react-time-ago";
 import { Link, useHistory } from "react-router-dom";
-import Like from "../Like.svg";
+import Like from "../../images/Like.svg";
 import Card from "react-bootstrap/Card";
-import Comment from "../comment_black_24dp.svg";
+import Comment from "../../images/comment_black_24dp.svg";
 
 function RecipeViewRecommendations(props) {
     // State to support shadow effect on hover
