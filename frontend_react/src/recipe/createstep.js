@@ -1,25 +1,24 @@
 /*
 Component for the steps part of the recipe creation page
  */
-import React, {useState} from 'react';
+import React, { useState } from "react";
 
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import Col from "react-bootstrap/Col";
 
-import ListGroup from 'react-bootstrap/ListGroup';
-import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
-import Reorder from './reorder_black_24dp.svg';
+import ListGroup from "react-bootstrap/ListGroup";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import Reorder from "./reorder_black_24dp.svg";
 
-
-function RecipeCreateStep({steps, setSteps}) {
+function RecipeCreateStep({ steps, setSteps }) {
     // The number of steps in the list
     const [idCount, setIdCount] = useState(0);
 
     /**
-      * Handles the event where the user lets go of the mouse after a drag
-      * @param e - the onDragEnd event
-      */
+     * Handles the event where the user lets go of the mouse after a drag
+     * @param e - the onDragEnd event
+     */
     function handleOnDragEnd(e) {
         if (e.destination == null) return;
         const items = Array.from(steps);
@@ -35,7 +34,7 @@ function RecipeCreateStep({steps, setSteps}) {
         let items = Array.from(steps);
         items.push({
             id: idCount.toString(),
-            description: null
+            description: null,
         });
         setIdCount(idCount + 1);
         setSteps(items);
@@ -69,39 +68,71 @@ function RecipeCreateStep({steps, setSteps}) {
             <DragDropContext onDragEnd={handleOnDragEnd}>
                 <Droppable droppableId="steps">
                     {(provided) => (
-                        <ListGroup as="ul" {...provided.droppableProps}
-                                   ref={provided.innerRef}>
-                            {steps.map(({id, description}, index) => {
+                        <ListGroup
+                            as="ul"
+                            {...provided.droppableProps}
+                            ref={provided.innerRef}
+                        >
+                            {steps.map(({ id, description }, index) => {
                                 return (
-                                    <Draggable key={id} draggableId={id}
-                                               index={index}>
+                                    <Draggable
+                                        key={id}
+                                        draggableId={id}
+                                        index={index}
+                                    >
                                         {(provided) => (
-                                            <ListGroup.Item as="li"
-                                                            ref={provided.innerRef}
-                                                                {...provided.draggableProps}
-                                                                {...provided.dragHandleProps} >
+                                            <ListGroup.Item
+                                                as="li"
+                                                ref={provided.innerRef}
+                                                {...provided.draggableProps}
+                                                {...provided.dragHandleProps}
+                                            >
                                                 <Form.Row>
-                                                    <Col sm={1}
-                                                         className={"my-auto"}>
+                                                    <Col
+                                                        sm={1}
+                                                        className={"my-auto"}
+                                                    >
                                                         <span>{index + 1}</span>
                                                     </Col>
-                                                    <Form.Group as={Col} sm={10}
-                                                                style={{marginBottom: "0"}}>
+                                                    <Form.Group
+                                                        as={Col}
+                                                        sm={10}
+                                                        style={{
+                                                            marginBottom: "0",
+                                                        }}
+                                                    >
                                                         <Form.Control
                                                             placeholder="Details"
-                                                            onChange={e =>
-                                                                updateStep(index, "description", e.target.value)}
-                                                            required/>
+                                                            onChange={(e) =>
+                                                                updateStep(
+                                                                    index,
+                                                                    "description",
+                                                                    e.target
+                                                                        .value
+                                                                )
+                                                            }
+                                                            required
+                                                        />
                                                     </Form.Group>
-                                                    <Col sm={1}
-                                                         className={"my-auto"}>
-                                                        <button type="button"
-                                                                className="close"
-                                                                onClick={() => removeStep(index)}>
+                                                    <Col
+                                                        sm={1}
+                                                        className={"my-auto"}
+                                                    >
+                                                        <button
+                                                            type="button"
+                                                            className="close"
+                                                            onClick={() =>
+                                                                removeStep(
+                                                                    index
+                                                                )
+                                                            }
+                                                        >
                                                             <span>×</span>
                                                         </button>
-                                                        <img src={Reorder}
-                                                             alt=""/>
+                                                        <img
+                                                            src={Reorder}
+                                                            alt=""
+                                                        />
                                                     </Col>
                                                 </Form.Row>
                                             </ListGroup.Item>
@@ -111,9 +142,13 @@ function RecipeCreateStep({steps, setSteps}) {
                             })}
                             {provided.placeholder}
                             <ListGroup.Item as="li">
-                                <Button variant="outline-secondary"
-                                        style={{float: "right"}}
-                                        onClick={addRow}>Add</Button>
+                                <Button
+                                    variant="outline-secondary"
+                                    style={{ float: "right" }}
+                                    onClick={addRow}
+                                >
+                                    Add
+                                </Button>
                             </ListGroup.Item>
                         </ListGroup>
                     )}

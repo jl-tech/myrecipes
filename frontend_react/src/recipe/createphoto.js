@@ -2,43 +2,40 @@
 Component for the photos part of the recipe creation page
  */
 
-import React, {useState} from 'react';
-import imageCompression from 'browser-image-compression';
+import React, { useState } from "react";
+import imageCompression from "browser-image-compression";
 
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
-import Alert from 'react-bootstrap/Alert';
-import Row from 'react-bootstrap/Row';
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import Col from "react-bootstrap/Col";
+import Alert from "react-bootstrap/Alert";
+import Row from "react-bootstrap/Row";
 
-import Image from 'react-bootstrap/Image';
+import Image from "react-bootstrap/Image";
 
+import ListGroup from "react-bootstrap/ListGroup";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import Reorder from "./reorder_black_24dp.svg";
 
-import ListGroup from 'react-bootstrap/ListGroup';
-import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
-import Reorder from './reorder_black_24dp.svg';
-
-
-function RecipeCreatePhoto({photos, setPhotos}) {
+function RecipeCreatePhoto({ photos, setPhotos }) {
     // The number of photos in the list
     const [idCount, setIdCount] = useState(0);
-
 
     // Whether to show the error box
     const [errorShow, setErrorShow] = useState(false);
     // The text to show in the error box
-    const [errorText, setErrorText] = useState('');
+    const [errorText, setErrorText] = useState("");
     // Whether the image is uploaded
     const [uploaded, setUploaded] = useState(false);
     // The URL of the uploaded image
-    const [url, setUrl] = useState('');
+    const [url, setUrl] = useState("");
     // The image object uploaded
     const [image, setImage] = useState(null);
 
     /**
-      * Handles the event where the user lets go of the mouse after a drag
-      * @param e - the onDragEnd event
-      */
+     * Handles the event where the user lets go of the mouse after a drag
+     * @param e - the onDragEnd event
+     */
     function handleOnDragEnd(e) {
         if (e.destination == null) return;
         const items = Array.from(photos);
@@ -53,7 +50,7 @@ function RecipeCreatePhoto({photos, setPhotos}) {
     function addRow() {
         if (!uploaded) {
             setErrorShow(true);
-            setErrorText('Please upload valid image');
+            setErrorText("Please upload valid image");
             return;
         }
         let items = Array.from(photos);
@@ -61,12 +58,12 @@ function RecipeCreatePhoto({photos, setPhotos}) {
             id: idCount.toString(),
             url: url,
             image: image,
-            name: image.name
+            name: image.name,
         });
         setIdCount(idCount + 1);
         setPhotos(items);
         setImage(null);
-        setUrl('');
+        setUrl("");
         setUploaded(false);
         document.getElementById("file-upload").value = "";
     }
@@ -90,27 +87,29 @@ function RecipeCreatePhoto({photos, setPhotos}) {
     async function handleImageUpload(event) {
         const imageFile = event.target.files[0];
         const options = {
-            maxSizeMB: 0.5
-        }
-        if (!imageFile.type.startsWith('image/')) {
+            maxSizeMB: 0.5,
+        };
+        if (!imageFile.type.startsWith("image/")) {
             setErrorShow(true);
-            setErrorText('File is not image type');
+            setErrorText("File is not image type");
             setImage(null);
-            setUrl('');
+            setUrl("");
             setUploaded(false);
             return;
         }
-        await imageCompression(imageFile, options).then(compressedFile => {
-            setImage(compressedFile);
-            setUrl(URL.createObjectURL(compressedFile));
-            setErrorShow(false);
-            setUploaded(true);
-        }).catch(e => {
-            setImage(null);
-            setUrl('');
-            setUploaded(false);
-            setErrorShow(false);
-        });
+        await imageCompression(imageFile, options)
+            .then((compressedFile) => {
+                setImage(compressedFile);
+                setUrl(URL.createObjectURL(compressedFile));
+                setErrorShow(false);
+                setUploaded(true);
+            })
+            .catch((e) => {
+                setImage(null);
+                setUrl("");
+                setUploaded(false);
+                setErrorShow(false);
+            });
     }
 
     return (
@@ -119,38 +118,62 @@ function RecipeCreatePhoto({photos, setPhotos}) {
             <DragDropContext onDragEnd={handleOnDragEnd}>
                 <Droppable droppableId="photos">
                     {(provided) => (
-                        <ListGroup as="ul" {...provided.droppableProps}
-                                   ref={provided.innerRef}>
-                            {photos.map(({id, url, image, name}, index) => {
+                        <ListGroup
+                            as="ul"
+                            {...provided.droppableProps}
+                            ref={provided.innerRef}
+                        >
+                            {photos.map(({ id, url, image, name }, index) => {
                                 return (
-                                    <Draggable key={id} draggableId={id}
-                                               index={index}>
+                                    <Draggable
+                                        key={id}
+                                        draggableId={id}
+                                        index={index}
+                                    >
                                         {(provided) => (
-                                            <ListGroup.Item as="li"
-                                                            ref={provided.innerRef}
-                                                                {...provided.draggableProps}
-                                                                {...provided.dragHandleProps} >
+                                            <ListGroup.Item
+                                                as="li"
+                                                ref={provided.innerRef}
+                                                {...provided.draggableProps}
+                                                {...provided.dragHandleProps}
+                                            >
                                                 <Row>
-                                                    <Col sm={1}
-                                                         className={"my-auto"}>
-                                                        {index === 0 ? "1 (Main)" : index + 1}
+                                                    <Col
+                                                        sm={1}
+                                                        className={"my-auto"}
+                                                    >
+                                                        {index === 0
+                                                            ? "1 (Main)"
+                                                            : index + 1}
                                                     </Col>
                                                     <Col sm={5}>
                                                         <span>{name}</span>
                                                     </Col>
                                                     <Col sm={5}>
-                                                        <Image src={url}
-                                                               width="10%"/>
+                                                        <Image
+                                                            src={url}
+                                                            width="10%"
+                                                        />
                                                     </Col>
-                                                    <Col sm={1}
-                                                         className={"my-auto"}>
-                                                        <button type="button"
-                                                                className="close"
-                                                                onClick={() => removePhoto(index)}>
+                                                    <Col
+                                                        sm={1}
+                                                        className={"my-auto"}
+                                                    >
+                                                        <button
+                                                            type="button"
+                                                            className="close"
+                                                            onClick={() =>
+                                                                removePhoto(
+                                                                    index
+                                                                )
+                                                            }
+                                                        >
                                                             <span>×</span>
                                                         </button>
-                                                        <img src={Reorder}
-                                                             alt=""/>
+                                                        <img
+                                                            src={Reorder}
+                                                            alt=""
+                                                        />
                                                     </Col>
                                                 </Row>
                                             </ListGroup.Item>
@@ -160,30 +183,42 @@ function RecipeCreatePhoto({photos, setPhotos}) {
                             })}
                             {provided.placeholder}
                             <ListGroup.Item as="li">
-                                {uploaded ?
+                                {uploaded ? (
                                     <Row>
-                                        <Col style={{textAlign: "center"}}>
-                                            <Image src={url} width="10%"/>
+                                        <Col style={{ textAlign: "center" }}>
+                                            <Image src={url} width="10%" />
                                         </Col>
                                     </Row>
-                                    : <></>}
+                                ) : (
+                                    <></>
+                                )}
                                 <Row>
                                     <Col sm={11}>
                                         <Form.File
-                                            onChange={e => handleImageUpload(e)}
-                                            id="file-upload"/>
+                                            onChange={(e) =>
+                                                handleImageUpload(e)
+                                            }
+                                            id="file-upload"
+                                        />
 
-                                        <Alert show={errorShow} variant="danger"
-                                               style={{marginTop: "1em"}}
-                                               onClose={() => setErrorShow(false)}
-                                               dismissible>
+                                        <Alert
+                                            show={errorShow}
+                                            variant="danger"
+                                            style={{ marginTop: "1em" }}
+                                            onClose={() => setErrorShow(false)}
+                                            dismissible
+                                        >
                                             {errorText}
                                         </Alert>
                                     </Col>
                                     <Col sm={1}>
-                                        <Button variant="outline-secondary"
-                                                style={{float: "right"}}
-                                                onClick={addRow}>Add</Button>
+                                        <Button
+                                            variant="outline-secondary"
+                                            style={{ float: "right" }}
+                                            onClick={addRow}
+                                        >
+                                            Add
+                                        </Button>
                                     </Col>
                                 </Row>
                             </ListGroup.Item>

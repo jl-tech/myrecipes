@@ -2,12 +2,12 @@
  * Component providing the 'Register' button on the login page
  */
 
-import React, {useState} from 'react';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import Form from 'react-bootstrap/Form';
-import Col from 'react-bootstrap/Col';
-import Alert from 'react-bootstrap/Alert';
+import React, { useState } from "react";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
+import Form from "react-bootstrap/Form";
+import Col from "react-bootstrap/Col";
+import Alert from "react-bootstrap/Alert";
 
 /**
  * Performs the API request for /auth/forgetpassword to the backend and returns
@@ -17,18 +17,18 @@ import Alert from 'react-bootstrap/Alert';
  * @returns {Promise<*>} The response from the server. null on failure.
  */
 async function registerUser(firstName, lastName, email, password) {
-    let response = await fetch('http://localhost:5000/auth/register', {
-        method: 'POST',
+    let response = await fetch("http://localhost:5000/auth/register", {
+        method: "POST",
         headers: {
-            'Content-Type': 'application/json'
+            "Content-Type": "application/json",
         },
         body: JSON.stringify({
             first_name: firstName,
             last_name: lastName,
             email: email,
             password: password,
-        })
-    }).catch(e => {
+        }),
+    }).catch((e) => {
         throw new Error(e);
     });
 
@@ -47,17 +47,17 @@ function RegisterBody(props) {
     // Show or hide alert box
     const [alertShow, setAlertShow] = useState(false);
     // The text to display in the alert
-    const [alertText, setAlertText] = useState('');
+    const [alertText, setAlertText] = useState("");
     // The current text in the first name field
-    const [firstName, setfirstName] = useState('');
+    const [firstName, setfirstName] = useState("");
     // The current text in the last name field
-    const [lastName, setlastName] = useState('');
+    const [lastName, setlastName] = useState("");
     // The current text in the email field
-    const [email, setEmail] = useState('');
+    const [email, setEmail] = useState("");
     // The current text in the password field
-    const [password, setPassword] = useState('');
+    const [password, setPassword] = useState("");
     // The current text in the confirm password field
-    const [password2, setPassword2] = useState('');
+    const [password2, setPassword2] = useState("");
 
     /**
      * Calls and awaits for the API request function to register
@@ -68,15 +68,19 @@ function RegisterBody(props) {
 
         if (password !== password2) {
             setAlertShow(true);
-            setAlertText('Passwords are different');
+            setAlertText("Passwords are different");
             return;
         }
 
-        let response = await registerUser(firstName, lastName, email, password)
-            .catch(e => {
-                setAlertShow(true);
-                setAlertText(e.message);
-            });
+        let response = await registerUser(
+            firstName,
+            lastName,
+            email,
+            password
+        ).catch((e) => {
+            setAlertShow(true);
+            setAlertText(e.message);
+        });
 
         if (response != null) {
             setRegistered(true);
@@ -89,38 +93,60 @@ function RegisterBody(props) {
             <Form onSubmit={handleSubmit}>
                 <Form.Row>
                     <Form.Group as={Col}>
-                        <Form.Control placeholder="First name" required
-                                      onChange={e => setfirstName(e.target.value)}/>
+                        <Form.Control
+                            placeholder="First name"
+                            required
+                            onChange={(e) => setfirstName(e.target.value)}
+                        />
                     </Form.Group>
                     <Form.Group as={Col}>
-                        <Form.Control placeholder="Last name" required
-                                      onChange={e => setlastName(e.target.value)}/>
+                        <Form.Control
+                            placeholder="Last name"
+                            required
+                            onChange={(e) => setlastName(e.target.value)}
+                        />
                     </Form.Group>
                 </Form.Row>
                 <Form.Group>
-                    <Form.Control type="email" placeholder="Email address"
-                                  required
-                                  onChange={e => setEmail(e.target.value)}/>
+                    <Form.Control
+                        type="email"
+                        placeholder="Email address"
+                        required
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
                 </Form.Group>
                 <Form.Group>
-                    <Form.Control type="password" placeholder="Password"
-                                  required
-                                  onChange={e => setPassword(e.target.value)}/>
+                    <Form.Control
+                        type="password"
+                        placeholder="Password"
+                        required
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
                 </Form.Group>
                 <Form.Group>
-                    <Form.Control type="password" placeholder="Retype Password"
-                                  required
-                                  onChange={e => setPassword2(e.target.value)}/>
+                    <Form.Control
+                        type="password"
+                        placeholder="Retype Password"
+                        required
+                        onChange={(e) => setPassword2(e.target.value)}
+                    />
                 </Form.Group>
-                <Alert show={alertShow} variant="danger"
-                       onClose={() => setAlertShow(false)} dismissible>
+                <Alert
+                    show={alertShow}
+                    variant="danger"
+                    onClose={() => setAlertShow(false)}
+                    dismissible
+                >
                     {alertText}
                 </Alert>
-                <div style={{textAlign: "center"}}>
-                    <Button style={{
-                        backgroundColor: "#ff9147",
-                        borderColor: "#fff3de"
-                    }} type="submit">
+                <div style={{ textAlign: "center" }}>
+                    <Button
+                        style={{
+                            backgroundColor: "#ff9147",
+                            borderColor: "#fff3de",
+                        }}
+                        type="submit"
+                    >
                         Sign Up
                     </Button>
                 </div>
@@ -134,11 +160,14 @@ function RegisterBody(props) {
                     We have sent an email with a confirmation link to your email
                     address.
                 </div>
-                <div style={{textAlign: "center"}}>
-                    <Button style={{
-                        backgroundColor: "#ff9147",
-                        borderColor: "#fff3de"
-                    }} onClick={() => props.setModalShow(false)}>
+                <div style={{ textAlign: "center" }}>
+                    <Button
+                        style={{
+                            backgroundColor: "#ff9147",
+                            borderColor: "#fff3de",
+                        }}
+                        onClick={() => props.setModalShow(false)}
+                    >
                         Close
                     </Button>
                 </div>
@@ -154,20 +183,24 @@ function RegisterBody(props) {
 function Register() {
     const [modalShow, setModalShow] = useState(false);
 
-    return (<>
-        <Button style={{backgroundColor: "#ff9147", borderColor: "#ff9147"}}
-                onClick={() => setModalShow(true)}>
-            Create New Account
-        </Button>
-        <Modal show={modalShow} onHide={() => setModalShow(false)} centered>
-            <Modal.Header closeButton>
-                <Modal.Title>Sign Up</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <RegisterBody setModalShow={setModalShow}/>
-            </Modal.Body>
-        </Modal>
-    </>);
+    return (
+        <>
+            <Button
+                style={{ backgroundColor: "#ff9147", borderColor: "#ff9147" }}
+                onClick={() => setModalShow(true)}
+            >
+                Create New Account
+            </Button>
+            <Modal show={modalShow} onHide={() => setModalShow(false)} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Sign Up</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <RegisterBody setModalShow={setModalShow} />
+                </Modal.Body>
+            </Modal>
+        </>
+    );
 }
 
 export default Register;

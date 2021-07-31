@@ -3,23 +3,23 @@
  * Also, a component providing the edit photos modal
  */
 
-import React, {useState} from 'react';
-import imageCompression from 'browser-image-compression';
+import React, { useState } from "react";
+import imageCompression from "browser-image-compression";
 
-import Button from 'react-bootstrap/Button';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import Button from "react-bootstrap/Button";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 import Carousel from "react-bootstrap/Carousel";
-import Cookie from 'universal-cookie';
+import Cookie from "universal-cookie";
 
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import Alert from "react-bootstrap/Alert";
-import Image from 'react-bootstrap/Image';
+import Image from "react-bootstrap/Image";
 
-import ListGroup from 'react-bootstrap/ListGroup';
-import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
-import Reorder from './reorder_black_24dp.svg';
+import ListGroup from "react-bootstrap/ListGroup";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import Reorder from "./reorder_black_24dp.svg";
 
 /**
  * Performs the API request for /recipe/editphotos and returns the result
@@ -30,20 +30,20 @@ import Reorder from './reorder_black_24dp.svg';
  * @param photos - new array of photos objects
  * @param names - array of names corresponding to each photo (file names)
  * @returns {Promise<*>} The response from the server. null on failure.
-*/
+ */
 async function requestEditPhotos(token, recipe_id, photos, names) {
-    let data = new FormData()
-    data.append('recipe_id', recipe_id)
-    photos.forEach(photo => data.append('photos[]', photo))
-    data.append('photo_names', names)
+    let data = new FormData();
+    data.append("recipe_id", recipe_id);
+    photos.forEach((photo) => data.append("photos[]", photo));
+    data.append("photo_names", names);
 
-    let response = await fetch('http://localhost:5000/recipe/editphotos', {
-        method: 'POST',
+    let response = await fetch("http://localhost:5000/recipe/editphotos", {
+        method: "POST",
         headers: {
-            'Authorization': token
+            Authorization: token,
         },
-        body: data
-    }).catch(e => {
+        body: data,
+    }).catch((e) => {
         throw new Error(e);
     });
 
@@ -59,24 +59,24 @@ async function requestEditPhotos(token, recipe_id, photos, names) {
 export function EditPhoto(props) {
     const editClose = () => {
         props.setShowPhotoEdit(false);
-        props.setChatbotVisible(true)
-        setUrl('');
+        props.setChatbotVisible(true);
+        setUrl("");
         setUploaded(false);
         setImage(null);
-    }
+    };
 
     // The following relates whether to show the error/success boxes and what to
     // show in them
     const [errorShow, setErrorShow] = useState(false);
-    const [errorText, setErrorText] = useState('');
+    const [errorText, setErrorText] = useState("");
     const [errorShow2, setErrorShow2] = useState(false);
-    const [errorText2, setErrorText2] = useState('');
+    const [errorText2, setErrorText2] = useState("");
     const [successShow, setSuccessShow] = useState(false);
 
     // Whether the image is uploaded
     const [uploaded, setUploaded] = useState(false);
     // The URL of the uploaded image
-    const [url, setUrl] = useState('');
+    const [url, setUrl] = useState("");
     // The image object uploaded
     const [image, setImage] = useState(null);
     const cookie = new Cookie();
@@ -90,9 +90,9 @@ export function EditPhoto(props) {
         for (let photo of props.photos) {
             photosP.push({
                 id: idCountP.toString(),
-                url: photo['url'],
-                image: photo['image'],
-                name: photo['name']
+                url: photo["url"],
+                image: photo["image"],
+                name: photo["name"],
             });
             idCountP++;
         }
@@ -105,9 +105,9 @@ export function EditPhoto(props) {
     const [idCount, setIdCount] = useState(photos.length);
 
     /**
-      * Handles the event where the user lets go of the mouse after a drag
-      * @param e - the onDragEnd event
-      */
+     * Handles the event where the user lets go of the mouse after a drag
+     * @param e - the onDragEnd event
+     */
     function handleOnDragEnd(e) {
         if (e.destination == null) return;
         const items = Array.from(photos);
@@ -122,7 +122,7 @@ export function EditPhoto(props) {
     function addRow() {
         if (!uploaded) {
             setErrorShow(true);
-            setErrorText('Please upload valid image');
+            setErrorText("Please upload valid image");
             return;
         }
         let items = Array.from(photos);
@@ -130,12 +130,12 @@ export function EditPhoto(props) {
             id: idCount.toString(),
             url: url,
             image: image,
-            name: image.name
+            name: image.name,
         });
         setIdCount(idCount + 1);
         setPhotos(items);
         setImage(null);
-        setUrl('');
+        setUrl("");
         setUploaded(false);
         document.getElementById("file-upload").value = "";
     }
@@ -159,27 +159,29 @@ export function EditPhoto(props) {
     async function handleImageUpload(event) {
         const imageFile = event.target.files[0];
         const options = {
-            maxSizeMB: 0.5
-        }
-        if (!imageFile.type.startsWith('image/')) {
+            maxSizeMB: 0.5,
+        };
+        if (!imageFile.type.startsWith("image/")) {
             setErrorShow(true);
-            setErrorText('File is not image type');
+            setErrorText("File is not image type");
             setImage(null);
-            setUrl('');
+            setUrl("");
             setUploaded(false);
             return;
         }
-        await imageCompression(imageFile, options).then(compressedFile => {
-            setImage(compressedFile);
-            setUrl(URL.createObjectURL(compressedFile));
-            setErrorShow(false);
-            setUploaded(true);
-        }).catch(e => {
-            setImage(null);
-            setUrl('');
-            setUploaded(false);
-            setErrorShow(false);
-        });
+        await imageCompression(imageFile, options)
+            .then((compressedFile) => {
+                setImage(compressedFile);
+                setUrl(URL.createObjectURL(compressedFile));
+                setErrorShow(false);
+                setUploaded(true);
+            })
+            .catch((e) => {
+                setImage(null);
+                setUrl("");
+                setUploaded(false);
+                setErrorShow(false);
+            });
     }
 
     /**
@@ -188,19 +190,23 @@ export function EditPhoto(props) {
      * Updates state of the page accordingly or shows error as required.
      */
     async function handleSubmit() {
-        let images = []
-        let names = []
-        photos.forEach(photo => {
-            images.push(photo.image)
-            names.push(photo.name)
+        let images = [];
+        let names = [];
+        photos.forEach((photo) => {
+            images.push(photo.image);
+            names.push(photo.name);
         });
 
-        let response = await requestEditPhotos(cookie.get('token'), props.recipeId, images, JSON.stringify(names))
-            .catch(e => {
-                setErrorShow2(true);
-                setSuccessShow(false);
-                setErrorText2(e.message);
-            });
+        let response = await requestEditPhotos(
+            cookie.get("token"),
+            props.recipeId,
+            images,
+            JSON.stringify(names)
+        ).catch((e) => {
+            setErrorShow2(true);
+            setSuccessShow(false);
+            setErrorText2(e.message);
+        });
 
         if (response != null) {
             setErrorShow2(false);
@@ -209,11 +215,11 @@ export function EditPhoto(props) {
                 photosP.push({
                     url: photo.url,
                     image: photo.image,
-                    name: photo.name
+                    name: photo.name,
                 });
             }
             props.setPhotos(photosP);
-            props.setEditedAt(response['edit_time']);
+            props.setEditedAt(response["edit_time"]);
             setSuccessShow(true);
         }
     }
@@ -221,83 +227,131 @@ export function EditPhoto(props) {
     return (
         <Modal show={props.showPhotoEdit} onHide={editClose}>
             <Modal.Header closeButton>
-                <Modal.Title>
-                    Edit Photos
-                </Modal.Title>
+                <Modal.Title>Edit Photos</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <DragDropContext onDragEnd={handleOnDragEnd}>
                     <Droppable droppableId="photos">
                         {(provided) => (
-                            <ListGroup as="ul" {...provided.droppableProps}
-                                       ref={provided.innerRef}
-                                       style={{marginBottom: "1em"}}>
-                                {photos.map(({id, url, image, name}, index) => {
-                                    return (
-                                        <Draggable key={id} draggableId={id}
-                                                   index={index}>
-                                            {(provided) => (
-                                                <ListGroup.Item as="li"
-                                                                ref={provided.innerRef}
-                                                                {...provided.draggableProps}
-                                                                {...provided.dragHandleProps} >
-                                                    <Row>
-                                                        <Col sm={2}
-                                                             className={"my-auto"}>
-                                                            {index === 0 ? "1 (Main)" : index + 1}
-                                                        </Col>
-                                                        <Col sm={4}>
-                                                            <span>{name}</span>
-                                                        </Col>
-                                                        <Col sm={4}>
-                                                            <Image src={url}
-                                                                   height="100em"/>
-                                                        </Col>
-                                                        <Col sm={2}
-                                                             className={"my-auto"}>
-                                                            <button
-                                                                type="button"
-                                                                className="close"
-                                                                onClick={() => removePhoto(index)}>
-                                                                <span>×</span>
-                                                            </button>
-                                                            <img src={Reorder}
-                                                                 alt=""/>
-                                                        </Col>
-                                                    </Row>
-                                                </ListGroup.Item>
-                                            )}
-                                        </Draggable>
-                                    );
-                                })}
+                            <ListGroup
+                                as="ul"
+                                {...provided.droppableProps}
+                                ref={provided.innerRef}
+                                style={{ marginBottom: "1em" }}
+                            >
+                                {photos.map(
+                                    ({ id, url, image, name }, index) => {
+                                        return (
+                                            <Draggable
+                                                key={id}
+                                                draggableId={id}
+                                                index={index}
+                                            >
+                                                {(provided) => (
+                                                    <ListGroup.Item
+                                                        as="li"
+                                                        ref={provided.innerRef}
+                                                        {...provided.draggableProps}
+                                                        {...provided.dragHandleProps}
+                                                    >
+                                                        <Row>
+                                                            <Col
+                                                                sm={2}
+                                                                className={
+                                                                    "my-auto"
+                                                                }
+                                                            >
+                                                                {index === 0
+                                                                    ? "1 (Main)"
+                                                                    : index + 1}
+                                                            </Col>
+                                                            <Col sm={4}>
+                                                                <span>
+                                                                    {name}
+                                                                </span>
+                                                            </Col>
+                                                            <Col sm={4}>
+                                                                <Image
+                                                                    src={url}
+                                                                    height="100em"
+                                                                />
+                                                            </Col>
+                                                            <Col
+                                                                sm={2}
+                                                                className={
+                                                                    "my-auto"
+                                                                }
+                                                            >
+                                                                <button
+                                                                    type="button"
+                                                                    className="close"
+                                                                    onClick={() =>
+                                                                        removePhoto(
+                                                                            index
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    <span>
+                                                                        ×
+                                                                    </span>
+                                                                </button>
+                                                                <img
+                                                                    src={
+                                                                        Reorder
+                                                                    }
+                                                                    alt=""
+                                                                />
+                                                            </Col>
+                                                        </Row>
+                                                    </ListGroup.Item>
+                                                )}
+                                            </Draggable>
+                                        );
+                                    }
+                                )}
                                 {provided.placeholder}
                                 <ListGroup.Item as="li">
-                                    {uploaded ?
+                                    {uploaded ? (
                                         <Row>
-                                            <Col style={{textAlign: "center"}}>
-                                                <Image src={url} width="10%"/>
+                                            <Col
+                                                style={{ textAlign: "center" }}
+                                            >
+                                                <Image src={url} width="10%" />
                                             </Col>
                                         </Row>
-                                        : <></>}
+                                    ) : (
+                                        <></>
+                                    )}
                                     <Row>
                                         <Col sm={11}>
                                             <Form.File
-                                                onChange={e => handleImageUpload(e)}
-                                                id="file-upload"/>
+                                                onChange={(e) =>
+                                                    handleImageUpload(e)
+                                                }
+                                                id="file-upload"
+                                            />
 
-                                            <Alert show={errorShow}
-                                                   variant="danger"
-                                                   style={{marginTop: "1em"}}
-                                                   onClose={() => setErrorShow(false)}
-                                                   dismissible>
+                                            <Alert
+                                                show={errorShow}
+                                                variant="danger"
+                                                style={{ marginTop: "1em" }}
+                                                onClose={() =>
+                                                    setErrorShow(false)
+                                                }
+                                                dismissible
+                                            >
                                                 {errorText}
                                             </Alert>
                                         </Col>
                                         <Col sm={1}>
-                                            <Button variant="outline-secondary"
-                                                    style={{float: "right"}}
-                                                    onClick={addRow}
-                                                    size="sm">Add</Button>
+                                            <Button
+                                                variant="outline-secondary"
+                                                style={{ float: "right" }}
+                                                onClick={addRow}
+                                                size="sm"
+                                            >
+                                                Add
+                                            </Button>
                                         </Col>
                                     </Row>
                                 </ListGroup.Item>
@@ -305,15 +359,23 @@ export function EditPhoto(props) {
                         )}
                     </Droppable>
                 </DragDropContext>
-                <Alert show={errorShow2} variant="danger"
-                       onClose={() => setErrorShow2(false)} dismissible>
+                <Alert
+                    show={errorShow2}
+                    variant="danger"
+                    onClose={() => setErrorShow2(false)}
+                    dismissible
+                >
                     {errorText2}
                 </Alert>
-                <Alert show={successShow} variant="success"
-                       onClose={() => setSuccessShow(false)} dismissible>
+                <Alert
+                    show={successShow}
+                    variant="success"
+                    onClose={() => setSuccessShow(false)}
+                    dismissible
+                >
                     Successfully updated recipe details
                 </Alert>
-                <div style={{textAlign: "center"}}>
+                <div style={{ textAlign: "center" }}>
                     <Button type="submit" size="sm" onClick={handleSubmit}>
                         Confirm
                     </Button>
@@ -329,45 +391,59 @@ export function EditPhoto(props) {
 function RecipeViewPhoto(props) {
     return (
         <>
-            <Row style={{marginBottom: "1em"}}>
+            <Row style={{ marginBottom: "1em" }}>
                 <Col>
                     <Carousel className={"shadow"}>
-                        {props.photos.length === 0
-                            ?
-                            <Carousel.Item key={0} style={{
-                                textAlign: "center",
-                                backgroundColor: "white"
-                            }}>
+                        {props.photos.length === 0 ? (
+                            <Carousel.Item
+                                key={0}
+                                style={{
+                                    textAlign: "center",
+                                    backgroundColor: "white",
+                                }}
+                            >
                                 <img
                                     src="http://127.0.0.1:5000/img/default_recipe.png"
-                                    alt="Default" style={{height: "20em"}}/>
+                                    alt="Default"
+                                    style={{ height: "20em" }}
+                                />
                             </Carousel.Item>
-                            :
-                            props.photos.map(({url}, index) =>
-                                <Carousel.Item key={index}
-                                               style={{textAlign: "center"}}>
-                                    <img src={url} className="shadow-lg"
-                                         alt={`Capture ${index}`} style={{
-                                        zIndex: 1,
-                                        position: 'absolute',
-                                        height: "20em",
-                                        width: "auto",
-                                        marginLeft: "auto",
-                                        marginRight: "auto",
-                                        left: 0,
-                                        right: 0,
-                                        textAlign: "center"
-                                    }}/>
-                                    <img src={url} className=""
-                                         alt={`Capture ${index} background`}
-                                         style={{
-                                             objectFit: "cover",
-                                             height: "20em",
-                                             width: "100%",
-                                             filter: "blur(100px) brightness(100%)"
-                                         }}/>
+                        ) : (
+                            props.photos.map(({ url }, index) => (
+                                <Carousel.Item
+                                    key={index}
+                                    style={{ textAlign: "center" }}
+                                >
+                                    <img
+                                        src={url}
+                                        className="shadow-lg"
+                                        alt={`Capture ${index}`}
+                                        style={{
+                                            zIndex: 1,
+                                            position: "absolute",
+                                            height: "20em",
+                                            width: "auto",
+                                            marginLeft: "auto",
+                                            marginRight: "auto",
+                                            left: 0,
+                                            right: 0,
+                                            textAlign: "center",
+                                        }}
+                                    />
+                                    <img
+                                        src={url}
+                                        className=""
+                                        alt={`Capture ${index} background`}
+                                        style={{
+                                            objectFit: "cover",
+                                            height: "20em",
+                                            width: "100%",
+                                            filter: "blur(100px) brightness(100%)",
+                                        }}
+                                    />
                                 </Carousel.Item>
-                            )}
+                            ))
+                        )}
                     </Carousel>
                 </Col>
             </Row>

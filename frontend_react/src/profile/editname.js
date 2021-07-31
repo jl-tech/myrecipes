@@ -2,13 +2,13 @@
  Component providing the name part of the profile edit page
  */
 
-import React, {useState} from 'react';
-import Button from 'react-bootstrap/Button';
-import Alert from 'react-bootstrap/Alert';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
-import Cookie from 'universal-cookie';
+import React, { useState } from "react";
+import Button from "react-bootstrap/Button";
+import Alert from "react-bootstrap/Alert";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Form from "react-bootstrap/Form";
+import Cookie from "universal-cookie";
 
 /**
  * Performs the API request for /profile/edit to the backend and returns
@@ -20,17 +20,17 @@ import Cookie from 'universal-cookie';
  * @returns {Promise<*>} The response from the server. null on failure.
  */
 async function editName(token, firstname, lastname) {
-    let response = await fetch('http://localhost:5000/profile/edit', {
-        method: 'POST',
+    let response = await fetch("http://localhost:5000/profile/edit", {
+        method: "POST",
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token
+            "Content-Type": "application/json",
+            Authorization: token,
         },
         body: JSON.stringify({
             FirstName: firstname,
-            LastName: lastname
-        })
-    }).catch(e => {
+            LastName: lastname,
+        }),
+    }).catch((e) => {
         throw new Error(e);
     });
 
@@ -41,7 +41,6 @@ async function editName(token, firstname, lastname) {
 }
 
 function ProfileEditName(props) {
-
     // Whether the text field is enabled (i.e. in edit mode)
     const [editMode, setEditMode] = useState(false);
     // The current text in the first name field
@@ -51,7 +50,7 @@ function ProfileEditName(props) {
     // Whether to show the error box
     const [errorShow, setErrorShow] = useState(false);
     // The text to show in the error box
-    const [errorText, setErrorText] = useState('');
+    const [errorText, setErrorText] = useState("");
     // Whether to show the success box
     const [successShow, setSuccessShow] = useState(false);
 
@@ -64,11 +63,14 @@ function ProfileEditName(props) {
     async function handleSubmit(event) {
         event.preventDefault();
 
-        let response = await editName(cookie.get('token'), newFirst, newLast)
-            .catch(e => {
-                setErrorShow(true);
-                setErrorText(e.message);
-            });
+        let response = await editName(
+            cookie.get("token"),
+            newFirst,
+            newLast
+        ).catch((e) => {
+            setErrorShow(true);
+            setErrorText(e.message);
+        });
 
         if (response != null) {
             props.setfirstName(newFirst);
@@ -85,15 +87,30 @@ function ProfileEditName(props) {
         return (
             <>
                 <Row>
-                    <Col sm={10}><h5>Name</h5></Col>
-                    <Col sm={2}><Button variant="outline-secondary" size="sm"
-                                        onClick={() => setEditMode(true)}>Edit</Button></Col>
+                    <Col sm={10}>
+                        <h5>Name</h5>
+                    </Col>
+                    <Col sm={2}>
+                        <Button
+                            variant="outline-secondary"
+                            size="sm"
+                            onClick={() => setEditMode(true)}
+                        >
+                            Edit
+                        </Button>
+                    </Col>
                 </Row>
                 <Row>
-                    <Col>{props.firstName} {props.lastName}</Col>
+                    <Col>
+                        {props.firstName} {props.lastName}
+                    </Col>
                 </Row>
-                <Alert show={successShow} variant="success"
-                       onClose={() => setSuccessShow(false)} dismissible>
+                <Alert
+                    show={successShow}
+                    variant="success"
+                    onClose={() => setSuccessShow(false)}
+                    dismissible
+                >
                     Successfully changed name
                 </Alert>
             </>
@@ -103,9 +120,18 @@ function ProfileEditName(props) {
         return (
             <>
                 <Row>
-                    <Col sm={10}><h5>Name</h5></Col>
-                    <Col sm={2}><Button variant="outline-secondary" size="sm"
-                                        onClick={() => setEditMode(false)}>Cancel</Button></Col>
+                    <Col sm={10}>
+                        <h5>Name</h5>
+                    </Col>
+                    <Col sm={2}>
+                        <Button
+                            variant="outline-secondary"
+                            size="sm"
+                            onClick={() => setEditMode(false)}
+                        >
+                            Cancel
+                        </Button>
+                    </Col>
                 </Row>
                 <Form onSubmit={handleSubmit}>
                     <Form.Group as={Row}>
@@ -113,9 +139,11 @@ function ProfileEditName(props) {
                             First
                         </Form.Label>
                         <Col sm="8">
-                            <Form.Control defaultValue={props.firstName}
-                                          required
-                                          onChange={e => setNewFirst(e.target.value)}/>
+                            <Form.Control
+                                defaultValue={props.firstName}
+                                required
+                                onChange={(e) => setNewFirst(e.target.value)}
+                            />
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
@@ -123,15 +151,22 @@ function ProfileEditName(props) {
                             Last
                         </Form.Label>
                         <Col sm="8">
-                            <Form.Control defaultValue={props.lastName} required
-                                          onChange={e => setNewLast(e.target.value)}/>
+                            <Form.Control
+                                defaultValue={props.lastName}
+                                required
+                                onChange={(e) => setNewLast(e.target.value)}
+                            />
                         </Col>
                     </Form.Group>
-                    <Alert show={errorShow} variant="danger"
-                           onClose={() => setErrorShow(false)} dismissible>
+                    <Alert
+                        show={errorShow}
+                        variant="danger"
+                        onClose={() => setErrorShow(false)}
+                        dismissible
+                    >
                         {errorText}
                     </Alert>
-                    <div style={{textAlign: "center"}}>
+                    <div style={{ textAlign: "center" }}>
                         <Button type="submit" size="sm">
                             Confirm
                         </Button>

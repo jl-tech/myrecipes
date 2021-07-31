@@ -3,12 +3,12 @@
  *
  */
 
-import React, {useEffect, useState} from 'react';
-import {Link, useHistory, useLocation} from "react-router-dom";
-import {Helmet} from "react-helmet-async";
+import React, { useEffect, useState } from "react";
+import { Link, useHistory, useLocation } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 
 /**
@@ -19,15 +19,15 @@ import Spinner from "react-bootstrap/Spinner";
  * @returns {Promise<*>} The response from the server. null on failure.
  */
 async function requestEmailConfirm(code) {
-    let response = await fetch('http://localhost:5000/auth/emailconfirm', {
-        method: 'POST',
+    let response = await fetch("http://localhost:5000/auth/emailconfirm", {
+        method: "POST",
         headers: {
-            'Content-Type': 'application/json'
+            "Content-Type": "application/json",
         },
         body: JSON.stringify({
             code: code,
-        })
-    }).catch(e => {
+        }),
+    }).catch((e) => {
         throw new Error(e);
     });
 
@@ -47,7 +47,7 @@ function useQuery() {
 
 function EmailConfirm() {
     // The message to show the user
-    const [message, setMessage] = useState('');
+    const [message, setMessage] = useState("");
     // Whether the API request has finished being fetched
     const [fetched, setFetched] = useState(false);
     const history = useHistory();
@@ -60,12 +60,11 @@ function EmailConfirm() {
     async function processCode() {
         let code = query.get("code");
         if (code == null) {
-            history.push('/');
+            history.push("/");
         }
-        let response = await requestEmailConfirm(code)
-            .catch(e => {
-                setMessage(e.message);
-            });
+        let response = await requestEmailConfirm(code).catch((e) => {
+            setMessage(e.message);
+        });
 
         if (response != null) setMessage("Successfully verified email");
 
@@ -80,14 +79,18 @@ function EmailConfirm() {
         // Show loading symbol
         return (
             <>
-                <Modal.Dialog style={{textAlign: "center"}}>
+                <Modal.Dialog style={{ textAlign: "center" }}>
                     <Helmet>
                         <title> Verifying email - MyRecipes </title>
                     </Helmet>
-                    <Spinner style={{
-                        color: 'tomato', marginLeft: "auto",
-                        marginRight: "auto"
-                    }} animation={"grow"}/>
+                    <Spinner
+                        style={{
+                            color: "tomato",
+                            marginLeft: "auto",
+                            marginRight: "auto",
+                        }}
+                        animation={"grow"}
+                    />
                 </Modal.Dialog>
             </>
         );
@@ -101,10 +104,14 @@ function EmailConfirm() {
 
                 <Modal.Dialog>
                     <Modal.Body>
-                        <div style={{textAlign: "center"}}>
-                            {message}<br/>
-                            <Link to="/login" component={Button}
-                                  style={{marginTop: "1em"}}>
+                        <div style={{ textAlign: "center" }}>
+                            {message}
+                            <br />
+                            <Link
+                                to="/login"
+                                component={Button}
+                                style={{ marginTop: "1em" }}
+                            >
                                 Return
                             </Link>
                         </div>
@@ -113,7 +120,6 @@ function EmailConfirm() {
             </>
         );
     }
-
 }
 
 export default EmailConfirm;

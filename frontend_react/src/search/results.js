@@ -1,22 +1,22 @@
 /**
  * Component providing the search results page.
  */
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from "react";
 
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 
 import Container from "react-bootstrap/Container";
 import Alert from "react-bootstrap/Alert";
-import Cookie from 'universal-cookie';
-import Spinner from "react-bootstrap/Spinner"
+import Cookie from "universal-cookie";
+import Spinner from "react-bootstrap/Spinner";
 
-import {useLocation} from "react-router-dom";
-import RecipeList from '../recipe/list';
-import SearchBar from './bar.js';
-import SearchAdvanced from './advanced.js';
-import {Helmet} from "react-helmet-async";
-import {Collapse} from "@material-ui/core";
+import { useLocation } from "react-router-dom";
+import RecipeList from "../recipe/list";
+import SearchBar from "./bar.js";
+import SearchAdvanced from "./advanced.js";
+import { Helmet } from "react-helmet-async";
+import { Collapse } from "@material-ui/core";
 
 /**
  * Performs the API request for /search and returns the result.
@@ -29,13 +29,21 @@ import {Collapse} from "@material-ui/core";
  * @param ingredients - the ingredients specified
  * @param step_keywords - the step keywords specified
  * @returns {Promise<*>} The response from the server. null on failure.
-*/
-async function requestRecipes(token, name_keywords, type, serving_size, time_to_cook, ingredients, step_keywords) {
-    let response = await fetch('http://localhost:5000/search/', {
-        method: 'POST',
+ */
+async function requestRecipes(
+    token,
+    name_keywords,
+    type,
+    serving_size,
+    time_to_cook,
+    ingredients,
+    step_keywords
+) {
+    let response = await fetch("http://localhost:5000/search/", {
+        method: "POST",
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token
+            "Content-Type": "application/json",
+            Authorization: token,
         },
         body: JSON.stringify({
             name_keywords: name_keywords,
@@ -43,9 +51,9 @@ async function requestRecipes(token, name_keywords, type, serving_size, time_to_
             serving_size: serving_size,
             time_to_cook: time_to_cook,
             ingredients: ingredients,
-            step_keywords: step_keywords
-        })
-    }).catch(e => {
+            step_keywords: step_keywords,
+        }),
+    }).catch((e) => {
         throw new Error(e);
     });
 
@@ -61,13 +69,13 @@ function useQuery() {
 
 function SearchResults(props) {
     // The recipe data of the search results
-    const [recipeData, setRecipeData] = useState([])
+    const [recipeData, setRecipeData] = useState([]);
     // Fetch status of search results
-    const [fetched, setFetched] = useState(false)
+    const [fetched, setFetched] = useState(false);
     // Whether error box should be shown
-    const [errorShow, setErrorShow] = useState(false)
+    const [errorShow, setErrorShow] = useState(false);
     // Whether success box should be shown
-    const [success, setSuccess] = useState(false)
+    const [success, setSuccess] = useState(false);
     const cookie = new Cookie();
     let query = useQuery();
     const [advancedMode, setAdvancedMode] = useState(initAdvanced());
@@ -77,7 +85,7 @@ function SearchResults(props) {
      * @returns {string|string} The type if a valid type. Empty string otherwise.
      */
     function validateType() {
-        let type = query.get('type');
+        let type = query.get("type");
         let validTypes = ["Breakfast", "Brunch", "Lunch", "Dinner", "Snack"];
         return validTypes.includes(type) ? type : null;
     }
@@ -87,13 +95,16 @@ function SearchResults(props) {
      * @returns whether advanced search is active
      */
     function initAdvanced() {
-        if (validateType() != null || query.get('serving') != null ||
-            query.get('ingredient') != null || query.get('step') != null) {
+        if (
+            validateType() != null ||
+            query.get("serving") != null ||
+            query.get("ingredient") != null ||
+            query.get("step") != null
+        ) {
             return true;
         }
         return false;
     }
-
 
     /**
      * Calls and awaits for the search request function and sets the component state
@@ -101,14 +112,18 @@ function SearchResults(props) {
      */
     async function processQuery() {
         let type = validateType();
-        let response = await requestRecipes(cookie.get('token'),
-            query.get('name'), type, query.get('serving'), query.get('time'),
-            query.get('ingredient'), query.get('step'))
-            .catch(e => {
-            });
+        let response = await requestRecipes(
+            cookie.get("token"),
+            query.get("name"),
+            type,
+            query.get("serving"),
+            query.get("time"),
+            query.get("ingredient"),
+            query.get("step")
+        ).catch((e) => {});
 
         if (response != null) {
-            setRecipeData(response)
+            setRecipeData(response);
             setSuccess(true);
         }
         setFetched(true);
@@ -121,71 +136,98 @@ function SearchResults(props) {
         return (
             <>
                 <Helmet>
-                    <title> {query.get('name') != null ? `'${query.get('name')}': Search Results`
-                        : 'Browse All Recipes'} -
-                        MyRecipes </title>
+                    <title>
+                        {" "}
+                        {query.get("name") != null
+                            ? `'${query.get("name")}': Search Results`
+                            : "Browse All Recipes"}{" "}
+                        - MyRecipes{" "}
+                    </title>
                 </Helmet>
-                <Container style={{marginTop: "1em", marginBottom: "2em"}}>
+                <Container style={{ marginTop: "1em", marginBottom: "2em" }}>
                     <Row>
                         <Col>
-                            <div style={{textAlign: "center"}}>
+                            <div style={{ textAlign: "center" }}>
                                 <h2>Search Recipes </h2>
                             </div>
                         </Col>
                     </Row>
-                    <Row style={{marginTop: "1em"}}>
-                        <Col sm={3}/>
+                    <Row style={{ marginTop: "1em" }}>
+                        <Col sm={3} />
                         <Col sm={6}>
-                            <SearchBar loggedIn={props.loggedIn} isHome={false}
-                                       init={query.get('name') != null ? query.get('name') : ""}
-                                       disabled={advancedMode}/>
-                            <div style={{marginTop: "0.5em"}}>
+                            <SearchBar
+                                loggedIn={props.loggedIn}
+                                isHome={false}
+                                init={
+                                    query.get("name") != null
+                                        ? query.get("name")
+                                        : ""
+                                }
+                                disabled={advancedMode}
+                            />
+                            <div style={{ marginTop: "0.5em" }}>
                                 {recipeData.length} recipes found
-                                <a href="#" style={{float: "right"}}
-                                   onClick={() => {
-                                       setAdvancedMode(!advancedMode)
-                                   }}> {advancedMode ? "Hide advanced options" :
-                                    "Show advanced options"}</a>
+                                <a
+                                    href="#"
+                                    style={{ float: "right" }}
+                                    onClick={() => {
+                                        setAdvancedMode(!advancedMode);
+                                    }}
+                                >
+                                    {" "}
+                                    {advancedMode
+                                        ? "Hide advanced options"
+                                        : "Show advanced options"}
+                                </a>
                             </div>
                         </Col>
                     </Row>
                     <Collapse in={advancedMode}>
-                        <Row style={{marginTop: "1em"}}>
-                            <Col sm={3}/>
+                        <Row style={{ marginTop: "1em" }}>
+                            <Col sm={3} />
                             <Col sm={6}>
-                                <SearchAdvanced setErrorShow={setErrorShow}/>
-                                <Alert show={errorShow} variant="danger"
-                                       style={{marginTop: '1em'}}
-                                       onClose={() => setErrorShow(false)}
-                                       dismissible>
+                                <SearchAdvanced setErrorShow={setErrorShow} />
+                                <Alert
+                                    show={errorShow}
+                                    variant="danger"
+                                    style={{ marginTop: "1em" }}
+                                    onClose={() => setErrorShow(false)}
+                                    dismissible
+                                >
                                     Please enter a valid search term in any
                                     field.
                                 </Alert>
                             </Col>
                         </Row>
                     </Collapse>
-                    <Row style={{marginTop: "1em"}}>
-
-                        {recipeData.length === 0 ?
-                            <Col style={{textAlign: 'center'}}><span> No recipes found. </span></Col> :
-                            <RecipeList recipeData={recipeData}
-                                        setRecipeData={setRecipeData}/>}
+                    <Row style={{ marginTop: "1em" }}>
+                        {recipeData.length === 0 ? (
+                            <Col style={{ textAlign: "center" }}>
+                                <span> No recipes found. </span>
+                            </Col>
+                        ) : (
+                            <RecipeList
+                                recipeData={recipeData}
+                                setRecipeData={setRecipeData}
+                            />
+                        )}
                     </Row>
                 </Container>
             </>
-        )
+        );
     } else {
         return (
-            <Container style={{
-                textAlign: "center",
-                marginTop: "1em",
-                marginBottom: "2em"
-            }}>
-                <Spinner style={{color: 'tomato'}} animation={"grow"}/>
+            <Container
+                style={{
+                    textAlign: "center",
+                    marginTop: "1em",
+                    marginBottom: "2em",
+                }}
+            >
+                <Spinner style={{ color: "tomato" }} animation={"grow"} />
             </Container>
-        )
+        );
     }
-
 }
 
 export default SearchResults;

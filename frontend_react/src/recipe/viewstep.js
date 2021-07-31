@@ -2,16 +2,16 @@
 Component for the step part of the recipe creation page
  */
 
-import React, {useState} from 'react';
-import Alert from 'react-bootstrap/Alert';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
-import Cookie from 'universal-cookie';
-import Button from 'react-bootstrap/esm/Button';
+import React, { useState } from "react";
+import Alert from "react-bootstrap/Alert";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Form from "react-bootstrap/Form";
+import Cookie from "universal-cookie";
+import Button from "react-bootstrap/esm/Button";
 import ListGroup from "react-bootstrap/ListGroup";
-import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
-import Reorder from './reorder_black_24dp.svg';
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import Reorder from "./reorder_black_24dp.svg";
 
 /**
  * Performs the API request for /recipe/editsteps and returns the result
@@ -20,19 +20,19 @@ import Reorder from './reorder_black_24dp.svg';
  * @param token - the token of the user requesting
  * @param recipe_id - the recipe_id of the recipe to edit steps for
  * @param steps - an array containing the new steps
-*/
+ */
 async function requestEditSteps(token, recipe_id, steps) {
-    let response = await fetch('http://localhost:5000/recipe/editsteps', {
-        method: 'POST',
+    let response = await fetch("http://localhost:5000/recipe/editsteps", {
+        method: "POST",
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token
+            "Content-Type": "application/json",
+            Authorization: token,
         },
         body: JSON.stringify({
             steps: steps,
-            recipe_id: recipe_id
-        })
-    }).catch(e => {
+            recipe_id: recipe_id,
+        }),
+    }).catch((e) => {
         throw new Error(e);
     });
 
@@ -54,7 +54,7 @@ function RecipeViewStep(props) {
     // Whether to show the error box
     const [errorShow, setErrorShow] = useState(false);
     // The text to show in the error box
-    const [errorText, setErrorText] = useState('');
+    const [errorText, setErrorText] = useState("");
 
     // Whether to show the success box
     const [successShow, setSuccessShow] = useState(false);
@@ -62,9 +62,9 @@ function RecipeViewStep(props) {
     const cookie = new Cookie();
 
     /**
-      * Handles the event where the user lets go of the mouse after a drag
-      * @param e - the onDragEnd event
-      */
+     * Handles the event where the user lets go of the mouse after a drag
+     * @param e - the onDragEnd event
+     */
     function handleOnDragEnd(e) {
         if (e.destination == null) return;
         const items = Array.from(steps);
@@ -80,7 +80,7 @@ function RecipeViewStep(props) {
         let items = Array.from(steps);
         items.push({
             id: idCount.toString(),
-            description: null
+            description: null,
         });
         setIdCount(idCount + 1);
         setSteps(items);
@@ -117,7 +117,7 @@ function RecipeViewStep(props) {
         for (let step of props.steps) {
             stepsP.push({
                 id: idCountP.toString(),
-                description: step['description']
+                description: step["description"],
             });
             idCountP++;
         }
@@ -148,30 +148,33 @@ function RecipeViewStep(props) {
      * Updates state of the page accordingly or shows error as required.
      */
     async function handleSubmit() {
-        let stepsP = []
+        let stepsP = [];
         for (let step of steps) {
             stepsP.push({
-                "description": step["description"]
+                description: step["description"],
             });
         }
 
-        let response = await requestEditSteps(cookie.get('token'), props.recipeId, stepsP)
-            .catch(e => {
-                setErrorShow(true);
-                setSuccessShow(false);
-                setErrorText(e.message);
-            });
+        let response = await requestEditSteps(
+            cookie.get("token"),
+            props.recipeId,
+            stepsP
+        ).catch((e) => {
+            setErrorShow(true);
+            setSuccessShow(false);
+            setErrorText(e.message);
+        });
 
         if (response != null) {
             setErrorShow(false);
             let stepsP = [];
             for (let step of steps) {
                 stepsP.push({
-                    description: step["description"]
+                    description: step["description"],
                 });
             }
             props.setSteps(stepsP);
-            props.setEditedAt(response['edit_time']);
+            props.setEditedAt(response["edit_time"]);
             setSuccessShow(true);
             setEditMode(false);
         }
@@ -180,21 +183,35 @@ function RecipeViewStep(props) {
     if (editMode && props.editable) {
         return (
             <>
-                <Row style={{marginTop: "1em"}}>
+                <Row style={{ marginTop: "1em" }}>
                     <Col sm={9}>
                         <h3> Steps </h3>
                     </Col>
-                    <Col sm={3} style={{textAlign: "right"}}>
-                        <Button variant="primary" size="sm"
-                                style={{marginRight: "1em"}}
-                                onClick={handleSubmit}>Confirm</Button>
-                        <Button variant="outline-secondary" size="sm"
-                                onClick={hideEditMode}>Cancel</Button>
+                    <Col sm={3} style={{ textAlign: "right" }}>
+                        <Button
+                            variant="primary"
+                            size="sm"
+                            style={{ marginRight: "1em" }}
+                            onClick={handleSubmit}
+                        >
+                            Confirm
+                        </Button>
+                        <Button
+                            variant="outline-secondary"
+                            size="sm"
+                            onClick={hideEditMode}
+                        >
+                            Cancel
+                        </Button>
                     </Col>
-                    <Col sm={6}/>
+                    <Col sm={6} />
                     <Col sm={6}>
-                        <Alert show={errorShow} variant="danger"
-                               onClose={() => setErrorShow(false)} dismissible>
+                        <Alert
+                            show={errorShow}
+                            variant="danger"
+                            onClose={() => setErrorShow(false)}
+                            dismissible
+                        >
                             {errorText}
                         </Alert>
                     </Col>
@@ -205,61 +222,109 @@ function RecipeViewStep(props) {
                             <Droppable droppableId="steps">
                                 {(provided) => (
                                     <ListGroup
-                                        as="ul" {...provided.droppableProps}
-                                        ref={provided.innerRef}>
-                                        {steps.map(({
-                                                        id,
-                                                        description
-                                                    }, index) => {
-                                            return (
-                                                <Draggable key={id}
-                                                           draggableId={id}
-                                                           index={index}>
-                                                    {(provided) => (
-                                                        <ListGroup.Item as="li"
-                                                                        ref={provided.innerRef}
-                                                                        {...provided.draggableProps}
-                                                                        {...provided.dragHandleProps} >
-                                                            <Form.Row>
-                                                                <Col sm={1}
-                                                                     className={"my-auto"}>
-                                                                    <span>{index + 1}</span>
-                                                                </Col>
-                                                                <Form.Group
-                                                                    as={Col}
-                                                                    sm={10}
-                                                                    style={{marginBottom: "0"}}>
-                                                                    <Form.Control
-                                                                        placeholder="Details"
-                                                                        onChange={e =>
-                                                                            updateStep(index, "description", e.target.value)}
-                                                                        required
-                                                                        defaultValue={description}/>
-                                                                </Form.Group>
-                                                                <Col sm={1}
-                                                                     className={"my-auto"}>
-                                                                    <button
-                                                                        type="button"
-                                                                        className="close"
-                                                                        onClick={() => removeStep(index)}>
-                                                                        <span>×</span>
-                                                                    </button>
-                                                                    <img
-                                                                        src={Reorder}
-                                                                        alt=""/>
-                                                                </Col>
-                                                            </Form.Row>
-                                                        </ListGroup.Item>
-                                                    )}
-                                                </Draggable>
-                                            );
-                                        })}
+                                        as="ul"
+                                        {...provided.droppableProps}
+                                        ref={provided.innerRef}
+                                    >
+                                        {steps.map(
+                                            ({ id, description }, index) => {
+                                                return (
+                                                    <Draggable
+                                                        key={id}
+                                                        draggableId={id}
+                                                        index={index}
+                                                    >
+                                                        {(provided) => (
+                                                            <ListGroup.Item
+                                                                as="li"
+                                                                ref={
+                                                                    provided.innerRef
+                                                                }
+                                                                {...provided.draggableProps}
+                                                                {...provided.dragHandleProps}
+                                                            >
+                                                                <Form.Row>
+                                                                    <Col
+                                                                        sm={1}
+                                                                        className={
+                                                                            "my-auto"
+                                                                        }
+                                                                    >
+                                                                        <span>
+                                                                            {index +
+                                                                                1}
+                                                                        </span>
+                                                                    </Col>
+                                                                    <Form.Group
+                                                                        as={Col}
+                                                                        sm={10}
+                                                                        style={{
+                                                                            marginBottom:
+                                                                                "0",
+                                                                        }}
+                                                                    >
+                                                                        <Form.Control
+                                                                            placeholder="Details"
+                                                                            onChange={(
+                                                                                e
+                                                                            ) =>
+                                                                                updateStep(
+                                                                                    index,
+                                                                                    "description",
+                                                                                    e
+                                                                                        .target
+                                                                                        .value
+                                                                                )
+                                                                            }
+                                                                            required
+                                                                            defaultValue={
+                                                                                description
+                                                                            }
+                                                                        />
+                                                                    </Form.Group>
+                                                                    <Col
+                                                                        sm={1}
+                                                                        className={
+                                                                            "my-auto"
+                                                                        }
+                                                                    >
+                                                                        <button
+                                                                            type="button"
+                                                                            className="close"
+                                                                            onClick={() =>
+                                                                                removeStep(
+                                                                                    index
+                                                                                )
+                                                                            }
+                                                                        >
+                                                                            <span>
+                                                                                ×
+                                                                            </span>
+                                                                        </button>
+                                                                        <img
+                                                                            src={
+                                                                                Reorder
+                                                                            }
+                                                                            alt=""
+                                                                        />
+                                                                    </Col>
+                                                                </Form.Row>
+                                                            </ListGroup.Item>
+                                                        )}
+                                                    </Draggable>
+                                                );
+                                            }
+                                        )}
                                         {provided.placeholder}
                                         <ListGroup.Item as="li">
-                                            <Button variant="outline-secondary"
-                                                    style={{float: "right"}}
-                                                    onClick={addRow}
-                                                    size="sm">Add</Button>
+                                            <Button
+                                                variant="outline-secondary"
+                                                style={{ float: "right" }}
+                                                onClick={addRow}
+                                                size="sm"
+                                            >
+                                                Add
+                                            </Button>
                                         </ListGroup.Item>
                                     </ListGroup>
                                 )}
@@ -272,37 +337,48 @@ function RecipeViewStep(props) {
     } else {
         return (
             <>
-
-                <Row style={{marginTop: "1em"}}>
+                <Row style={{ marginTop: "1em" }}>
                     <Col sm={11}>
                         <h3> Steps </h3>
                     </Col>
-                    {props.editable ?
+                    {props.editable ? (
                         <>
-                            <Col sm={1} style={{textAlign: "right"}}>
-                                <Button variant="outline-secondary" size="sm"
-                                        onClick={showEditMode}>Edit</Button>
+                            <Col sm={1} style={{ textAlign: "right" }}>
+                                <Button
+                                    variant="outline-secondary"
+                                    size="sm"
+                                    onClick={showEditMode}
+                                >
+                                    Edit
+                                </Button>
                             </Col>
-                            <Col sm={6}/>
+                            <Col sm={6} />
                             <Col sm={6}>
-                                <Alert show={successShow} variant="success"
-                                       onClose={() => setSuccessShow(false)}
-                                       dismissible>
+                                <Alert
+                                    show={successShow}
+                                    variant="success"
+                                    onClose={() => setSuccessShow(false)}
+                                    dismissible
+                                >
                                     Successfully updated recipe steps
                                 </Alert>
-                            </Col></> : <></>}
+                            </Col>
+                        </>
+                    ) : (
+                        <></>
+                    )}
                 </Row>
                 <Row>
                     <Col>
                         <ListGroup as="ul" className={"shadow-sm"}>
-                            {props.steps.map(({id, description}, index) =>
+                            {props.steps.map(({ id, description }, index) => (
                                 <ListGroup.Item as="li" key={index}>
                                     <Row>
                                         <Col sm={1}>{index + 1}.</Col>
                                         <Col sm={11}>{description}</Col>
                                     </Row>
                                 </ListGroup.Item>
-                            )}
+                            ))}
                         </ListGroup>
                     </Col>
                 </Row>
