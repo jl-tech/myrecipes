@@ -1,3 +1,6 @@
+/*
+Component for the ingredient part of the recipe creation page
+ */
 import React, {useState} from 'react';
 
 import Form from 'react-bootstrap/Form';
@@ -10,9 +13,13 @@ import Reorder from './reorder_black_24dp.svg';
 
 
 function RecipeCreateIngredient({ingredients, setIngredients}) {
-
+    // The number of ingredients in the list
     const [idCount, setIdCount] = useState(0);
 
+    /**
+      * Handles the event where the user lets go of the mouse after a drag
+      * @param e - the onDragEnd event
+      */
     function handleOnDragEnd(e) {
         if (e.destination == null) return;
         const items = Array.from(ingredients);
@@ -21,6 +28,9 @@ function RecipeCreateIngredient({ingredients, setIngredients}) {
         setIngredients(items);
     }
 
+    /*
+     * Adds another row (by appending an array element) for a new ingredient.
+     */
     function addRow() {
         let items = Array.from(ingredients);
         items.push({
@@ -33,12 +43,22 @@ function RecipeCreateIngredient({ingredients, setIngredients}) {
         setIngredients(items);
     }
 
+    /**
+     * Changes an ingredient in the ingredients array
+     * @param index - the index of the ingredient to change
+     * @param key - the key of the ingredient to change
+     * @param value - the new value of the ingredient
+     */
     function updateIngredient(index, key, value) {
         let items = Array.from(ingredients);
         items[index][key] = value;
         setIngredients(items);
     }
 
+    /**
+     * Remove an ingredient from the ingredients array
+     * @param index - the index of the ingredient to remove
+     */
     function removeIngredient(index) {
         let items = Array.from(ingredients);
         items.splice(index, 1);

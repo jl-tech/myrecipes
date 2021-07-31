@@ -1,3 +1,6 @@
+/*
+Component for the steps part of the recipe creation page
+ */
 import React, {useState} from 'react';
 
 import Form from 'react-bootstrap/Form';
@@ -10,9 +13,13 @@ import Reorder from './reorder_black_24dp.svg';
 
 
 function RecipeCreateStep({steps, setSteps}) {
-
+    // The number of steps in the list
     const [idCount, setIdCount] = useState(0);
 
+    /**
+      * Handles the event where the user lets go of the mouse after a drag
+      * @param e - the onDragEnd event
+      */
     function handleOnDragEnd(e) {
         if (e.destination == null) return;
         const items = Array.from(steps);
@@ -21,6 +28,9 @@ function RecipeCreateStep({steps, setSteps}) {
         setSteps(items);
     }
 
+    /*
+     * Adds another row (by appending an array element) for a new step.
+     */
     function addRow() {
         let items = Array.from(steps);
         items.push({
@@ -31,12 +41,22 @@ function RecipeCreateStep({steps, setSteps}) {
         setSteps(items);
     }
 
+    /**
+     * Changes an step in the steps array
+     * @param index - the index of the step to change
+     * @param key - the key of the step to change
+     * @param value - the new value of the step
+     */
     function updateStep(index, key, value) {
         let items = Array.from(steps);
         items[index][key] = value;
         setSteps(items);
     }
 
+    /**
+     * Remove an step from the steps array
+     * @param index - the index of the step to remove
+     */
     function removeStep(index) {
         let items = Array.from(steps);
         items.splice(index, 1);
@@ -57,7 +77,9 @@ function RecipeCreateStep({steps, setSteps}) {
                                                index={index}>
                                         {(provided) => (
                                             <ListGroup.Item as="li"
-                                                            ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
+                                                            ref={provided.innerRef}
+                                                                {...provided.draggableProps}
+                                                                {...provided.dragHandleProps} >
                                                 <Form.Row>
                                                     <Col sm={1}
                                                          className={"my-auto"}>
@@ -67,7 +89,8 @@ function RecipeCreateStep({steps, setSteps}) {
                                                                 style={{marginBottom: "0"}}>
                                                         <Form.Control
                                                             placeholder="Details"
-                                                            onChange={e => updateStep(index, "description", e.target.value)}
+                                                            onChange={e =>
+                                                                updateStep(index, "description", e.target.value)}
                                                             required/>
                                                     </Form.Group>
                                                     <Col sm={1}

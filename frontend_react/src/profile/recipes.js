@@ -1,3 +1,7 @@
+/*
+ Component providing the list of recipes/comments on the profile page
+ */
+
 import React, {useEffect, useState} from 'react';
 
 import Spinner from 'react-bootstrap/Spinner';
@@ -15,9 +19,16 @@ import ReactTimeAgo from "react-time-ago";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 
-
+/**
+ * Performs the API request for /profile/recipes and returns the result
+ * of that request.
+ * @throws The error if the API request was not successful.
+ * @param user_id - the userid of the recipes
+ * @returns {Promise<*>} The response from the server. null on failure.
+ */
 async function requestRecipes(user_id) {
-    let response = await fetch('http://localhost:5000/profile/recipes?' + new URLSearchParams({'user_id': user_id}), {
+    let response = await fetch('http://localhost:5000/profile/recipes?'
+        + new URLSearchParams({'user_id': user_id}), {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -32,8 +43,17 @@ async function requestRecipes(user_id) {
     else throw new Error(responseJson.error);
 }
 
+/**
+ * Performs the API request for /profile/liked and returns the result
+ * of that request.
+ * @throws The error if the API request was not successful.
+ * @param token - the token of the user requesting
+ * @param user_id - the userid of the recipes
+ * @returns {Promise<*>} The response from the server. null on failure.
+ */
 async function requestLikedRecipes(token, user_id) {
-    let response = await fetch('http://localhost:5000/profile/recipes/liked?' + new URLSearchParams({'user_id': user_id}), {
+    let response = await fetch('http://localhost:5000/profile/recipes/liked?'
+        + new URLSearchParams({'user_id': user_id}), {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -49,8 +69,17 @@ async function requestLikedRecipes(token, user_id) {
     else throw new Error(responseJson.error);
 }
 
+/**
+ * Performs the API request for /profile/profileuserliked and returns the result
+ * of that request.
+ * @throws The error if the API request was not successful.
+ * @param token - the token of the user requesting
+ * @param user_id - the userid of the recipes
+ * @returns {Promise<*>} The response from the server. null on failure.
+ */
 async function requestProfileUserLikedRecipes(token, user_id) {
-    let response = await fetch('http://localhost:5000/profile/recipes/profileuserliked?' + new URLSearchParams({'user_id': user_id}), {
+    let response = await fetch('http://localhost:5000/profile/recipes/profileuserliked?'
+        + new URLSearchParams({'user_id': user_id}), {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -65,8 +94,16 @@ async function requestProfileUserLikedRecipes(token, user_id) {
     else throw new Error(responseJson.error);
 }
 
-async function requestComments(token, user_id) {
-    let response = await fetch('http://localhost:5000/profile/comments?' + new URLSearchParams({'user_id': user_id}), {
+/**
+ * Performs the API request for /profile/comments and returns the result
+ * of that request.
+ * @throws The error if the API request was not successful.
+ * @param user_id - the userid to fetch comments for
+ * @returns {Promise<*>} The response from the server. null on failure.
+ */
+async function requestComments(user_id) {
+    let response = await fetch('http://localhost:5000/profile/comments?'
+        + new URLSearchParams({'user_id': user_id}), {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -83,14 +120,23 @@ async function requestComments(token, user_id) {
 
 
 function ProfileRecipes(props) {
+    // Recipe data for 'All Recipes'
     const [recipeData, setRecipeData] = useState([])
+    // Recipe data for 'Recipes You Liked'
     const [likedRecipeData, setLikedRecipeData] = useState([])
+    // Recipe data for 'Recipes They Liked'
     const [profileUserLikedRecipeData, setProfileUserLikedRecipeData] = useState([])
+    // Whether the API request has been fetched
     const [fetched, setFetched] = useState(false)
+    // Whether the API request succeeded
     const [success, setSuccess] = useState(false)
+    // The list of the user's comments
     const [comments, setComments] = useState([])
+    // To apply shadow effect on hover
     const [commentIndexHovered, setCommentIndexHovered] = useState(-1)
+    // Limits the shown comments to the specified number
     const [loadCommentsTo, setLoadCommentsTo] = useState(5)
+    // Current comments sort method, either 'newest' or 'oldest'
     const [currCommentSort, setCurrCommentSort] = useState("newest")
     const history = useHistory()
     const cookie = new Cookie();

@@ -1,3 +1,7 @@
+/*
+ Component providing the the recipe create page
+ */
+
 import React, {useState} from 'react';
 import {useHistory} from "react-router-dom";
 
@@ -15,7 +19,16 @@ import Button from 'react-bootstrap/esm/Button';
 import {Helmet} from "react-helmet-async";
 import {Collapse} from "react-bootstrap";
 
-async function createRecipe(token, name, type, time, serving, description, ingredients, steps, photos, photoNames) {
+/**
+ * Performs the API request for /profile/profileuserliked and returns the result
+ * of that request.
+ * @throws The error if the API request was not successful.
+ * @param token - the token of the user requesting
+ * @param user_id - the userid of the recipes
+ * @returns {Promise<*>} The response from the server. null on failure.
+*/
+async function createRecipe(token, name, type, time, serving, description,
+                            ingredients, steps, photos, photoNames) {
     let data = new FormData();
     data.append('name', name);
     data.append('type', type);
@@ -46,6 +59,7 @@ async function createRecipe(token, name, type, time, serving, description, ingre
 
 function RecipeCreate(props) {
 
+    // These store the values of the input fields
     const [name, setName] = useState(null);
     const [type, setType] = useState(null);
     const [time, setTime] = useState(null);
@@ -55,9 +69,12 @@ function RecipeCreate(props) {
     const [steps, setSteps] = useState([]);
     const [photos, setPhotos] = useState([]);
 
+    // Whether to show the error box
     const [errorShow, setErrorShow] = useState(false);
+    // The text to show in the error box
     const [errorText, setErrorText] = useState('');
 
+    // Whether the corresponding collapsible is opened or collapsed
     const [formDetailsOpen, setFormDetailsOpen] = useState(true)
     const [formIngredientsOpen, setFormIngredientsOpen] = useState(false)
     const [formDirectionsOpen, setFormDirectionsOpen] = useState(false)
@@ -67,6 +84,12 @@ function RecipeCreate(props) {
     const cookie = new Cookie();
     const history = useHistory();
 
+    /**
+     * Handles the pressing of the submit button by performing the API request
+     * for /profile/profileuserliked and returns the result of that request.
+     * @throws The error if the API request was not successful.
+     * @param event - the button click event
+     */
     async function handleSubmit(event) {
         event.preventDefault();
         collapseAll()
@@ -102,7 +125,9 @@ function RecipeCreate(props) {
             photosP.push(photo["image"]);
             photoNames.push(photo["name"])
         }
-        let response = await createRecipe(cookie.get('token'), name_, type, time, serving, description_, JSON.stringify(ingredientsP), JSON.stringify(stepsP), photosP, JSON.stringify(photoNames))
+        let response = await createRecipe(cookie.get('token'), name_, type,
+            time, serving, description_, JSON.stringify(ingredientsP),
+            JSON.stringify(stepsP), photosP, JSON.stringify(photoNames))
             .catch(e => {
                 setErrorShow(true);
                 setErrorText(e.message);
@@ -113,6 +138,9 @@ function RecipeCreate(props) {
         }
     }
 
+    /**
+     * Collapses all collapsibles
+     */
     function collapseAll() {
         setFormIngredientsOpen(false)
         setFormDetailsOpen(false)
@@ -120,6 +148,9 @@ function RecipeCreate(props) {
         setFormPhotosOpen(false)
     }
 
+    /**
+     * Shows all collapsibles
+     */
     function showAll() {
         setGuidedFormIsDone(true)
         setFormIngredientsOpen(true)
@@ -128,16 +159,25 @@ function RecipeCreate(props) {
         setFormPhotosOpen(true)
     }
 
+    /**
+     * Collapses all collapsibles and but shows the Ingredients collapsible
+     */
     function toIngredients() {
         collapseAll()
         setFormIngredientsOpen(true)
     }
 
+    /**
+     * Collapses all collapsibles and but shows the Directions collapsible
+     */
     function toDirections() {
         collapseAll()
         setFormDirectionsOpen(true)
     }
 
+    /**
+     * Collapses all collapsibles and but shows the Photos collapsible
+     */
     function toPhotos() {
         collapseAll()
         setFormPhotosOpen(true)
@@ -166,7 +206,9 @@ function RecipeCreate(props) {
                         all </a>
                     </div>
                     <a href="#"
-                       onClick={formDetailsOpen ? () => setFormDetailsOpen(false) : () => setFormDetailsOpen(true)}>
+                       onClick={formDetailsOpen ?
+                           () => setFormDetailsOpen(false) :
+                           () => setFormDetailsOpen(true)}>
                         <h4> {formDetailsOpen ? `▼ Details` : `▶ Details`}  </h4>
                     </a>
                     <Collapse in={formDetailsOpen}>
@@ -182,7 +224,9 @@ function RecipeCreate(props) {
                     </Collapse>
                     <br/>
                     <a href="#"
-                       onClick={formIngredientsOpen ? () => setFormIngredientsOpen(false) : () => setFormIngredientsOpen(true)}>
+                       onClick={formIngredientsOpen ?
+                           () => setFormIngredientsOpen(false) :
+                           () => setFormIngredientsOpen(true)}>
                         <h4> {formIngredientsOpen ? `▼ Ingredients` : `▶ Ingredients`}  </h4>
                     </a>
                     <Collapse in={formIngredientsOpen}>
@@ -196,7 +240,9 @@ function RecipeCreate(props) {
                     </Collapse>
                     <br/>
                     <a href="#"
-                       onClick={formDirectionsOpen ? () => setFormDirectionsOpen(false) : () => setFormDirectionsOpen(true)}>
+                       onClick={formDirectionsOpen ?
+                           () => setFormDirectionsOpen(false) :
+                           () => setFormDirectionsOpen(true)}>
                         <h4> {formDirectionsOpen ? `▼ Directions` : `▶ Directions`}  </h4>
                     </a>
                     <Collapse in={formDirectionsOpen}>
@@ -209,7 +255,9 @@ function RecipeCreate(props) {
                     </Collapse>
                     <br/>
                     <a href="#"
-                       onClick={formPhotosOpen ? () => setFormPhotosOpen(false) : () => setFormPhotosOpen(true)}>
+                       onClick={formPhotosOpen ?
+                           () => setFormPhotosOpen(false) :
+                           () => setFormPhotosOpen(true)}>
                         <h4> {formPhotosOpen ? `▼ Photos` : `▶ Photos`}  </h4>
                     </a>
                     <Collapse in={formPhotosOpen}>
@@ -225,9 +273,6 @@ function RecipeCreate(props) {
                     </Alert>
                     <Row style={{marginTop: "1em", textAlign: "center"}}>
                         <Col>
-                            {/* <Button variant="secondary" style={{color:"white", marginRight:"1em"}}>
-                            Cancel
-                        </Button> */}
                             <Button type="submit"
                                     variant={!guidedFormIsDone ? "outline-secondary" : "primary"}
                                     onClick={() => setFormDetailsOpen(true)}>

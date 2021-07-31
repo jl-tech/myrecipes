@@ -1,3 +1,9 @@
+/**
+ * Component providing description section for the recipe page, including the
+ * statistics table and the description.
+ * Also provides the 'edit photos' 'edit description' and 'delete recipe' options
+ */
+
 import React, {useState} from 'react';
 
 import Row from 'react-bootstrap/Row';
@@ -11,10 +17,23 @@ import ListGroup from "react-bootstrap/ListGroup";
 import Cookie from 'universal-cookie';
 
 import {EditPhoto} from './viewphoto.js';
-import RecipeDelete from "./delete.js";
+import RecipeDelete from "./viewdelete.js";
 import Dropdown from "react-bootstrap/Dropdown";
 import RecipeViewLikes from "./viewlikes";
 
+/**
+ * Performs the API request for /recipe/editdescription and returns the result
+ * of that request.
+ * @throws The error if the API request was not successful.
+ * @param token - the token of the user requesting
+ * @param recipe_id - the recipe_id of the recipe to edit
+ * @param name - the new name of the recipe
+ * @param type - the new type of the recipe
+ * @param time - the new time to cook for the recipe
+ * @param serving_size - the new serving size of the recipe
+ * @param description - the new description of the recipe
+ * @returns {Promise<*>} The response from the server. null on failure.
+*/
 async function requestEditDesc(token, recipe_id, name, type, time, serving_size, description) {
     let response = await fetch('http://localhost:5000/recipe/editdescription', {
         method: 'POST',
@@ -40,7 +59,11 @@ async function requestEditDesc(token, recipe_id, name, type, time, serving_size,
     else throw new Error(responseJson.error);
 }
 
+/**
+ * This is a component providing the modal popup for editing the description.
+ */
 function EditDesc(props) {
+    // Closes the 'Edit Description' modal popup (i.e. this)
     const editClose = () => {
         setSuccessShow(false);
         setErrorShow(false);
@@ -48,18 +71,27 @@ function EditDesc(props) {
         props.setChatbotVisible(true)
     }
 
+    // Stores the state of the fields in the description section
     const [name, setName] = useState(props.recipeName);
     const [type, setType] = useState(props.mealType);
     const [time, setTime] = useState(props.time);
     const [serving, setServing] = useState(props.serving);
     const [description, setDescription] = useState(props.description);
-    const [errorShow, setErrorShow] = useState(false);
-    const [errorText, setErrorText] = useState('');
 
+    // Whether to show the error box
+    const [errorShow, setErrorShow] = useState(false);
+    // The text to show in the error box
+    const [errorText, setErrorText] = useState('');
+    // Whether to show the success box
     const [successShow, setSuccessShow] = useState(false);
 
     const cookie = new Cookie();
 
+    /**
+     * Handles the pressing of the submit edit button by performing and awaiting
+     * the request to edit
+     * @param event: the onSubmit event
+     */
     async function handleSubmit(event) {
         event.preventDefault();
 
@@ -152,6 +184,9 @@ function EditDesc(props) {
     );
 }
 
+/**
+ * This is a component providing only the description block of the recipe
+ */
 export function RecipeViewDescription(props) {
     return (
         <>
@@ -173,29 +208,36 @@ export function RecipeViewDescription(props) {
     );
 }
 
-
+/**
+ * This is a component providing the entire description section of the recipe.
+ */
 function RecipeViewDesc(props) {
-
+    // Whether to show the edit modal
     const [showDescEdit, setShowDescEdit] = useState(false);
+    // Shows the edit modal
     const descEditShow = () => {
         setShowDescEdit(true);
         props.setChatbotVisible(false)
     }
 
+    // Whether to show the edit photos modal
     const [showPhotoEdit, setShowPhotoEdit] = useState(false);
     const photoEditShow = () => {
         setShowPhotoEdit(true);
         props.setChatbotVisible(false)
     }
 
+    // Whether to show the delete modal
     const [showDelete, setShowDelete] = useState(false);
     const deleteShow = () => {
         setShowDelete(true);
         props.setChatbotVisible(false)
     }
 
-    const [errorShow, setErrorShow] = useState(false)
-    const [errorText, setErrorText] = useState("Unknown error")
+    // Whether to show the error box
+    const [errorShow, setErrorShow] = useState(false);
+    // The text to show in the error box
+    const [errorText, setErrorText] = useState('');
 
 
     return (
@@ -227,7 +269,8 @@ function RecipeViewDesc(props) {
                                     <th style={{fontSize: "200%"}}> {props.time} </th>
                                     <th style={{fontSize: "200%"}}> {props.serving} </th>
                                     <th style={{fontSize: "200%"}}> {props.mealType} </th>
-                                    <th style={{fontSize: "200%"}}> {props.calories == null ? "N/A" : props.calories} </th>
+                                    <th style={{fontSize: "200%"}}> {props.calories == null ?
+                                        "N/A" : props.calories} </th>
                                 </tr>
                                 <tr>
                                     <td> MINS</td>

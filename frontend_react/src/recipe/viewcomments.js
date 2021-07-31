@@ -1,3 +1,6 @@
+/**
+ * Component providing the comments section of the recipe page.
+ */
 import React, {useState} from 'react';
 import Image from 'react-bootstrap/Image';
 import Row from 'react-bootstrap/Row';
@@ -11,6 +14,15 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import {Link, useHistory} from "react-router-dom";
 
+/**
+ * Performs the API request for /recipe/comment and returns the result
+ * of that request.
+ * @throws The error if the API request was not successful.
+ * @param token - the token of the user requesting
+ * @param recipe_id - the recipe_id of the recipe
+ * @param comment - the comment to post
+ * @returns {Promise<*>} The response from the server. null on failure.
+*/
 async function requestComment(token, recipe_id, comment) {
     let response = await fetch('http://localhost:5000/recipe/comment', {
         method: 'POST',
@@ -32,6 +44,14 @@ async function requestComment(token, recipe_id, comment) {
     else throw new Error(responseJson.error);
 }
 
+/**
+ * Performs the API request for /recipe/delete and returns the result
+ * of that request.
+ * @throws The error if the API request was not successful.
+ * @param token - the token of the user requesting
+ * @param comment_id - the comment id to delete
+ * @returns {Promise<*>} The response from the server. null on failure.
+*/
 async function requestCommentDelete(token, comment_id) {
     let response = await fetch('http://localhost:5000/recipe/comment/delete', {
         method: 'POST',
@@ -53,13 +73,22 @@ async function requestCommentDelete(token, comment_id) {
 }
 
 function RecipeViewComments(props) {
+    // The current value of the comment field
     const [comment, setComment] = useState('');
+    // Only show comments up to this value
     const [loadCommentsTo, setLoadCommentsTo] = useState(5)
+    // The current sort of the comments, either 'oldest' or 'newest'
     const [currSort, setCurrSort] = useState("oldest")
     const cookie = new Cookie();
     const history = useHistory()
 
-
+    /**
+     * Handles the pressing of the submit button by performing and awaiting the
+     * request for posting a comment.
+     * Updates the comments list accordingly
+     * @throws The error if the API request was not successful.
+     * @param e - the button click event
+     */
     async function handleSubmit(e) {
         e.preventDefault();
         setComment("")
@@ -73,6 +102,12 @@ function RecipeViewComments(props) {
         }
     }
 
+    /**
+     * Handles the pressing of the delete button by performing and awaiting the
+     * request for deleting a comment.
+     * Updates the comments list accordingly
+     * @param commentId - the comment id to delete
+     */
     async function handleDelete(commentId) {
         let response = await requestCommentDelete(cookie.get('token'), commentId)
             .catch(e => {
@@ -83,6 +118,10 @@ function RecipeViewComments(props) {
         }
     }
 
+    /**
+     * Changes the sort method.
+     * @param e - the onChange method for the dropdown
+     */
     function sortChange(e) {
         switch (e.target.value) {
             case "0":
@@ -123,7 +162,8 @@ function RecipeViewComments(props) {
                             <Col sm={11}>
                                 <Form.Control value={comment}
                                               placeholder="Leave a comment"
-                                              onChange={(e) => setComment(e.target.value)}
+                                              onChange={(e) =>
+                                                  setComment(e.target.value)}
                                               required/>
                             </Col>
                             <Col sm={1} style={{paddingLeft: "0"}}>

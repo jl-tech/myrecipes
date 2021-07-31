@@ -1,3 +1,8 @@
+/**
+ * Component providing the contributor section of the recipe page, which includes
+ * the contributor details and the creation/edit time.
+ */
+
 import React, {useState} from 'react';
 import {useHistory} from "react-router-dom";
 
@@ -8,6 +13,8 @@ import ReactTimeAgo from "react-time-ago";
 import Modal from "react-bootstrap/Modal";
 
 function RecipeViewContri(props) {
+    // Whether user is hovering over the profile, to support shadow effect
+    // on hover.
     const [hoveredProfile, setHoveredProfile] = useState(false)
     const history = useHistory()
     return (
@@ -67,7 +74,8 @@ function RecipeViewContri(props) {
                                   locale="en-US"/>
                     <br/>
                     <small className={"text-muted"}>
-                        {new Date(props.createdAt).toLocaleDateString('en-GB') + " " + new Date(props.createdAt).toLocaleTimeString('en-GB')}
+                        {new Date(props.createdAt).toLocaleDateString('en-GB') + " " +
+                        new Date(props.createdAt).toLocaleTimeString('en-GB')}
                     </small>
                 </Col>
             </Row>
@@ -83,7 +91,8 @@ function RecipeViewContri(props) {
                                           locale="en-US"/>
                             <br/>
                             <small className={"text-muted"}>
-                                {new Date(props.editedAt).toLocaleDateString('en-GB') + " " + new Date(props.editedAt).toLocaleTimeString('en-GB')}
+                                {new Date(props.editedAt).toLocaleDateString('en-GB') + " " +
+                                new Date(props.editedAt).toLocaleTimeString('en-GB')}
                             </small>
                         </Col>
                     </Row></> : <></>

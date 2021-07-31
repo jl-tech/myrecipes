@@ -1,3 +1,7 @@
+/*
+Component for the photos part of the recipe creation page
+ */
+
 import React, {useState} from 'react';
 import imageCompression from 'browser-image-compression';
 
@@ -16,14 +20,25 @@ import Reorder from './reorder_black_24dp.svg';
 
 
 function RecipeCreatePhoto({photos, setPhotos}) {
-
+    // The number of photos in the list
     const [idCount, setIdCount] = useState(0);
+
+
+    // Whether to show the error box
     const [errorShow, setErrorShow] = useState(false);
+    // The text to show in the error box
     const [errorText, setErrorText] = useState('');
+    // Whether the image is uploaded
     const [uploaded, setUploaded] = useState(false);
+    // The URL of the uploaded image
     const [url, setUrl] = useState('');
+    // The image object uploaded
     const [image, setImage] = useState(null);
 
+    /**
+      * Handles the event where the user lets go of the mouse after a drag
+      * @param e - the onDragEnd event
+      */
     function handleOnDragEnd(e) {
         if (e.destination == null) return;
         const items = Array.from(photos);
@@ -32,6 +47,9 @@ function RecipeCreatePhoto({photos, setPhotos}) {
         setPhotos(items);
     }
 
+    /*
+     * Adds another row (by appending an array element) for a new photo.
+     */
     function addRow() {
         if (!uploaded) {
             setErrorShow(true);
@@ -53,12 +71,22 @@ function RecipeCreatePhoto({photos, setPhotos}) {
         document.getElementById("file-upload").value = "";
     }
 
+    /**
+     * Remove a photo from the photos array
+     * @param index - the index of the photo to remove
+     */
     function removePhoto(index) {
         let items = Array.from(photos);
         items.splice(index, 1);
         setPhotos(items);
     }
 
+    /**
+     * Performs the upload of the image file and adds it to the image
+     * hook.
+     * @param event - the onChange event
+     * @returns {Promise<void>}
+     */
     async function handleImageUpload(event) {
         const imageFile = event.target.files[0];
         const options = {
@@ -99,7 +127,9 @@ function RecipeCreatePhoto({photos, setPhotos}) {
                                                index={index}>
                                         {(provided) => (
                                             <ListGroup.Item as="li"
-                                                            ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
+                                                            ref={provided.innerRef}
+                                                                {...provided.draggableProps}
+                                                                {...provided.dragHandleProps} >
                                                 <Row>
                                                     <Col sm={1}
                                                          className={"my-auto"}>

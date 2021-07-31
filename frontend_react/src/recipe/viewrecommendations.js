@@ -1,3 +1,6 @@
+/**
+ * Component providing the recommendations section on the recipe page.
+ */
 import React, {useState} from 'react';
 import Image from 'react-bootstrap/Image';
 import Row from 'react-bootstrap/Row';
@@ -10,10 +13,16 @@ import Card from "react-bootstrap/Card";
 import Comment from "../comment_black_24dp.svg";
 
 function RecipeViewRecommendations(props) {
-    const cookie = new Cookie();
+    // State to support shadow effect on hover
     const [hoveredRecipeId, setHoveredRecipeId] = useState(-1)
     const history = useHistory()
 
+    /**
+     * Generates each recipe card. Should be used in a map.
+     * @param recipe - the details of the recipe as a dict
+     * @param index - the index of the card
+     * @return the card as a react fragment
+     */
     function generateCard(recipe, index) {
         return (
             <div style={{padding: "1em"}} key={index}>
@@ -35,7 +44,9 @@ function RecipeViewRecommendations(props) {
                             height: "9vw",
                             objectFit: "cover"
                         }} alt="Recipe Image"
-                                  src={recipe.photo_path == null ? "http://127.0.0.1:5000/img/default_recipe.png" : "http://127.0.0.1:5000/img/" + recipe.photo_path}/>
+                                  src={recipe.photo_path == null ?
+                                      "http://127.0.0.1:5000/img/default_recipe.png" :
+                                      "http://127.0.0.1:5000/img/" + recipe.photo_path}/>
                         <Card.Body style={{textAlign: "center"}}>
                             <Card.Title
                                 className={"text-truncate"}>{recipe.name}</Card.Title>
@@ -43,7 +54,9 @@ function RecipeViewRecommendations(props) {
                                 height: "1.5em",
                                 textDecoration: 'none'
                             }} className="text-truncate">
-                                {recipe.description == null ? "No description available" : recipe.description}
+                                {recipe.description == null ?
+                                    "No description available" :
+                                    recipe.description}
                             </Card.Text>
                             <div style={{textAlign: "center"}}>
                                 <table style={{
@@ -57,7 +70,9 @@ function RecipeViewRecommendations(props) {
                                         <th style={{fontSize: "95%"}}> {recipe.time_to_cook} </th>
                                         <th style={{fontSize: "95%"}}> {recipe.serving_size} </th>
                                         <th style={{fontSize: "95%"}}> {recipe.type} </th>
-                                        <th style={{fontSize: "95%"}}> {recipe.calories == null ? "N/A" : recipe.calories}</th>
+                                        <th style={{fontSize: "95%"}}> {recipe.calories == null ?
+                                            "N/A" :
+                                            recipe.calories}</th>
                                     </tr>
                                     <tr>
                                         <td style={{fontSize: "80%"}}> MINS</td>
@@ -94,7 +109,8 @@ function RecipeViewRecommendations(props) {
                                             <Link
                                                 to={"/profile/" + recipe.user_id}>
                                                 <div
-                                                    onClick={(e) => e.stopPropagation()}> {recipe.first_name + " " + recipe.last_name}
+                                                    onClick={(e) => e.stopPropagation()}>
+                                                    {recipe.first_name + " " + recipe.last_name}
                                                     <br/></div>
                                             </Link>
                                         </Col>

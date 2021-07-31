@@ -570,7 +570,6 @@ def recipe_nutrition(recipe_id):
                       ingredients['ingredient_name']))
         all_ingredients += q + "\n"
     payload = {'query': all_ingredients}
-    print(all_ingredients)
     r = requests.post(url, headers=headers, json=payload)
 
     try:
@@ -601,7 +600,6 @@ def recipe_nutrition(recipe_id):
                                                                'nf_potassium'] is not None else 0
             nutrition['p'] += n['nf_p'] if n['nf_p'] is not None else 0
     except KeyError:
-        print(r)
         return -2
 
     for i in nutrition:
@@ -814,7 +812,6 @@ def get_recipe_recommendations(recipe_id):
 
     cur.execute(query, (name, name, int(recipe_id)))
     result = cur.fetchall()
-    print(len(result))
 
     if len(result) < 3:
         query = """

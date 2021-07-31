@@ -1,3 +1,8 @@
+/**
+ * Component providing ingredients section in the recipe page.
+ */
+
+
 import React, {useState} from 'react';
 import Alert from 'react-bootstrap/Alert';
 import Row from 'react-bootstrap/Row';
@@ -9,6 +14,14 @@ import ListGroup from "react-bootstrap/ListGroup";
 import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
 import Reorder from './reorder_black_24dp.svg';
 
+/**
+ * Performs the API request for /recipe/editingredients and returns the result
+ * of that request.
+ * @throws The error if the API request was not successful.
+ * @param token - the token of the user requesting
+ * @param recipe_id - the recipe_id of the recipe to edit ingredients for
+ * @param ingredients - an array of dicts containing the new ingredients
+*/
 async function requestEditIngredients(token, recipe_id, ingredients) {
     let response = await fetch('http://localhost:5000/recipe/editingredients', {
         method: 'POST',
@@ -31,18 +44,27 @@ async function requestEditIngredients(token, recipe_id, ingredients) {
 }
 
 function RecipeViewIngredient(props) {
-
+    // Whether edit mode is enabled
     const [editMode, setEditMode] = useState(false);
 
+    //The current ingredients
     const [ingredients, setIngredients] = useState([]);
+    // The current number of ingredients
     const [idCount, setIdCount] = useState(0);
 
+    // Whether to show the error box
     const [errorShow, setErrorShow] = useState(false);
+    // The text to show in the error box
     const [errorText, setErrorText] = useState('');
-
+    // Whether to show the success box
     const [successShow, setSuccessShow] = useState(false);
+
     const cookie = new Cookie();
 
+     /**
+      * Handles the event where the user lets go of the mouse after a drag
+      * @param e - the onDragEnd event
+      */
     function handleOnDragEnd(e) {
         if (e.destination == null) return;
         const items = Array.from(ingredients);
@@ -51,6 +73,9 @@ function RecipeViewIngredient(props) {
         setIngredients(items);
     }
 
+    /*
+     * Adds another row (by appending an array element) for a new ingredient.
+     */
     function addRow() {
         let items = Array.from(ingredients);
         items.push({
@@ -63,18 +88,31 @@ function RecipeViewIngredient(props) {
         setIngredients(items);
     }
 
+    /**
+     * Changes an ingredient in the ingredients array
+     * @param index - the index of the ingredient to change
+     * @param key - the key of the ingredient to change
+     * @param value - the new value of the ingredient
+     */
     function updateIngredient(index, key, value) {
         let items = Array.from(ingredients);
         items[index][key] = value;
         setIngredients(items);
     }
 
+    /**
+     * Remove an ingredient from the ingredients array
+     * @param index - the index of the ingredient to remove
+     */
     function removeIngredient(index) {
         let items = Array.from(ingredients);
         items.splice(index, 1);
         setIngredients(items);
     }
 
+    /**
+     * Helper function to convert array format
+     */
     function makeJson() {
         let ingredientsP = [];
         let idCountP = 0;
@@ -90,18 +128,29 @@ function RecipeViewIngredient(props) {
         return ingredientsP;
     }
 
+    /**
+     * Go into edit mode
+     */
     function showEditMode() {
         setIngredients(makeJson());
         setIdCount(props.ingredients.length);
         setEditMode(true);
     }
 
+    /**
+     * Exit edit mode
+     */
     function hideEditMode() {
         setErrorShow(false);
         setSuccessShow(false);
         setEditMode(false);
     }
 
+    /**
+     * Handles the pressing of the submit edit button by performing and awaiting
+     * the request to edit
+     * Updates state of the page accordingly or shows error as required.
+     */
     async function handleSubmit() {
         let ingredientsP = []
         for (let ingredient of ingredients) {
@@ -137,6 +186,7 @@ function RecipeViewIngredient(props) {
     }
 
     if (editMode && props.editable) {
+        // Editable, show edit button
         return (
             <>
                 <Row style={{marginTop: "1em"}}>
@@ -178,7 +228,9 @@ function RecipeViewIngredient(props) {
                                                            index={index}>
                                                     {(provided) => (
                                                         <ListGroup.Item as="li"
-                                                                        ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
+                                                                        ref={provided.innerRef}
+                                                                        {...provided.draggableProps}
+                                                                        {...provided.dragHandleProps} >
                                                             <Form.Row>
                                                                 <Col sm={1}
                                                                      className={"my-auto"}>
@@ -192,7 +244,8 @@ function RecipeViewIngredient(props) {
                                                                         placeholder="Quantity (if any)"
                                                                         type="number"
                                                                         step="any"
-                                                                        onChange={e => updateIngredient(index, "quantity", e.target.value)}
+                                                                        onChange={e =>
+                                                                            updateIngredient(index, "quantity", e.target.value)}
                                                                         defaultValue={quantity}/>
                                                                 </Form.Group>
                                                                 <Form.Group
@@ -201,7 +254,8 @@ function RecipeViewIngredient(props) {
                                                                     style={{marginBottom: "0"}}>
                                                                     <Form.Control
                                                                         placeholder="Unit (if any)"
-                                                                        onChange={e => updateIngredient(index, "unit", e.target.value)}
+                                                                        onChange={e =>
+                                                                            updateIngredient(index, "unit", e.target.value)}
                                                                         defaultValue={unit}/>
                                                                 </Form.Group>
                                                                 <Form.Group
@@ -211,7 +265,8 @@ function RecipeViewIngredient(props) {
                                                                     <Form.Control
                                                                         placeholder="Name"
                                                                         required
-                                                                        onChange={e => updateIngredient(index, "name", e.target.value)}
+                                                                        onChange={e =>
+                                                                            updateIngredient(index, "name", e.target.value)}
                                                                         defaultValue={name}/>
                                                                 </Form.Group>
                                                                 <Col sm={1}
@@ -219,7 +274,8 @@ function RecipeViewIngredient(props) {
                                                                     <button
                                                                         type="button"
                                                                         className="close"
-                                                                        onClick={() => removeIngredient(index)}>
+                                                                        onClick={() =>
+                                                                            removeIngredient(index)}>
                                                                         <span>×</span>
                                                                     </button>
                                                                     <img
@@ -248,6 +304,7 @@ function RecipeViewIngredient(props) {
             </>
         );
     } else {
+        // Not editable
         return (
             <>
 
@@ -282,8 +339,9 @@ function RecipeViewIngredient(props) {
                                     <Row>
                                         <Col sm={1}><Form.Check
                                             type="checkbox"/></Col>
-                                        <Col
-                                            sm={11}>{quantity != null ? quantity : ''} {unit != null ? unit : ''} {name}</Col>
+                                        <Col sm={11}>
+                                            {quantity != null ? quantity : ''} {unit != null ? unit : ''} {name}
+                                        </Col>
                                     </Row>
                                 </ListGroup.Item>
                             )}

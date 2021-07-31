@@ -23,7 +23,6 @@ def route_recipe_create():
                                   ingredients, steps, photos, photo_names,
                                   description)
     if recipe_id < 0:
-        print(recipe_id)
         response = jsonify({'error': 'Invalid token'})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400

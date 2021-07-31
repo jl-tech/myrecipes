@@ -44,9 +44,6 @@ def add_new_user(email, first_name, last_name, password):
     con.close()
     send_confirm_email(user_id['user_id'], email)
 
-    print(
-        f"INFO: Created new account: {email}, f: {first_name},"
-        f" l: {last_name}, p: {hashed_pwd}")
     return 0
 
 

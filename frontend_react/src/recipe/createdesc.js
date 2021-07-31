@@ -1,3 +1,6 @@
+/*
+Component for the description part of the recipe creation page
+ */
 import React from 'react';
 
 import Form from 'react-bootstrap/Form';

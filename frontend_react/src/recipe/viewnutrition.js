@@ -1,10 +1,21 @@
+/**
+ * Component providing nutrition section for the recipe page.
+ */
+
 import React, {useEffect, useState} from 'react';
 import Row from 'react-bootstrap/Row';
 import Image from "react-bootstrap/Image";
 import {Spinner, Table} from "react-bootstrap";
 
-async function requestNutrition(recipeId) {
-    let response = await fetch("http://localhost:5000/recipe/nutrition?" + new URLSearchParams({'recipe_id': recipeId}), {
+/**
+ * Performs the API request for /recipe/nutrition and returns the result
+ * of that request.
+ * @throws The error if the API request was not successful.
+ * @param recipe_id - the recipe id to check nutrition of
+ * @returns {Promise<*>} The response from the server. null on failure.
+*/
+async function requestNutrition(recipe_id) {
+    let response = await fetch("http://localhost:5000/recipe/nutrition?" + new URLSearchParams({'recipe_id': recipe_id}), {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -20,14 +31,17 @@ async function requestNutrition(recipeId) {
 }
 
 function RecipeViewNutri(props) {
+    // The nutrition info dict
     const [nutritionData, setNutritionData] = useState({})
+    // Fetch status of nutrition
     const [fetched, setFetched] = useState(false)
     const [success, setSuccess] = useState(false)
+    // Whether a failure was incurred by the Nutritionix API
     const [failNutritionix, setFailNutritionix] = useState(false)
 
     /**
-     * Calls and awaits for the API request function and sets the component state
-     * based on the response.
+     * Calls and awaits for the nutrition request function and sets the nutrition
+     * state based on the response.
      */
     async function processNutrition() {
         let response = await requestNutrition(props.recipeId)
@@ -47,19 +61,20 @@ function RecipeViewNutri(props) {
     }, []);
 
     if (!success) {
+        // Did not succeed
         return (
             failNutritionix ?
+                // Did not succeed because of Nutritionix
                 <>
                     <h5 style={{textAlign: "center"}}> Nutritional Info </h5>
                     <p style={{textAlign: "center"}}> per serving</p>
-                    <small style={{textAlign: "center"}}> powered by
-                        Nutritionix </small>
                     <p style={{textAlign: "center"}}>
                         Failed to fetch nutrition. Try again later. <br/>
                         <small> Is the API limit exceeded? </small>
                     </p>
                 </>
                 :
+                // Did not succeed because of our end
                 <>
                     <h5 style={{textAlign: "center"}}> Nutritional Info </h5>
                     <p style={{textAlign: "center"}}> per serving</p>
@@ -77,6 +92,7 @@ function RecipeViewNutri(props) {
                 </>
         )
     } else {
+        // Success
         return (
             <>
                 <h5 style={{textAlign: "center"}}> Nutritional Info </h5>

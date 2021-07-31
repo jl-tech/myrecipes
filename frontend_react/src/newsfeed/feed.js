@@ -187,7 +187,10 @@ function Feed() {
 
 
     /**
-     * Generates each recipe card
+     * Generates each recipe card. Should be used in a map.
+     * @param recipe - the details of the recipe as a dict
+     * @param index - the index of the card
+     * @return the card as a react fragment
      */
     function generateCard(recipe, index) {
         if (hideRecommended && recipe.recommended) {

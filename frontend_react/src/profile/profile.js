@@ -1,3 +1,7 @@
+/*
+ Component providing the profile page
+ */
+
 import React, {useEffect, useState} from 'react';
 import {Link, useHistory, useParams} from "react-router-dom";
 
@@ -17,8 +21,17 @@ import Subscribers from '../newsfeed/subscribers.js';
 import Subscriptions from '../newsfeed/subscriptions.js';
 import Cookie from 'universal-cookie';
 
+/**
+ * Performs the API request for /profile/view and returns the result
+ * of that request.
+ * @throws The error if the API request was not successful.
+ * @param token - the token of the user fetching the newsfeed
+ * @param userid - the userid of the profile to view
+ * @returns {Promise<*>} The response from the server. null on failure.
+ */
 async function profileUser(token, userid) {
-    let response = await fetch('http://localhost:5000/profile/view?' + new URLSearchParams({'user_id': userid}), {
+    let response = await fetch('http://localhost:5000/profile/view?' +
+        new URLSearchParams({'user_id': userid}), {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -41,15 +54,20 @@ function Profile(props) {
     // Whether the API request was completed with a 200 return code indicating success.
     const [success, setSuccess] = useState(false);
 
+    // The the fields in the profile page
     const [firstName, setfirstName] = useState('');
     const [lastName, setlastName] = useState('');
     const [recipeCount, setRecipeCount] = useState(0);
     const [subscribers, setSubscribers] = useState([]);
     const [subscriptions, setSubscriptions] = useState([]);
     const [email, setEmail] = useState('');
+    // The url to the profile picture
     const [imgUrl, setImgUrl] = useState('');
+    // Button type that changes based on whether user logged in
     const [buttonType, setButtonType] = useState(0);
+    // Whether to show the spinner
     const [showSpinner, setShowSpinner] = useState(true)
+
     let {id} = useParams();
     id = id == null ? props.currId : id;
     const history = useHistory();

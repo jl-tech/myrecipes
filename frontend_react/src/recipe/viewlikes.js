@@ -1,3 +1,7 @@
+/**
+ * Component providing the like button and like count on the recipe page.
+ */
+
 import React, {useEffect, useState} from "react";
 import Cookie from "universal-cookie";
 import Image from "react-bootstrap/Image";
@@ -5,6 +9,13 @@ import Liked from "../Like.png";
 import NotLiked from "../NotLiked.svg";
 import Row from "react-bootstrap/Row";
 
+/**
+ * Performs the API request for /recipe/like and returns the result
+ * of that request.
+ * @throws The error if the API request was not successful.
+ * @param token - the token of the user requesting
+ * @param recipe_id - the recipe_id of the recipe to like
+*/
 async function requestLike(recipe_id, token) {
     let response = await fetch('http://localhost:5000/recipe/like', {
         method: 'POST',
@@ -25,6 +36,13 @@ async function requestLike(recipe_id, token) {
     else throw new Error(responseJson.error);
 }
 
+/**
+ * Performs the API request for /recipe/isliked and returns the result
+ * of that request.
+ * @throws The error if the API request was not successful.
+ * @param token - the token of the user requesting
+ * @param recipe_id - the recipe_id of the recipe to check whether the user liked
+*/
 async function getLikedStatus(recipe_id, token) {
     let response = await fetch('http://localhost:5000/recipe/is_liked?' + new URLSearchParams({'recipe_id': recipe_id}), {
         method: 'GET',
@@ -43,10 +61,14 @@ async function getLikedStatus(recipe_id, token) {
 }
 
 function RecipeViewLikes(props) {
+    // Whether this recipe has been liked
     const [liked, setLiked] = useState(false)
+
+    // Fetch status of the number of likles
     const [likeFetched, setLikeFetched] = useState(false)
     const [likeSuccess, setLikeSuccess] = useState(false)
-    const [likeHovered, setLikeHovered] = useState(false)
+
+    // Whether the like button is currently being clicked (to support like animation)
     const [likeClicked, setLikeClicked] = useState(false)
 
     const cookie = new Cookie();
@@ -57,7 +79,7 @@ function RecipeViewLikes(props) {
     }
 
     /**
-     * Calls and awaits for the API request function and sets the component state
+     * Calls and awaits for the liked request function and sets the component state
      * based on the response.
      */
     async function processLiked() {
@@ -74,7 +96,10 @@ function RecipeViewLikes(props) {
         setLikeFetched(true);
     }
 
-
+    /**
+     * Handles the clicking of like by awaiting on the request like function.
+     * Updates the like count accordingly.
+     */
     async function handleLike() {
         let response = await requestLike(props.recipeId, cookie.get('token'))
             .catch(e => {
@@ -113,7 +138,8 @@ function RecipeViewLikes(props) {
                     onMouseDown={props.loggedIn ? () => setLikeClicked(true) : null}
                     onMouseUp={props.loggedIn ? () => setLikeClicked(false) : null}
                     src={liked ? Liked : NotLiked}
-                    onClick={props.loggedIn ? () => handleLike() : () => showError("Log in to like this recipe")}
+                    onClick={props.loggedIn ? () => handleLike() : () =>
+                        showError("Log in to like this recipe")}
                 />
             </Row>
             <Row style={{textAlign: "center", justifyContent: "center"}}

@@ -1,3 +1,6 @@
+/**
+ * Component which provides the recipe page.
+ */
 import React, {useEffect, useState} from 'react';
 import {Link, useHistory, useParams} from "react-router-dom";
 
@@ -40,16 +43,17 @@ function RecipeView(props) {
     // Whether the API request was completed with a 200 return code indicating success.
     const [success, setSuccess] = useState(false);
 
+    // Stores state of recipe related fields
     const [photos, setPhotos] = useState('');
     const [createdAt, setCreatedAt] = useState('');
     const [editedAt, setEditedAt] = useState(null);
-
     const [recipeName, setRecipeName] = useState('');
     const [serving, setServing] = useState('');
     const [time, setTime] = useState('');
     const [mealType, setMealType] = useState('');
     const [description, setDescription] = useState('');
 
+    // Stores state of recipe's contributor related fields
     const [contributorUID, setContributorUID] = useState('');
     const [userImgURL, setUserImageURL] = useState('');
     const [firstName, setFirstName] = useState('');
@@ -63,10 +67,12 @@ function RecipeView(props) {
     const [contributorRecipes, setContributorRecipes] = useState(0)
     const [contributorSubscribers, setContributorSubscribers] = useState(0)
 
+    // Whether this recipe is editable. This recipe is editable iff the user
+    // has created this recipe
     const [editable, setEditable] = useState(false);
-
+    // Whether this recipe has been deleted
     const [deleted, setDeleted] = useState(false);
-
+    // Whether to show the spinner
     const [spinnerVisible, setSpinnerVisible] = useState(true)
 
     let {id} = useParams();
@@ -160,6 +166,7 @@ function RecipeView(props) {
 
     if (success) {
         if (!deleted) {
+            // Recipe was fetched successfully and not deleted
             return (
                 <>
                     <Helmet>
@@ -224,6 +231,7 @@ function RecipeView(props) {
                 </>
             );
         } else {
+            // Recipe was deleted by the user
             return (
                 <Modal.Dialog>
                     <Modal.Body>
@@ -239,7 +247,9 @@ function RecipeView(props) {
             );
         }
     } else {
+        // Success not done yet
         if (spinnerVisible === true) {
+            // Still loading
             return (
                 <div style={{textAlign: "center"}}>
                     <br/>
@@ -247,11 +257,13 @@ function RecipeView(props) {
                 </div>
             )
         } else {
+            // Load complete but was unsuccessful. Show error.
             return (
                 <Modal.Dialog>
                     <Modal.Body>
                         <div style={{textAlign: "center"}}>
-                            That recipe could not be found. <br/>
+                            Either that recipe could not be found or we
+                            encountered an error.<br/>
                             <Link to="/" style={{marginTop: "1em"}}>
                                 <Button>Return</Button>
                             </Link>

@@ -1,3 +1,8 @@
+/**
+ * Component providing photos carousel for the recipe page
+ * Also, a component providing the edit photos modal
+ */
+
 import React, {useState} from 'react';
 import imageCompression from 'browser-image-compression';
 
@@ -16,6 +21,16 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
 import Reorder from './reorder_black_24dp.svg';
 
+/**
+ * Performs the API request for /recipe/editphotos and returns the result
+ * of that request.
+ * @throws The error if the API request was not successful.
+ * @param token - the token of the user requesting
+ * @param recipe_id - the recipe_id of the recipe to edit
+ * @param photos - new array of photos objects
+ * @param names - array of names corresponding to each photo (file names)
+ * @returns {Promise<*>} The response from the server. null on failure.
+*/
 async function requestEditPhotos(token, recipe_id, photos, names) {
     let data = new FormData()
     data.append('recipe_id', recipe_id)
@@ -38,6 +53,9 @@ async function requestEditPhotos(token, recipe_id, photos, names) {
     else throw new Error(responseJson.error);
 }
 
+/**
+ * Edit photos modal
+ */
 export function EditPhoto(props) {
     const editClose = () => {
         props.setShowPhotoEdit(false);
@@ -46,17 +64,26 @@ export function EditPhoto(props) {
         setUploaded(false);
         setImage(null);
     }
+
+    // The following relates whether to show the error/success boxes and what to
+    // show in them
     const [errorShow, setErrorShow] = useState(false);
     const [errorText, setErrorText] = useState('');
     const [errorShow2, setErrorShow2] = useState(false);
     const [errorText2, setErrorText2] = useState('');
     const [successShow, setSuccessShow] = useState(false);
 
+    // Whether the image is uploaded
     const [uploaded, setUploaded] = useState(false);
+    // The URL of the uploaded image
     const [url, setUrl] = useState('');
+    // The image object uploaded
     const [image, setImage] = useState(null);
     const cookie = new Cookie();
 
+    /**
+     * Helper function to convert array format
+     */
     function makeJson() {
         let photosP = [];
         let idCountP = 0;
@@ -72,9 +99,15 @@ export function EditPhoto(props) {
         return photosP;
     }
 
+    // List of photos
     const [photos, setPhotos] = useState(makeJson());
+    // Number of photos
     const [idCount, setIdCount] = useState(photos.length);
 
+    /**
+      * Handles the event where the user lets go of the mouse after a drag
+      * @param e - the onDragEnd event
+      */
     function handleOnDragEnd(e) {
         if (e.destination == null) return;
         const items = Array.from(photos);
@@ -83,6 +116,9 @@ export function EditPhoto(props) {
         setPhotos(items);
     }
 
+    /*
+     * Adds another row (by appending an array element) for a new photo.
+     */
     function addRow() {
         if (!uploaded) {
             setErrorShow(true);
@@ -104,12 +140,22 @@ export function EditPhoto(props) {
         document.getElementById("file-upload").value = "";
     }
 
+    /**
+     * Remove a photo from the photos array
+     * @param index - the index of the photo to remove
+     */
     function removePhoto(index) {
         let items = Array.from(photos);
         items.splice(index, 1);
         setPhotos(items);
     }
 
+    /**
+     * Performs the upload of the image file and adds it to the image
+     * hook.
+     * @param event - the onChange event
+     * @returns {Promise<void>}
+     */
     async function handleImageUpload(event) {
         const imageFile = event.target.files[0];
         const options = {
@@ -136,6 +182,11 @@ export function EditPhoto(props) {
         });
     }
 
+    /**
+     * Handles the pressing of the submit edit button by performing and awaiting
+     * the request to edit
+     * Updates state of the page accordingly or shows error as required.
+     */
     async function handleSubmit() {
         let images = []
         let names = []
@@ -187,7 +238,9 @@ export function EditPhoto(props) {
                                                    index={index}>
                                             {(provided) => (
                                                 <ListGroup.Item as="li"
-                                                                ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
+                                                                ref={provided.innerRef}
+                                                                {...provided.draggableProps}
+                                                                {...provided.dragHandleProps} >
                                                     <Row>
                                                         <Col sm={2}
                                                              className={"my-auto"}>
@@ -270,6 +323,9 @@ export function EditPhoto(props) {
     );
 }
 
+/**
+ * Photos carousel component
+ */
 function RecipeViewPhoto(props) {
     return (
         <>

@@ -1,3 +1,6 @@
+/*
+   Reusable component providing a list of recipes in a card format
+ */
 import React, {useEffect, useState} from 'react';
 import {Link, useHistory, useLocation} from "react-router-dom";
 
@@ -16,7 +19,10 @@ import Slider from '@material-ui/core/Slider';
 
 
 function RecipeList(props) {
+    // The recipe data as an array of dicts. Pass in as a required prop.
     const [recipeData, setRecipeData] = useState(props.recipeData);
+
+    // Filtering state
     const [recipeDataFiltered, setRecipeDataFiltered] = useState(props.recipeData);
     const [mealFilters, setMealFilters] = useState(initMealFilters());
     const [activeMealFilter, setActiveMealFilter] = useState([]);
@@ -26,12 +32,23 @@ function RecipeList(props) {
     const [activeTimeFilters, setActiveTimeFilters] = useState([Math.min(...timeFilters), Math.max(...timeFilters)]);
     const [calorieFilters, setCalorieFilters] = useState(initCalorieFilters());
     const [activeCalorieFilters, setActiveCalorieFilters] = useState([Math.min(...calorieFilters), Math.max(...calorieFilters)]);
+
+    // Active page state
     const [activePage, setActivePage] = useState(0);
+    // State to support shadow effect on hover
     const [hoveredRecipeId, setHoveredRecipeId] = useState(-1)
+    // Some features of this component differ when on a search page
     const isSearchPage = useLocation().pathname.includes('/search')
+    // Adjust to increase/decrease number of recipes per page
     const recipesPerPage = 4;
     const history = useHistory();
 
+    /**
+     * Generates each recipe card. Should be used in a map.
+     * @param recipe - the details of the recipe as a dict
+     * @param index - the index of the card
+     * @return the card as a react fragment
+     */
     function generateCard(recipe, index) {
         return (
             <div style={{padding: "1em"}} key={index}>
@@ -152,6 +169,10 @@ function RecipeList(props) {
         )
     }
 
+    /**
+     * Initialises the meal filters.
+     * @returns {any[]}
+     */
     function initMealFilters() {
         let tempSet = new Set();
         for (let i of props.recipeData) {
@@ -163,6 +184,12 @@ function RecipeList(props) {
         });
     }
 
+    /**
+     * Toggles the meal filter specified on/off
+     * @param type the type of meal
+     * @param checked whether that filter is currently checked (on/off)
+     * @returns {any[]}
+     */
     function toggleMealFilter(type, checked) {
         let tempArray = Array.from(activeMealFilter);
         if (checked) {
@@ -173,6 +200,10 @@ function RecipeList(props) {
         setActiveMealFilter(tempArray);
     }
 
+    /**
+     * Initialises the serving filters.
+     * @returns {any[]}
+     */
     function initServingFilters() {
         let tempSet = new Set();
         for (let i of props.recipeData) {
@@ -181,6 +212,10 @@ function RecipeList(props) {
         return Array.from(tempSet).sort();
     }
 
+    /**
+     * Initialises the time to cook filters.
+     * @returns {any[]}
+     */
     function initTimeFilters() {
         let tempSet = new Set();
         for (let i of props.recipeData) {
@@ -189,6 +224,10 @@ function RecipeList(props) {
         return Array.from(tempSet).sort();
     }
 
+    /**
+     * Initialises the calorie filters.
+     * @returns {any[]}
+     */
     function initCalorieFilters() {
         let tempSet = new Set();
         for (let i of props.recipeData) {
@@ -197,6 +236,10 @@ function RecipeList(props) {
         return Array.from(tempSet).sort();
     }
 
+    /**
+     * Filters the recipes in the list based on the state of the filter hooks.
+     * @returns {any[]}
+     */
     function filterRecipes() {
         let tempArray = Array.from(recipeData);
         if (activeMealFilter.length !== 0) {
@@ -219,6 +262,9 @@ function RecipeList(props) {
         }
     }
 
+    /**
+     * Clears all filters, i.e. sets the filter hooks to default.
+     */
     function clearFilters() {
         setActiveMealFilter([]);
         setActiveServingFilters([Math.min(...servingFilters), Math.max(...servingFilters)]);
@@ -230,6 +276,11 @@ function RecipeList(props) {
         }
     }
 
+    /**
+     * Comparator function which sorts based on the given key
+     * @param key - the key to sort with, must be 'creation_time', 'edit_time'
+     * or other for a simple ordered sorting.
+     */
     function sortComparator(key) {
         return function (a, b) {
             switch (key) {
@@ -256,6 +307,10 @@ function RecipeList(props) {
         }
     }
 
+    /**
+     * Handles the event where sorting is changed
+     * @param e: the onChange event
+     */
     function sortChange(e) {
         let key = "creation_time";
         switch (e.target.value) {
