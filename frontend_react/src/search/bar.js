@@ -1,3 +1,7 @@
+/**
+ * A reusable search bar component providing search field and search history.
+ */
+
 import React, {useEffect, useState} from 'react';
 
 import Row from 'react-bootstrap/Row';
@@ -17,6 +21,12 @@ import SearchIconBig from "../search_white_24dp.svg";
 import SearchIconSmall from "../search_white_18dp.svg";
 
 
+/**
+ * Performs the API request for /search/history and returns the result.
+ * @throws The error if the API request was not successful.
+ * @param token - the token of the user requesting search history
+ * @returns {Promise<*>} The response from the server. null on failure.
+*/
 async function getHistory(token) {
     let response = await fetch('http://localhost:5000/search/history', {
         method: 'GET',
@@ -34,6 +44,14 @@ async function getHistory(token) {
     else throw new Error(responseJson.error);
 }
 
+/**
+ * Performs the API request for /search/history/remove and returns the result.
+ * @throws The error if the API request was not successful.
+ * @param token - the token of the user requesting search history
+ * @param search_term - the term to remove
+ * @param time - the time the history item was added
+ * @returns {Promise<*>} The response from the server. null on failure.
+*/
 async function requestDeleteHistory(search_term, time, token) {
     let response = await fetch('http://localhost:5000/search/history/remove', {
         method: 'DELETE',
@@ -58,9 +76,13 @@ async function requestDeleteHistory(search_term, time, token) {
 
 function SearchBar(props) {
     const history = useHistory()
+    // The list of search history terms as {term, timestamp}
     const [searchHistoryTerms, setSearchHistoryTerms] = useState([])
+    // Whether the history has been fetched
     const [historyFetched, setHistoryFetched] = useState(false)
+    // Whether the history/suggestions pane should be opened (opened on focus)
     const [showSuggestions, setShowSuggestions] = useState(false)
+    // Whether the search bar is hovered (to support shadow effect)
     const [isHovered, setIsHovered] = useState(false)
     const cookie = new Cookie()
     const searchInput = React.createRef();
@@ -83,7 +105,7 @@ function SearchBar(props) {
     }
 
     /**
-     * Calls and awaits for the API request function and sets the component state
+     * Calls and awaits for the history request function and sets the component state
      * based on the response.
      */
     async function processHistory() {
@@ -98,11 +120,15 @@ function SearchBar(props) {
         setHistoryFetched(true);
     }
 
+     /**
+     * Calls and awaits for the remove history function and sets the component state
+     * based on the response.
+     */
     function handleRemoveHistory(elementToRemove) {
         let temp = searchHistoryTerms
         temp.splice(searchHistoryTerms.indexOf(elementToRemove), 1)
         setSearchHistoryTerms(temp)
-        let response = requestDeleteHistory(elementToRemove.search_term, elementToRemove.time, cookie.get('token'))
+        requestDeleteHistory(elementToRemove.search_term, elementToRemove.time, cookie.get('token'))
             .catch(e => {
 
             });
@@ -178,7 +204,8 @@ function SearchBar(props) {
                                        </Row>
                                    </React.Fragment>)
                            }}
-                           emptyLabel={props.loggedIn ? "No related history" : "Log in to view search history"}/>
+                           emptyLabel={props.loggedIn ? "No related history" :
+                               "Log in to view search history"}/>
                 <InputGroup.Append>
                     <Button type="submit" size="sm" variant="primary"
                             disabled={props.disabled}>

@@ -1,3 +1,7 @@
+/**
+ * Component providing advanced search
+ */
+
 import Form from "react-bootstrap/Form";
 import React, {useState} from "react";
 import {useHistory, useLocation} from "react-router-dom";
@@ -12,6 +16,8 @@ function useQuery() {
 function SearchAdvanced(props) {
     const history = useHistory()
     let query = useQuery();
+
+    // The state of the various text fields
     const [name, setName] = useState(query.get('name'));
     const [serving, setServing] = useState(query.get('serving'));
     const [time, setTime] = useState(query.get('time'));
@@ -19,12 +25,21 @@ function SearchAdvanced(props) {
     const [ingredient, setIngredient] = useState(query.get('ingredient'));
     const [step, setStep] = useState(query.get('step'));
 
+    /**
+     * Checks whether the current type state is a valid type.
+     * @returns {string|string} The type if a valid type. Empty string otherwise.
+     */
     function validateType() {
         let type = query.get('type');
         let validTypes = ["", "Breakfast", "Brunch", "Lunch", "Dinner", "Snack"];
         return validTypes.includes(type) ? type : "";
     }
 
+    /**
+     * Handles pressing the search button by generating the correct search URL
+     * with the correct parameters
+     * @param event - the onClick event
+     */
     function handleSubmit(event) {
         event.preventDefault()
         let url = '';

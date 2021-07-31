@@ -1,3 +1,6 @@
+/**
+ * Component providing the search results page.
+ */
 import React, {useEffect, useState} from 'react';
 
 import Row from 'react-bootstrap/Row';
@@ -15,6 +18,18 @@ import SearchAdvanced from './advanced.js';
 import {Helmet} from "react-helmet-async";
 import {Collapse} from "@material-ui/core";
 
+/**
+ * Performs the API request for /search and returns the result.
+ * @throws The error if the API request was not successful.
+ * @param token - the token of the user requesting the search
+ * @param name_keywords - the name keywords for the search
+ * @param type - the type specified
+ * @param serving_size - the serving size specified
+ * @param time_to_cook - the time to cook specified
+ * @param ingredients - the ingredients specified
+ * @param step_keywords - the step keywords specified
+ * @returns {Promise<*>} The response from the server. null on failure.
+*/
 async function requestRecipes(token, name_keywords, type, serving_size, time_to_cook, ingredients, step_keywords) {
     let response = await fetch('http://localhost:5000/search/', {
         method: 'POST',
@@ -45,22 +60,35 @@ function useQuery() {
 }
 
 function SearchResults(props) {
+    // The recipe data of the search results
     const [recipeData, setRecipeData] = useState([])
+    // Fetch status of search results
     const [fetched, setFetched] = useState(false)
+    // Whether error box should be shown
     const [errorShow, setErrorShow] = useState(false)
+    // Whether success box should be shown
     const [success, setSuccess] = useState(false)
     const cookie = new Cookie();
     let query = useQuery();
     const [advancedMode, setAdvancedMode] = useState(initAdvanced());
 
+    /**
+     * Checks whether the current type state is a valid type.
+     * @returns {string|string} The type if a valid type. Empty string otherwise.
+     */
     function validateType() {
         let type = query.get('type');
         let validTypes = ["Breakfast", "Brunch", "Lunch", "Dinner", "Snack"];
         return validTypes.includes(type) ? type : null;
     }
 
+    /**
+     * Checks whether the current URL suggests that advanced search is activated
+     * @returns whether advanced search is active
+     */
     function initAdvanced() {
-        if (validateType() != null || query.get('serving') != null || query.get('ingredient') != null || query.get('step') != null) {
+        if (validateType() != null || query.get('serving') != null ||
+            query.get('ingredient') != null || query.get('step') != null) {
             return true;
         }
         return false;
@@ -68,12 +96,14 @@ function SearchResults(props) {
 
 
     /**
-     * Calls and awaits for the API request function and sets the component state
+     * Calls and awaits for the search request function and sets the component state
      * based on the response.
      */
     async function processQuery() {
         let type = validateType();
-        let response = await requestRecipes(cookie.get('token'), query.get('name'), type, query.get('serving'), query.get('time'), query.get('ingredient'), query.get('step'))
+        let response = await requestRecipes(cookie.get('token'),
+            query.get('name'), type, query.get('serving'), query.get('time'),
+            query.get('ingredient'), query.get('step'))
             .catch(e => {
             });
 
@@ -91,7 +121,8 @@ function SearchResults(props) {
         return (
             <>
                 <Helmet>
-                    <title> {query.get('name') != null ? `'${query.get('name')}': Search Results` : 'Browse All Recipes'} -
+                    <title> {query.get('name') != null ? `'${query.get('name')}': Search Results`
+                        : 'Browse All Recipes'} -
                         MyRecipes </title>
                 </Helmet>
                 <Container style={{marginTop: "1em", marginBottom: "2em"}}>
@@ -113,7 +144,8 @@ function SearchResults(props) {
                                 <a href="#" style={{float: "right"}}
                                    onClick={() => {
                                        setAdvancedMode(!advancedMode)
-                                   }}> {advancedMode ? "Hide advanced options" : "Show advanced options"}</a>
+                                   }}> {advancedMode ? "Hide advanced options" :
+                                    "Show advanced options"}</a>
                             </div>
                         </Col>
                     </Row>

@@ -111,6 +111,12 @@ def do_search(name, type, serving_size, time_to_cook, ingredients,
     if isinstance(results, tuple):
         results = []
 
+    ## End search results now if this is an advanced search
+    if type is not None or serving_size is not None or time_to_cook is not None\
+        or ingredients is not None or step_key_words is not None:
+        con.close()
+        return results
+
     ## Stage 2: include name matches for ingredients
     # Sorts by number of ingredients which contain the name
     if name is not None:
@@ -176,7 +182,6 @@ def do_search(name, type, serving_size, time_to_cook, ingredients,
                         break
                 if is_not_duplicate:
                     results.append(result)
-
     return results
 
 
