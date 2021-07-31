@@ -1,3 +1,8 @@
+"""
+This file contains functions associated with viewing, creating, and modifying
+recipes.
+"""
+
 import os
 
 import requests
@@ -12,16 +17,16 @@ def add_recipe(token, name, type, time, serving_size, ingredients, steps,
                photos, photo_names, description):
     '''
     Adds a recipe to the database.
-    :param token:
-    :param name:
-    :param type:
-    :param time:
-    :param serving_size:
+    :param token: the token of the user creating recipe
+    :param name: name of the recipe
+    :param type: type of the recipe
+    :param time: time to cook for recipe
+    :param serving_size: serving size of recipe
     :param ingredients: Array of dictionaries of the form with fields name,
     quantity, unit
-    :param steps: Array of text
-    :param photos: Array of files
-    :param photo_names: Array of file names
+    :param steps: Array of text - list of steps
+    :param photos: Array of files - list of photos
+    :param photo_names: Array of file names - list of photo names
     :param description: recipe description
     :returns:
     '''
@@ -98,19 +103,7 @@ def get_recipe_details(recipe_id):
     '''
     Gets details of a recipe.
     :param recipe_id: the recipe id to get details of
-    :returns: Dictionary with fields:
-        - name: string
-        - creation_time: string
-        - edit_time: string, null if not edited
-        - contributor_user_id: integer
-        - type: string
-        - time_to_cook: integer
-        - serving_size: integer
-        - ingredients: array of dictionaries (dict has keys  name, quantity,
-        unit)
-        - steps: array of strings
-        - photos: array of strings (corresponding to path of image)
-        -1 if the recipe id was invalid
+    :returns: Dictionary with every field in Recipes and Users
     '''
     con = helpers.get_db_conn()
     cur = con.cursor()
@@ -203,7 +196,7 @@ def edit_recipe_description(token, recipe_id, name, type, time, serving_size,
                             description):
     '''
     edit given recipe's description
-    :param token:
+    :param token: the token of the user executing the edit
     :param recipe_id: recipe's id in database
     :param name: new recipe's name
     :param type: new recipe's type
@@ -243,7 +236,7 @@ def edit_recipe_ingredients(token, recipe_id, ingredients):
     '''
     overwrite all old ingredients in database by new ingredients for given
     recipe
-    :param token:
+    :param token: the token of the user performing the edit
     :param recipe_id: recipe's id in database
     :param ingredients: new ingredients of the recipe
     :returns:

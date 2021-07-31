@@ -1,3 +1,8 @@
+"""
+This file contains the main backend server.
+Run this file to start the backend.
+"""
+
 from json import dumps
 
 from flask import *

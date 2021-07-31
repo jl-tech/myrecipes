@@ -1,3 +1,7 @@
+"""
+This file contains helper functions used across the backend.
+"""
+
 import hashlib
 import mimetypes
 import smtplib
@@ -14,11 +18,11 @@ def send_email(subject, message_html, message_plain, dest_addr,
     '''
     Sends an email to dest_addr with contents specified by subject,
     message_html, message_plain, banner_image_path.
-    :param subject:
-    :param message_html:
-    :param message_plain:
-    :param dest_addr:
-    :param banner_image_path:
+    :param subject: The subject of the email
+    :param message_html: The message in HTML
+    :param message_plain: The message in plaintext
+    :param dest_addr: The destination email address
+    :param banner_image_path: The path to the image containing the banner
     :returns: 0 on success. 1 on failure.
     '''
     # Variables setup
@@ -57,7 +61,7 @@ def send_email(subject, message_html, message_plain, dest_addr,
 def store_image(image_file):
     '''
     Stores the image given by image_file.
-    :param image_file:
+    :param image_file: The image file
     :returns: file name of the image stored.
     '''
     file_name = hashlib.sha1(image_file.read()).hexdigest()
@@ -71,6 +75,7 @@ def store_image(image_file):
 
 def get_db_conn():
     '''
+    Gets a new database connection. This connection should be closed after use.
     :returns: A connection to the database.
     '''
     return pymysql.connect(host='localhost',

@@ -1,3 +1,7 @@
+"""
+Routes for /chatbot/ calls
+"""
+
 import hashlib
 
 from flask import *

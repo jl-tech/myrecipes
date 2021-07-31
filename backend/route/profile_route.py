@@ -1,3 +1,7 @@
+"""
+Routes for /profile/ calls
+"""
+
 from flask import *
 
 import profile

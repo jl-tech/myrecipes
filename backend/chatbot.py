@@ -1,3 +1,7 @@
+"""
+This file contains functions associated with the chatbot.
+"""
+
 import json
 import os
 import threading

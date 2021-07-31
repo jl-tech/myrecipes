@@ -1,3 +1,10 @@
+"""
+This file contains functions relating to authentication, for example
+    - creating account
+    - logging in
+    - resetting password
+"""
+
 import threading
 
 import bcrypt
@@ -13,10 +20,10 @@ def add_new_user(email, first_name, last_name, password):
     '''
     Adds a new user to the database, and sends a confirmation email providing
     the email verification code.
-    :param email:
-    :param first_name:
-    :param last_name:
-    :param password:
+    :param email: the email of the user
+    :param first_name: the first_name of the user
+    :param last_name: the last_name of the user
+    :param password: the password of the new account
     :returns: 0 success, the confirmation code for email verification.
     -1 if the email already exists.
     -2 if the password didn't meet the password requirements.
@@ -24,8 +31,6 @@ def add_new_user(email, first_name, last_name, password):
     '''
     if email_already_exists(email):
         return 1
-
-    # TODO password requirements?
 
     hashed_pwd = hash_password(password)
 
@@ -49,9 +54,8 @@ def add_new_user(email, first_name, last_name, password):
 
 def email_confirm(code):
     '''
-    Given an email verification token, updates the user email associated with
-    user_id
-    an unverified account, and verifies that account if so.
+    Given an email verification code, updates the user email associated with it
+    If an unverified account, and verifies that account.
     :param code: The email verification token
     :returns: 0 on success. 1 if token is unsecure
     '''
@@ -93,7 +97,7 @@ def email_confirm(code):
 def verify(token):
     '''
     Decrypts and verifies a token.
-    :param token:
+    :param token: the token to decrypt
     :returns: user_id associated with the token.
     None if token is invalid.
     '''
@@ -381,7 +385,7 @@ def send_pwd_change_email(email):
     '''
     Sends an email to the given email address detailing a successful password
     change.
-    :param email:
+    :param email: the email to send to
     :returns: None
     '''
     subject = "Your password was changed for MyRecipes"
