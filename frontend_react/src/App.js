@@ -49,6 +49,7 @@ function VisitorRoute(props) {
 function App() {
 
     const [loggedIn, setLoggedIn] = useState(false);
+    // Whether the API request has finished being fetched
     const [fetched, setFetched] = useState(false);
     const [currId, setCurrId] = useState(null);
     const cookie = new Cookie();

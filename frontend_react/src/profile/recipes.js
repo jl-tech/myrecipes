@@ -96,6 +96,10 @@ function ProfileRecipes(props) {
     const cookie = new Cookie();
 
 
+    /**
+     * Calls and awaits for the API request function and sets the component state
+     * based on the response.
+     */
     async function processId() {
         let response = await requestRecipes(props.userID)
             .catch(e => {

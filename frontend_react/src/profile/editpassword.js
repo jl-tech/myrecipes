@@ -1,3 +1,7 @@
+/*
+ Component providing the password part of the profile edit page
+ */
+
 import React, {useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
@@ -6,7 +10,15 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Cookie from 'universal-cookie';
 
-
+/**
+ * Performs the API request for /profile/changepassword to the backend and returns
+ * result of that request.
+ * @throws The error if the API request was not successful.
+ * @param token - the token of the user requesting
+ * @param oldPass - the old password
+ * @param newPass - the new password
+ * @returns {Promise<*>} The response from the server. null on failure.
+ */
 async function editPassword(token, oldPass, newPass) {
     let response = await fetch('http://localhost:5000/profile/changepassword', {
         method: 'POST',
@@ -30,18 +42,27 @@ async function editPassword(token, oldPass, newPass) {
 
 function ProfileEditPassword(props) {
 
-
+    // Whether the text field is enabled (i.e. in edit mode)
     const [editMode, setEditMode] = useState(false);
-
+    // The current text in the old password field
     const [oldPass, setOldPass] = useState('');
+    // The current text in the new password field
     const [newPass, setNewPass] = useState('');
+    // The current text in the new password (confirm) field
     const [newPass2, setNewPass2] = useState('');
+    // Whether to show the error box
     const [errorShow, setErrorShow] = useState(false);
+    // The text to show in the error box
     const [errorText, setErrorText] = useState('');
+    // Whether to show the success box
     const [successShow, setSuccessShow] = useState(false);
 
     const cookie = new Cookie();
 
+    /**
+     * Calls and awaits for the API request function to change the password.
+     * Sets the state of this component based on the response.
+     */
     async function handleSubmit(event) {
         event.preventDefault();
 
@@ -65,6 +86,7 @@ function ProfileEditPassword(props) {
     }
 
     if (!editMode) {
+        // Edit mode off, disable text input and save button
         return (
             <>
                 <Row style={{
@@ -88,6 +110,7 @@ function ProfileEditPassword(props) {
             </>
         );
     } else {
+        // Edit mode on, enable text field and submit button
         return (
             <>
                 <Row style={{

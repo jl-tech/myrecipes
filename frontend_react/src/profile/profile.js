@@ -36,7 +36,9 @@ async function profileUser(token, userid) {
 
 function Profile(props) {
 
+    // Whether the API request has finished being fetched
     const [fetched, setFetched] = useState(false);
+    // Whether the API request was completed with a 200 return code indicating success.
     const [success, setSuccess] = useState(false);
 
     const [firstName, setfirstName] = useState('');
@@ -53,6 +55,10 @@ function Profile(props) {
     const history = useHistory();
     const cookie = new Cookie();
 
+    /**
+     * Calls and awaits for the API request function and sets the component state
+     * based on the response.
+     */
     async function processId() {
         let id_ = id;
         if (id_ == null) {

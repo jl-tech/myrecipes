@@ -1,3 +1,7 @@
+/**
+ * Component providing the subscribers count and subscribers list on click
+ */
+
 import React, {useState} from 'react';
 
 import Modal from 'react-bootstrap/Modal';
@@ -9,9 +13,12 @@ import {Link, useHistory} from "react-router-dom";
 
 import Image from 'react-bootstrap/Image';
 
-
+/**
+ * Component providing the subscribers count and subscribers list on click
+ */
 function Subscribers(props) {
     const history = useHistory();
+    // Whether the modal containing the subscribers list is shown
     const [showModal, setShowModal] = useState(props.initOpen);
 
     function modalShow(e) {

@@ -1,3 +1,7 @@
+/**
+ * Component providing the newsfeed page
+ */
+
 import React, {useEffect, useState} from 'react';
 import {Link, useHistory, useParams} from "react-router-dom";
 
@@ -18,8 +22,17 @@ import Like from "../Like.svg";
 import Comment from "../comment_black_24dp.svg";
 import Button from "react-bootstrap/Button";
 
+/**
+ * Performs the API request for /newsfeed/get_feed and returns the result of that
+ * request.
+ * @throws The error if the API request was not successful.
+ * @param token - the token of the user fetching the newsfeed
+ * @param page - the page number
+ * @returns {Promise<*>} The response from the server. null on failure.
+ */
 async function requestFeed(token, page) {
-    let response = await fetch('http://localhost:5000/newsfeed/get_feed?' + new URLSearchParams({'page': page}), {
+    let response = await fetch('http://localhost:5000/newsfeed/get_feed?'
+        + new URLSearchParams({'page': page}), {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -35,6 +48,13 @@ async function requestFeed(token, page) {
     else throw new Error(responseJson.error);
 }
 
+/**
+ * Performs the API request for /newsfeed/get_subscriptions and returns the result
+ * of that request.
+ * @throws The error if the API request was not successful.
+ * @param token - the token of the user fetching the newsfeed
+ * @returns {Promise<*>} The response from the server. null on failure.
+ */
 async function profileUser(token) {
     let response = await fetch('http://localhost:5000/newsfeed/get_subscriptions', {
         method: 'GET',
@@ -52,23 +72,31 @@ async function profileUser(token) {
     else throw new Error(responseJson.error);
 }
 
-function Feed(props) {
+function Feed() {
+    // Whether the feed API request has finished being fetched
     const [fetchedFeed, setFetchedFeed] = useState(false);
+    // Whether the profile API request has finished being fetched
     const [fetchedProfile, setFetchedProfile] = useState(false);
 
+    // The state of the various user-related fields
     const [firstName, setfirstName] = useState('');
     const [lastName, setlastName] = useState('');
     const [recipeCount, setRecipeCount] = useState(0);
     const [subscribers, setSubscribers] = useState([]);
     const [subscriptions, setSubscriptions] = useState([]);
-    const [imgUrl, setImgUrl] = useState('');
+    const [imgUrl, setImgUrl] = useState(''); // the profile picture
 
+    // The list of recipes
     const [recipes, setRecipes] = useState(null);
+    // The number of pages
     const [pages, setPages] = useState(null);
+
+    // State to handle shadow effect on hover
     const [hoveredRecipeId, setHoveredRecipeId] = useState(-1)
     const [activePage, setActivePage] = useState(null);
     const [hoveredProfile, setHoveredProfile] = useState(false)
 
+    // Whether the RECOMMENDED tag is being hovered
     const [recommendedTagHovered, setRecommendedTagHovered] = useState(false)
 
     let {page} = useParams();
@@ -77,6 +105,10 @@ function Feed(props) {
     const [hideRecommended, setHideRecommended] = useState(cookie.get('recommended_hidden') === "true")
     console.log(hideRecommended)
 
+    /**
+     * Calls and awaits for the API request function to get the newsfeed
+     * Sets the state of variables based on the response.
+     */
     async function getFeed() {
         let page_ = /^\d+$/.test(page) ? page : 1;
         let response = await requestFeed(cookie.get('token'), page_)
@@ -93,6 +125,10 @@ function Feed(props) {
         setFetchedFeed(true);
     }
 
+    /**
+     * Calls and awaits for the API request function to get the user details
+     * Sets the state of variables based on the response.
+     */
     async function getProfile() {
         let response = await profileUser(cookie.get('token'))
             .catch(e => {
@@ -116,12 +152,17 @@ function Feed(props) {
         if (!fetchedProfile) getProfile();
     }, []);
 
-
+    /**
+     * Handles the clicking of the recommended tag by hiding recommended
+     */
     function handleClickTag(e) {
         e.stopPropagation()
         doHideRecommended()
     }
 
+    /**
+     * Hides recommended and saves this setting in cookie
+     */
     function doHideRecommended() {
         cookie.set('recommended_hidden', "true", {
             path: '/newsfeed',
@@ -131,6 +172,10 @@ function Feed(props) {
         console.log(cookie.get('recommended_hidden'))
     }
 
+
+    /**
+     * Shows recommended and saves this setting in cookie
+     */
     function doShowRecommended() {
         cookie.set('recommended_hidden', "false", {
             path: '/newsfeed',
@@ -140,6 +185,10 @@ function Feed(props) {
         console.log(cookie.get('recommended_hidden'))
     }
 
+
+    /**
+     * Generates each recipe card
+     */
     function generateCard(recipe, index) {
         if (hideRecommended && recipe.recommended) {
             return null
@@ -283,6 +332,10 @@ function Feed(props) {
         }
     }
 
+    /**
+     * Changes the active page
+     * @param page_ the page to change to
+     */
     function navigatePage(page_) {
         history.push('/newsfeed/' + page_);
         history.go();

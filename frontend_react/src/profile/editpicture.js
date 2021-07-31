@@ -1,3 +1,7 @@
+/*
+ Component providing the profile pic part of the profile edit page
+ */
+
 import React, {useState} from 'react';
 import imageCompression from 'browser-image-compression';
 
@@ -10,6 +14,13 @@ import Form from 'react-bootstrap/Form';
 import Image from 'react-bootstrap/Image';
 import Cookie from 'universal-cookie';
 
+/**
+ * Performs the API request for /profile/removepicture to the backend and returns
+ * result of that request.
+ * @throws The error if the API request was not successful.
+ * @param token - the token of the user requesting
+ * @returns {Promise<*>} The response from the server. null on failure.
+ */
 async function removePicture(token) {
     let response = await fetch('http://localhost:5000/profile/removepicture', {
         method: 'GET',
@@ -26,6 +37,14 @@ async function removePicture(token) {
     else throw new Error(responseJson.error);
 }
 
+/**
+ * Performs the API request for /profile/changepicture to the backend and returns
+ * result of that request.
+ * @throws The error if the API request was not successful.
+ * @param token - the token of the user requesting
+ * @param image - the new profile pic
+ * @returns {Promise<*>} The response from the server. null on failure.
+ */
 async function editPicture(token, image) {
     let data = new FormData();
     data.append('ProfilePicture', image);
@@ -47,21 +66,31 @@ async function editPicture(token, image) {
 
 function ProfileEditPicture(props) {
 
-
+    // Whether the picture field is enabled (i.e. in edit mode)
     const [editMode, setEditMode] = useState(false);
 
+    // The following relates whether to show the error/success boxes and what to
+    // show in them
     const [errorShow, setErrorShow] = useState(false);
     const [errorText, setErrorText] = useState('');
     const [errorShow2, setErrorShow2] = useState(false);
     const [errorText2, setErrorText2] = useState('');
     const [successShow, setSuccessShow] = useState(false);
     const [successText, setSuccessText] = useState('');
+
+    // whether upload is complete
     const [uploaded, setUploaded] = useState(false);
+    // The new image url after upload complete
     const [newUrl, setNewUrl] = useState('');
+    // The new image after upload complete
     const [newImage, setNewImage] = useState(null);
 
     const cookie = new Cookie();
 
+    /**
+     * Calls and awaits for the API request function to remove the image.
+     * Sets the state of this component based on the response.
+     */
     async function handleRemoveImage() {
         let response = await removePicture(cookie.get('token'))
             .catch(e => {
@@ -76,6 +105,10 @@ function ProfileEditPicture(props) {
         }
     }
 
+    /**
+     * Handles the image upload operation
+     * @param event - the button click event
+     */
     async function handleImageUpload(event) {
         const imageFile = event.target.files[0];
         const options = {
@@ -102,6 +135,10 @@ function ProfileEditPicture(props) {
         });
     }
 
+    /**
+     * Calls and awaits for the API request function to change the image.
+     * Sets the state of this component based on the response.
+     */
     async function handleSubmit() {
         let response = await editPicture(cookie.get('token'), newImage)
             .catch(e => {
@@ -129,6 +166,7 @@ function ProfileEditPicture(props) {
     }
 
     if (!editMode) {
+        // Edit mode off, disable change image input and save button
         return (
             <>
                 <Row style={{
@@ -165,6 +203,7 @@ function ProfileEditPicture(props) {
             </>
         );
     } else {
+        // Edit mode on, enable change image input and submit button
         return (
             <>
                 <Row style={{

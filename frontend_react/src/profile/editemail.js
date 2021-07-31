@@ -1,3 +1,7 @@
+/*
+ Component providing the email part of the profile edit page
+ */
+
 import React, {useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
@@ -6,7 +10,14 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Cookie from 'universal-cookie';
 
-
+/**
+ * Performs the API request for /profile/changeemail to the backend and returns
+ * result of that request.
+ * @throws The error if the API request was not successful.
+ * @param token - the token of the user requesting
+ * @param email - the new email address
+ * @returns {Promise<*>} The response from the server. null on failure.
+ */
 async function editEmail(token, email) {
     let response = await fetch('http://localhost:5000/profile/changeemail', {
         method: 'POST',
@@ -29,16 +40,23 @@ async function editEmail(token, email) {
 
 function ProfileEditEmail(props) {
 
-
+    // Whether the text field is enabled (i.e. in edit mode)
     const [editMode, setEditMode] = useState(false);
-
+    // The current text in the email field
     const [newEmail, setNewEmail] = useState('');
+    // Whether to show the error box
     const [errorShow, setErrorShow] = useState(false);
+    // The text to show in the error box
     const [errorText, setErrorText] = useState('');
+    // Whether to show the success box
     const [successShow, setSuccessShow] = useState(false);
 
     const cookie = new Cookie();
 
+    /**
+     * Calls and awaits for the API request function to edit the email.
+     * Sets the state of this component based on the response.
+     */
     async function handleSubmit(event) {
         event.preventDefault();
 
@@ -56,6 +74,7 @@ function ProfileEditEmail(props) {
     }
 
     if (!editMode) {
+        // Edit mode off, disable text input and save button
         return (
             <>
                 <Row style={{
@@ -80,6 +99,7 @@ function ProfileEditEmail(props) {
             </>
         );
     } else {
+        // Edit mode on, enable text field and submit button
         return (
             <>
                 <Row style={{

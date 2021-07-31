@@ -67,6 +67,10 @@ function SearchResults(props) {
     }
 
 
+    /**
+     * Calls and awaits for the API request function and sets the component state
+     * based on the response.
+     */
     async function processQuery() {
         let type = validateType();
         let response = await requestRecipes(cookie.get('token'), query.get('name'), type, query.get('serving'), query.get('time'), query.get('ingredient'), query.get('step'))

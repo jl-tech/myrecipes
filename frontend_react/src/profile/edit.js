@@ -1,3 +1,7 @@
+/*
+Component providing the profile edit (i.e. account settings) modal
+ */
+
 import React, {useState} from 'react';
 
 import Modal from 'react-bootstrap/Modal';
@@ -10,8 +14,7 @@ import ProfileEditPassword from './editpassword.js';
 import ProfileEditPicture from './editpicture.js';
 
 function ProfileEdit(props) {
-
-
+    // Whether to show the modal
     const [showEdit, setShowEdit] = useState(props.initOpen);
     const editShow = () => {
         setShowEdit(true);

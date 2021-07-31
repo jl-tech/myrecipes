@@ -25,6 +25,10 @@ function RecipeViewNutri(props) {
     const [success, setSuccess] = useState(false)
     const [failNutritionix, setFailNutritionix] = useState(false)
 
+    /**
+     * Calls and awaits for the API request function and sets the component state
+     * based on the response.
+     */
     async function processNutrition() {
         let response = await requestNutrition(props.recipeId)
             .catch(e => {

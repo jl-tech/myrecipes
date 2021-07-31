@@ -1,3 +1,7 @@
+/**
+ * Component providing the 'Register' button on the login page
+ */
+
 import React, {useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -5,6 +9,13 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Alert from 'react-bootstrap/Alert';
 
+/**
+ * Performs the API request for /auth/forgetpassword to the backend and returns
+ * result of that request.
+ * @throws The error if the API request was not successful.
+ * @param email - the email to request forget password for
+ * @returns {Promise<*>} The response from the server. null on failure.
+ */
 async function registerUser(firstName, lastName, email, password) {
     let response = await fetch('http://localhost:5000/auth/register', {
         method: 'POST',
@@ -27,17 +38,31 @@ async function registerUser(firstName, lastName, email, password) {
     else throw new Error(responseJson.error);
 }
 
+/*
+    Component providing the register modal
+ */
 function RegisterBody(props) {
-
+    // Whether the user has completed the register process
     const [registered, setRegistered] = useState(false);
+    // Show or hide alert box
     const [alertShow, setAlertShow] = useState(false);
+    // The text to display in the alert
     const [alertText, setAlertText] = useState('');
+    // The current text in the first name field
     const [firstName, setfirstName] = useState('');
+    // The current text in the last name field
     const [lastName, setlastName] = useState('');
+    // The current text in the email field
     const [email, setEmail] = useState('');
+    // The current text in the password field
     const [password, setPassword] = useState('');
+    // The current text in the confirm password field
     const [password2, setPassword2] = useState('');
 
+    /**
+     * Calls and awaits for the API request function to register
+     * Sets the alert field with any errors if they occur
+     */
     async function handleSubmit(event) {
         event.preventDefault();
 
@@ -59,6 +84,7 @@ function RegisterBody(props) {
     }
 
     if (!registered) {
+        // Registration form not submitted yet, show registration form
         return (
             <Form onSubmit={handleSubmit}>
                 <Form.Row>
@@ -101,6 +127,7 @@ function RegisterBody(props) {
             </Form>
         );
     } else {
+        // Registration form submitted, show confirmation
         return (
             <>
                 <div>
@@ -120,6 +147,10 @@ function RegisterBody(props) {
     }
 }
 
+/*
+    Component providing the register button, which opens the RegisterBody
+    modal when clicked
+ */
 function Register() {
     const [modalShow, setModalShow] = useState(false);
 

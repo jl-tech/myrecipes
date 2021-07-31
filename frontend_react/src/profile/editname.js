@@ -1,3 +1,7 @@
+/*
+ Component providing the name part of the profile edit page
+ */
+
 import React, {useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
@@ -6,7 +10,15 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Cookie from 'universal-cookie';
 
-
+/**
+ * Performs the API request for /profile/edit to the backend and returns
+ * result of that request.
+ * @throws The error if the API request was not successful.
+ * @param token - the token of the user requesting
+ * @param firstname - the new first name
+ * @param lastname - the new last name
+ * @returns {Promise<*>} The response from the server. null on failure.
+ */
 async function editName(token, firstname, lastname) {
     let response = await fetch('http://localhost:5000/profile/edit', {
         method: 'POST',
@@ -30,17 +42,25 @@ async function editName(token, firstname, lastname) {
 
 function ProfileEditName(props) {
 
-
+    // Whether the text field is enabled (i.e. in edit mode)
     const [editMode, setEditMode] = useState(false);
-
+    // The current text in the first name field
     const [newFirst, setNewFirst] = useState(props.firstName);
+    // The current text in the lsat name field
     const [newLast, setNewLast] = useState(props.lastName);
+    // Whether to show the error box
     const [errorShow, setErrorShow] = useState(false);
+    // The text to show in the error box
     const [errorText, setErrorText] = useState('');
+    // Whether to show the success box
     const [successShow, setSuccessShow] = useState(false);
 
     const cookie = new Cookie();
 
+    /**
+     * Calls and awaits for the API request function to edit the name.
+     * Sets the state of this component based on the response.
+     */
     async function handleSubmit(event) {
         event.preventDefault();
 
@@ -61,6 +81,7 @@ function ProfileEditName(props) {
     }
 
     if (!editMode) {
+        // Edit mode off, disable text input and save button
         return (
             <>
                 <Row>
@@ -78,6 +99,7 @@ function ProfileEditName(props) {
             </>
         );
     } else {
+        // Edit mode on, enable text field and submit button
         return (
             <>
                 <Row>

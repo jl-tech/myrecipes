@@ -1,3 +1,8 @@
+/**
+ * Two components providing the login page.
+ *
+ */
+
 import React, {useState} from 'react';
 import {Link, Route, Switch, useHistory} from "react-router-dom";
 
@@ -14,6 +19,14 @@ import Register from './register.js';
 import ForgetPassword from './forgetpassword.js';
 import {Helmet} from "react-helmet-async";
 
+/**
+ * Performs the API request to /login to the backend and returns
+ * result of that request.
+ * @throws The error if the API request was not successful.
+ * @param email - the email to log into
+ * @param password - the password for this account
+ * @returns {Promise<*>} The response from the server. null on failure.
+ */
 async function loginUser(email, password) {
     let response = await fetch('http://localhost:5000/auth/login', {
         method: 'POST',
@@ -34,14 +47,25 @@ async function loginUser(email, password) {
     else throw new Error(responseJson.error);
 }
 
+/*
+    Component for the login body.
+    Used in Login component.
+ */
 function LoginBody() {
+    // Show or hide alert box
     const [alertShow, setAlertShow] = useState(false);
+    // The text to display in the alert
     const [alertText, setAlertText] = useState('');
+    // The email value typed in the control
     const [email, setEmail] = useState('');
+    // The password value typed in the control
     const [password, setPassword] = useState('');
     const cookie = new Cookie();
     const history = useHistory();
 
+    /**
+     * Calls and awaits for the API request function for login.
+     */
     async function handleSubmit(event) {
         event.preventDefault();
 
@@ -96,6 +120,10 @@ function LoginBody() {
     );
 }
 
+/**
+ * Login component.
+ * Provides the login page.
+ */
 function Login() {
 
     return (<>

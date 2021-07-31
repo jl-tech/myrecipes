@@ -82,6 +82,10 @@ function SearchBar(props) {
         }
     }
 
+    /**
+     * Calls and awaits for the API request function and sets the component state
+     * based on the response.
+     */
     async function processHistory() {
         let response = await getHistory(cookie.get('token'))
             .catch(e => {

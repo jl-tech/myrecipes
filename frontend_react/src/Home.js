@@ -60,10 +60,15 @@ function LoginButton() {
 function UserButton(props) {
     const cookie = new Cookie();
     const [imgUrl, setImgUrl] = useState(null);
+    // Whether the API request has finished being fetched
     const [fetched, setFetched] = useState(false);
     const location = useLocation();
 
 
+    /**
+     * Calls and awaits for the API request function and sets the component state
+     * based on the response.
+     */
     async function processId() {
         let response = await profileUser(props.currId)
             .catch(e => {

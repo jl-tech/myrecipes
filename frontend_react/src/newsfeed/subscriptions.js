@@ -1,3 +1,7 @@
+/**
+ * Component providing the subscriptions count and subscrptions list on click
+ */
+
 import React, {useState} from 'react';
 
 import Modal from 'react-bootstrap/Modal';
@@ -12,6 +16,7 @@ import Image from 'react-bootstrap/Image';
 
 function Subscriptions(props) {
     const history = useHistory();
+    // Whether the modal containing the subscriptions list is shown
     const [showModal, setShowModal] = useState(props.initOpen);
 
     function modalShow(e) {

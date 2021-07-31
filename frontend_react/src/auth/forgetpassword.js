@@ -1,3 +1,9 @@
+/**
+ * Component to handle user requests to reset their password.
+ * Provides the forget password page.
+ *
+ */
+
 import React, {useState} from 'react';
 import {Link} from "react-router-dom";
 
@@ -7,6 +13,13 @@ import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 import {Helmet} from "react-helmet-async";
 
+/**
+ * Performs the API request for /auth/forgetpassword to the backend and returns
+ * result of that request.
+ * @throws The error if the API request was not successful.
+ * @param email - the email to request forget password for
+ * @returns {Promise<*>} The response from the server. null on failure.
+ */
 async function requestForgetPassword(email) {
     let response = await fetch('http://localhost:5000/auth/forgetpassword', {
         method: 'POST',
@@ -28,7 +41,9 @@ async function requestForgetPassword(email) {
 
 function ForgetPassword() {
     const [submitted, setSubmitted] = useState(false);
+    // Show or hide alert box
     const [alertShow, setAlertShow] = useState(false);
+    // The text to display in the alert
     const [alertText, setAlertText] = useState('');
     const [email, setEmail] = useState('');
 
@@ -47,6 +62,7 @@ function ForgetPassword() {
     }
 
     if (!submitted) {
+        // Show form to enter email
         return (
             <>
                 <Helmet>
@@ -76,6 +92,7 @@ function ForgetPassword() {
             </>
         );
     } else {
+        // Submitted, show success message
         return (
             <Modal.Body>
                 <div style={{textAlign: "center"}}>

@@ -56,6 +56,10 @@ function RecipeViewLikes(props) {
         props.setErrorText(errorText)
     }
 
+    /**
+     * Calls and awaits for the API request function and sets the component state
+     * based on the response.
+     */
     async function processLiked() {
 
         let response = await getLikedStatus(props.recipeId, cookie.get('token'))
