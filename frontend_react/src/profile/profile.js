@@ -17,8 +17,7 @@ import ProfileRecipes from "./recipes";
 import {Spinner} from "react-bootstrap";
 import SubscribeButton from "../newsfeed/subscribe";
 import {Helmet} from "react-helmet-async";
-import Subscribers from '../newsfeed/subscribers.js';
-import Subscriptions from '../newsfeed/subscriptions.js';
+import UserList from '../utility/userlist';
 import Cookie from 'universal-cookie';
 
 /**
@@ -173,14 +172,16 @@ function Profile(props) {
                                     <th style={{fontSize: "200%"}}> {recipeCount} </th>
                                     <th style={{fontSize: "200%"}}>
                                         {buttonType === 1 ?
-                                            <Subscribers
-                                                subscribers={subscribers}/>
+                                            <UserList
+                                                title="Subscribers"
+                                                data={subscribers}/>
                                             : subscribers.length}
                                     </th>
                                     {buttonType === 1 ?
                                         <th style={{fontSize: "200%"}}>
-                                            <Subscriptions
-                                                subscriptions={subscriptions}/>
+                                            <UserList
+                                                title="Subscriptions"
+                                                data={subscriptions}/>
                                         </th>
                                         :
                                         null

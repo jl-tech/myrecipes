@@ -1,5 +1,5 @@
 /**
- * Component providing the subscribers count and subscribers list on click
+ * Component providing the user list on click
  */
 
 import React, {useState} from 'react';
@@ -14,12 +14,12 @@ import {Link, useHistory} from "react-router-dom";
 import Image from 'react-bootstrap/Image';
 
 /**
- * Component providing the subscribers count and subscribers list on click
+ * Component providing the user count and user list on click
  */
-function Subscribers(props) {
+function UserList(props) {
     const history = useHistory();
-    // Whether the modal containing the subscribers list is shown
-    const [showModal, setShowModal] = useState(props.initOpen);
+    // Whether the modal containing the user list is shown
+    const [showModal, setShowModal] = useState(false);
 
     function modalShow(e) {
         e.preventDefault();
@@ -30,16 +30,16 @@ function Subscribers(props) {
     return (
         <>
             <a href="#" style={{color: "black"}}
-               onClick={e => modalShow(e)}> {props.subscribers.length} </a>
+               onClick={e => modalShow(e)}> {props.data.length} </a>
             <Modal show={showModal} onHide={modalHide} centered>
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        Subscribers
+                        {props.title}
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <ListGroup>
-                        {props.subscribers.map(({
+                        {props.data.map(({
                                                     first_name,
                                                     last_name,
                                                     user_id,
@@ -73,4 +73,4 @@ function Subscribers(props) {
 
 }
 
-export default Subscribers;
+export default UserList;
