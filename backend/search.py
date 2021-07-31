@@ -225,10 +225,10 @@ def add_search_history(token, name, ingredients, step):
             values (%s, UTC_TIMESTAMP(), %s)
         '''
         cur.execute(query, (int(u_id), term,))
-
+    con.commit()
     auto_update_search_history(token)
 
-    con.commit()
+
     con.close()
 
 
