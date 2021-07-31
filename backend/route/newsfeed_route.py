@@ -1,3 +1,7 @@
+"""
+Routes for /newsfeed/ calls
+"""
+
 from flask import *
 
 import newsfeed

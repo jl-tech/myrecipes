@@ -1,3 +1,7 @@
+"""
+Routes for /recipe/ calls
+"""
+
 import json
 
 from flask import *

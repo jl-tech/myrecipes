@@ -1,3 +1,8 @@
+"""
+This file contains functions associated with the newsfeed, including functionality
+to subscribe to users, and to get the newsfeed.
+"""
+
 import math
 
 import helpers
@@ -259,11 +264,11 @@ def get_subscriptions(token):
 def get_recommendations(u_id, page, rec):
     '''
     Finds recipe recommendations for the user given by u_id.
-    :param u_id:
-    :param page:
-    :param rec:
+    Uses the search history of the user to do so.
+    :param u_id: The u_id of the user to get recommendations for
+    :param page: The page number of the recommendations
+    :param rec: The number of recommendations per page
     :returns: Array of recipes.
-    # TODO Clarify this documentation.
     '''
     con = helpers.get_db_conn()
     cur = con.cursor()

@@ -1,3 +1,6 @@
+"""
+This file contains functions associated with searching.
+"""
 import helpers
 
 import tokenise

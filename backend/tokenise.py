@@ -1,3 +1,7 @@
+"""
+This file contains functions associated with creating and decoding JWT tokens.
+"""
+
 import jwt
 
 import helpers

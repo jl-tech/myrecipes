@@ -1,3 +1,7 @@
+"""
+Routes for /search/ calls
+"""
+
 import pymysql
 from flask import *
 

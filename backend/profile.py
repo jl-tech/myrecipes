@@ -1,7 +1,13 @@
+"""
+This file contains functions associated with profile and profile management
+including
+    - getting a user's details
+    - changing name
+    - changing username
+    - changing password
+"""
 import os
-
 import bcrypt
-
 import helpers
 from auth import DEFAULT_PIC, hash_password, send_pwd_change_email, \
     email_already_exists, send_confirm_email

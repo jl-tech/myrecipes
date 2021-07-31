@@ -1,3 +1,7 @@
+"""
+Routes for /auth/ calls
+"""
+
 from flask import *
 
 import auth
