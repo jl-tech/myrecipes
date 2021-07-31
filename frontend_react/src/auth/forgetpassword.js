@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Link } from "react-router-dom";
+import React, {useState} from 'react';
+import {Link} from "react-router-dom";
 
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
-import { Helmet } from "react-helmet-async";
+import {Helmet} from "react-helmet-async";
 
 async function requestForgetPassword(email) {
     let response = await fetch('http://localhost:5000/auth/forgetpassword', {
@@ -60,9 +60,12 @@ function ForgetPassword() {
                 <Modal.Body>
                     <Form onSubmit={handleSubmit}>
                         <Form.Group controlId="email">
-                            <Form.Control type="email" placeholder="Email address" required onChange={e => setEmail(e.target.value)}/>
+                            <Form.Control type="email"
+                                          placeholder="Email address" required
+                                          onChange={e => setEmail(e.target.value)}/>
                         </Form.Group>
-                        <Alert show={alertShow} variant="danger" onClose={() => setAlertShow(false)} dismissible>
+                        <Alert show={alertShow} variant="danger"
+                               onClose={() => setAlertShow(false)} dismissible>
                             {alertText}
                         </Alert>
                         <Button type="submit" block>
@@ -75,9 +78,10 @@ function ForgetPassword() {
     } else {
         return (
             <Modal.Body>
-                <div style={{textAlign:"center"}}>
+                <div style={{textAlign: "center"}}>
                     We have sent an email with a link to reset your password.
-                    <Link to="/login" component={Button} style={{marginTop:"1em"}}>
+                    <Link to="/login" component={Button}
+                          style={{marginTop: "1em"}}>
                         Return
                     </Link>
                 </div>

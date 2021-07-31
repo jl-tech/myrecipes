@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import Image from 'react-bootstrap/Image';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -101,14 +101,16 @@ function RecipeViewComments(props) {
                 break
         }
     }
+
     return (<>
-        <Row style={{marginTop:"1em"}}>
-            <Col sm={1} />
+        <Row style={{marginTop: "1em"}}>
+            <Col sm={1}/>
             <Col sm={11}>
                 <h3> {props.comments.length} {props.comments.length === 1 ? "Comment" : "Comments"}</h3>
                 <Form>
                     Sort by:
-                    <Form.Control as="select" style={{width:"30%"}} onChange={(e) => sortChange(e)}>
+                    <Form.Control as="select" style={{width: "30%"}}
+                                  onChange={(e) => sortChange(e)}>
                         <option value="0">Oldest</option>
                         <option value="1">Newest</option>
 
@@ -118,80 +120,116 @@ function RecipeViewComments(props) {
                 {props.loggedIn ?
                     <Form onSubmit={handleSubmit}>
                         <Row>
-                            <Col sm={11} >
-                                <Form.Control value={comment} placeholder="Leave a comment" onChange={(e) => setComment(e.target.value)} required/>
+                            <Col sm={11}>
+                                <Form.Control value={comment}
+                                              placeholder="Leave a comment"
+                                              onChange={(e) => setComment(e.target.value)}
+                                              required/>
                             </Col>
-                            <Col sm={1} style={{paddingLeft:"0"}} >
-                                <Button type="submit" variant="secondary" >Post</Button>
+                            <Col sm={1} style={{paddingLeft: "0"}}>
+                                <Button type="submit"
+                                        variant="secondary">Post</Button>
                             </Col>
                         </Row>
-                    </Form> : <div> <Link to={"/login"}> Log in</Link> to leave a comment </div>}
+                    </Form> :
+                    <div><Link to={"/login"}> Log in</Link> to leave a comment
+                    </div>}
                 <br/>
 
                 <ListGroup>
-                    {props.comments.slice(0,loadCommentsTo).map(({first_name, last_name, user_id, profile_pic_path, comment_id, by_user_id, comment_text, time_created}, index)=>
-                        <ListGroup.Item className={"shadow-sm border-top"} key={index} style={{marginBottom:"1em", paddingLeft:"2em", paddingRight:"2em"}}>
+                    {props.comments.slice(0, loadCommentsTo).map(({
+                                                                      first_name,
+                                                                      last_name,
+                                                                      user_id,
+                                                                      profile_pic_path,
+                                                                      comment_id,
+                                                                      by_user_id,
+                                                                      comment_text,
+                                                                      time_created
+                                                                  }, index) =>
+                        <ListGroup.Item className={"shadow-sm border-top"}
+                                        key={index} style={{
+                            marginBottom: "1em",
+                            paddingLeft: "2em",
+                            paddingRight: "2em"
+                        }}>
                             <Row>
-                                <Link to={"/profile/" + user_id}  onClick={() => {history.push("/profile/"+user_id);history.go(0);}}>
+                                <Link to={"/profile/" + user_id}
+                                      onClick={() => {
+                                          history.push("/profile/" + user_id);
+                                          history.go(0);
+                                      }}>
 
-                                    <Image src={"http://127.0.0.1:5000/img/" + profile_pic_path} alt="Profile Picture" roundedCircle width="40em" style={{marginRight:"1em"}}/>
+                                    <Image
+                                        src={"http://127.0.0.1:5000/img/" + profile_pic_path}
+                                        alt="Profile Picture" roundedCircle
+                                        width="40em"
+                                        style={{marginRight: "1em"}}/>
                                     {first_name} {last_name}
                                 </Link>
 
                                 {user_id === props.contributorID ?
                                     <span style={{
-                                        marginTop:"0.4em",
-                                        marginLeft:"1em",
+                                        marginTop: "0.4em",
+                                        marginLeft: "1em",
                                         fontSize: "85%",
                                         backgroundColor: "tomato",
                                         color: "white",
                                         borderRadius: "5px 5px 5px 5px",
                                         height: "1.5em",
                                         width: "6em",
-                                        marginBottom:"1em",
+                                        marginBottom: "1em",
                                         textAlign: "center",
-                                        verticalAlign:"middle"
+                                        verticalAlign: "middle"
 
                                     }}>
                                  &nbsp; CREATOR &nbsp;
                                   </span> : null}
-                                {props.currId === by_user_id ? ( <>
+                                {props.currId === by_user_id ? (<>
                                     <span style={{
-                                        marginTop:"0.35em",
-                                        marginLeft:"1em",
+                                        marginTop: "0.35em",
+                                        marginLeft: "1em",
                                         fontSize: "85%",
                                         backgroundColor: "tomato",
                                         color: "white",
                                         borderRadius: "5px 5px 5px 5px",
                                         height: "1.5em",
                                         width: "4em",
-                                        marginBottom:"1em",
+                                        marginBottom: "1em",
                                         textAlign: "center",
-                                        verticalAlign:"middle"
+                                        verticalAlign: "middle"
                                     }}>
                                         &nbsp; YOU &nbsp;
                                   </span>
-                                        <DropdownButton size="sm" style={{marginLeft:"auto"}}>
-                                            <Dropdown.Item onClick={()=>handleDelete(comment_id)} >Delete</Dropdown.Item>
+                                        <DropdownButton size="sm"
+                                                        style={{marginLeft: "auto"}}>
+                                            <Dropdown.Item
+                                                onClick={() => handleDelete(comment_id)}>Delete</Dropdown.Item>
                                         </DropdownButton></>)
-                                    :null}
+                                    : null}
                             </Row>
-                            <Row style={{fontSize:"115%", marginBottom:"0.2em"}}>
+                            <Row style={{
+                                fontSize: "115%",
+                                marginBottom: "0.2em"
+                            }}>
                                 {comment_text}
                             </Row>
                             <Row>
                                 <small className={'text-muted'}>
-                                    <ReactTimeAgo date={new Date(time_created)} locale="en-US"/>
+                                    <ReactTimeAgo date={new Date(time_created)}
+                                                  locale="en-US"/>
                                 </small>
                             </Row>
                         </ListGroup.Item>
                     )}
                 </ListGroup>
                 {loadCommentsTo < props.comments.length ?
-                    <Button variant={"outline-secondary"} onClick={()=>setLoadCommentsTo(loadCommentsTo + 5)}> Show more... </Button> :
+                    <Button variant={"outline-secondary"}
+                            onClick={() => setLoadCommentsTo(loadCommentsTo + 5)}> Show
+                        more... </Button> :
                     null
                 }
-                <br />
+                <br/>
 
             </Col>
         </Row>

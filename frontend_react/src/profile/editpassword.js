@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 import Row from 'react-bootstrap/Row';
@@ -67,14 +67,22 @@ function ProfileEditPassword(props) {
     if (!editMode) {
         return (
             <>
-                <Row style={{borderTopColor:"gray",borderTopWidth:"1px",borderTopStyle:"solid",paddingTop:"1em", marginTop:"1em"}}>
+                <Row style={{
+                    borderTopColor: "gray",
+                    borderTopWidth: "1px",
+                    borderTopStyle: "solid",
+                    paddingTop: "1em",
+                    marginTop: "1em"
+                }}>
                     <Col sm={10}><h5>Password</h5></Col>
-                    <Col sm={2} ><Button variant="outline-secondary" size="sm" onClick={() => setEditMode(true)}>Edit</Button></Col>
+                    <Col sm={2}><Button variant="outline-secondary" size="sm"
+                                        onClick={() => setEditMode(true)}>Edit</Button></Col>
                 </Row>
                 <Row>
-                    <Col >●●●●●●●●</Col>
+                    <Col>●●●●●●●●</Col>
                 </Row>
-                <Alert show={successShow} variant="success" onClose={() => setSuccessShow(false)} dismissible>
+                <Alert show={successShow} variant="success"
+                       onClose={() => setSuccessShow(false)} dismissible>
                     Successfully changed password
                 </Alert>
             </>
@@ -82,9 +90,16 @@ function ProfileEditPassword(props) {
     } else {
         return (
             <>
-                <Row style={{borderTopColor:"gray",borderTopWidth:"1px",borderTopStyle:"solid",paddingTop:"1em", marginTop:"1em"}}>
+                <Row style={{
+                    borderTopColor: "gray",
+                    borderTopWidth: "1px",
+                    borderTopStyle: "solid",
+                    paddingTop: "1em",
+                    marginTop: "1em"
+                }}>
                     <Col sm={10}><h5>Password</h5></Col>
-                    <Col sm={2} ><Button variant="outline-secondary" size="sm" onClick={() => setEditMode(false)}>Cancel</Button></Col>
+                    <Col sm={2}><Button variant="outline-secondary" size="sm"
+                                        onClick={() => setEditMode(false)}>Cancel</Button></Col>
                 </Row>
                 <Form onSubmit={handleSubmit}>
                     <Form.Group as={Row}>
@@ -92,7 +107,8 @@ function ProfileEditPassword(props) {
                             Current
                         </Form.Label>
                         <Col sm="8">
-                            <Form.Control required type="password" onChange={e => setOldPass(e.target.value)} />
+                            <Form.Control required type="password"
+                                          onChange={e => setOldPass(e.target.value)}/>
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
@@ -100,7 +116,8 @@ function ProfileEditPassword(props) {
                             New
                         </Form.Label>
                         <Col sm="8">
-                            <Form.Control required type="password" onChange={e => setNewPass(e.target.value)} />
+                            <Form.Control required type="password"
+                                          onChange={e => setNewPass(e.target.value)}/>
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
@@ -108,13 +125,15 @@ function ProfileEditPassword(props) {
                             Retype New
                         </Form.Label>
                         <Col sm="8">
-                            <Form.Control required type="password" onChange={e => setNewPass2(e.target.value)} />
+                            <Form.Control required type="password"
+                                          onChange={e => setNewPass2(e.target.value)}/>
                         </Col>
                     </Form.Group>
-                    <Alert show={errorShow} variant="danger" onClose={() => setErrorShow(false)} dismissible>
+                    <Alert show={errorShow} variant="danger"
+                           onClose={() => setErrorShow(false)} dismissible>
                         {errorText}
                     </Alert>
-                    <div style={{textAlign:"center"}}>
+                    <div style={{textAlign: "center"}}>
                         <Button type="submit" size="sm">
                             Confirm
                         </Button>

@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 $theme-colors: (
-    "primary": tomato,
-    "secondary": #ff751a
+        "primary": tomato,
+        "secondary": #ff751a
 );
 @import "~bootstrap/scss/bootstrap";
 
@@ -14,7 +14,7 @@ $theme-colors: (
 .react-chat-close-icon {
   border-radius: 5px 5px 5px 5px !important;
   background-color: tomato;
-  height:2em !important;
+  height: 2em !important;
   width: 2em !important;
   padding-top: 0.2em !important;
   padding-left: 0.25em !important;
@@ -23,9 +23,9 @@ $theme-colors: (
 
 .react-chat-rightBubble {
   border-color: tomato !important;
-  background-color:tomato !important;
+  background-color: tomato !important;
 }
 
 body {
-    font-family: 'Inter', sans-serif;
+  font-family: 'Inter', sans-serif;
 }

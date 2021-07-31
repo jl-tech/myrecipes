@@ -1,8 +1,8 @@
 import ChatBox, {ChatFrame} from 'react-chat-plugin'
-import Cookie from 'universal-cookie';
 import {useEffect, useState} from "react";
 import CloseButton from "react-bootstrap/CloseButton";
 import Image from "react-bootstrap/Image";
+
 async function requestSend(message) {
     let response = await fetch('http://localhost:5000/chatbot/', {
         method: 'POST',
@@ -56,15 +56,18 @@ function ChatBot(props) {
         });
 
     }
-    async function handleOnSendMessage (message) {
-        let next_msg = {author: {
+
+    async function handleOnSendMessage(message) {
+        let next_msg = {
+            author: {
                 username: 'You',
                 id: 1,
                 avatarUrl: userAvatarURL
             },
             text: message,
             type: 'text',
-            timestamp: +new Date()}
+            timestamp: +new Date()
+        }
 
         setAttr({
             ...attr,
@@ -104,7 +107,8 @@ function ChatBot(props) {
                     });
                 })
             }
-            next_msg = [{author: {
+            next_msg = [{
+                author: {
                     username: 'You',
                     id: 1,
                     avatarUrl: userAvatarURL
@@ -140,8 +144,8 @@ function ChatBot(props) {
         localStorage.setItem('show_tip', '0')
     }
 
-    useEffect( () => {
-        window.remove_target_blank()
+    useEffect(() => {
+            window.remove_target_blank()
         }
     )
     return (
@@ -153,26 +157,35 @@ function ChatBot(props) {
                     messages={attr.messages}
                     width={'400px'}
                     showTypingIndicator={typing}
-                    activeAuthor={{ username: 'Malvina, the MyRecipes Bot', id: 2, avatarUrl: botAvatarURL }}
+                    activeAuthor={{
+                        username: 'Malvina, the MyRecipes Bot',
+                        id: 2,
+                        avatarUrl: botAvatarURL
+                    }}
                 />
             }
-            icon={<Image src={"http://127.0.0.1:5000/img/speech.png"} style={{marginLeft:"auto", marginRight:"auto", width:"2em"}}/>}
+            icon={<Image src={"http://127.0.0.1:5000/img/speech.png"} style={{
+                marginLeft: "auto",
+                marginRight: "auto",
+                width: "2em"
+            }}/>}
             clickIcon={handleClickIcon}
             showChatbox={attr.showChatbox}
             showIcon={attr.showIcon}
-            iconStyle={{ background: 'tomato', fill: 'white' }}
+            iconStyle={{background: 'tomato', fill: 'white'}}
         >
             <div className="Greeting shadow" style={{
                 width: '350px',
-                backgroundColor:"white",
-                paddingLeft:"1em",
-                paddingRight:"1em",
-                paddingTop:"1em",
-                paddingBottom:"1em",
+                backgroundColor: "white",
+                paddingLeft: "1em",
+                paddingRight: "1em",
+                paddingTop: "1em",
+                paddingBottom: "1em",
                 borderRadius: "15px 15px 15px 15px",
-                display: showTip ? "": "none",
+                display: showTip ? "" : "none",
             }}>
-                👋 Need help? Ask Malvina, our bot!<CloseButton onClick={()=>setHideTip()}/>
+                👋 Need help? Ask Malvina, our bot!<CloseButton
+                onClick={() => setHideTip()}/>
             </div>
         </ChatFrame>);
 }

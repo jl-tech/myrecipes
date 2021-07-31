@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useLocation, useHistory } from "react-router-dom";
-import { Helmet } from "react-helmet-async";
+import React, {useEffect, useState} from 'react';
+import {Link, useHistory, useLocation} from "react-router-dom";
+import {Helmet} from "react-helmet-async";
 
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
@@ -61,7 +61,8 @@ function EmailConfirm() {
                     <Helmet>
                         <title> Verifying email - MyRecipes </title>
                     </Helmet>
-                    <Spinner style={{color:'tomato'}} animation={"grow"} style={{marginLeft:"auto", marginRight:"auto"}}/>
+                    <Spinner style={{color: 'tomato'}} animation={"grow"}
+                             style={{marginLeft: "auto", marginRight: "auto"}}/>
                 </Modal.Dialog>
             </>
         );
@@ -74,9 +75,10 @@ function EmailConfirm() {
 
                 <Modal.Dialog>
                     <Modal.Body>
-                        <div style={{textAlign:"center"}}>
-                            {message}<br />
-                            <Link to="/login" component={Button} style={{marginTop:"1em"}}>
+                        <div style={{textAlign: "center"}}>
+                            {message}<br/>
+                            <Link to="/login" component={Button}
+                                  style={{marginTop: "1em"}}>
                                 Return
                             </Link>
                         </div>

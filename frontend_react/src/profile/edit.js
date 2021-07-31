@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
@@ -26,7 +26,8 @@ function ProfileEdit(props) {
     return (
         <>
             <Button onClick={editShow}>Edit Profile & Account Details</Button>
-            <Modal show={showEdit || props.modalToggle} onHide={editClose} centered>
+            <Modal show={showEdit || props.modalToggle} onHide={editClose}
+                   centered>
                 <Modal.Header closeButton>
                     <Modal.Title>
                         Edit Profile & Account Details
@@ -34,10 +35,15 @@ function ProfileEdit(props) {
                 </Modal.Header>
                 <Modal.Body>
                     <Container>
-                        <ProfileEditName firstName={props.firstName} setfirstName={props.setfirstName} lastName={props.lastName} setlastName={props.setlastName} setButtonName={props.setButtonName}/>
-                        <ProfileEditEmail email={props.email} />
-                        <ProfileEditPassword />
-                        <ProfileEditPicture imgUrl={props.imgUrl} setImgUrl={props.setImgUrl} />
+                        <ProfileEditName firstName={props.firstName}
+                                         setfirstName={props.setfirstName}
+                                         lastName={props.lastName}
+                                         setlastName={props.setlastName}
+                                         setButtonName={props.setButtonName}/>
+                        <ProfileEditEmail email={props.email}/>
+                        <ProfileEditPassword/>
+                        <ProfileEditPicture imgUrl={props.imgUrl}
+                                            setImgUrl={props.setImgUrl}/>
                     </Container>
                 </Modal.Body>
             </Modal>

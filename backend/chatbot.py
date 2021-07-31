@@ -1,28 +1,24 @@
-import os
 import json
-
-from constants import *
-
+import os
 import threading
-
-import helpers
 
 from google.cloud import dialogflow
 
-from tokenise import token_to_id
+import helpers
 from search import do_search
 
-
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./static/chatbot_client/myrecipe-v9yo-da19f36bed8b.json"
+os.environ[
+    "GOOGLE_APPLICATION_CREDENTIALS"] = \
+    "./static/chatbot_client/myrecipe-v9yo-da19f36bed8b.json"
 
 project_id = "myrecipe-v9yo"
 language_code = "en-US"
 
 
-
 def talk(messages, session):
     '''
-    Talks to Dialogflow API with given messages from user and given session id then sends a response to the messages.
+    Talks to Dialogflow API with given messages from user and given session
+    id then sends a response to the messages.
     Will also send an email to the support staff if the messages are unclear.
     :param messages: messages entered by user
     :param session: a unique session id
@@ -36,7 +32,8 @@ def talk(messages, session):
 
     if messages.startswith('customer support:'):
         send_support_email(messages)
-        return "I've sent your message to our support team. Please expect a response within 24 hours."
+        return "I've sent your message to our support team. Please expect a " \
+               "response within 24 hours."
 
     if intent_name == "Welcome":
         react_message = react_message + '##NAME##?'
@@ -60,7 +57,8 @@ def talk(messages, session):
         if ingredient == "":
             ingredient = None
 
-        result = do_search(name, meal_type, serving_size, None, ingredient, step)
+        result = do_search(name, meal_type, serving_size, None, ingredient,
+                           step)
         if len(result) == 0:
             return "Sorry, I couldn't find any recipes."
         else:
@@ -68,18 +66,24 @@ def talk(messages, session):
             i = 0
             links = []
             while i < len(result) and i < 3:
-                links.append({'name': result[i]['name'], 'link': "http://localhost:3000/recipe/" + str(result[i]['recipe_id'])})
+                links.append({'name': result[i]['name'],
+                              'link': "http://localhost:3000/recipe/" + str(
+                                  result[i]['recipe_id'])})
                 i = i + 1
             return message, links
     elif intent_name == "Account_Settings":
-        return react_message, [{'name': 'Account Settings', 'link': 'http://localhost:3000/settings'}],
+        return react_message, [{'name': 'Account Settings',
+                                'link': 'http://localhost:3000/settings'}],
     elif intent_name == "direct_to_search":
-        return react_message, [{'name': 'Search', 'link': 'http://localhost:3000/search'}],
+        return react_message, [
+            {'name': 'Search', 'link': 'http://localhost:3000/search'}],
     elif intent_name == "Find_User":
-        return react_message, [{'name': 'Find User', 'link': 'http://localhost:3000/users'}],
+        return react_message, [
+            {'name': 'Find User', 'link': 'http://localhost:3000/users'}],
     elif intent_name == "Create":
         return react_message, [
-            {'name': 'Create a Recipe', 'link': 'http://localhost:3000/recipe/create'}],
+            {'name': 'Create a Recipe',
+             'link': 'http://localhost:3000/recipe/create'}],
     elif intent_name == "Newsfeed":
         return react_message, [
             {'name': 'Newsfeed', 'link': 'http://localhost:3000/newsfeed'}],
@@ -94,7 +98,8 @@ def talk(messages, session):
             {'name': 'Log In', 'link': 'http://localhost:3000/login'}],
 
     return react_message
-    
+
+
 def connect_dialogflow_api(session_id, text):
     '''
     Connects to Dialogflow API
@@ -112,9 +117,11 @@ def connect_dialogflow_api(session_id, text):
         request={"session": session, "query_input": query_input}
     )
 
+
 def send_support_email(messages):
     '''
-    Sends an email to the myrecipes support email address detailing a request from a user.
+    Sends an email to the myrecipes support email address detailing a request
+    from a user.
     :param messages: user's request
     :returns: None
     '''
@@ -126,13 +133,15 @@ def send_support_email(messages):
     message_html = f"""\
                <html>
                    <body>
-                       <p style="font-size:150%;text-align: center"> {messages} </p>
+                       <p style="font-size:150%;text-align: center"> 
+                       {messages} </p>
                    </body>
                </html>
                """
 
     email_thread = threading.Thread(name="email_thread",
-                                    args=(subject, message_html, message_plain, "myrecipes.supp@gmail.com",
+                                    args=(subject, message_html, message_plain,
+                                          "myrecipes.supp@gmail.com",
                                           None),
                                     target=helpers.send_email)
     email_thread.start()

@@ -3,10 +3,6 @@ import Cookie from "universal-cookie";
 import Image from "react-bootstrap/Image";
 import Liked from "../Like.png";
 import NotLiked from "../NotLiked.svg";
-
-import Col from "react-bootstrap/Col";
-import {Tooltip} from "@material-ui/core";
-import Alert from "react-bootstrap/Alert";
 import Row from "react-bootstrap/Row";
 
 async function requestLike(recipe_id, token) {
@@ -75,7 +71,6 @@ function RecipeViewLikes(props) {
     }
 
 
-
     async function handleLike() {
         let response = await requestLike(props.recipeId, cookie.get('token'))
             .catch(e => {
@@ -100,20 +95,36 @@ function RecipeViewLikes(props) {
 
     return (
         <>
-            <Row style={{textAlign: "center", justifyContent: "center"}} className={"mx-auto align-content-center"}>
+            <Row style={{textAlign: "center", justifyContent: "center"}}
+                 className={"mx-auto align-content-center"}>
                 <Image
-                    style={{cursor: "pointer", height: likeClicked ? "2em" : "2.5em", width:"auto", marginTop: likeClicked ? "0.2em": null, marginLeft: likeClicked ? "0.05em" : null}}
-                    onMouseLeave={props.loggedIn ? ()=>setLikeClicked(false) : null}
-                    onMouseDown={props.loggedIn ? ()=>setLikeClicked(true) : null}
-                    onMouseUp={props.loggedIn ? ()=>setLikeClicked(false) : null}
+                    style={{
+                        cursor: "pointer",
+                        height: likeClicked ? "2em" : "2.5em",
+                        width: "auto",
+                        marginTop: likeClicked ? "0.2em" : null,
+                        marginLeft: likeClicked ? "0.05em" : null
+                    }}
+                    onMouseLeave={props.loggedIn ? () => setLikeClicked(false) : null}
+                    onMouseDown={props.loggedIn ? () => setLikeClicked(true) : null}
+                    onMouseUp={props.loggedIn ? () => setLikeClicked(false) : null}
                     src={liked ? Liked : NotLiked}
-                    onClick={props.loggedIn ? () => handleLike() : ()=>showError("Log in to like this recipe")}
+                    onClick={props.loggedIn ? () => handleLike() : () => showError("Log in to like this recipe")}
                 />
             </Row>
-            <Row style={{textAlign: "center",  justifyContent: "center"}} className={"mx-auto align-content-center"}>
-                <p style={{width:"2em", textAlign:"center", fontSize: props.likes < 9999 ?  "150%" : "100%", color: liked ? "tomato" : "black",  marginTop: likeClicked ? "0.2em": null, verticalAlign: "middle"}}> { props.likes}</p>
+            <Row style={{textAlign: "center", justifyContent: "center"}}
+                 className={"mx-auto align-content-center"}>
+                <p style={{
+                    width: "2em",
+                    textAlign: "center",
+                    fontSize: props.likes < 9999 ? "150%" : "100%",
+                    color: liked ? "tomato" : "black",
+                    marginTop: likeClicked ? "0.2em" : null,
+                    verticalAlign: "middle"
+                }}> {props.likes}</p>
             </Row>
         </>
     )
 }
+
 export default RecipeViewLikes;

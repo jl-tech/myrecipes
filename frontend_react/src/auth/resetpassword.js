@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useLocation, useHistory } from "react-router-dom";
+import React, {useEffect, useState} from 'react';
+import {Link, useHistory, useLocation} from "react-router-dom";
 
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
@@ -7,7 +7,7 @@ import Form from 'react-bootstrap/Form';
 import Alert from 'react-bootstrap/Alert';
 
 import logo from '../WIP_logo_2.png';
-import { Helmet } from "react-helmet-async";
+import {Helmet} from "react-helmet-async";
 
 async function verifyResetCode(reset_code) {
     let response = await fetch('http://localhost:5000/auth/verifyresetcode', {
@@ -85,8 +85,8 @@ function ResetPasswordBody(props) {
                 <Helmet>
                     <title> Reset Password - MyRecipes </title>
                 </Helmet>
-                <div style={{textAlign:"center",marginTop:"1em"}}>
-                    <img src={logo} alt="Logo" style={{maxWidth:"500px"}}/>
+                <div style={{textAlign: "center", marginTop: "1em"}}>
+                    <img src={logo} alt="Logo" style={{maxWidth: "500px"}}/>
                 </div>
                 <Modal.Dialog>
                     <Modal.Header>
@@ -95,14 +95,15 @@ function ResetPasswordBody(props) {
                         </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <div style={{textAlign:"center"}}>
-                            Successfully changed password <br />
-                            <Link to="/login" component={Button} style={{marginTop:"1em"}}>
+                        <div style={{textAlign: "center"}}>
+                            Successfully changed password <br/>
+                            <Link to="/login" component={Button}
+                                  style={{marginTop: "1em"}}>
                                 Return
                             </Link>
                         </div>
                     </Modal.Body>
-                </Modal.Dialog >
+                </Modal.Dialog>
             </>
         );
     } else {
@@ -111,8 +112,8 @@ function ResetPasswordBody(props) {
                 <Helmet>
                     <title> Reset Password - MyRecipes </title>
                 </Helmet>
-                <div style={{textAlign:"center"}}>
-                    <img src={logo} alt="Logo" style={{maxWidth:"500px"}}/>
+                <div style={{textAlign: "center"}}>
+                    <img src={logo} alt="Logo" style={{maxWidth: "500px"}}/>
                 </div>
                 <Modal.Dialog>
                     <Modal.Header>
@@ -123,12 +124,19 @@ function ResetPasswordBody(props) {
                     <Modal.Body>
                         <Form onSubmit={handleSubmit}>
                             <Form.Group controlId="password">
-                                <Form.Control type="password" placeholder="Password" required onChange={e => setPassword(e.target.value)}/>
+                                <Form.Control type="password"
+                                              placeholder="Password" required
+                                              onChange={e => setPassword(e.target.value)}/>
                             </Form.Group>
                             <Form.Group controlId="password">
-                                <Form.Control type="password" placeholder="Retype Password" required onChange={e => setPassword2(e.target.value)}/>
+                                <Form.Control type="password"
+                                              placeholder="Retype Password"
+                                              required
+                                              onChange={e => setPassword2(e.target.value)}/>
                             </Form.Group>
-                            <Alert show={alertShow} variant="danger" onClose={() => setAlertShow(false)} dismissible>
+                            <Alert show={alertShow} variant="danger"
+                                   onClose={() => setAlertShow(false)}
+                                   dismissible>
                                 {alertText}
                             </Alert>
                             <Button type="submit" block>
@@ -136,7 +144,7 @@ function ResetPasswordBody(props) {
                             </Button>
                         </Form>
                     </Modal.Body>
-                </Modal.Dialog >
+                </Modal.Dialog>
             </>
         );
     }
@@ -146,9 +154,10 @@ function ResetPasswordError(props) {
     return (
         <Modal.Dialog>
             <Modal.Body>
-                <div style={{textAlign:"center"}}>
-                    {props.message}<br />
-                    <Link to="/login" component={Button} style={{marginTop:"1em"}}>
+                <div style={{textAlign: "center"}}>
+                    {props.message}<br/>
+                    <Link to="/login" component={Button}
+                          style={{marginTop: "1em"}}>
                         Return
                     </Link>
                 </div>
@@ -185,8 +194,8 @@ function ResetPassword() {
     }, []);
 
     if (fetched) {
-        if (valid) return (<ResetPasswordBody code={code} />);
-        else return (<ResetPasswordError message={message} />);
+        if (valid) return (<ResetPasswordBody code={code}/>);
+        else return (<ResetPasswordError message={message}/>);
     } else {
         return (<Modal.Dialog></Modal.Dialog>);
     }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 import Row from 'react-bootstrap/Row';
@@ -58,24 +58,40 @@ function ProfileEditEmail(props) {
     if (!editMode) {
         return (
             <>
-                <Row style={{borderTopColor:"gray",borderTopWidth:"1px",borderTopStyle:"solid",paddingTop:"1em", marginTop:"1em"}}>
+                <Row style={{
+                    borderTopColor: "gray",
+                    borderTopWidth: "1px",
+                    borderTopStyle: "solid",
+                    paddingTop: "1em",
+                    marginTop: "1em"
+                }}>
                     <Col sm={10}><h5>Email</h5></Col>
-                    <Col sm={2} ><Button variant="outline-secondary" size="sm" onClick={() => setEditMode(true)}>Edit</Button></Col>
+                    <Col sm={2}><Button variant="outline-secondary" size="sm"
+                                        onClick={() => setEditMode(true)}>Edit</Button></Col>
                 </Row>
                 <Row>
-                    <Col >{props.email}</Col>
+                    <Col>{props.email}</Col>
                 </Row>
-                <Alert show={successShow} variant="success" onClose={() => setSuccessShow(false)} dismissible>
-                    Please verify the new email using the confirmation link sent.
+                <Alert show={successShow} variant="success"
+                       onClose={() => setSuccessShow(false)} dismissible>
+                    Please verify the new email using the confirmation link
+                    sent.
                 </Alert>
             </>
         );
     } else {
         return (
             <>
-                <Row style={{borderTopColor:"gray",borderTopWidth:"1px",borderTopStyle:"solid",paddingTop:"1em", marginTop:"1em"}}>
+                <Row style={{
+                    borderTopColor: "gray",
+                    borderTopWidth: "1px",
+                    borderTopStyle: "solid",
+                    paddingTop: "1em",
+                    marginTop: "1em"
+                }}>
                     <Col sm={10}><h5>Email</h5></Col>
-                    <Col sm={2} ><Button variant="outline-secondary" size="sm" onClick={() => setEditMode(false)}>Cancel</Button></Col>
+                    <Col sm={2}><Button variant="outline-secondary" size="sm"
+                                        onClick={() => setEditMode(false)}>Cancel</Button></Col>
                 </Row>
                 <Form onSubmit={handleSubmit}>
                     <Form.Group as={Row}>
@@ -83,13 +99,15 @@ function ProfileEditEmail(props) {
                             New
                         </Form.Label>
                         <Col sm="8">
-                            <Form.Control required onChange={e => setNewEmail(e.target.value)} />
+                            <Form.Control required
+                                          onChange={e => setNewEmail(e.target.value)}/>
                         </Col>
                     </Form.Group>
-                    <Alert show={errorShow} variant="danger" onClose={() => setErrorShow(false)} dismissible>
+                    <Alert show={errorShow} variant="danger"
+                           onClose={() => setErrorShow(false)} dismissible>
                         {errorText}
                     </Alert>
-                    <div style={{textAlign:"center"}}>
+                    <div style={{textAlign: "center"}}>
                         <Button type="submit" size="sm">
                             Confirm
                         </Button>

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useHistory, useParams } from "react-router-dom";
+import React, {useEffect, useState} from 'react';
+import {Link, useHistory, useParams} from "react-router-dom";
 
 import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
@@ -13,7 +13,7 @@ import Pagination from "react-bootstrap/Pagination";
 import ListGroup from "react-bootstrap/ListGroup";
 import ReactTimeAgo from "react-time-ago";
 
-import { Helmet } from "react-helmet-async";
+import {Helmet} from "react-helmet-async";
 import Like from "../Like.svg";
 import Comment from "../comment_black_24dp.svg";
 import Button from "react-bootstrap/Button";
@@ -71,7 +71,7 @@ function Feed(props) {
 
     const [recommendedTagHovered, setRecommendedTagHovered] = useState(false)
 
-    let { page } = useParams();
+    let {page} = useParams();
     const cookie = new Cookie()
     const history = useHistory()
     const [hideRecommended, setHideRecommended] = useState(cookie.get('recommended_hidden') === "true")
@@ -121,13 +121,21 @@ function Feed(props) {
         e.stopPropagation()
         doHideRecommended()
     }
+
     function doHideRecommended() {
-        cookie.set('recommended_hidden', "true", {path:'/newsfeed',  sameSite:"strict"})
+        cookie.set('recommended_hidden', "true", {
+            path: '/newsfeed',
+            sameSite: "strict"
+        })
         setHideRecommended(true)
         console.log(cookie.get('recommended_hidden'))
     }
+
     function doShowRecommended() {
-        cookie.set('recommended_hidden', "false", {path:'/newsfeed', sameSite:"strict"})
+        cookie.set('recommended_hidden', "false", {
+            path: '/newsfeed',
+            sameSite: "strict"
+        })
         setHideRecommended(false)
         console.log(cookie.get('recommended_hidden'))
     }
@@ -194,9 +202,9 @@ function Feed(props) {
                                                 height: "1.5em",
                                                 width: "10em"
                                             }}
-                                                 onMouseEnter={()=>setRecommendedTagHovered(true)}
-                                                 onMouseLeave={()=>setRecommendedTagHovered(false)}
-                                                 onClick={ recommendedTagHovered ? (e)=>handleClickTag(e) : null}
+                                                 onMouseEnter={() => setRecommendedTagHovered(true)}
+                                                 onMouseLeave={() => setRecommendedTagHovered(false)}
+                                                 onClick={recommendedTagHovered ? (e) => handleClickTag(e) : null}
                                             >
                                                 {recommendedTagHovered ? "Hide Recommended" : "RECOMMENDED"}
                                             </div>
@@ -285,49 +293,72 @@ function Feed(props) {
             <Helmet>
                 <title> Newsfeed - MyRecipes </title>
             </Helmet>
-            <Container  style={{marginTop:'1em', marginBottom:"2em"}}>
+            <Container style={{marginTop: '1em', marginBottom: "2em"}}>
                 <Row>
                     <Col sm={3}>
                         {!fetchedProfile ?
                             <div style={{textAlign: "center"}}>
                                 <br/>
-                                <Spinner style={{color:'tomato'}} animation={"grow"}/>
+                                <Spinner style={{color: 'tomato'}}
+                                         animation={"grow"}/>
                             </div>
                             :
                             <>
                                 <Row>
                                     <Col>
-                                        <div style={{cursor:'pointer'}} role="link" onClick={()=>history.push("/profile")} >
+                                        <div style={{cursor: 'pointer'}}
+                                             role="link"
+                                             onClick={() => history.push("/profile")}>
                                             <Modal.Dialog
-                                                onMouseEnter={()=> setHoveredProfile(true)}
-                                                onMouseLeave={()=> setHoveredProfile(false)}
+                                                onMouseEnter={() => setHoveredProfile(true)}
+                                                onMouseLeave={() => setHoveredProfile(false)}
                                                 className={hoveredProfile ? 'shadow-lg' : 'shadow-sm'}>
-                                                <Modal.Header style={{paddingTop:"0.5em", paddingBottom:"0.5em"}}>
-                                                    <Col style={{textAlign: "center", fontSize:"125%"}}> Your Profile  </Col>
+                                                <Modal.Header style={{
+                                                    paddingTop: "0.5em",
+                                                    paddingBottom: "0.5em"
+                                                }}>
+                                                    <Col style={{
+                                                        textAlign: "center",
+                                                        fontSize: "125%"
+                                                    }}> Your Profile </Col>
                                                 </Modal.Header>
                                                 <Modal.Body>
                                                     <Row>
-                                                        <Col style={{textAlign:"center"}}>
-                                                            <Image src={"http://127.0.0.1:5000/img/" + imgUrl} alt="Profile Picture" roundedCircle width="70em"/>
+                                                        <Col
+                                                            style={{textAlign: "center"}}>
+                                                            <Image
+                                                                src={"http://127.0.0.1:5000/img/" + imgUrl}
+                                                                alt="Profile Picture"
+                                                                roundedCircle
+                                                                width="70em"/>
                                                         </Col>
                                                     </Row>
                                                     <Row>
-                                                        <Col style={{textAlign:"center"}}>
+                                                        <Col
+                                                            style={{textAlign: "center"}}>
                                                             <h4>{firstName} {lastName}</h4>
                                                         </Col>
                                                     </Row>
-                                                    <Row style={{textAlign:"center"}}>
+                                                    <Row
+                                                        style={{textAlign: "center"}}>
                                                         <Col>
-                                                            <table style={{marginLeft:"auto", marginRight:"auto", borderCollapse:"separate", borderSpacing:"1em 0em"}}><tbody>
-                                                            <tr>
-                                                                <th style={{fontSize:"150%"}}> {recipeCount} </th>
-                                                                <th style={{fontSize:"150%"}}> {subscribers.length} </th>
-                                                            </tr>
-                                                            <tr>
-                                                                <td> RECIPES </td>
-                                                                <td> SUBSCRIBERS </td>
-                                                            </tr>
-                                                            </tbody></table>
+                                                            <table style={{
+                                                                marginLeft: "auto",
+                                                                marginRight: "auto",
+                                                                borderCollapse: "separate",
+                                                                borderSpacing: "1em 0em"
+                                                            }}>
+                                                                <tbody>
+                                                                <tr>
+                                                                    <th style={{fontSize: "150%"}}> {recipeCount} </th>
+                                                                    <th style={{fontSize: "150%"}}> {subscribers.length} </th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td> RECIPES</td>
+                                                                    <td> SUBSCRIBERS</td>
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
                                                         </Col>
                                                     </Row>
                                                 </Modal.Body>
@@ -335,9 +366,11 @@ function Feed(props) {
                                         </div>
                                     </Col>
                                 </Row>
-                                <Row className={"mx-auto align-content-center"} style={{textAlign:"center"}}>
+                                <Row className={"mx-auto align-content-center"}
+                                     style={{textAlign: "center"}}>
                                     <Col>
-                                        <Button onClick={hideRecommended ? ()=>doShowRecommended() : ()=>doHideRecommended()}> {hideRecommended ? "Show Recommended": "Hide Recommended"} </Button>
+                                        <Button
+                                            onClick={hideRecommended ? () => doShowRecommended() : () => doHideRecommended()}> {hideRecommended ? "Show Recommended" : "Hide Recommended"} </Button>
                                     </Col>
                                 </Row>
                                 <br/>
@@ -345,22 +378,34 @@ function Feed(props) {
                                     <Col>
                                         {subscriptions.length === 0 ? null :
                                             <ListGroup>
-                                                <ListGroup.Item variant="primary">Subscriptions</ListGroup.Item>
-                                                { subscriptions.map(({first_name, last_name, user_id, profile_pic_path}, index)=>
+                                                <ListGroup.Item
+                                                    variant="primary">Subscriptions</ListGroup.Item>
+                                                {subscriptions.map(({
+                                                                        first_name,
+                                                                        last_name,
+                                                                        user_id,
+                                                                        profile_pic_path
+                                                                    }, index) =>
                                                     <ListGroup.Item key={index}>
-                                                        <Link  to={"/profile/" + user_id} style={{width:"100%"}}>
+                                                        <Link
+                                                            to={"/profile/" + user_id}
+                                                            style={{width: "100%"}}>
                                                             <Row>
                                                                 <Col sm={3}>
-                                                                    <Image src={"http://127.0.0.1:5000/img/" + profile_pic_path} alt="Profile Picture" roundedCircle width="40em"/>
+                                                                    <Image
+                                                                        src={"http://127.0.0.1:5000/img/" + profile_pic_path}
+                                                                        alt="Profile Picture"
+                                                                        roundedCircle
+                                                                        width="40em"/>
                                                                 </Col>
-                                                                <Col >
+                                                                <Col>
                                                                     {first_name} {last_name}
                                                                 </Col>
                                                             </Row>
                                                         </Link>
                                                     </ListGroup.Item>
                                                 )}
-                                            </ListGroup> }
+                                            </ListGroup>}
                                     </Col>
                                 </Row>
                             </>
@@ -370,25 +415,42 @@ function Feed(props) {
                         {!fetchedFeed ?
                             <div style={{textAlign: "center"}}>
                                 <br/>
-                                <Spinner style={{color:'tomato'}} animation={"grow"}/>
+                                <Spinner style={{color: 'tomato'}}
+                                         animation={"grow"}/>
                             </div>
                             :
                             <>
                                 <Row>
                                     <Col>
                                         {subscriptions.length === 0 ?
-                                            <Modal.Dialog style={{textAlign: "center"}}> <Modal.Title style={{padding:"1em"}}> You haven't subscribed to anyone. </Modal.Title> <Modal.Body>
-                                                Visit a profile and select Subscribe, and your newsfeed will show their most recent recipes. </Modal.Body> </Modal.Dialog>
+                                            <Modal.Dialog
+                                                style={{textAlign: "center"}}>
+                                                <Modal.Title
+                                                    style={{padding: "1em"}}> You
+                                                    haven't subscribed to
+                                                    anyone. </Modal.Title>
+                                                <Modal.Body>
+                                                    Visit a profile and select
+                                                    Subscribe, and your newsfeed
+                                                    will show their most recent
+                                                    recipes. </Modal.Body>
+                                            </Modal.Dialog>
                                             : (recipes.length === 0 ?
-                                                <Modal.Dialog><Modal.Body>Your subscriptions have not created recipes.</Modal.Body> </Modal.Dialog>:
+                                                <Modal.Dialog><Modal.Body>Your
+                                                    subscriptions have not
+                                                    created
+                                                    recipes.</Modal.Body>
+                                                </Modal.Dialog> :
                                                 recipes.map(generateCard))}
                                     </Col>
                                 </Row>
                                 <Row>
                                     <Col>
-                                        <Pagination style={{padding:"1em"}}>
+                                        <Pagination style={{padding: "1em"}}>
                                             {[...Array(pages).keys()].map(i =>
-                                                <Pagination.Item key={i} active={i+1 === activePage} onClick={()=>navigatePage(i+1)}>{i+1}</Pagination.Item>
+                                                <Pagination.Item key={i}
+                                                                 active={i + 1 === activePage}
+                                                                 onClick={() => navigatePage(i + 1)}>{i + 1}</Pagination.Item>
                                             )}
                                         </Pagination>
                                     </Col>

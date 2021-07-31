@@ -11,7 +11,7 @@ import Image from 'react-bootstrap/Image';
 
 
 import ListGroup from 'react-bootstrap/ListGroup';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
 import Reorder from './reorder_black_24dp.svg';
 
 
@@ -91,27 +91,36 @@ function RecipeCreatePhoto({photos, setPhotos}) {
             <DragDropContext onDragEnd={handleOnDragEnd}>
                 <Droppable droppableId="photos">
                     {(provided) => (
-                        <ListGroup as="ul" {...provided.droppableProps} ref={provided.innerRef}>
+                        <ListGroup as="ul" {...provided.droppableProps}
+                                   ref={provided.innerRef}>
                             {photos.map(({id, url, image, name}, index) => {
                                 return (
-                                    <Draggable key={id} draggableId={id} index={index}>
+                                    <Draggable key={id} draggableId={id}
+                                               index={index}>
                                         {(provided) => (
-                                            <ListGroup.Item as="li" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
-                                                <Row >
-                                                    <Col sm={1} className={"my-auto"}>
-                                                        {index === 0 ? "1 (Main)" : index+1}
+                                            <ListGroup.Item as="li"
+                                                            ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
+                                                <Row>
+                                                    <Col sm={1}
+                                                         className={"my-auto"}>
+                                                        {index === 0 ? "1 (Main)" : index + 1}
                                                     </Col>
                                                     <Col sm={5}>
                                                         <span>{name}</span>
                                                     </Col>
                                                     <Col sm={5}>
-                                                        <Image src={url} width="10%"/>
+                                                        <Image src={url}
+                                                               width="10%"/>
                                                     </Col>
-                                                    <Col sm={1} className={"my-auto"}>
-                                                        <button type="button" className="close" onClick={() => removePhoto(index)}>
+                                                    <Col sm={1}
+                                                         className={"my-auto"}>
+                                                        <button type="button"
+                                                                className="close"
+                                                                onClick={() => removePhoto(index)}>
                                                             <span>×</span>
                                                         </button>
-                                                        <img src={Reorder} alt=""/>
+                                                        <img src={Reorder}
+                                                             alt=""/>
                                                     </Col>
                                                 </Row>
                                             </ListGroup.Item>
@@ -123,21 +132,28 @@ function RecipeCreatePhoto({photos, setPhotos}) {
                             <ListGroup.Item as="li">
                                 {uploaded ?
                                     <Row>
-                                        <Col style={{textAlign:"center"}}>
+                                        <Col style={{textAlign: "center"}}>
                                             <Image src={url} width="10%"/>
                                         </Col>
                                     </Row>
-                                    :<></>}
+                                    : <></>}
                                 <Row>
                                     <Col sm={11}>
-                                        <Form.File onChange={e => handleImageUpload(e)} id="file-upload"/>
+                                        <Form.File
+                                            onChange={e => handleImageUpload(e)}
+                                            id="file-upload"/>
 
-                                        <Alert show={errorShow} variant="danger" style={{marginTop:"1em"}} onClose={() => setErrorShow(false)} dismissible>
+                                        <Alert show={errorShow} variant="danger"
+                                               style={{marginTop: "1em"}}
+                                               onClose={() => setErrorShow(false)}
+                                               dismissible>
                                             {errorText}
                                         </Alert>
                                     </Col>
                                     <Col sm={1}>
-                                        <Button variant="outline-secondary" style={{float:"right"}} onClick={addRow}>Add</Button>
+                                        <Button variant="outline-secondary"
+                                                style={{float: "right"}}
+                                                onClick={addRow}>Add</Button>
                                     </Col>
                                 </Row>
                             </ListGroup.Item>

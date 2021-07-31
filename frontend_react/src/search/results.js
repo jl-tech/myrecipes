@@ -8,11 +8,11 @@ import Alert from "react-bootstrap/Alert";
 import Cookie from 'universal-cookie';
 import Spinner from "react-bootstrap/Spinner"
 
-import { useLocation } from "react-router-dom";
+import {useLocation} from "react-router-dom";
 import RecipeList from '../recipe/list';
 import SearchBar from './bar.js';
 import SearchAdvanced from './advanced.js';
-import { Helmet } from "react-helmet-async";
+import {Helmet} from "react-helmet-async";
 import {Collapse} from "@material-ui/core";
 
 async function requestRecipes(token, name_keywords, type, serving_size, time_to_cook, ingredients, step_keywords) {
@@ -86,52 +86,66 @@ function SearchResults(props) {
     if (success) {
         return (
             <>
-            <Helmet>
-                <title> {query.get('name') != null ? `'${query.get('name')}': Search Results`: 'Browse All Recipes' } - MyRecipes </title>
-            </Helmet>
-            <Container style={{marginTop:"1em",marginBottom:"2em"}}>
-                <Row>
-                    <Col>
-                        <div style={{textAlign:"center"}}>
-                            <h2>Search Recipes </h2>
-                        </div>
-                    </Col>
-                </Row>
-                <Row style={{marginTop:"1em"}}>
-                    <Col sm={3} />
-                    <Col sm={6}>
-                    <SearchBar loggedIn={props.loggedIn} isHome={false} init={query.get('name') != null ? query.get('name') : ""} disabled={advancedMode}/>
-                    <div style={{marginTop:"0.5em"}}>
-                        {recipeData.length} recipes found
-                        <a href="#" style={{float:"right"}} onClick={()=>{setAdvancedMode(!advancedMode)}}> {advancedMode? "Hide advanced options" : "Show advanced options"}</a>
-                    </div>
-                    </Col>
-                </Row>
-                <Collapse in={advancedMode}>
-                    <Row style={{marginTop:"1em"}}>
-                        <Col sm={3} />
-                        <Col sm={6}>
-                            <SearchAdvanced setErrorShow={setErrorShow}/>
-                            <Alert show={errorShow} variant="danger" style={{marginTop:'1em'}} onClose={() => setErrorShow(false)} dismissible>
-                                Please enter a valid search term in any field.
-                            </Alert>
+                <Helmet>
+                    <title> {query.get('name') != null ? `'${query.get('name')}': Search Results` : 'Browse All Recipes'} -
+                        MyRecipes </title>
+                </Helmet>
+                <Container style={{marginTop: "1em", marginBottom: "2em"}}>
+                    <Row>
+                        <Col>
+                            <div style={{textAlign: "center"}}>
+                                <h2>Search Recipes </h2>
+                            </div>
                         </Col>
                     </Row>
-                </Collapse>
-                <Row style={{marginTop:"1em"}}>
-                
-                {recipeData.length === 0 ?
-                <Col style={{textAlign: 'center'}}><span> No recipes found. </span></Col> :
-                <RecipeList recipeData={recipeData} setRecipeData={setRecipeData}/>}
-                </Row>
-            </Container>
+                    <Row style={{marginTop: "1em"}}>
+                        <Col sm={3}/>
+                        <Col sm={6}>
+                            <SearchBar loggedIn={props.loggedIn} isHome={false}
+                                       init={query.get('name') != null ? query.get('name') : ""}
+                                       disabled={advancedMode}/>
+                            <div style={{marginTop: "0.5em"}}>
+                                {recipeData.length} recipes found
+                                <a href="#" style={{float: "right"}}
+                                   onClick={() => {
+                                       setAdvancedMode(!advancedMode)
+                                   }}> {advancedMode ? "Hide advanced options" : "Show advanced options"}</a>
+                            </div>
+                        </Col>
+                    </Row>
+                    <Collapse in={advancedMode}>
+                        <Row style={{marginTop: "1em"}}>
+                            <Col sm={3}/>
+                            <Col sm={6}>
+                                <SearchAdvanced setErrorShow={setErrorShow}/>
+                                <Alert show={errorShow} variant="danger"
+                                       style={{marginTop: '1em'}}
+                                       onClose={() => setErrorShow(false)}
+                                       dismissible>
+                                    Please enter a valid search term in any
+                                    field.
+                                </Alert>
+                            </Col>
+                        </Row>
+                    </Collapse>
+                    <Row style={{marginTop: "1em"}}>
+
+                        {recipeData.length === 0 ?
+                            <Col style={{textAlign: 'center'}}><span> No recipes found. </span></Col> :
+                            <RecipeList recipeData={recipeData}
+                                        setRecipeData={setRecipeData}/>}
+                    </Row>
+                </Container>
             </>
         )
-    }
-    else {
+    } else {
         return (
-            <Container style={{textAlign: "center",marginTop:"1em",marginBottom:"2em"}}>
-                    <Spinner style={{color:'tomato'}} animation={"grow"}/>
+            <Container style={{
+                textAlign: "center",
+                marginTop: "1em",
+                marginBottom: "2em"
+            }}>
+                <Spinner style={{color: 'tomato'}} animation={"grow"}/>
             </Container>
         )
     }

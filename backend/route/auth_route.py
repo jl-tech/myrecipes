@@ -1,7 +1,7 @@
 from flask import *
-import tokenise
-import auth
 
+import auth
+import tokenise
 
 AUTH = Blueprint('AUTH', __name__, template_folder='templates')
 
@@ -9,7 +9,8 @@ AUTH = Blueprint('AUTH', __name__, template_folder='templates')
 @AUTH.route("/register", methods=['POST'])
 def route_auth_register():
     data = request.get_json()
-    result = auth.add_new_user(data["email"], data["first_name"], data["last_name"], data["password"])
+    result = auth.add_new_user(data["email"], data["first_name"],
+                               data["last_name"], data["password"])
     if result == 1:
         response = jsonify({'error': 'The email already exists'})
         response.headers.add('Access-Control-Allow-Origin', '*')
@@ -57,7 +58,8 @@ def route_auth_login():
     data = request.get_json()
     correct, user_id = auth.check_password(data["email"], data["password"])
     if correct:
-        response = jsonify({'token': tokenise.encode_token({'user_id': user_id})})
+        response = jsonify(
+            {'token': tokenise.encode_token({'user_id': user_id})})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
     elif not correct and user_id == -1 or not correct and user_id == -2:

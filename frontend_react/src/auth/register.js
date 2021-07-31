@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
@@ -63,26 +63,38 @@ function RegisterBody(props) {
             <Form onSubmit={handleSubmit}>
                 <Form.Row>
                     <Form.Group as={Col}>
-                        <Form.Control placeholder="First name" required onChange={e => setfirstName(e.target.value)}/>
+                        <Form.Control placeholder="First name" required
+                                      onChange={e => setfirstName(e.target.value)}/>
                     </Form.Group>
                     <Form.Group as={Col}>
-                        <Form.Control placeholder="Last name" required onChange={e => setlastName(e.target.value)}/>
+                        <Form.Control placeholder="Last name" required
+                                      onChange={e => setlastName(e.target.value)}/>
                     </Form.Group>
                 </Form.Row>
                 <Form.Group>
-                    <Form.Control type="email" placeholder="Email address" required onChange={e => setEmail(e.target.value)}/>
+                    <Form.Control type="email" placeholder="Email address"
+                                  required
+                                  onChange={e => setEmail(e.target.value)}/>
                 </Form.Group>
                 <Form.Group>
-                    <Form.Control type="password" placeholder="Password" required onChange={e => setPassword(e.target.value)}/>
+                    <Form.Control type="password" placeholder="Password"
+                                  required
+                                  onChange={e => setPassword(e.target.value)}/>
                 </Form.Group>
                 <Form.Group>
-                    <Form.Control type="password" placeholder="Retype Password" required onChange={e => setPassword2(e.target.value)}/>
+                    <Form.Control type="password" placeholder="Retype Password"
+                                  required
+                                  onChange={e => setPassword2(e.target.value)}/>
                 </Form.Group>
-                <Alert show={alertShow} variant="danger" onClose={() => setAlertShow(false)} dismissible>
+                <Alert show={alertShow} variant="danger"
+                       onClose={() => setAlertShow(false)} dismissible>
                     {alertText}
                 </Alert>
-                <div style={{textAlign:"center"}}>
-                    <Button style={{backgroundColor:"#ff9147",borderColor:"#fff3de"}} type="submit">
+                <div style={{textAlign: "center"}}>
+                    <Button style={{
+                        backgroundColor: "#ff9147",
+                        borderColor: "#fff3de"
+                    }} type="submit">
                         Sign Up
                     </Button>
                 </div>
@@ -92,10 +104,14 @@ function RegisterBody(props) {
         return (
             <>
                 <div>
-                    We have sent an email with a confirmation link to your email address.
+                    We have sent an email with a confirmation link to your email
+                    address.
                 </div>
-                <div style={{textAlign:"center"}}>
-                    <Button style={{backgroundColor:"#ff9147",borderColor:"#fff3de"}} onClick={() => props.setModalShow(false)}>
+                <div style={{textAlign: "center"}}>
+                    <Button style={{
+                        backgroundColor: "#ff9147",
+                        borderColor: "#fff3de"
+                    }} onClick={() => props.setModalShow(false)}>
                         Close
                     </Button>
                 </div>
@@ -108,7 +124,8 @@ function Register() {
     const [modalShow, setModalShow] = useState(false);
 
     return (<>
-        <Button style={{backgroundColor:"#ff9147",borderColor:"#ff9147"}} onClick={() => setModalShow(true)}>
+        <Button style={{backgroundColor: "#ff9147", borderColor: "#ff9147"}}
+                onClick={() => setModalShow(true)}>
             Create New Account
         </Button>
         <Modal show={modalShow} onHide={() => setModalShow(false)} centered>
@@ -116,7 +133,7 @@ function Register() {
                 <Modal.Title>Sign Up</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <RegisterBody setModalShow={setModalShow} />
+                <RegisterBody setModalShow={setModalShow}/>
             </Modal.Body>
         </Modal>
     </>);

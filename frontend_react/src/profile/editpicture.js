@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import imageCompression from 'browser-image-compression';
 
 import Button from 'react-bootstrap/Button';
@@ -131,21 +131,35 @@ function ProfileEditPicture(props) {
     if (!editMode) {
         return (
             <>
-                <Row style={{borderTopColor:"gray",borderTopWidth:"1px",borderTopStyle:"solid",paddingTop:"1em", marginTop:"1em"}}>
+                <Row style={{
+                    borderTopColor: "gray",
+                    borderTopWidth: "1px",
+                    borderTopStyle: "solid",
+                    paddingTop: "1em",
+                    marginTop: "1em"
+                }}>
                     <Col sm={8}><h5>Picture</h5></Col>
-                    <Col sm={2} >
-                        { props.imgUrl === 'default.png' ? <></> : <Button variant="outline-primary" size="sm" onClick={handleRemoveImage}>Delete</Button>}</Col>
-                    <Col sm={2} ><Button variant="outline-secondary" size="sm" onClick={() => setEditMode(true)}>Edit</Button></Col>
+                    <Col sm={2}>
+                        {props.imgUrl === 'default.png' ? <></> :
+                            <Button variant="outline-primary" size="sm"
+                                    onClick={handleRemoveImage}>Delete</Button>}</Col>
+                    <Col sm={2}><Button variant="outline-secondary" size="sm"
+                                        onClick={() => setEditMode(true)}>Edit</Button></Col>
                 </Row>
                 <Row>
-                    <Col style={{textAlign:"center"}}>
-                        <Image src={"http://127.0.0.1:5000/img/" + props.imgUrl} alt="Profile Picture" roundedCircle width="25%"/>
+                    <Col style={{textAlign: "center"}}>
+                        <Image src={"http://127.0.0.1:5000/img/" + props.imgUrl}
+                               alt="Profile Picture" roundedCircle width="25%"/>
                     </Col>
                 </Row>
-                <Alert show={successShow} variant="success" onClose={() => setSuccessShow(false)} style={{marginTop:"1em"}} dismissible>
+                <Alert show={successShow} variant="success"
+                       onClose={() => setSuccessShow(false)}
+                       style={{marginTop: "1em"}} dismissible>
                     {successText}
                 </Alert>
-                <Alert show={errorShow2} variant="danger" style={{marginTop:"1em"}} onClose={() => setErrorShow2(false)} dismissible>
+                <Alert show={errorShow2} variant="danger"
+                       style={{marginTop: "1em"}}
+                       onClose={() => setErrorShow2(false)} dismissible>
                     {errorText2}
                 </Alert>
             </>
@@ -153,29 +167,39 @@ function ProfileEditPicture(props) {
     } else {
         return (
             <>
-                <Row style={{borderTopColor:"gray",borderTopWidth:"1px",borderTopStyle:"solid",paddingTop:"1em", marginTop:"1em"}}>
+                <Row style={{
+                    borderTopColor: "gray",
+                    borderTopWidth: "1px",
+                    borderTopStyle: "solid",
+                    paddingTop: "1em",
+                    marginTop: "1em"
+                }}>
                     <Col sm={10}><h5>Picture</h5></Col>
-                    <Col sm={2} ><Button variant="outline-secondary" size="sm" onClick={cancel} >Cancel</Button></Col>
+                    <Col sm={2}><Button variant="outline-secondary" size="sm"
+                                        onClick={cancel}>Cancel</Button></Col>
                 </Row>
                 <Row>
-                    <Col style={{textAlign:"center"}}>
+                    <Col style={{textAlign: "center"}}>
                         <Image src={newUrl} roundedCircle width="25%"/>
                     </Col>
                 </Row>
-                <Row style={{marginTop:"1em"}}>
-                    <Col sm="8" style={{textAlign:"center"}}>
+                <Row style={{marginTop: "1em"}}>
+                    <Col sm="8" style={{textAlign: "center"}}>
                         <Form>
-                            <Form.File onChange={e => handleImageUpload(e)} />
+                            <Form.File onChange={e => handleImageUpload(e)}/>
                         </Form>
                     </Col>
-                    <Col sm="2" style={{textAlign:"center"}}>
+                    <Col sm="2" style={{textAlign: "center"}}>
                         {uploaded
-                            ? <Button variant="primary" size="sm" onClick={handleSubmit}>Confirm</Button>
+                            ? <Button variant="primary" size="sm"
+                                      onClick={handleSubmit}>Confirm</Button>
                             : <></>
                         }
                     </Col>
                 </Row>
-                <Alert show={errorShow} variant="danger" style={{marginTop:"1em"}} onClose={() => setErrorShow(false)} dismissible>
+                <Alert show={errorShow} variant="danger"
+                       style={{marginTop: "1em"}}
+                       onClose={() => setErrorShow(false)} dismissible>
                     {errorText}
                 </Alert>
             </>

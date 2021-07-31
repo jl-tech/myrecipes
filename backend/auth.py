@@ -1,10 +1,10 @@
-import helpers
-import bcrypt
-import tokenise
 import threading
 
+import bcrypt
+
+import helpers
+import tokenise
 from tokenise import token_to_id
-from constants import *
 
 DEFAULT_PIC = 'default.png'
 
@@ -31,7 +31,8 @@ def add_new_user(email, first_name, last_name, password):
 
     con = helpers.get_db_conn()
     cur = con.cursor()
-    query = "insert into Users (email, first_name, last_name, password_hash, email_verified)" \
+    query = "insert into Users (email, first_name, last_name, password_hash, " \
+            "email_verified)" \
             "values (%s, %s, %s, %s, FALSE)"
     cur.execute(query, (email, first_name, last_name, hashed_pwd))
     con.commit()
@@ -43,13 +44,16 @@ def add_new_user(email, first_name, last_name, password):
     con.close()
     send_confirm_email(user_id['user_id'], email)
 
-    print(f"INFO: Created new account: {email}, f: {first_name}, l: {last_name}, p: {hashed_pwd}")
+    print(
+        f"INFO: Created new account: {email}, f: {first_name},"
+        f" l: {last_name}, p: {hashed_pwd}")
     return 0
 
 
 def email_confirm(code):
     '''
-    Given an email verification token, updates the user email associated with user_id
+    Given an email verification token, updates the user email associated with
+    user_id
     an unverified account, and verifies that account if so.
     :param code: The email verification token
     :returns: 0 on success. 1 if token is unsecure
@@ -62,7 +66,8 @@ def email_confirm(code):
     # Verify unverified user
     con = helpers.get_db_conn()
     cur = con.cursor()
-    query = "select * from Users where email = %s and email_verified = FALSE and user_id = %s"
+    query = "select * from Users where email = %s and email_verified = FALSE " \
+            "and user_id = %s"
     cur.execute(query, (data["email"], int(data["user_id"])))
     result = cur.fetchall()
     con.close()
@@ -79,7 +84,8 @@ def email_confirm(code):
         return 1
 
     con = helpers.get_db_conn()
-    query = "update Users set email = %s, email_verified = TRUE where user_id = %s"
+    query = "update Users set email = %s, email_verified = TRUE where user_id" \
+            " = %s"
     changed_rows = cur.execute(query, (data["email"], int(data["user_id"])))
     con.commit()
 
@@ -95,7 +101,7 @@ def verify(token):
     None if token is invalid.
     '''
     user_id = token_to_id(token)
-    
+
     if user_id < 0:
         return None
 
@@ -121,7 +127,8 @@ def check_password(email, password):
     :param password: The password to check
     :returns: (True, user_id) if the password was correct.
     (False, -1) if not. (False, -2) if the email wasn't found.
-    (False, -3) if the email hasn't been verified, but the combination was correct.
+    (False, -3) if the email hasn't been verified, but the combination was
+    correct.
     '''
     con = helpers.get_db_conn()
     cur = con.cursor()
@@ -206,12 +213,17 @@ def send_confirm_email(user_id, email):
                    <p style="font-size:150%;text-align: center"> Hi! </p>
 
                    <b> <a href=http://localhost:3000/emailconfirm?code={code}>
-                   <p style="font-size:150%;text-align: center"> Please click HERE to confirm your email.</p> </b> </a>
+                   <p style="font-size:150%;text-align: center"> Please click 
+                   HERE to confirm your email.</p> </b> </a>
                    
-                    <p style="font-size:100%;text-align: center"> If the link doesnt work, copy and paste the following into your browser: </p>
-                    <p style="font-size:100%;text-align: center"> http://localhost:3000/emailconfirm?code={code}</p> </b>
+                    <p style="font-size:100%;text-align: center"> If the link 
+                    doesnt work, copy and paste the following into your 
+                    browser: </p>
+                    <p style="font-size:100%;text-align: center"> 
+                    http://localhost:3000/emailconfirm?code={code}</p> </b>
             
-                    <p style="font-size:150%;text-align: center"> If you did not sign up, you do not need to do anything. </p>
+                    <p style="font-size:150%;text-align: center"> If you did 
+                    not sign up, you do not need to do anything. </p>
         
                     <p style="font-size:150%;text-align: center"> Regards, </p>
                     <p style="font-size:150%;text-align: center"> MyRecipes </p>
@@ -220,8 +232,9 @@ def send_confirm_email(user_id, email):
            """
 
     email_thread = threading.Thread(name="email_thread",
-                                    args=(subject, message_html, message_plain, email,
-                                          'https://i.imgur.com/j2apOOM.png'),
+                                    args=(
+                                    subject, message_html, message_plain, email,
+                                    'https://i.imgur.com/j2apOOM.png'),
                                     target=helpers.send_email)
     email_thread.start()
 
@@ -268,15 +281,22 @@ def send_reset(email):
                <body>
                    <p style="font-size:150%;text-align: center"> Hi! </p>
 
-                   <p style="font-size:150%;text-align: center">  Someone (hopefully you) requested to change your password for MyRecipes. </p>
+                   <p style="font-size:150%;text-align: center">  Someone (
+                   hopefully you) requested to change your password for 
+                   MyRecipes. </p>
 
-                   <b> <a href=http://localhost:3000/resetpassword?code={code}> <p style="font-size:150%;text-align: center"> 
+                   <b> <a href=http://localhost:3000/resetpassword?code=
+                   {code}> <p style="font-size:150%;text-align: center"> 
                    Please click HERE to change your password. </a> </p> </b>
                    
-                   <p style="font-size:100%;text-align: center"> If the link doesnt work, copy and paste the following into your browser: </p>
-                    <p style="font-size:100%;text-align: center"> http://localhost:3000/resetpassword?code={code}</p>
+                   <p style="font-size:100%;text-align: center"> If the link 
+                   doesnt work, copy and paste the following into your 
+                   browser: </p>
+                    <p style="font-size:100%;text-align: center"> 
+                    http://localhost:3000/resetpassword?code={code}</p>
 
-                    <p style="font-size:150%;text-align: center"> If you did not request this change you do not need to do anything. </p>
+                    <p style="font-size:150%;text-align: center"> If you did 
+                    not request this change you do not need to do anything. </p>
 
                     <p style="font-size:150%;text-align: center"> Regards, </p>
                     <p style="font-size:150%;text-align: center"> MyRecipes </p>
@@ -285,7 +305,8 @@ def send_reset(email):
            """
     email_thread = threading.Thread(name="email_thread",
                                     args=(subject, message_html, message_plain,
-                                          email, 'http://i.imgur.com/S9M7chn.png'),
+                                          email,
+                                          'http://i.imgur.com/S9M7chn.png'),
                                     target=helpers.send_email)
     email_thread.start()
 
@@ -339,7 +360,6 @@ def verify_reset_code(reset_code):
     '''
     decoded = tokenise.decode_token(reset_code)
     if decoded is None:
-
         return 1
     if 'password' not in decoded:
         return 1
@@ -362,7 +382,8 @@ def verify_reset_code(reset_code):
 
 def send_pwd_change_email(email):
     '''
-    Sends an email to the given email address detailing a successful password change.
+    Sends an email to the given email address detailing a successful password
+    change.
     :param email:
     :returns: None
     '''
@@ -377,20 +398,21 @@ def send_pwd_change_email(email):
         Regards,
         MyRecipes
               """
-    message_html =f"""\
+    message_html = f"""\
         <p style="font-size:150%;text-align: center"> Hi,</p>
 
-        <p style="font-size:150%;text-align: center"> This email is to inform you that your password was changed.</p>
+        <p style="font-size:150%;text-align: center"> This email is to inform 
+        you that your password was changed.</p>
 
-        <p style="font-size:150%;text-align: center"> If you didn't expect this, contact customer support immediately.</p>
+        <p style="font-size:150%;text-align: center"> If you didn't expect 
+        this, contact customer support immediately.</p>
 
         <p style="font-size:150%;text-align: center"> Regards, </p>
         <p style="font-size:150%;text-align: center"> MyRecipes </p>
         """
     email_thread = threading.Thread(name="conf_email_thread",
-                                    args=(subject, message_html, message_plain, email,
-                                          'http://i.imgur.com/fUkY4mW.png'),
+                                    args=(
+                                    subject, message_html, message_plain, email,
+                                    'http://i.imgur.com/fUkY4mW.png'),
                                     target=helpers.send_email)
     email_thread.start()
-
-

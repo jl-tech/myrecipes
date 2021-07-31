@@ -18,11 +18,13 @@ async function requestNutrition(recipeId) {
     if (response.ok) return responseJson;
     else throw new Error(responseJson.error);
 }
+
 function RecipeViewNutri(props) {
     const [nutritionData, setNutritionData] = useState({})
     const [fetched, setFetched] = useState(false)
     const [success, setSuccess] = useState(false)
     const [failNutritionix, setFailNutritionix] = useState(false)
+
     async function processNutrition() {
         let response = await requestNutrition(props.recipeId)
             .catch(e => {
@@ -46,7 +48,8 @@ function RecipeViewNutri(props) {
                 <>
                     <h5 style={{textAlign: "center"}}> Nutritional Info </h5>
                     <p style={{textAlign: "center"}}> per serving</p>
-                    <small style={{textAlign: "center"}}> powered by Nutritionix </small>
+                    <small style={{textAlign: "center"}}> powered by
+                        Nutritionix </small>
                     <p style={{textAlign: "center"}}>
                         Failed to fetch nutrition. Try again later. <br/>
                         <small> Is the API limit exceeded? </small>
@@ -57,12 +60,16 @@ function RecipeViewNutri(props) {
                     <h5 style={{textAlign: "center"}}> Nutritional Info </h5>
                     <p style={{textAlign: "center"}}> per serving</p>
                     <div style={{textAlign: "center"}}>
-                        <Spinner style={{color:'tomato'}} animation={"grow"} size={"sm"}/>
+                        <Spinner style={{color: 'tomato'}} animation={"grow"}
+                                 size={"sm"}/>
                         <br/>
                         <small> One sec... </small>
                     </div>
                     <br/>
-                    <p style={{textAlign: "center"}}> <small> powered by <Image style={{height:"2em", width:"auto"}} src={"https://www.nutritionix.com/nix_assets/images/nutritionix_small.png"}/> </small> </p>
+                    <p style={{textAlign: "center"}}><small> powered by <Image
+                        style={{height: "2em", width: "auto"}}
+                        src={"https://www.nutritionix.com/nix_assets/images/nutritionix_small.png"}/>
+                    </small></p>
                 </>
         )
     } else {
@@ -116,7 +123,10 @@ function RecipeViewNutri(props) {
                         </tbody>
                     </Table>
                 </Row>
-                <p style={{textAlign: "center"}}> <small> powered by <Image style={{height:"2em", width:"auto"}} src={"https://www.nutritionix.com/nix_assets/images/nutritionix_small.png"}/> </small> </p>
+                <p style={{textAlign: "center"}}><small> powered by <Image
+                    style={{height: "2em", width: "auto"}}
+                    src={"https://www.nutritionix.com/nix_assets/images/nutritionix_small.png"}/>
+                </small></p>
             </>
 
         );

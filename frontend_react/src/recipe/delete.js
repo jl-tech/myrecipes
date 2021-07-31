@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 
 import Button from 'react-bootstrap/Button';
 
@@ -60,7 +60,8 @@ function RecipeDelete(props) {
             <Modal.Body>
                 Are you sure you want to delete this recipe? This action cannot
                 be undone!
-                <Alert show={errorShow} variant="danger" onClose={() => setErrorShow(false)} dismissible>
+                <Alert show={errorShow} variant="danger"
+                       onClose={() => setErrorShow(false)} dismissible>
                     {errorText}
                 </Alert>
             </Modal.Body>

@@ -1,20 +1,19 @@
+import hashlib
 import mimetypes
+import smtplib
 import ssl
-from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-
-import smtplib
-
-import hashlib
 
 import pymysql
 from PIL import Image
 
 
-def send_email(subject, message_html, message_plain, dest_addr, banner_image_path):
+def send_email(subject, message_html, message_plain, dest_addr,
+               banner_image_path):
     '''
-    Sends an email to dest_addr with contents specified by subject, message_html, message_plain, banner_image_path.
+    Sends an email to dest_addr with contents specified by subject,
+    message_html, message_plain, banner_image_path.
     :param subject:
     :param message_html:
     :param message_plain:
@@ -28,9 +27,10 @@ def send_email(subject, message_html, message_plain, dest_addr, banner_image_pat
     message["From"] = "myrecipes.supp@gmail.com"
     message["To"] = dest_addr
 
-
     if banner_image_path is not None:
-        message_html = f'<center><br><img src="{banner_image_path}", style="max-width: 80%; height: auto;"><br></center>\n' + message_html
+        message_html = f'<center><br><img src="{banner_image_path}", ' \
+                       f'style="max-width: 80%; height: ' \
+                       f'auto;"><br></center>\n' + message_html
 
     message.attach(MIMEText(message_plain, "plain"))
     message.attach(MIMEText(message_html, "html"))
@@ -45,8 +45,10 @@ def send_email(subject, message_html, message_plain, dest_addr, banner_image_pat
     ctxt = ssl.create_default_context()
     try:
         with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=ctxt) as server:
-            server.login("myrecipes.supp@gmail.com", "#%ep773^KpScAduTj^SM6U*Gnw")
-            server.sendmail("myrecipes.supp@gmail.com", dest_addr, message.as_string())
+            server.login("myrecipes.supp@gmail.com",
+                         "#%ep773^KpScAduTj^SM6U*Gnw")
+            server.sendmail("myrecipes.supp@gmail.com", dest_addr,
+                            message.as_string())
     except:
         return 1
     return 0
@@ -72,7 +74,7 @@ def get_db_conn():
     :returns: A connection to the database.
     '''
     return pymysql.connect(host='localhost',
-                          user='myrecipes',
-                          password='g3iCv7sr!',
-                          db='myrecipes',
-                          cursorclass=pymysql.cursors.DictCursor)
+                           user='myrecipes',
+                           password='g3iCv7sr!',
+                           db='myrecipes',
+                           cursorclass=pymysql.cursors.DictCursor)

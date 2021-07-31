@@ -1,9 +1,8 @@
 from flask import *
-import tokenise
+
 import newsfeed
 
-
-NEWSFEED= Blueprint('NEWSFEED', __name__, template_folder='templates')
+NEWSFEED = Blueprint('NEWSFEED', __name__, template_folder='templates')
 
 
 @NEWSFEED.route("/subscribe", methods=['POST'])
@@ -91,9 +90,12 @@ def route_get_subscriptions():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
     else:
-        response = jsonify({'Email': result['email'], 'FirstName': result['first_name'],
-                  'LastName': result['last_name'], 'ProfilePictureURL': result['profile_pic_path'],
-                  'RecipeCount': result['recipe_count'], 'Subscribers': result['subscribers'],
-                  'Subscriptions': result['subscriptions']})
+        response = jsonify(
+            {'Email': result['email'], 'FirstName': result['first_name'],
+             'LastName': result['last_name'],
+             'ProfilePictureURL': result['profile_pic_path'],
+             'RecipeCount': result['recipe_count'],
+             'Subscribers': result['subscribers'],
+             'Subscriptions': result['subscriptions']})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200

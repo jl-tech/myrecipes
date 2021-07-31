@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useHistory } from "react-router-dom";
+import React, {useState} from 'react';
+import {useHistory} from "react-router-dom";
 
 import Container from 'react-bootstrap/Container';
 import Alert from 'react-bootstrap/Alert';
@@ -12,7 +12,7 @@ import RecipeCreateIngredient from './createingredient.js';
 import RecipeCreateStep from './createstep.js';
 import RecipeCreatePhoto from './createphoto.js';
 import Button from 'react-bootstrap/esm/Button';
-import { Helmet } from "react-helmet-async";
+import {Helmet} from "react-helmet-async";
 import {Collapse} from "react-bootstrap";
 
 async function createRecipe(token, name, type, time, serving, description, ingredients, steps, photos, photoNames) {
@@ -137,6 +137,7 @@ function RecipeCreate(props) {
         collapseAll()
         setFormDirectionsOpen(true)
     }
+
     function toPhotos() {
         collapseAll()
         setFormPhotosOpen(true)
@@ -149,59 +150,87 @@ function RecipeCreate(props) {
             <Helmet>
                 <title> Create Recipe - MyRecipes </title>
             </Helmet>
-            <Container style={{marginTop:"1em",marginBottom:"2em"}}>
+            <Container style={{marginTop: "1em", marginBottom: "2em"}}>
                 <Row>
                     <Col>
-                        <div style={{textAlign:"center"}}>
+                        <div style={{textAlign: "center"}}>
                             <h2>Create Recipe</h2>
                         </div>
                     </Col>
                 </Row>
                 <Form onSubmit={handleSubmit}>
                     <div style={{textAlign: "right"}}>
-                        <a href="#" onClick={showAll}> Show all </a> &nbsp; &nbsp; <a href="#" onClick={collapseAll}> Collapse all </a>
+                        <a href="#" onClick={showAll}> Show
+                            all </a> &nbsp; &nbsp; <a href="#"
+                                                      onClick={collapseAll}> Collapse
+                        all </a>
                     </div>
-                    <a href="#" onClick={formDetailsOpen ? () => setFormDetailsOpen(false) : () => setFormDetailsOpen(true)}> <h4> {formDetailsOpen ? `▼ Details` : `▶ Details`}  </h4> </a>
+                    <a href="#"
+                       onClick={formDetailsOpen ? () => setFormDetailsOpen(false) : () => setFormDetailsOpen(true)}>
+                        <h4> {formDetailsOpen ? `▼ Details` : `▶ Details`}  </h4>
+                    </a>
                     <Collapse in={formDetailsOpen}>
                         <div>
-                            <RecipeCreateDesc setName={setName} setType={setType} setTime={setTime} setServing={setServing} setDescription={setDescription} />
-                            <Button onClick={toIngredients}> Next: Ingredients </Button>
+                            <RecipeCreateDesc setName={setName}
+                                              setType={setType}
+                                              setTime={setTime}
+                                              setServing={setServing}
+                                              setDescription={setDescription}/>
+                            <Button onClick={toIngredients}> Next:
+                                Ingredients </Button>
                         </div>
                     </Collapse>
                     <br/>
-                    <a href="#" onClick={formIngredientsOpen ? () => setFormIngredientsOpen(false) : () => setFormIngredientsOpen(true)}> <h4> {formIngredientsOpen ? `▼ Ingredients` : `▶ Ingredients`}  </h4> </a>
+                    <a href="#"
+                       onClick={formIngredientsOpen ? () => setFormIngredientsOpen(false) : () => setFormIngredientsOpen(true)}>
+                        <h4> {formIngredientsOpen ? `▼ Ingredients` : `▶ Ingredients`}  </h4>
+                    </a>
                     <Collapse in={formIngredientsOpen}>
                         <div>
-                            <RecipeCreateIngredient ingredients={ingredients} setIngredients={setIngredients} />
+                            <RecipeCreateIngredient ingredients={ingredients}
+                                                    setIngredients={setIngredients}/>
                             <br/>
-                            <Button onClick={toDirections}> Next: Directions </Button>
+                            <Button onClick={toDirections}> Next:
+                                Directions </Button>
                         </div>
                     </Collapse>
                     <br/>
-                    <a href="#" onClick={formDirectionsOpen ? () => setFormDirectionsOpen(false) : () => setFormDirectionsOpen(true)}> <h4> {formDirectionsOpen ? `▼ Directions` : `▶ Directions`}  </h4> </a>
+                    <a href="#"
+                       onClick={formDirectionsOpen ? () => setFormDirectionsOpen(false) : () => setFormDirectionsOpen(true)}>
+                        <h4> {formDirectionsOpen ? `▼ Directions` : `▶ Directions`}  </h4>
+                    </a>
                     <Collapse in={formDirectionsOpen}>
                         <div>
-                            <RecipeCreateStep steps={steps} setSteps={setSteps} />
+                            <RecipeCreateStep steps={steps}
+                                              setSteps={setSteps}/>
                             <br/>
                             <Button onClick={toPhotos}> Next: Photos </Button>
                         </div>
                     </Collapse>
                     <br/>
-                    <a href="#" onClick={formPhotosOpen ? () => setFormPhotosOpen(false) : () => setFormPhotosOpen(true)}> <h4> {formPhotosOpen ? `▼ Photos` : `▶ Photos`}  </h4> </a>
+                    <a href="#"
+                       onClick={formPhotosOpen ? () => setFormPhotosOpen(false) : () => setFormPhotosOpen(true)}>
+                        <h4> {formPhotosOpen ? `▼ Photos` : `▶ Photos`}  </h4>
+                    </a>
                     <Collapse in={formPhotosOpen}>
                         <div>
-                            <RecipeCreatePhoto photos={photos} setPhotos={setPhotos} />
+                            <RecipeCreatePhoto photos={photos}
+                                               setPhotos={setPhotos}/>
                         </div>
                     </Collapse>
-                    <Alert show={errorShow} variant="danger" style={{marginTop:"1em"}} onClose={() => setErrorShow(false)} dismissible>
+                    <Alert show={errorShow} variant="danger"
+                           style={{marginTop: "1em"}}
+                           onClose={() => setErrorShow(false)} dismissible>
                         {errorText}
                     </Alert>
-                    <Row style={{marginTop:"1em",textAlign:"center"}}>
+                    <Row style={{marginTop: "1em", textAlign: "center"}}>
                         <Col>
                             {/* <Button variant="secondary" style={{color:"white", marginRight:"1em"}}>
                             Cancel
                         </Button> */}
-                            <Button type="submit"  variant={!guidedFormIsDone ? "outline-secondary" : "primary"}  onClick={() => setFormDetailsOpen(true)} >
+                            <Button type="submit"
+                                    variant={!guidedFormIsDone ? "outline-secondary" : "primary"}
+                                    onClick={() => setFormDetailsOpen(true)}>
                                 Create Recipe
                             </Button>
                         </Col>

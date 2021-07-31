@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Link, useHistory} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -14,40 +14,57 @@ function RecipeViewContri(props) {
         <>
             <Row>
                 <Modal.Dialog
-                    onMouseEnter={()=> setHoveredProfile(true)}
-                    onMouseLeave={()=> setHoveredProfile(false)}
+                    onMouseEnter={() => setHoveredProfile(true)}
+                    onMouseLeave={() => setHoveredProfile(false)}
                     className={hoveredProfile ? 'shadow-lg' : 'shadow-sm'}
-                    onClick={()=>history.push('/profile/' + props.contributorUID)}
-                    style={{cursor:"pointer"}}
+                    onClick={() => history.push('/profile/' + props.contributorUID)}
+                    style={{cursor: "pointer"}}
                 >
-                    <Modal.Header style={{paddingTop:"0.5em", paddingBottom:"0.5em"}}>
-                        <Col style={{textAlign: "center", fontSize:"125%"}}> Contributor  </Col>
+                    <Modal.Header
+                        style={{paddingTop: "0.5em", paddingBottom: "0.5em"}}>
+                        <Col style={{
+                            textAlign: "center",
+                            fontSize: "125%"
+                        }}> Contributor </Col>
                     </Modal.Header>
                     <Modal.Body>
                         <Row>
-                            <Col style={{textAlign:"center", fontSize:"125%"}}>
-                                <Image className={"shadow-lg"} src={"http://127.0.0.1:5000/img/" + props.userImgURL} alt="Profile Picture" roundedCircle height="55em" style={{align:"left"}}/>
+                            <Col
+                                style={{textAlign: "center", fontSize: "125%"}}>
+                                <Image className={"shadow-lg"}
+                                       src={"http://127.0.0.1:5000/img/" + props.userImgURL}
+                                       alt="Profile Picture" roundedCircle
+                                       height="55em" style={{align: "left"}}/>
                                 <br/>
                                 {props.firstName} {props.lastName}
                             </Col>
                         </Row>
-                        <Row style={{textAlign:"center"}}>
-                            <table style={{marginTop:"1em", marginLeft:"auto", marginRight:"auto", borderCollapse:"separate", borderSpacing:"1em 0em"}}><tbody>
-                            <b>{props.contributorRecipes} </b> Recipes <br/>
-                            <b> {props.contributorSubscribers} </b> Subscribers
-                            </tbody></table>
+                        <Row style={{textAlign: "center"}}>
+                            <table style={{
+                                marginTop: "1em",
+                                marginLeft: "auto",
+                                marginRight: "auto",
+                                borderCollapse: "separate",
+                                borderSpacing: "1em 0em"
+                            }}>
+                                <tbody>
+                                <b>{props.contributorRecipes} </b> Recipes <br/>
+                                <b> {props.contributorSubscribers} </b> Subscribers
+                                </tbody>
+                            </table>
                         </Row>
                     </Modal.Body>
                 </Modal.Dialog>
             </Row>
-            <Row style={{marginTop:"1em"}}>
-                <Col style={{textAlign:"center"}}>
+            <Row style={{marginTop: "1em"}}>
+                <Col style={{textAlign: "center"}}>
                     <b> Created </b>
                 </Col>
             </Row>
             <Row>
-                <Col style={{textAlign:"center"}}>
-                    <ReactTimeAgo date={new Date(props.createdAt)} locale="en-US"/>
+                <Col style={{textAlign: "center"}}>
+                    <ReactTimeAgo date={new Date(props.createdAt)}
+                                  locale="en-US"/>
                     <br/>
                     <small className={"text-muted"}>
                         {new Date(props.createdAt).toLocaleDateString('en-GB') + " " + new Date(props.createdAt).toLocaleTimeString('en-GB')}
@@ -55,14 +72,15 @@ function RecipeViewContri(props) {
                 </Col>
             </Row>
             {props.editedAt != null ?
-                <><Row style={{marginTop:"1em"}}>
-                    <Col style={{textAlign:"center"}}>
+                <><Row style={{marginTop: "1em"}}>
+                    <Col style={{textAlign: "center"}}>
                         <b> Last modified: </b>
                     </Col>
                 </Row>
                     <Row>
-                        <Col style={{textAlign:"center"}}>
-                            <ReactTimeAgo date={new Date(props.editedAt)} locale="en-US"/>
+                        <Col style={{textAlign: "center"}}>
+                            <ReactTimeAgo date={new Date(props.editedAt)}
+                                          locale="en-US"/>
                             <br/>
                             <small className={"text-muted"}>
                                 {new Date(props.editedAt).toLocaleDateString('en-GB') + " " + new Date(props.editedAt).toLocaleTimeString('en-GB')}

@@ -1,15 +1,14 @@
-from flask import *
-import tokenise
-import recipe
 import json
-import sys
+
+from flask import *
+
+import recipe
 
 RECIPE = Blueprint('RECIPE', __name__, template_folder='templates')
 
 
 @RECIPE.route("/create", methods=['POST'])
 def route_recipe_create():
-
     photos = request.files.getlist('photos[]')
     name = request.form['name']
     type = request.form['type']
@@ -19,7 +18,10 @@ def route_recipe_create():
     ingredients = json.loads(request.form['ingredients'])
     steps = json.loads(request.form['steps'])
     photo_names = json.loads(request.form['photo_names'])
-    recipe_id = recipe.add_recipe(request.headers.get("Authorization"), name, type, int(time), int(serving_size),  ingredients, steps, photos, photo_names, description)
+    recipe_id = recipe.add_recipe(request.headers.get("Authorization"), name,
+                                  type, int(time), int(serving_size),
+                                  ingredients, steps, photos, photo_names,
+                                  description)
     if recipe_id < 0:
         print(recipe_id)
         response = jsonify({'error': 'Invalid token'})
@@ -60,7 +62,9 @@ def route_recipe_edit_description():
     description = data['description']
     token = request.headers.get("Authorization")
 
-    result, ret = recipe.edit_recipe_description(token, recipe_id, name, type, time, serving_size, description)
+    result, ret = recipe.edit_recipe_description(token, recipe_id, name, type,
+                                                 time, serving_size,
+                                                 description)
 
     if result == -1:
         response = jsonify({'error': 'Invalid token'})
@@ -71,7 +75,8 @@ def route_recipe_edit_description():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
     elif result == -3:
-        response = jsonify({'error': 'You don\'t have permission to edit this reicpe'})
+        response = jsonify(
+            {'error': 'You don\'t have permission to edit this reicpe'})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
     else:
@@ -141,8 +146,9 @@ def route_recipe_edit_photos():
     photo_names = json.loads(request.form['photo_names'])
     token = request.headers.get("Authorization")
 
-    result, ret = recipe.edit_recipe_photos(token, recipe_id, photos, photo_names)
-    
+    result, ret = recipe.edit_recipe_photos(token, recipe_id, photos,
+                                            photo_names)
+
     if result == -1:
         response = jsonify({'error': 'Invalid token'})
         response.headers.add('Access-Control-Allow-Origin', '*')
@@ -197,7 +203,8 @@ def route_recipe_nutrition():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
     if result == -2:
-        response = jsonify({'error': 'Could not fetch nutrition data at this time'})
+        response = jsonify(
+            {'error': 'Could not fetch nutrition data at this time'})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
     else:

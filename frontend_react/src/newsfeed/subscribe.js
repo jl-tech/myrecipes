@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Cookie from 'universal-cookie';
 
@@ -79,9 +79,10 @@ function SubscribeButton(props) {
         <>
             {subscribed
                 ?
-                <Button variant="secondary" onClick={()=>handleButton(false)}>Unsubscribe</Button>
+                <Button variant="secondary"
+                        onClick={() => handleButton(false)}>Unsubscribe</Button>
                 :
-                <Button onClick={()=>handleButton(true)}>Subscribe</Button>
+                <Button onClick={() => handleButton(true)}>Subscribe</Button>
             }
         </>
     );

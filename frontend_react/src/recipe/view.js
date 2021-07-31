@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { Link, useHistory, useParams } from "react-router-dom";
+import {Link, useHistory, useParams} from "react-router-dom";
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -7,14 +7,14 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/esm/Button';
 import Modal from "react-bootstrap/Modal";
 
-import RecipeViewDesc, { RecipeViewDescription } from './viewdesc.js';
+import RecipeViewDesc, {RecipeViewDescription} from './viewdesc.js';
 import RecipeViewContri from './viewcontri.js';
 import RecipeViewIngredient from './viewingredient.js';
 import RecipeViewStep from './viewstep.js';
 import RecipeViewPhoto from './viewphoto.js';
 import {Spinner} from "react-bootstrap";
 import RecipeViewNutri from "./viewnutrition";
-import { Helmet } from "react-helmet-async";
+import {Helmet} from "react-helmet-async";
 import RecipeViewComments from './viewcomments.js';
 import RecipeViewRecommendations from './viewrecommendations.js';
 
@@ -67,7 +67,7 @@ function RecipeView(props) {
 
     const [spinnerVisible, setSpinnerVisible] = useState(true)
 
-    let { id } = useParams();
+    let {id} = useParams();
     const history = useHistory();
 
     async function processId() {
@@ -157,26 +157,63 @@ function RecipeView(props) {
             return (
                 <>
                     <Helmet>
-                        <title> {recipeName} by {firstName} {lastName} - MyRecipes </title>
+                        <title> {recipeName} by {firstName} {lastName} -
+                            MyRecipes </title>
                     </Helmet>
-                    <Container style={{marginTop:"1em",marginBottom:"2em"}}>
-                        <RecipeViewPhoto photos={photos}  setChatbotVisible={props.setChatbotVisible}/>
-                        <RecipeViewDesc loggedIn={props.loggedIn} recipeId={id} recipeName={recipeName} likes={likes} setLikes={setLikes} calories={calories} setRecipeName={setRecipeName} time={time} setTime={setTime} serving={serving} setServing={setServing} mealType={mealType} setMealType={setMealType} photos={photos} setPhotos={setPhotos} editable={editable} setDeleted={setDeleted} setEditedAt={setEditedAt} description={description} setDescription={setDescription} setChatbotVisible={props.setChatbotVisible}/>
-                        <Row style={{marginTop:"1em"}}>
+                    <Container style={{marginTop: "1em", marginBottom: "2em"}}>
+                        <RecipeViewPhoto photos={photos}
+                                         setChatbotVisible={props.setChatbotVisible}/>
+                        <RecipeViewDesc loggedIn={props.loggedIn} recipeId={id}
+                                        recipeName={recipeName} likes={likes}
+                                        setLikes={setLikes} calories={calories}
+                                        setRecipeName={setRecipeName}
+                                        time={time} setTime={setTime}
+                                        serving={serving}
+                                        setServing={setServing}
+                                        mealType={mealType}
+                                        setMealType={setMealType}
+                                        photos={photos} setPhotos={setPhotos}
+                                        editable={editable}
+                                        setDeleted={setDeleted}
+                                        setEditedAt={setEditedAt}
+                                        description={description}
+                                        setDescription={setDescription}
+                                        setChatbotVisible={props.setChatbotVisible}/>
+                        <Row style={{marginTop: "1em"}}>
                             <Col sm={3}>
-                                <RecipeViewContri userImgURL={userImgURL} contributorUID={contributorUID} firstName={firstName} lastName={lastName} createdAt={createdAt} editedAt={editedAt} contributorRecipes={contributorRecipes} contributorSubscribers={contributorSubscribers}/>
+                                <RecipeViewContri userImgURL={userImgURL}
+                                                  contributorUID={contributorUID}
+                                                  firstName={firstName}
+                                                  lastName={lastName}
+                                                  createdAt={createdAt}
+                                                  editedAt={editedAt}
+                                                  contributorRecipes={contributorRecipes}
+                                                  contributorSubscribers={contributorSubscribers}/>
                                 <br/> <br/>
                                 <RecipeViewNutri recipeId={id}/>
                             </Col>
                             <Col sm={9}>
-                                <RecipeViewDescription description={description}/>
-                                <RecipeViewIngredient recipeId={id} ingredients={ingredients} setIngredients={setIngredients} editable={editable} setEditedAt={setEditedAt}/>
-                                <RecipeViewStep recipeId={id} steps={steps} setSteps={setSteps} editable={editable} setEditedAt={setEditedAt}/>
+                                <RecipeViewDescription
+                                    description={description}/>
+                                <RecipeViewIngredient recipeId={id}
+                                                      ingredients={ingredients}
+                                                      setIngredients={setIngredients}
+                                                      editable={editable}
+                                                      setEditedAt={setEditedAt}/>
+                                <RecipeViewStep recipeId={id} steps={steps}
+                                                setSteps={setSteps}
+                                                editable={editable}
+                                                setEditedAt={setEditedAt}/>
                             </Col>
 
                         </Row>
-                        <RecipeViewRecommendations recipeData={recommendations} />
-                        <RecipeViewComments loggedIn={props.loggedIn} contributorID={contributorUID} currId={props.currId} recipeId={id} comments={comments} setComments={setComments} />
+                        <RecipeViewRecommendations
+                            recipeData={recommendations}/>
+                        <RecipeViewComments loggedIn={props.loggedIn}
+                                            contributorID={contributorUID}
+                                            currId={props.currId} recipeId={id}
+                                            comments={comments}
+                                            setComments={setComments}/>
                     </Container>
                 </>
             );
@@ -184,9 +221,10 @@ function RecipeView(props) {
             return (
                 <Modal.Dialog>
                     <Modal.Body>
-                        <div style={{textAlign:"center"}}>
-                            Recipe deleted successfully <br />
-                            <Link to="/profile" component={Button} style={{marginTop:"1em"}}>
+                        <div style={{textAlign: "center"}}>
+                            Recipe deleted successfully <br/>
+                            <Link to="/profile" component={Button}
+                                  style={{marginTop: "1em"}}>
                                 Return to profile
                             </Link>
                         </div>
@@ -199,7 +237,7 @@ function RecipeView(props) {
             return (
                 <div style={{textAlign: "center"}}>
                     <br/>
-                    <Spinner style={{color:'tomato'}} animation={"grow"}/>
+                    <Spinner style={{color: 'tomato'}} animation={"grow"}/>
                 </div>
             )
         } else {

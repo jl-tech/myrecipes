@@ -1,10 +1,9 @@
-import sys
-
 import jwt
 
 import helpers
 
 SECRET_PASSKEY = "9V^xohyJ9K2AFt!@T38h&ewvSw"
+
 
 def encode_token(data):
     '''
@@ -23,7 +22,7 @@ def decode_token(token):
     '''
     try:
         return jwt.decode(token.encode('utf-8'),
-                             SECRET_PASSKEY, algorithms=['HS256'])
+                          SECRET_PASSKEY, algorithms=['HS256'])
     except:
         return None
 
@@ -57,7 +56,7 @@ def token_to_id(token):
     if len(result) == 0:
         return -2
     query = "select * from Users where user_id = %s and email_verified = %s"
-    cur.execute(query, (user_id, True, ))
+    cur.execute(query, (user_id, True,))
     result = cur.fetchall()
     if len(result) == 0:
         return -3
@@ -68,7 +67,8 @@ def token_to_id(token):
 def token_to_email(token):
     '''
     Given a jwt token, decodes that token into the user id corresponding
-    to the token's account, and then gets the email associated with that account.
+    to the token's account, and then gets the email associated with that
+    account.
     :param token: The token to decode
     :returns: The email address of the account on success.
     -1 if the token couldn't be decoded

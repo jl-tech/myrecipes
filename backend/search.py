@@ -1,23 +1,12 @@
-import os
-
 import helpers
-import recipe
-from constants import *
-
-import bcrypt
-import pymysql
-import smtplib
 
 import tokenise
 
-import sys
-
-import time
-from datetime import datetime
 from auth import DEFAULT_PIC
 
 
-def do_search(name, type, serving_size, time_to_cook, ingredients, step_key_words):
+def do_search(name, type, serving_size, time_to_cook, ingredients,
+              step_key_words):
     '''
     Search all recipes with given property
     :param name: recipe name
@@ -33,12 +22,17 @@ def do_search(name, type, serving_size, time_to_cook, ingredients, step_key_word
 
     query = """
         select distinct R.recipe_id, R.name, R.creation_time, R.edit_time,
-            R.time_to_cook, R.type, R.serving_size, RP.photo_path, R.description,
-            U.first_name, U.last_name, COALESCE(U.profile_pic_path, '""" + DEFAULT_PIC + """') as profile_pic_path,
-            U.user_id, R.calories, (select count(*) from Likes L where R.recipe_id = L.recipe_id) as likes,
-            (select count(*) from Comments C where R.recipe_id = C.recipe_id) as comments
+            R.time_to_cook, R.type, R.serving_size, RP.photo_path, 
+            R.description,
+            U.first_name, U.last_name, COALESCE(U.profile_pic_path, '""" + \
+            DEFAULT_PIC + """') as profile_pic_path,
+            U.user_id, R.calories, (select count(*) from Likes L where 
+            R.recipe_id = L.recipe_id) as likes,
+            (select count(*) from Comments C where R.recipe_id = C.recipe_id) 
+            as comments
         from Recipes R
-            left outer join (select * from RecipePhotos where photo_no = 0) RP on R.recipe_id = RP.recipe_id
+            left outer join (select * from RecipePhotos where photo_no = 0) 
+            RP on R.recipe_id = RP.recipe_id
             left outer join RecipeIngredients I on R.recipe_id = I.recipe_id
             left outer join RecipeSteps S on I.recipe_id = S.recipe_id
             join Users U on R.created_by_user_id = U.user_id 
@@ -47,12 +41,16 @@ def do_search(name, type, serving_size, time_to_cook, ingredients, step_key_word
     and_needed = False
     args = tuple()
 
-    if name is not None or type is not None or serving_size is not None or time_to_cook is not None or ingredients is not None or step_key_words is not None:
+    if name is not None or type is not None or serving_size is not None or \
+            time_to_cook is not None or ingredients is not None or \
+            step_key_words is not None:
         query += "where "
 
     if name is not None:
         query += "match(R.name) against (%s in natural language mode) "
-        query = query.replace("select distinct", "select distinct match(R.name) against (%s in natural language mode) as name_relevance, ")
+        query = query.replace("select distinct",
+                              "select distinct match(R.name) against (%s in "
+                              "natural language mode) as name_relevance, ")
         # query += "R.name like %s "
         args = args + (name, name,)
         # args = args + ('%'+name+'%',)
@@ -118,12 +116,17 @@ def do_search(name, type, serving_size, time_to_cook, ingredients, step_key_word
     if name is not None:
         query = """
         select count(*), R.recipe_id, R.name, R.creation_time, R.edit_time,
-            R.time_to_cook, R.type, R.serving_size, RP.photo_path, R.description,
-            U.first_name, U.last_name, COALESCE(U.profile_pic_path, '""" + DEFAULT_PIC + """') as profile_pic_path,
-            U.user_id, R.calories, (select count(*) from Likes L where R.recipe_id = L.recipe_id) as likes,
-            (select count(*) from Comments C where R.recipe_id = C.recipe_id) as comments
+            R.time_to_cook, R.type, R.serving_size, RP.photo_path, 
+            R.description,
+            U.first_name, U.last_name, COALESCE(U.profile_pic_path, '""" + \
+                DEFAULT_PIC + """') as profile_pic_path,
+            U.user_id, R.calories, (select count(*) from Likes L where 
+            R.recipe_id = L.recipe_id) as likes,
+            (select count(*) from Comments C where R.recipe_id = C.recipe_id) 
+            as comments
         from Recipes R
-            left outer join (select * from RecipePhotos where photo_no = 0) RP on R.recipe_id = RP.recipe_id
+            left outer join (select * from RecipePhotos where photo_no = 0) 
+            RP on R.recipe_id = RP.recipe_id
             left outer join RecipeIngredients I on R.recipe_id = I.recipe_id
             join Users U on R.created_by_user_id = U.user_id 
         where match(I.ingredient_name) against (%s in natural language mode)
@@ -146,12 +149,17 @@ def do_search(name, type, serving_size, time_to_cook, ingredients, step_key_word
         if name is not None:
             query = """
             select count(*), R.recipe_id, R.name, R.creation_time, R.edit_time,
-                R.time_to_cook, R.type, R.serving_size, RP.photo_path, R.description,
-                U.first_name, U.last_name, COALESCE(U.profile_pic_path, '""" + DEFAULT_PIC + """') as profile_pic_path,
-                U.user_id, R.calories, (select count(*) from Likes L where R.recipe_id = L.recipe_id) as likes,
-                (select count(*) from Comments C where R.recipe_id = C.recipe_id) as comments
+                R.time_to_cook, R.type, R.serving_size, RP.photo_path, 
+                R.description,
+                U.first_name, U.last_name, COALESCE(U.profile_pic_path, 
+                '""" + DEFAULT_PIC + """') as profile_pic_path,
+                U.user_id, R.calories, (select count(*) from Likes L where 
+                R.recipe_id = L.recipe_id) as likes,
+                (select count(*) from Comments C where R.recipe_id = 
+                C.recipe_id) as comments
             from Recipes R
-                left outer join (select * from RecipePhotos where photo_no = 0) RP on R.recipe_id = RP.recipe_id
+                left outer join (select * from RecipePhotos where photo_no = 
+                0) RP on R.recipe_id = RP.recipe_id
                 left outer join RecipeSteps S on R.recipe_id = S.recipe_id
                 join Users U on R.created_by_user_id = U.user_id 
             where match(S.step_text) against (%s in natural language mode)
@@ -199,10 +207,12 @@ def add_search_history(token, name, ingredients, step):
         con.close()
         return
 
-    query = ''' select * from SearchHistory where search_term = %s and user_id = %s'''
+    query = ''' select * from SearchHistory where search_term = %s and 
+    user_id = %s'''
     cur.execute(query, (term, int(u_id)))
     if len(cur.fetchall()) > 0:
-        query = '''update SearchHistory set time=UTC_TIMESTAMP() where search_term = %s and user_id = %s '''
+        query = '''update SearchHistory set time=UTC_TIMESTAMP() where 
+        search_term = %s and user_id = %s '''
         cur.execute(query, (term, int(u_id)))
     else:
         query = '''
@@ -257,13 +267,13 @@ def delete_search_history(token, search_term, search_time):
     con = helpers.get_db_conn()
     cur = con.cursor()
 
-    query = '''delete from SearchHistory where user_id=%s and search_term=%s and time=%s'''
+    query = '''delete from SearchHistory where user_id=%s and search_term=%s 
+    and time=%s'''
     cur.execute(query, (int(u_id), search_term, search_time,))
 
     con.commit()
     con.close()
     return 0
-
 
 
 def auto_update_search_history(token):
@@ -290,7 +300,8 @@ def auto_update_search_history(token):
     search_term = result[0]['search_term']
     search_time = result[0]['time']
 
-    query = '''delete from SearchHistory where user_id=%s and search_term=%s and time=%s'''
+    query = '''delete from SearchHistory where user_id=%s and search_term=%s 
+    and time=%s'''
     cur.execute(query, (int(u_id), search_term, search_time,))
 
     con.commit()

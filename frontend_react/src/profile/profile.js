@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useHistory, useParams } from "react-router-dom";
+import React, {useEffect, useState} from 'react';
+import {Link, useHistory, useParams} from "react-router-dom";
 
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
@@ -12,7 +12,7 @@ import ProfileEdit from './edit.js';
 import ProfileRecipes from "./recipes";
 import {Spinner} from "react-bootstrap";
 import SubscribeButton from "../newsfeed/subscribe";
-import { Helmet } from "react-helmet-async";
+import {Helmet} from "react-helmet-async";
 import Subscribers from '../newsfeed/subscribers.js';
 import Subscriptions from '../newsfeed/subscriptions.js';
 import Cookie from 'universal-cookie';
@@ -48,7 +48,7 @@ function Profile(props) {
     const [imgUrl, setImgUrl] = useState('');
     const [buttonType, setButtonType] = useState(0);
     const [showSpinner, setShowSpinner] = useState(true)
-    let { id } = useParams();
+    let {id} = useParams();
     id = id == null ? props.currId : id;
     const history = useHistory();
     const cookie = new Cookie();
@@ -74,8 +74,7 @@ function Profile(props) {
             setSubscribers(response.Subscribers);
             setSubscriptions(response.Subscriptions);
             setSuccess(true);
-        }
-        else {
+        } else {
             setShowSpinner(false)
         }
         if (props.loggedIn) {
@@ -85,7 +84,6 @@ function Profile(props) {
 
         setFetched(true);
     }
-
 
 
     useEffect(() => {
@@ -100,22 +98,26 @@ function Profile(props) {
         return (
             <>
                 <Helmet>
-                    <title> {firstName} {lastName}'s Profile - MyRecipes </title>
+                    <title> {firstName} {lastName}'s Profile -
+                        MyRecipes </title>
                 </Helmet>
-                <Container style={{marginTop:"1em", marginBottom:"2em"}}>
+                <Container style={{marginTop: "1em", marginBottom: "2em"}}>
                     <Row>
                         <Col>
-                            <div style={{textAlign:"center"}}>
-                                <Image src={"http://127.0.0.1:5000/img/" + imgUrl} className="shadow" alt="Profile Picture" roundedCircle height="150em"/>
+                            <div style={{textAlign: "center"}}>
+                                <Image
+                                    src={"http://127.0.0.1:5000/img/" + imgUrl}
+                                    className="shadow" alt="Profile Picture"
+                                    roundedCircle height="150em"/>
                             </div>
                         </Col>
                     </Row>
-                    <Row style={{textAlign:"center"}}>
+                    <Row style={{textAlign: "center"}}>
                         <Col>
                             <h1>{firstName} {lastName}</h1>
                             {Number(props.currId) === Number(id) ?
                                 <div style={{
-                                    marginLeft:"auto",
+                                    marginLeft: "auto",
                                     marginRight: "auto",
                                     fontSize: "85%",
                                     backgroundColor: "tomato",
@@ -123,7 +125,7 @@ function Profile(props) {
                                     borderRadius: "5px 5px 5px 5px",
                                     height: "1.5em",
                                     width: "5em",
-                                    marginBottom:"1em"
+                                    marginBottom: "1em"
 
                                 }}>
                                     YOU
@@ -134,44 +136,69 @@ function Profile(props) {
                             }
                         </Col>
                     </Row>
-                    <Row style={{textAlign:"center"}}>
+                    <Row style={{textAlign: "center"}}>
                         <Col>
-                            <table style={{marginLeft:"auto", marginRight:"auto", borderCollapse:"separate", borderSpacing:"2em 0em"}}><tbody>
-                            <tr>
-                                <th style={{fontSize:"200%"}}> {recipeCount} </th>
-                                <th style={{fontSize:"200%"}}>
-                                    { buttonType === 1 ?
-                                        <Subscribers subscribers={subscribers} />
-                                        : subscribers.length }
-                                </th>
-                                { buttonType === 1 ?
-                                    <th style={{fontSize:"200%"}}>
-                                        <Subscriptions subscriptions={subscriptions} />
+                            <table style={{
+                                marginLeft: "auto",
+                                marginRight: "auto",
+                                borderCollapse: "separate",
+                                borderSpacing: "2em 0em"
+                            }}>
+                                <tbody>
+                                <tr>
+                                    <th style={{fontSize: "200%"}}> {recipeCount} </th>
+                                    <th style={{fontSize: "200%"}}>
+                                        {buttonType === 1 ?
+                                            <Subscribers
+                                                subscribers={subscribers}/>
+                                            : subscribers.length}
                                     </th>
-                                    :
-                                    null
-                                }
-                            </tr>
-                            <tr>
-                                <td> RECIPES </td>
-                                <td> SUBSCRIBERS </td>
-                                { buttonType === 1 ?
-                                    <td> SUBSCRIPTIONS </td>
-                                    : null
-                                }
-                            </tr>
-                            </tbody></table>
+                                    {buttonType === 1 ?
+                                        <th style={{fontSize: "200%"}}>
+                                            <Subscriptions
+                                                subscriptions={subscriptions}/>
+                                        </th>
+                                        :
+                                        null
+                                    }
+                                </tr>
+                                <tr>
+                                    <td> RECIPES</td>
+                                    <td> SUBSCRIBERS</td>
+                                    {buttonType === 1 ?
+                                        <td> SUBSCRIPTIONS </td>
+                                        : null
+                                    }
+                                </tr>
+                                </tbody>
+                            </table>
                         </Col>
                     </Row>
                     <Row>
                         <Col>
-                            <div style={{textAlign:"center", marginTop:"1em"}}>
-                                {buttonType === 0 ? <></> : buttonType === 1 ? <ProfileEdit setChatbotVisible={props.setChatbotVisible} firstName={firstName} setfirstName={setfirstName} lastName={lastName} setlastName={setlastName} setButtonName={props.setButtonName} email={email} imgUrl={imgUrl} setImgUrl={setImgUrl} initOpen={props.settings} modalToggle={props.modalToggle} setModalToggle={props.setModalToggle}/> : <SubscribeButton userid={id} setSubscribers={setSubscribers}/>}
+                            <div
+                                style={{textAlign: "center", marginTop: "1em"}}>
+                                {buttonType === 0 ? <></> : buttonType === 1 ?
+                                    <ProfileEdit
+                                        setChatbotVisible={props.setChatbotVisible}
+                                        firstName={firstName}
+                                        setfirstName={setfirstName}
+                                        lastName={lastName}
+                                        setlastName={setlastName}
+                                        setButtonName={props.setButtonName}
+                                        email={email} imgUrl={imgUrl}
+                                        setImgUrl={setImgUrl}
+                                        initOpen={props.settings}
+                                        modalToggle={props.modalToggle}
+                                        setModalToggle={props.setModalToggle}/> :
+                                    <SubscribeButton userid={id}
+                                                     setSubscribers={setSubscribers}/>}
                             </div>
                         </Col>
                     </Row>
-                    <br />
-                    <ProfileRecipes userID={id} loggedIn={props.loggedIn} loggedInUID={props.currId}/>
+                    <br/>
+                    <ProfileRecipes userID={id} loggedIn={props.loggedIn}
+                                    loggedInUID={props.currId}/>
                 </Container>
             </>
         );
