@@ -8,6 +8,7 @@ import Image from "react-bootstrap/Image";
 import Liked from "../Like.png";
 import NotLiked from "../NotLiked.svg";
 import Row from "react-bootstrap/Row";
+import UserList from "../utility/userlist.js";
 
 /**
  * Performs the API request for /recipe/like and returns the result
@@ -66,7 +67,6 @@ function RecipeViewLikes(props) {
 
     // Fetch status of the number of likles
     const [likeFetched, setLikeFetched] = useState(false)
-    const [likeSuccess, setLikeSuccess] = useState(false)
 
     // Whether the like button is currently being clicked (to support like animation)
     const [likeClicked, setLikeClicked] = useState(false)
@@ -86,12 +86,10 @@ function RecipeViewLikes(props) {
 
         let response = await getLikedStatus(props.recipeId, cookie.get('token'))
             .catch(e => {
-                setLikeSuccess(false)
             });
 
         if (response != null) {
             setLiked(response.is_liked)
-            setLikeSuccess(true)
         }
         setLikeFetched(true);
     }
@@ -108,11 +106,10 @@ function RecipeViewLikes(props) {
         if (response != null) {
             if (liked) {
                 setLiked(false)
-                props.setLikes(props.likes - 1);
             } else {
                 setLiked(true)
-                props.setLikes(props.likes + 1);
             }
+            props.setLikes(response);
 
         }
     }
@@ -144,14 +141,17 @@ function RecipeViewLikes(props) {
             </Row>
             <Row style={{textAlign: "center", justifyContent: "center"}}
                  className={"mx-auto align-content-center"}>
-                <p style={{
-                    width: "2em",
-                    textAlign: "center",
-                    fontSize: props.likes < 9999 ? "150%" : "100%",
-                    color: liked ? "tomato" : "black",
-                    marginTop: likeClicked ? "0.2em" : null,
-                    verticalAlign: "middle"
-                }}> {props.likes}</p>
+                <UserList
+                    title="Liked by"
+                    data={props.likes}
+                    style={{
+                        width: "2em",
+                        textAlign: "center",
+                        fontSize: props.likes.length < 9999 ? "150%" : "100%",
+                        color: liked ? "tomato" : "black",
+                        marginTop: likeClicked ? "0.2em" : null,
+                        verticalAlign: "middle"
+                    }}/>
             </Row>
         </>
     )

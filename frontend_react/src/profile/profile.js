@@ -174,14 +174,16 @@ function Profile(props) {
                                         {buttonType === 1 ?
                                             <UserList
                                                 title="Subscribers"
-                                                data={subscribers}/>
+                                                data={subscribers}
+                                                style={{color: "black"}}/>
                                             : subscribers.length}
                                     </th>
                                     {buttonType === 1 ?
                                         <th style={{fontSize: "200%"}}>
                                             <UserList
                                                 title="Subscriptions"
-                                                data={subscriptions}/>
+                                                data={subscriptions}
+                                                style={{color: "black"}}/>
                                         </th>
                                         :
                                         null

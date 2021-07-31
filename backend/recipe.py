@@ -166,6 +166,20 @@ def get_recipe_details(recipe_id):
     result = cur.fetchall()
     out['comments'] = result
 
+    # likes
+    query = "select U.user_id, U.first_name, U.last_name, COALESCE(" \
+                    "U.profile_pic_path, '" + DEFAULT_PIC + "') as " \
+                    "profile_pic_path " \
+                    "from " \
+                    "Likes L " \
+                    "join Users U on " \
+                    "L.liked_by_user_id = " \
+                    "U.user_id where " \
+                    "L.recipe_id = %s"
+    cur.execute(query, (int(recipe_id),))
+    result = cur.fetchall()
+    out['likes_users'] = result
+
     # contributor stats
     query = """
             select COUNT(*) 
@@ -740,8 +754,22 @@ def recipe_like_toggle(token, recipe_id):
         cur.execute(query, (int(u_id), int(recipe_id)))
 
     con.commit()
+
+    # likes
+    query = "select U.user_id, U.first_name, U.last_name, COALESCE(" \
+                    "U.profile_pic_path, '" + DEFAULT_PIC + "') as " \
+                    "profile_pic_path " \
+                    "from " \
+                    "Likes L " \
+                    "join Users U on " \
+                    "L.liked_by_user_id = " \
+                    "U.user_id where " \
+                    "L.recipe_id = %s"
+    cur.execute(query, (int(recipe_id),))
+    result = cur.fetchall()
+
     con.close()
-    return 0
+    return result
 
 
 def recipe_is_liked(token, recipe_id):

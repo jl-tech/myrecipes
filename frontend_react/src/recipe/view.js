@@ -61,7 +61,7 @@ function RecipeView(props) {
     const [calories, setCalories] = useState(0);
     const [steps, setSteps] = useState([]);
     const [ingredients, setIngredients] = useState('');
-    const [likes, setLikes] = useState(0)
+    const [likes, setLikes] = useState([])
     const [comments, setComments] = useState([])
     const [recommendations, setRecommendations] = useState([])
     const [contributorRecipes, setContributorRecipes] = useState(0)
@@ -110,7 +110,7 @@ function RecipeView(props) {
             setServing(response.serving_size);
             setDescription(response.description);
             setCalories(response.calories);
-            setLikes(response.likes);
+            setLikes(response.likes_users);
             setComments(response.comments);
             setRecommendations(response.recommendations);
 

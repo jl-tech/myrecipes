@@ -29,7 +29,7 @@ function UserList(props) {
     const modalHide = () => setShowModal(false);
     return (
         <>
-            <a href="#" style={{color: "black"}}
+            <a href="#" style={props.style}
                onClick={e => modalShow(e)}> {props.data.length} </a>
             <Modal show={showModal} onHide={modalHide} centered>
                 <Modal.Header closeButton>
