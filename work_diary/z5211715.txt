@@ -20,24 +20,36 @@ Week 4:
 - Backend
   Auth: email_confirm/verify_reset_code/remove_password
   Fixed token validation
-- Integrated frontend and backend (Managing the API endpoints)
 
 Week 5:
 - Frontend
   Recipe: Create/CreateDesc/CreateIngredient/CreatePhoto/CreateStep
-- Integrated frontend and backend (Managing the API endpoints)
 
 Week 6:
 - Frontend
   Recipe: Delete/View/ViewContri/ViewDesc/ViewIngredient/ViewPhoto/ViewStep
-- Integrated frontend and backend (Managing the API endpoints)
 
 Week 7:
 - Frontend
   Recipe: List
   Search: Results/Advanced
-  Newsfeed: Feed/SubscribeButton/Subscribers
+  Newsfeed: Feed/SubscribeButton/Subscribers/Subsciptions
 - Backend
   Newsfeed: get_subscriptions
-  Updated profile_info to return recipe count and subscribers
-- Integrated frontend and backend (Managing the API endpoints)
+  Updated profile_info to return recipe count, subscribers and subscriptions
+
+Week 8:
+- Frontend
+  Recipe: ViewComments
+  Improved like button interface
+- Backend
+  Recipe: recipe_comment_delete
+  Improved query for recipes likes
+  
+Week 9:
+- Frontend
+  Newsfeed: Feed(Recommendations)
+  Recipe: ViewRecommendations
+- Backend
+  Newsfeed: get_recommendations
+  Recipe: get_recipe_recommendations
