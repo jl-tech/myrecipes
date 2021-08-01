@@ -2,7 +2,7 @@
 Component for the photos part of the recipe creation page
  */
 
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import imageCompression from "browser-image-compression";
 
 import Form from "react-bootstrap/Form";
@@ -49,8 +49,6 @@ function RecipeCreatePhoto({ photos, setPhotos }) {
      */
     function addRow() {
         if (!uploaded) {
-            setErrorShow(true);
-            setErrorText("Please upload valid image");
             return;
         }
         let items = Array.from(photos);
@@ -111,7 +109,9 @@ function RecipeCreatePhoto({ photos, setPhotos }) {
                 setErrorShow(false);
             });
     }
-
+    useEffect(() => {
+        addRow();
+    }, [uploaded]);
     return (
         <>
             <Form.Label>Photos</Form.Label>
@@ -146,7 +146,7 @@ function RecipeCreatePhoto({ photos, setPhotos }) {
                                                             ? "1 (Main)"
                                                             : index + 1}
                                                     </Col>
-                                                    <Col sm={5}>
+                                                    <Col sm={5} className={"my-auto"}>
                                                         <span>{name}</span>
                                                     </Col>
                                                     <Col sm={5}>
@@ -193,7 +193,7 @@ function RecipeCreatePhoto({ photos, setPhotos }) {
                                     <></>
                                 )}
                                 <Row>
-                                    <Col sm={11}>
+                                    <Col>
                                         <Form.File
                                             onChange={(e) =>
                                                 handleImageUpload(e)
@@ -210,15 +210,6 @@ function RecipeCreatePhoto({ photos, setPhotos }) {
                                         >
                                             {errorText}
                                         </Alert>
-                                    </Col>
-                                    <Col sm={1}>
-                                        <Button
-                                            variant="outline-secondary"
-                                            style={{ float: "right" }}
-                                            onClick={addRow}
-                                        >
-                                            Add
-                                        </Button>
                                     </Col>
                                 </Row>
                             </ListGroup.Item>

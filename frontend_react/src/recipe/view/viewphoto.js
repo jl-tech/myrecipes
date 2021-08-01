@@ -3,7 +3,7 @@
  * Also, a component providing the edit photos modal
  */
 
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import imageCompression from "browser-image-compression";
 
 import Button from "react-bootstrap/Button";
@@ -121,8 +121,6 @@ export function EditPhoto(props) {
      */
     function addRow() {
         if (!uploaded) {
-            setErrorShow(true);
-            setErrorText("Please upload valid image");
             return;
         }
         let items = Array.from(photos);
@@ -224,6 +222,9 @@ export function EditPhoto(props) {
         }
     }
 
+    useEffect(() => {
+        addRow();
+    }, [uploaded]);
     return (
         <Modal show={props.showPhotoEdit} onHide={editClose}>
             <Modal.Header closeButton>
@@ -323,7 +324,7 @@ export function EditPhoto(props) {
                                         <></>
                                     )}
                                     <Row>
-                                        <Col sm={11}>
+                                        <Col>
                                             <Form.File
                                                 onChange={(e) =>
                                                     handleImageUpload(e)
@@ -342,16 +343,6 @@ export function EditPhoto(props) {
                                             >
                                                 {errorText}
                                             </Alert>
-                                        </Col>
-                                        <Col sm={1}>
-                                            <Button
-                                                variant="outline-secondary"
-                                                style={{ float: "right" }}
-                                                onClick={addRow}
-                                                size="sm"
-                                            >
-                                                Add
-                                            </Button>
                                         </Col>
                                     </Row>
                                 </ListGroup.Item>
