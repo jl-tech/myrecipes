@@ -291,13 +291,14 @@ def get_recommendations(u_id, page, rec):
         where R.created_by_user_id not in (select is_subscribed_to from 
         SubscribedTo where user_id = %s)
             and R.created_by_user_id <> %s
+            and S.user_id = %s
         order by DATE(S.time) desc, DATE(R.creation_time) desc, (select 
         count(*) from Likes L where R.recipe_id = L.recipe_id) desc, 
         TIME(R.creation_time) desc
         limit %s offset %s
     """
     cur.execute(query,
-                ('%', '%', u_id, u_id, int(rec), int((int(page) - 1) * rec)))
+                ('%', '%', u_id, u_id, u_id, int(rec), int((int(page) - 1) * rec)))
     result = cur.fetchall()
 
     con.close()
