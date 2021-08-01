@@ -95,12 +95,12 @@ function RecipeViewNutri(props) {
                         {" "}
                         powered by{" "}
                         <a href={"http://nutritionix.com"}>
-                        <Image
-                            style={{ height: "2em", width: "auto" }}
-                            src={
-                                "https://www.nutritionix.com/nix_assets/images/nutritionix_small.png"
-                            }
-                        />
+                            <Image
+                                style={{ height: "2em", width: "auto" }}
+                                src={
+                                    "https://www.nutritionix.com/nix_assets/images/nutritionix_small.png"
+                                }
+                            />
                         </a>
                     </small>
                 </p>
@@ -163,12 +163,12 @@ function RecipeViewNutri(props) {
                         {" "}
                         powered by{" "}
                         <a href={"http://nutritionix.com"}>
-                        <Image
-                            style={{ height: "2em", width: "auto" }}
-                            src={
-                                "https://www.nutritionix.com/nix_assets/images/nutritionix_small.png"
-                            }
-                        />
+                            <Image
+                                style={{ height: "2em", width: "auto" }}
+                                src={
+                                    "https://www.nutritionix.com/nix_assets/images/nutritionix_small.png"
+                                }
+                            />
                         </a>
                     </small>
                 </p>
