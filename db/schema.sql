@@ -22,7 +22,9 @@ create table Users (
     profile_pic_path text, -- path in flask backend to the profile pic file, NULL if no pic
     password_reset_code_hash integer, -- password reset code if user requests password, NULL if not
     email_verified boolean,
-    primary key (user_id)
+    primary key (user_id),
+    fulltext (first_name),
+    fulltext (last_name)
 );
 
 create table Recipes(
@@ -34,9 +36,12 @@ create table Recipes(
     name text,
     type text,
     serving_size int,
+    description text,
+    calories int, -- rounded to 100th
     primary key(recipe_id),
     fulltext(name)
 );
+
 
 create table RecipeIngredients(
     recipe_id integer references Recipes(recipe_id),
@@ -70,6 +75,27 @@ create table SearchHistory(
     time timestamp,
     search_term text,
     primary key (user_id, time)
+);
+
+create table SubscribedTo(
+    user_id integer references Users(user_id),
+    is_subscribed_to integer references Users(user_id),
+    primary key (user_id, is_subscribed_to)
+);
+
+create table Comments(
+    comment_id serial,
+    recipe_id integer references Recipes(recipe_id),
+    by_user_id integer references Users(user_id),
+    time_created timestamp,
+    comment_text text,
+    primary key (comment_id)
+);
+
+create table Likes(
+    recipe_id integer references Recipes(recipe_id),
+    liked_by_user_id integer references Users(user_id),
+    primary key (recipe_id, liked_by_user_id)
 );
 
 -- temporary test account

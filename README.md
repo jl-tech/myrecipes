@@ -10,11 +10,25 @@ Instructions for Lubuntu VM.
 1. Setup & install mySQL Server 8 with `sudo apt-get update && sudo apt-get install mysql-server`
 2. Start mySQL server with `sudo service mysql start`
 3. Run `sudo mysql` command in Terminal.
-4. When in the `mysql` environment, run `source [path_to_project]/db/schema.sql`
+4. FOR CLEAN DATABASE: when in the `mysql` environment, run `source [path_to_project]/db/schema.sql`
+5. FOR SAMPLE DATA:when in the `mysql` environment, run `source [path_to_project]/db/dump.sql`
+
+Sample database login:
+
+Username: `jonathan.liu2000@gmail.com`
+
+Password: `myrecipes`
 
 ### Backend
 1. Install pip3 with `sudo apt-get install python3-pip`
 2. `cd` to project directory, then install requirements with `pip3 install -r requirements.txt`
+
+### Dialogflow
+1. Install Google Cloud SDK with `curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-347.0.0-linux-x86_64.tar.gz`
+2. Extract the contents of the file to any location on your file system (preferably your Home directory)
+3. Add Cloud SDK tools to `PATH`, reopen Terminal
+4. Run gcloud init to initialize the SDK:`./google-cloud-sdk/bin/gcloud init`
+5. Install the Dialogflow client library with `pip install google-cloud-dialogflow`
 
 ### Frontend
 1. Install nodejs with `sudo apt-get install nodejs`

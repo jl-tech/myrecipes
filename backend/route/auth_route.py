@@ -1,26 +1,33 @@
-from flask import *
-import tokenise
-import auth
+"""
+Routes for /auth/ calls
+"""
 
+from flask import *
+
+import auth
+import tokenise
 
 AUTH = Blueprint('AUTH', __name__, template_folder='templates')
+
 
 @AUTH.route("/register", methods=['POST'])
 def route_auth_register():
     data = request.get_json()
-    result = auth.add_new_user(data["email"], data["first_name"], data["last_name"], data["password"])
-    if result == 1:
+    result = auth.add_new_user(data["email"], data["first_name"],
+                               data["last_name"], data["password"])
+    if result == -1:
         response = jsonify({'error': 'The email already exists'})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
-    elif result == 2:
-        response = jsonify({'error': 'Invalid password'})
+    elif result == -2:
+        response = jsonify({'error': 'Password should have at least 6 characters'})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
     elif result == 0:
         response = jsonify({})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
+
 
 @AUTH.route("/emailconfirm", methods=['POST'])
 def route_auth_emailconfirm():
@@ -35,6 +42,7 @@ def route_auth_emailconfirm():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
 
+
 @AUTH.route("/verify", methods=['GET'])
 def route_auth_verify():
     token = request.headers.get("Authorization")
@@ -48,12 +56,14 @@ def route_auth_verify():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
 
+
 @AUTH.route("/login", methods=['POST'])
 def route_auth_login():
     data = request.get_json()
     correct, user_id = auth.check_password(data["email"], data["password"])
     if correct:
-        response = jsonify({'token': tokenise.encode_token({'user_id': user_id})})
+        response = jsonify(
+            {'token': tokenise.encode_token({'user_id': user_id})})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
     elif not correct and user_id == -1 or not correct and user_id == -2:
@@ -64,6 +74,7 @@ def route_auth_login():
         response = jsonify({'error': 'That email hasn\'t been verified yet.'})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
+
 
 @AUTH.route("/forgetpassword", methods=['POST'])
 def route_auth_forgetpassword():
@@ -78,6 +89,7 @@ def route_auth_forgetpassword():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
 
+
 @AUTH.route("/resetpassword", methods=['POST'])
 def route_auth_resetpassword():
     data = request.get_json()
@@ -90,6 +102,7 @@ def route_auth_resetpassword():
         response = jsonify({})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
+
 
 @AUTH.route("/verifyresetcode", methods=['POST'])
 def route_auth_verifyresetcode():

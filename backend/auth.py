@@ -1,59 +1,66 @@
-import helpers
-from constants import *
-
-import bcrypt
-
-import tokenise
+"""
+This file contains functions relating to authentication, for example
+    - creating account
+    - logging in
+    - resetting password
+"""
 
 import threading
 
+import bcrypt
+
+import helpers
+import tokenise
 from tokenise import token_to_id
 
 DEFAULT_PIC = 'default.png'
+
 
 def add_new_user(email, first_name, last_name, password):
     '''
     Adds a new user to the database, and sends a confirmation email providing
     the email verification code.
-    :param email:
-    :param first_name:
-    :param last_name:
-    :param password:
-    :return: 0 success, the confirmation code for email verification.
+    :param email: the email of the user
+    :param first_name: the first_name of the user
+    :param last_name: the last_name of the user
+    :param password: the password of the new account
+    :returns: 0 success, the confirmation code for email verification.
     -1 if the email already exists.
     -2 if the password didn't meet the password requirements.
     -3 for any other error.
     '''
     if email_already_exists(email):
-        return 1
+        return -1
 
-    # TODO password requirements?
+    if len(password) < 6:
+        return -2
 
     hashed_pwd = hash_password(password)
 
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     cur = con.cursor()
-    query = "insert into Users (email, first_name, last_name, password_hash, email_verified)" \
+    query = "insert into Users (email, first_name, last_name, password_hash, " \
+            "email_verified)" \
             "values (%s, %s, %s, %s, FALSE)"
     cur.execute(query, (email, first_name, last_name, hashed_pwd))
     con.commit()
 
     query = "select user_id from Users where email = %s"
-    cur.execute(query, (email))
+    cur.execute(query, (email,))
     user_id = cur.fetchone()
 
-    query_lock.release()
+    con.close()
     send_confirm_email(user_id['user_id'], email)
 
-    print(f"INFO: Created new account: {email}, f: {first_name}, l: {last_name}, p: {hashed_pwd}")
     return 0
+
 
 def email_confirm(code):
     '''
-    Given an email verification token, updates the user email associated with user_id
-    an unverified account, and verifies that account if so.
+    Given an email verification code, updates the user email associated with it
+    If an unverified account, and verifies that account.
     :param code: The email verification token
-    :return: 0 on success. 1 if token is unsecure
+    :returns: 0 on success. 1 if token is unsecure
     '''
 
     data = tokenise.decode_token(code)
@@ -61,12 +68,13 @@ def email_confirm(code):
         return 1
 
     # Verify unverified user
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     cur = con.cursor()
-    query = "select * from Users where email = %s and email_verified = FALSE and user_id = %s"
+    query = "select * from Users where email = %s and email_verified = FALSE " \
+            "and user_id = %s"
     cur.execute(query, (data["email"], int(data["user_id"])))
     result = cur.fetchall()
-    query_lock.release()
+
     if len(result) == 1:
         query = "update Users set email_verified = TRUE where user_id = %s"
         changed_rows = cur.execute(query, (int(data["user_id"])))
@@ -78,17 +86,25 @@ def email_confirm(code):
     if email_already_exists(data["email"]):
         return 1
 
-    query_lock.acquire()
-    query = "update Users set email = %s, email_verified = TRUE where user_id = %s"
+    con = helpers.get_db_conn()
+    query = "update Users set email = %s, email_verified = TRUE where user_id" \
+            " = %s"
     changed_rows = cur.execute(query, (data["email"], int(data["user_id"])))
     con.commit()
 
-    query_lock.release()
+    con.close()
     return 0
 
+
 def verify(token):
+    '''
+    Decrypts and verifies a token.
+    :param token: the token to decrypt
+    :returns: user_id associated with the token.
+    None if token is invalid.
+    '''
     user_id = token_to_id(token)
-    
+
     if user_id < 0:
         return None
 
@@ -100,10 +116,11 @@ def hash_password(password):
     Hashes a password so it can be stored in the database securely.
     This function will use a salt which is randomly generated.
     :param password: The password to hash
-    :return: The hashed password which can be stored safely in the database
+    :returns: The hashed password which can be stored safely in the database
     '''
     pword_bytes = password.encode('utf-8')
     return bcrypt.hashpw(pword_bytes, bcrypt.gensalt()).decode('utf-8')
+
 
 def check_password(email, password):
     '''
@@ -111,32 +128,38 @@ def check_password(email, password):
     account with the specified email.
     :param email: The email address of the account
     :param password: The password to check
-    :return: (True, user_id) if the password was correct.
+    :returns: (True, user_id) if the password was correct.
     (False, -1) if not. (False, -2) if the email wasn't found.
-    (False, -3) if the email hasn't been verified, but the combination was correct.
+    (False, -3) if the email hasn't been verified, but the combination was
+    correct.
     '''
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     cur = con.cursor()
+
     query = f"select user_id, password_hash from Users where email = %s"
     cur.execute(query, (email,))
     result = cur.fetchall()
+
     if len(result) == 0:
-        query_lock.release()
+        con.close()
         return False, -2
+
     p_hash = result[0]['password_hash']
     correct = bcrypt.checkpw(password.encode('utf-8'), p_hash.encode('utf-8'))
+
     if not correct:
-        query_lock.release()
+        con.close()
         return False, -1
+
     query = f"select email_verified from Users where user_id = %s"
     cur.execute(query, (result[0]['user_id'],))
     is_verified = cur.fetchall()[0]['email_verified']
-    print(is_verified)
+
     if not is_verified:
-        query_lock.release()
+        con.close()
         return False, -3
 
-    query_lock.release()
+    con.close()
     return True, result[0]['user_id']
 
 
@@ -144,27 +167,30 @@ def email_already_exists(email):
     '''
     Checks whether a user with this email already exists in the database.
     :param email: The email address to check
-    :return: True if the email already exists. False otherwise.
+    :returns: True if the email already exists. False otherwise.
     '''
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     cur = con.cursor()
+
     query = f"select * from Users where email = %s"
     cur.execute(query, (email,))
     result = cur.fetchall()
 
-    query_lock.release()
+    con.close()
+
     if len(result) != 0:
         return True
     else:
         return False
 
+
 def send_confirm_email(user_id, email):
     '''
     Sends the email requesting the user to confirm their email to the
-    specified email address
+    specified email address.
     :param user_id: The id associated with the user
     :param email: The email address to send to
-    :return: 0 on success. 1 on any error.
+    :returns: 0 on success. 1 on any error.
     '''
 
     # Variables setup
@@ -190,12 +216,17 @@ def send_confirm_email(user_id, email):
                    <p style="font-size:150%;text-align: center"> Hi! </p>
 
                    <b> <a href=http://localhost:3000/emailconfirm?code={code}>
-                   <p style="font-size:150%;text-align: center"> Please click HERE to confirm your email.</p> </b> </a>
+                   <p style="font-size:150%;text-align: center"> Please click 
+                   HERE to confirm your email.</p> </b> </a>
                    
-                    <p style="font-size:100%;text-align: center"> If the link doesnt work, copy and paste the following into your browser: </p>
-                    <p style="font-size:100%;text-align: center"> http://localhost:3000/emailconfirm?code={code}</p> </b>
+                    <p style="font-size:100%;text-align: center"> If the link 
+                    doesnt work, copy and paste the following into your 
+                    browser: </p>
+                    <p style="font-size:100%;text-align: center"> 
+                    http://localhost:3000/emailconfirm?code={code}</p> </b>
             
-                    <p style="font-size:150%;text-align: center"> If you did not sign up, you do not need to do anything. </p>
+                    <p style="font-size:150%;text-align: center"> If you did 
+                    not sign up, you do not need to do anything. </p>
         
                     <p style="font-size:150%;text-align: center"> Regards, </p>
                     <p style="font-size:150%;text-align: center"> MyRecipes </p>
@@ -204,8 +235,9 @@ def send_confirm_email(user_id, email):
            """
 
     email_thread = threading.Thread(name="email_thread",
-                                    args=(subject, message_html, message_plain, email,
-                                          'https://i.imgur.com/j2apOOM.png'),
+                                    args=(
+                                    subject, message_html, message_plain, email,
+                                    'https://i.imgur.com/j2apOOM.png'),
                                     target=helpers.send_email)
     email_thread.start()
 
@@ -217,17 +249,17 @@ def send_reset(email):
     Sends the email containing the link and code to reset password.
     The
     :param email: The email address to send to
-    :return: 0 on success. 1 if the email is not associated with an account.
+    :returns: 0 on success. 1 if the email is not associated with an account.
     '''
 
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     cur = con.cursor()
     query = 'select password_hash from Users where email = %s'
     cur.execute(query, (email,))
 
     result = cur.fetchall()
     if len(result) == 0:
-        query_lock.release()
+        con.close()
         return 1
     code = tokenise.encode_token({'password': result[0]['password_hash']})
 
@@ -252,15 +284,22 @@ def send_reset(email):
                <body>
                    <p style="font-size:150%;text-align: center"> Hi! </p>
 
-                   <p style="font-size:150%;text-align: center">  Someone (hopefully you) requested to change your password for MyRecipes. </p>
+                   <p style="font-size:150%;text-align: center">  Someone (
+                   hopefully you) requested to change your password for 
+                   MyRecipes. </p>
 
-                   <b> <a href=http://localhost:3000/resetpassword?code={code}> <p style="font-size:150%;text-align: center"> 
+                   <b> <a href=http://localhost:3000/resetpassword?code={code}> 
+                   <p style="font-size:150%;text-align: center"> 
                    Please click HERE to change your password. </a> </p> </b>
                    
-                   <p style="font-size:100%;text-align: center"> If the link doesnt work, copy and paste the following into your browser: </p>
-                    <p style="font-size:100%;text-align: center"> http://localhost:3000/resetpassword?code={code}</p>
+                   <p style="font-size:100%;text-align: center"> If the link 
+                   doesnt work, copy and paste the following into your 
+                   browser: </p>
+                    <p style="font-size:100%;text-align: center"> 
+                    http://localhost:3000/resetpassword?code={code}</p>
 
-                    <p style="font-size:150%;text-align: center"> If you did not request this change you do not need to do anything. </p>
+                    <p style="font-size:150%;text-align: center"> If you did 
+                    not request this change you do not need to do anything. </p>
 
                     <p style="font-size:150%;text-align: center"> Regards, </p>
                     <p style="font-size:150%;text-align: center"> MyRecipes </p>
@@ -269,12 +308,14 @@ def send_reset(email):
            """
     email_thread = threading.Thread(name="email_thread",
                                     args=(subject, message_html, message_plain,
-                                          email, 'http://i.imgur.com/S9M7chn.png'),
+                                          email,
+                                          'http://i.imgur.com/S9M7chn.png'),
                                     target=helpers.send_email)
     email_thread.start()
 
-    query_lock.release()
+    con.close()
     return 0
+
 
 def reset_password(reset_code, password):
     '''
@@ -282,7 +323,7 @@ def reset_password(reset_code, password):
     password for the user account associated with that user code.
     :param reset_code: The reset code
     :param password: The new password
-    :return: 0 on success. 1 if the token is not valid in any way.
+    :returns: 0 on success. 1 if the token is not valid in any way.
     '''
 
     decoded = tokenise.decode_token(reset_code)
@@ -293,14 +334,14 @@ def reset_password(reset_code, password):
 
     password_hash = decoded['password']
 
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     cur = con.cursor()
     query = 'select email from Users where password_hash = %s'
     cur.execute(query, (password_hash,))
 
     result = cur.fetchall()
     if len(result) == 0:
-        query_lock.release()
+        con.close()
         return 1
 
     email_of_acc = result[0]['email']
@@ -310,41 +351,45 @@ def reset_password(reset_code, password):
     con.commit()
     send_pwd_change_email(email_of_acc)
 
-    query_lock.release()
+    con.close()
     return 0
+
 
 def verify_reset_code(reset_code):
     '''
     Given a reset code, checks that code is valid
     :param reset_code: The reset code
-    :return: 0 on success. 1 if the token is not valid in any way.
+    :returns: 0 on success. 1 if the token is not valid in any way.
     '''
     decoded = tokenise.decode_token(reset_code)
     if decoded is None:
-
         return 1
     if 'password' not in decoded:
         return 1
 
     password_hash = decoded['password']
 
-    query_lock.acquire()
+    con = helpers.get_db_conn()
     cur = con.cursor()
     query = 'select email from Users where password_hash = %s'
     cur.execute(query, (password_hash,))
 
     result = cur.fetchall()
     if len(result) == 0:
-        query_lock.release()
+        con.close()
         return 1
 
-    query_lock.release()
+    con.close()
     return 0
 
-def send_pwd_change_email(email):
-    # Send email to notify user
-    # Variables setup
 
+def send_pwd_change_email(email):
+    '''
+    Sends an email to the given email address detailing a successful password
+    change.
+    :param email: the email to send to
+    :returns: None
+    '''
     subject = "Your password was changed for MyRecipes"
     message_plain = f"""\
         Hi,
@@ -356,20 +401,21 @@ def send_pwd_change_email(email):
         Regards,
         MyRecipes
               """
-    message_html =f"""\
+    message_html = f"""\
         <p style="font-size:150%;text-align: center"> Hi,</p>
 
-        <p style="font-size:150%;text-align: center"> This email is to inform you that your password was changed.</p>
+        <p style="font-size:150%;text-align: center"> This email is to inform 
+        you that your password was changed.</p>
 
-        <p style="font-size:150%;text-align: center"> If you didn't expect this, contact customer support immediately.</p>
+        <p style="font-size:150%;text-align: center"> If you didn't expect 
+        this, contact customer support immediately.</p>
 
         <p style="font-size:150%;text-align: center"> Regards, </p>
         <p style="font-size:150%;text-align: center"> MyRecipes </p>
         """
     email_thread = threading.Thread(name="conf_email_thread",
-                                    args=(subject, message_html, message_plain, email,
-                                          'http://i.imgur.com/fUkY4mW.png'),
+                                    args=(
+                                    subject, message_html, message_plain, email,
+                                    'http://i.imgur.com/fUkY4mW.png'),
                                     target=helpers.send_email)
     email_thread.start()
-
-

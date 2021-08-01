@@ -1,7 +1,11 @@
+"""
+Routes for /search/ calls
+"""
+
+import pymysql
 from flask import *
-import tokenise
+
 import search
-import sys
 
 SEARCH = Blueprint('SEARCH', __name__, template_folder='templates')
 
@@ -17,9 +21,13 @@ def route_search():
     ingredients = data['ingredients']
     step = data['step_keywords']
 
-    result = search.do_search(name, type, serving_size, time_to_cook, ingredients, step)
+    result = search.do_search(name, type, serving_size, time_to_cook,
+                              ingredients, step)
     if token is not None:
-        search.add_search_history(token, name, ingredients, step)
+        try:
+            search.add_search_history(token, name, ingredients, step)
+        except pymysql.err.IntegrityError:
+            pass
 
     response = jsonify(result)
     response.headers.add('Access-Control-Allow-Origin', '*')
@@ -52,4 +60,3 @@ def route_search_history_remove():
         response = jsonify({})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 200
-
