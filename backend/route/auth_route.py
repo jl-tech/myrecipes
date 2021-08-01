@@ -15,12 +15,12 @@ def route_auth_register():
     data = request.get_json()
     result = auth.add_new_user(data["email"], data["first_name"],
                                data["last_name"], data["password"])
-    if result == 1:
+    if result == -1:
         response = jsonify({'error': 'The email already exists'})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
-    elif result == 2:
-        response = jsonify({'error': 'Invalid password'})
+    elif result == -2:
+        response = jsonify({'error': 'Password should have at least 6 characters'})
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response, 400
     elif result == 0:

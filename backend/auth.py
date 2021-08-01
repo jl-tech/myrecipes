@@ -30,7 +30,10 @@ def add_new_user(email, first_name, last_name, password):
     -3 for any other error.
     '''
     if email_already_exists(email):
-        return 1
+        return -1
+
+    if len(password) < 6:
+        return -2
 
     hashed_pwd = hash_password(password)
 
