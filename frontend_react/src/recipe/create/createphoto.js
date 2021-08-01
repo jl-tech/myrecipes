@@ -2,7 +2,7 @@
 Component for the photos part of the recipe creation page
  */
 
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import imageCompression from "browser-image-compression";
 
 import Form from "react-bootstrap/Form";
@@ -146,7 +146,10 @@ function RecipeCreatePhoto({ photos, setPhotos }) {
                                                             ? "1 (Main)"
                                                             : index + 1}
                                                     </Col>
-                                                    <Col sm={5} className={"my-auto"}>
+                                                    <Col
+                                                        sm={5}
+                                                        className={"my-auto"}
+                                                    >
                                                         <span>{name}</span>
                                                     </Col>
                                                     <Col sm={5}>
