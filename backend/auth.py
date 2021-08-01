@@ -71,7 +71,6 @@ def email_confirm(code):
             "and user_id = %s"
     cur.execute(query, (data["email"], int(data["user_id"])))
     result = cur.fetchall()
-    con.close()
 
     if len(result) == 1:
         query = "update Users set email_verified = TRUE where user_id = %s"

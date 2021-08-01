@@ -182,7 +182,6 @@ function ProfileRecipes(props) {
         }
 
         response = await requestComments(
-            cookie.get("token"),
             props.userID
         ).catch((e) => {});
 
