@@ -285,8 +285,8 @@ def send_reset(email):
                    hopefully you) requested to change your password for 
                    MyRecipes. </p>
 
-                   <b> <a href=http://localhost:3000/resetpassword?code=
-                   {code}> <p style="font-size:150%;text-align: center"> 
+                   <b> <a href=http://localhost:3000/resetpassword?code={code}> 
+                   <p style="font-size:150%;text-align: center"> 
                    Please click HERE to change your password. </a> </p> </b>
                    
                    <p style="font-size:100%;text-align: center"> If the link 
