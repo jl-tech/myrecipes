@@ -59,6 +59,9 @@ function HomePage(props) {
                             Browse all
                         </Button>
                     </Link>
+                    <br/>
+                    <br/>
+                    <Link style={{color:"gray"}} to={"/legal"}> <small> Legal </small> </Link>
                 </Container>
             </div>
         </>

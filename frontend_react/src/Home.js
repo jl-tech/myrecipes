@@ -29,6 +29,7 @@ import Feed from "./newsfeed/feed";
 import NotFound from "./404";
 import ProfileList from "./profile/list.js";
 import ChatBot from "./chatbot/chatbot";
+import Legal from "./legal";
 
 async function profileUser(userid) {
     let response = await fetch(
@@ -340,6 +341,9 @@ function Home({ loggedIn, setLoggedIn, currId }) {
                         )
                     }
                 />
+                <Route path={"/legal"}>
+                    <Legal/>
+                </Route>
                 <Route>
                     <NotFound />
                 </Route>
