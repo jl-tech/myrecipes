@@ -68,6 +68,8 @@ function ProfileListModal(props) {
                                                     alt="Profile Picture"
                                                     roundedCircle
                                                     width="40em"
+                                                    height="40em"
+                                                    style={{objectFit:"cover"}}
                                                 />
                                             </Col>
                                             <Col>

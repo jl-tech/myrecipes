@@ -237,6 +237,8 @@ function Feed() {
                                                 alt="Profile Picture"
                                                 roundedCircle
                                                 width="40em"
+                                                height="40em"
+                                                style={{objectFit:"cover"}}
                                             />
                                         </Link>
                                     </Col>

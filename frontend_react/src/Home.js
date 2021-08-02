@@ -104,7 +104,8 @@ function UserButton(props) {
                             alt="Profile Picture"
                             roundedCircle
                             width="25em"
-                            style={{ padding: 0 + "!important" }}
+                            height="25em"
+                            style={{ objectFit:"cover", padding: 0 + "!important" }}
                         />
                         &nbsp; {props.firstName}
                     </>

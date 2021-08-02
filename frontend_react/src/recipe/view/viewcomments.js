@@ -240,8 +240,10 @@ function RecipeViewComments(props) {
                                                     alt="Profile Picture"
                                                     roundedCircle
                                                     width="40em"
+                                                    height={"40em"}
                                                     style={{
                                                         marginRight: "1em",
+                                                        objectFit:"cover"
                                                     }}
                                                 />
                                                 {first_name} {last_name}

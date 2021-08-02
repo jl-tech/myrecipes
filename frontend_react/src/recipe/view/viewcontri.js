@@ -59,7 +59,8 @@ function RecipeViewContri(props) {
                                     alt="Profile Picture"
                                     roundedCircle
                                     height="55em"
-                                    style={{ align: "left" }}
+                                    width="55em"
+                                    style={{ align: "left", objectFit: "cover" }}
                                 />
                                 <br />
                                 {props.firstName} {props.lastName}

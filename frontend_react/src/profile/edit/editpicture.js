@@ -211,7 +211,9 @@ function ProfileEditPicture(props) {
                             src={"http://127.0.0.1:5000/img/" + props.imgUrl}
                             alt="Profile Picture"
                             roundedCircle
-                            width="25%"
+                            width="125em"
+                            height="125em"
+                            style={{objectFit: "cover"}}
                         />
                     </Col>
                 </Row>

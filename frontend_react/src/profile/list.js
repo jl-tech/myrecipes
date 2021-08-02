@@ -213,6 +213,7 @@ function ProfileList(props) {
                                                           profile_pic_path
                                                 }
                                                 alt="Profile Picture"
+                                                roundedCircle
                                                 style={{
                                                     marginTop: "1em",
                                                     marginLeft: "auto",
@@ -221,7 +222,7 @@ function ProfileList(props) {
                                                     height: "8em",
                                                     width: "8em",
                                                 }}
-                                                roundedCircle
+
                                             />
                                             <Card.Body>
                                                 <h5

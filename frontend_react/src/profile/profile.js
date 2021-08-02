@@ -139,6 +139,8 @@ function Profile(props) {
                                     alt="Profile Picture"
                                     roundedCircle
                                     height="150em"
+                                    width="150em"
+                                    style={{objectFit: "cover"}}
                                 />
                             </div>
                         </Col>
