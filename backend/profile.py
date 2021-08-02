@@ -103,7 +103,6 @@ def change_password(token, oldpassword, newpassword):
     cur.execute(query, (user_id,))
     result = cur.fetchall()
 
-    con.close()
     if bcrypt.checkpw(oldpassword.encode('utf-8'),
                       result[0]['password_hash'].encode('utf-8')):
         new_hash_password = hash_password(newpassword)
