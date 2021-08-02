@@ -8,7 +8,7 @@ printf "Beginning MyRecipes install...\n"
 printf "[0/3] Running apt-get update...\n"
 sleep 1
 apt-get update
-printf "[0/3] Installing database completed.\n\n\n"
+printf "[0/3] apt-get update completed.\n\n\n"
 
 printf "[1/3] Installing MyRecipes database...\n"
 sleep 3
