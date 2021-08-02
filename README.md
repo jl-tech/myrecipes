@@ -12,8 +12,9 @@ Please use the Lubuntu VM image without any modifications.
 
 ### Automatic install process
 Run the automatic install script with `sudo sh install.sh`
-- You will need to enter lubuntu as the superuser password.
+- You will need to enter `lubuntu` as the superuser password.
 - This script can take approximately 10 minutes to run. 
+- If you are prompted to enter a password, please enter `lubuntu`
 - The script will inform you of progress after each step is completed.
 
 ### Manual install process
