@@ -53,3 +53,9 @@ Week 9:
 - Backend
   Newsfeed: get_recommendations
   Recipe: get_recipe_recommendations
+
+Week 10:
+- Frontend
+  Refactored components
+- Backend
+  Added Jaccard Index to recipes recommendation
