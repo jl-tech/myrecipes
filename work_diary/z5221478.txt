@@ -59,3 +59,11 @@ Week 8:
 Week 9:
 - varied the behaviour of chatbot
 - loaded the chatbot into project's google account
+- changed code format and added annotations
+- done the final report with group
+- finalized coding with group
+- started preparation of final demo
+
+Week 10:
+- fixed several small bugs
+- submitted final report and code with group

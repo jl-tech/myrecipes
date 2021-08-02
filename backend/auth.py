@@ -79,11 +79,14 @@ def email_confirm(code):
         query = "update Users set email_verified = TRUE where user_id = %s"
         changed_rows = cur.execute(query, (int(data["user_id"])))
         con.commit()
+        con.close()
         return 0
     elif len(result) > 1:
+        con.close()
         return 1
 
     if email_already_exists(data["email"]):
+        con.close()
         return 1
 
     query = "update Users set email = %s, email_verified = TRUE where user_id" \
