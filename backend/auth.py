@@ -86,7 +86,6 @@ def email_confirm(code):
     if email_already_exists(data["email"]):
         return 1
 
-    con = helpers.get_db_conn()
     query = "update Users set email = %s, email_verified = TRUE where user_id" \
             " = %s"
     changed_rows = cur.execute(query, (data["email"], int(data["user_id"])))
