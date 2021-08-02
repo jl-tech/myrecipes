@@ -378,6 +378,8 @@ function RecipeList(props) {
         setRecipeDataFiltered(tempArray);
         if (activePage > Math.ceil(tempArray.length / recipesPerPage) - 1) {
             setActivePage(Math.ceil(tempArray.length / recipesPerPage) - 1);
+        } else if (activePage < 0) {
+            setActivePage(0);
         }
     }
 
