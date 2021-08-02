@@ -1,3 +1,7 @@
+/**
+ * Component handling the list of user profiles in Find User functionality
+ */
+
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 
@@ -16,6 +20,13 @@ import Image from "react-bootstrap/Image";
 import Card from "react-bootstrap/Card";
 import Spinner from "react-bootstrap/Spinner";
 
+/**
+ * Performs the API request for /profile/finduser and returns the result
+ * of that request.
+ * @throws The error if the API request was not successful.
+ * @param input - the input for find user
+ * @returns {Promise<*>} The response from the server. null on failure.
+ */
 async function requestUsers(input) {
     let response = await fetch("http://localhost:5000/profile/finduser", {
         method: "POST",
@@ -36,13 +47,19 @@ async function requestUsers(input) {
 }
 
 function ProfileList(props) {
+    // Current value of the input field
     const [input, setInput] = useState("");
+    // The list of user data resulting from the search
     const [userData, setUserData] = useState([]);
+    // To support shadow effect on hover
     const [userIndexHovered, setUserIndexHovered] = useState(-1);
-    const [showSpinner, setShowSpinner] = useState(false);
+    // Whether to show the error box
     const [errorShow, setErrorShow] = useState(false);
+    // The text to show in error box
     const [errorText, setErrorText] = useState("");
+    // Shadow effect on hover for search bar
     const [searchHover, setSearchHovered] = useState(false);
+    // Whether search operation completed
     const [searched, setSearched] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const history = useHistory();
