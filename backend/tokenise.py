@@ -83,7 +83,7 @@ def token_to_email(token):
     if id == -1 or id == -2 or id == -3:
         return id
 
-    cur = con.cursor()
+    cur = helpers.get_db_conn().cursor()
     query = 'select email from Users where user_id = %s'
     cur.execute(query, (id,))
     result = cur.fetchone()['email']
