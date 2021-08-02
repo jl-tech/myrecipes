@@ -181,9 +181,7 @@ function ProfileRecipes(props) {
             setProfileUserLikedRecipeData(response);
         }
 
-        response = await requestComments(
-            props.userID
-        ).catch((e) => {});
+        response = await requestComments(props.userID).catch((e) => {});
 
         if (response != null) {
             setComments(response);

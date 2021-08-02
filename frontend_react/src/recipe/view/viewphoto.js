@@ -3,7 +3,7 @@
  * Also, a component providing the edit photos modal
  */
 
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import imageCompression from "browser-image-compression";
 
 import Button from "react-bootstrap/Button";

@@ -342,7 +342,7 @@ function Home({ loggedIn, setLoggedIn, currId }) {
                     }
                 />
                 <Route path={"/legal"}>
-                    <Legal/>
+                    <Legal />
                 </Route>
                 <Route>
                     <NotFound />
