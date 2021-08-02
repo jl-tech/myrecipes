@@ -1,11 +1,5 @@
-# capstoneproject-comp3900-w16a-goodname
-![MyRecipes Logo](https://github.com/COMP3900-9900-Capstone-Project/capstoneproject-comp3900-w16a-goodname/blob/master/logo/WIP_logo_2.png?raw=true)
-## Project documents drive:
-
-https://drive.google.com/drive/folders/1yJ7aLntoO6hYm5q7MgF-A572aPRp40ZI?usp=sharing
-
 ## Setup
-The instructions below are based on the instructions contained in Final Report 
+The instructions below are based on the instructions contained in Final Report
 Part 4.
 
 Please use the Lubuntu VM image without any modifications.
@@ -14,18 +8,19 @@ Please use the Lubuntu VM image without any modifications.
 1.	Begin by cloning the git repository to any directory, then `cd` into the project directory.
 2.	Run the automatic install script with `sudo sh install.sh`
 - You will need to enter lubuntu as the superuser password.
-- This script can take approximately 10 minutes to run. 
+- This script can take approximately 10 minutes to run.
 - The script will inform you of progress after each step is completed.
 
 ### Manual install process
-If, for some reason the automatic installation process fails to work or run, please install MyRecipes manually by running the following commands:
+If, for some reason the automatic installation process fails to work or run, please install
+MyRecipes manually by running the following commands:
 
-#### Database 
+#### Database
 `sudo apt-get update`
 
 `sudo apt-get -y install mysql-server`
 
-`service mysql start`		
+`service mysql start`
 
 `mysql < ./db/schema.sql`
 
@@ -48,7 +43,8 @@ If, for some reason the automatic installation process fails to work or run, ple
 ## Running
 Please follow these steps to run MyRecipes:
 1.	Open two terminal windows. In both, `cd` to the project directory.
-2.	In any terminal window, ensure the MySQL service is running with `sudo service mysql status`. If it is not running, run it with `sudo service mysql start` 
+2.	In any terminal window, ensure the MySQL service is running with `sudo service mysql status`.
+If it is not running, run it with `sudo service mysql start`
 - ⓘ Once the service is running, the database is now operational.
 3.	In the first terminal window, `cd backend`
 4.	In the first terminal window, run the backend with `python3 server.py`
@@ -57,7 +53,8 @@ Please follow these steps to run MyRecipes:
 6.	In the second terminal window, run the frontend with `npm start`
 - ⓘ The frontend is now operational in the second terminal window.
 
-After step 6 your browser should have opened with MyRecipes. If not, open your browser and head to `localhost:3000`.
+After step 6 your browser should have opened with MyRecipes. If not, open your browser and
+head to `localhost:3000`.
 
 
 ## If something goes wrong

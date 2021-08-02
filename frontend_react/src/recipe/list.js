@@ -450,6 +450,7 @@ function RecipeList(props) {
         switch (e.target.value) {
             case "1":
                 key = "creation_time";
+                break;
             case "2":
                 key = "edit_time";
                 break;
