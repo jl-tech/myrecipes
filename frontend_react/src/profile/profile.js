@@ -110,6 +110,9 @@ function Profile(props) {
     }
 
     useEffect(() => {
+        if (props.settings) {
+            props.setChatbotVisible(false)
+        }
         if (!fetched) processId();
     }, []);
 
