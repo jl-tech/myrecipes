@@ -198,14 +198,16 @@ def get_feed(token, page):
     h2 = result[len(result) // 2:]
     g1 = result2[:len(result2) // 2]
     g2 = result2[len(result2) // 2:]
-    result3 = []
-    for i in range(len(result2)):
-        result3 = result3 + result[
-                            len(result) // len(result2) * i:len(result) // len(
-                                result2) * (i + 1)]
-        result3 = result3 + [result2[i]]
-    result3 = result3 + result[len(result) // len(result2) * len(result2):]
-
+    try:
+        result3 = []
+        for i in range(len(result2)):
+            result3 = result3 + result[
+                                len(result) // len(result2) * i:len(result) // len(
+                                    result2) * (i + 1)]
+            result3 = result3 + [result2[i]]
+        result3 = result3 + result[len(result) // len(result2) * len(result2):]
+    except:
+        return result2, total_pages
     return result3, total_pages
 
 

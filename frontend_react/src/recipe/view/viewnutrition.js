@@ -72,7 +72,6 @@ function RecipeViewNutri(props) {
                 <p style={{ textAlign: "center" }}> per serving</p>
                 <p style={{ textAlign: "center" }}>
                     Failed to fetch nutrition. Try again later. <br />
-                    <small> Is the API limit exceeded? </small>
                 </p>
             </>
         ) : (

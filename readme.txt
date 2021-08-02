@@ -1,12 +1,11 @@
 ## Setup
 The instructions below are based on the instructions contained in Final Report
-Part 4.
+Part 5.
 
 Please use the Lubuntu VM image without any modifications.
 
 ### Automatic install process
-1.	Begin by cloning the git repository to any directory, then `cd` into the project directory.
-2.	Run the automatic install script with `sudo sh install.sh`
+Run the automatic install script with `sudo sh install.sh`.
 - You will need to enter lubuntu as the superuser password.
 - This script can take approximately 10 minutes to run.
 - The script will inform you of progress after each step is completed.
@@ -58,4 +57,4 @@ head to `localhost:3000`.
 
 
 ## If something goes wrong
-If something goes wrong, please consult the Final Report Technical Manual section 4.
+If something goes wrong, please consult the Final Report Technical Manual section 5. section 4.
