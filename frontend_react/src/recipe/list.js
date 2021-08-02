@@ -455,6 +455,12 @@ function RecipeList(props) {
             case "2":
                 key = "edit_time";
                 break;
+            case "3":
+                key = "likes";
+                break;
+            case "4":
+                key = "comments";
+                break;
             default:
                 setRecipeData(props.recipeData);
                 return;
