@@ -73,3 +73,24 @@
 - Added comments data to dump 
 - Add ability to search for users - frontend & backend
 - Write portions of the retrospective report and compile work into final document
+
+*Week 9*
+- Add comment sorting functionality (frontend)
+- Create frontend chatbot (frontend)
+- Improve chatbot capabilities & training
+- Rework chatbot session id
+- Improved/added documentation for all javascript files
+- Improved some documentation in python files
+- Create install.sh automatic install script
+- Add legal notices page (frontend)
+- Final Report:
+    - Complete about 80% of section 1
+    - Complete about half of section 2
+    - Complete about 20% of section 3
+    - Complete 4.1, 4.4, 4.7 in section 4
+    - Complete all of section 5
+    - Complete all of section 6
+    - Compiled final report together, making it formatted nicely
+ 
+ 
+
