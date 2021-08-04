@@ -67,3 +67,4 @@ Week 9:
 Week 10:
 - fixed several small bugs
 - submitted final report and code with group
+- done the final demo with team
