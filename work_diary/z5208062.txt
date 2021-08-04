@@ -34,3 +34,23 @@ Week 5
 Week 7
 - Edited grammatical errors in retrospective 1 including paraphrasing for greater clarity.
 - Discussed other issues relating to the sprints with the team and added it to the retrospective.
+- Implement nutritionix for backend
+
+Week 8
+- Implement recipe comments for backend
+- Update recipe delete to account for recipe comments
+
+Week 9
+- Write "Things to try" from retrospective 1: review
+- Write some of "implementation and effect" from retrospective 1: review
+- Edited grammatical errors in retrospective 2 including paraphrasing for greater clarity.
+- Write code documentation for auth, chatbot, helpers, newsfeed
+- Write code documentation for recipe
+- Write code documentation for get_recipe_recommendations()
+- Test code for webapp
+- Write final report section 5.5, 5.6 and fix section 5.4
+
+Week 10
+- Write my script for final presentation
+- Practice run with team for final presentation
+- Presented in the final demo
