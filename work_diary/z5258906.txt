@@ -92,5 +92,9 @@
     - Complete all of section 6
     - Compiled final report together, making it formatted nicely
  
- 
-
+ *Week 10*
+ - Bug fixes for final submission
+ - Added my section for the presentation outline document
+ - Created slides for demo
+ - Setup presentation environment for demo
+ - Did final demo with team
