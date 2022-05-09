@@ -1,6 +1,15 @@
-<img src="https://github.com/COMP3900-9900-Capstone-Project/capstoneproject-comp3900-w16a-goodname/blob/master/logo/WIP_logo_2.png" height="150"/>
+<img src="/logo/WIP_logo_2.png" height="150"/>
 
 # MyRecipes
+## Screenshots
+<img src="/screenshots/home.png"/>
+<img src="/screenshots/recipe.png"/>
+<img src="/screenshots/profile.png"/>
+<img src="/screenshots/search.png"/>
+<img src="/screenshots/news.png"/>
+<img src="/screenshots/create.png"/>
+<img src="/screenshots/chatbot.png"/>
+
 ## Setup
 The instructions below are based on the instructions contained in Final Report 
 Part 5.
