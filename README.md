@@ -21,7 +21,7 @@
 <img src="/screenshots/create.png"/>
 
 ### Chatbot
-<img src="/screenshots/chatbot.png"/>
+<img src="/screenshots/chatbot.png" height="400"/>
 
 ## Setup
 The instructions below are based on the instructions contained in Final Report 
