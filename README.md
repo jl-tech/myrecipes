@@ -2,12 +2,25 @@
 
 # MyRecipes
 ## Screenshots
+### Home
 <img src="/screenshots/home.png"/>
+
+### Recipe
 <img src="/screenshots/recipe.png"/>
+
+### Profile
 <img src="/screenshots/profile.png"/>
+
+### Search
 <img src="/screenshots/search.png"/>
+
+### Newsfeed
 <img src="/screenshots/news.png"/>
+
+### Create recipe
 <img src="/screenshots/create.png"/>
+
+### Chatbot
 <img src="/screenshots/chatbot.png"/>
 
 ## Setup
